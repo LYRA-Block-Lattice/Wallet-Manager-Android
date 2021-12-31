@@ -1,10 +1,15 @@
 package com.lyrawallet;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 
 import android.annotation.SuppressLint;
 import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -12,7 +17,11 @@ import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceManager;
 
+import com.lyrawallet.PreferencesLoad.PreferencesLoad;
 import com.lyrawallet.Ui.Preferences.PreferencesRoot;
 import com.lyrawallet.Accounts.Accounts;
 import com.lyrawallet.Api.Network.WebHttps;
@@ -24,10 +33,10 @@ import com.lyrawallet.Ui.MyAccountReceive.MyAccountReceive;
 import com.lyrawallet.Ui.MyAccountSend.MyAccountSend;
 
 import java.io.File;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements WebHttps.WebHttpsTaskInformer, Rpc.RpcTaskInformer {
-    //private ActivityMainBinding binding = null;
-    private static MainActivity instance = null;
+    protected static MainActivity instance = null;
     int deviceOrientation = 0;
     void showOpenWalletButtons() {
         getSupportFragmentManager()
@@ -74,14 +83,14 @@ public class MainActivity extends AppCompatActivity implements WebHttps.WebHttps
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        instance = this;
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        new PreferencesLoad();
         //Get the path of the working directory.
         Global.walletPath = getApplicationContext().getFilesDir().getPath() + File.separator;
         setContentView(R.layout.content_main);
         // Fix UI when Soft Keyboard is visible.
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        // A temporary password for debug purposes.
-        instance = this;
         if(Global.dashboard == null) {
             Global.dashboard = Dashboard.newInstance("", "");
         }
@@ -100,40 +109,27 @@ public class MainActivity extends AppCompatActivity implements WebHttps.WebHttps
                 .add(R.id.nav_host_fragment_content_main, OpenWallet.newInstance())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
-        new Rpc(instance).execute("MainCallRpc1",
-                "wss://161.97.166.188:4504/api/v1/socket",
+        /*new Rpc(instance).execute("MainCallRpc1",
                 "History",
                 "LF6LpgcrANQWrErPcLREAbKzJg9DLeuXXa45cz5hKsUng7aJ2zCrAgHbtkSXv5dXiEfUB8ypN8i3daUkmiJwcX8cbXSv5U",
-                "0", String.valueOf(System.currentTimeMillis()), "0");
-        new Rpc(this).execute("MainCallRpc2",
-                "wss://161.97.166.188:4504/api/v1/socket",
+                "0", String.valueOf(System.currentTimeMillis()), "0");*/
+        /*new Rpc(this).execute("MainCallRpc2",
                 "Receive",
                 "LF6LpgcrANQWrErPcLREAbKzJg9DLeuXXa45cz5hKsUng7aJ2zCrAgHbtkSXv5dXiEfUB8ypN8i3daUkmiJwcX8cbXSv5U");
         new WebHttps(this).execute("https://api.latoken.com/v2/ticker", "MainCallHttps1");
-        new WebHttps(this).execute("https://api.latoken.com/v2/ticker", "MainCallHttps2");
-        /*List<Pair<String, String>> accList = new ArrayList<Pair<String, String>>();
+        new WebHttps(this).execute("https://api.latoken.com/v2/ticker", "MainCallHttps2");*/
+        /* List<Pair<String, String>> accList = new ArrayList<Pair<String, String>>();
         accList.add(new Pair<>("Test1", Global.pK));
-        accList.add(new Pair<>("Test2", "dkrwRdqNjEEshpLuEPPqc6zM1HM3nzGjsYts39zzA1iUypcpj"));
-        Global.walletPassword = "87654321";
-        System.out.println("Create keystore result: " + KeyStorage.containerSave("test1", Global.walletPassword, accList));
-*/
-        //List<Pair<String, String>> recoveredKeys = KeyStorage.containerRead("test1", Global.walletPassword);
-
-//        System.out.println("Key storage check: " + KeyStorage.containerExists("test1", Global.walletPassword));
-        System.out.println(KeyStorage.decrypt(Global.accountsContainer, Global.walletPassword));
-
-        //assert getSupportActionBar() != null;
+        accList.add(new Pair<>("Test2", "dkrwRdqNjEEshpLuEPPqc6zM1HM3nzGjsYts39zzA1iUypcpj"));*/
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.main, menu);
         if(getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
         Accounts accounts = new Accounts(this);
-        accounts.loadAccountsFromInternalContainer();
+        //accounts.loadAccountsFromInternalContainer();
         return true;
     }
     @Override
@@ -147,21 +143,6 @@ public class MainActivity extends AppCompatActivity implements WebHttps.WebHttps
     @Override
     public void onRpcNewEvent(String[] output) {
         System.out.println("RPC: " + output[0] + ", " + output[1]);
-    }
-    public void dashboard(View view) {
-        showDashboardButtons();
-    }
-    public void send(View view) {
-        showSendButtons();
-    }
-    public void receive(View view) {
-        showReceiveButtons();
-    }
-    public void settings(View view) {
-        showSettingsButtons();
-    }
-    public void openWallet(View view) {
-        showOpenWalletButtons();
     }
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -181,6 +162,21 @@ public class MainActivity extends AppCompatActivity implements WebHttps.WebHttps
         return false;
     }
 
+    public void dashboard(View view) {
+        showDashboardButtons();
+    }
+    public void send(View view) {
+        showSendButtons();
+    }
+    public void receive(View view) {
+        showReceiveButtons();
+    }
+    public void settings(View view) {
+        showSettingsButtons();
+    }
+    public void openWallet(View view) {
+        showOpenWalletButtons();
+    }
     public void closeWallet(View view) {
         finish();
         System.exit(0);

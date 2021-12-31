@@ -101,22 +101,22 @@ public class NewAccount extends Fragment {
                 if (newWalletNameEditText.length() < Global.minCharAllowedOnWalletName) {
                     // Error ask for retry.
                     newWalletNameEditText.setError("Minimum " + Global.minCharAllowedOnWalletName + " characters.");
-                } else if (KeyStorage.aliasExists(Global.walletName, newWalletNameEditText.getText().toString(), Global.walletPassword)) {
+                } else if (KeyStorage.decrypt(Global.accountsContainer, passwordEditText.getText().toString()) == null) {
+                    // Error ask for retry.
+                    passwordEditText.setError("Incorrect wallet password.");
+                } else if (KeyStorage.aliasExists(Global.walletName, newWalletNameEditText.getText().toString(), passwordEditText.getText().toString())) {
                     // Error ask for retry.
                     newWalletNameEditText.setError("This account already exists.");
                 } else if (passwordEditText.getText().length() < Global.minCharAllowedOnPassword) {
                     // Error ask for retry.
                     passwordEditText.setError("Minimum " + Global.minCharAllowedOnPassword + " characters.");
-                } else if (!passwordEditText.getText().toString().equals(Global.walletPassword)) {
-                    // Error ask for retry.
-                    passwordEditText.setError("Incorrect wallet password.");
                 } else {
-                    if(!KeyStorage.aliasAdd(Global.walletName, newWalletNameEditText.getText().toString(), Signatures.GenerateWallet().first, Global.walletPassword)) {
+                    if(!KeyStorage.aliasAdd(Global.walletName, newWalletNameEditText.getText().toString(), Signatures.GenerateWallet().first, passwordEditText.getText().toString())) {
                         Snackbar.make(view, "An error occured when saving new account.", Snackbar.LENGTH_LONG)
                                 .setAction("", null).show();
                     } else {
                         Accounts accounts = new Accounts((MainActivity) getActivity());
-                        boolean success = accounts.loadAccountsFromDisk(Global.walletName);
+                        boolean success = accounts.loadAccountsFromDisk(Global.walletName, passwordEditText.getText().toString());
                         passwordEditText.setText("");
                         newWalletNameEditText.setText("");
                         if(!success) {

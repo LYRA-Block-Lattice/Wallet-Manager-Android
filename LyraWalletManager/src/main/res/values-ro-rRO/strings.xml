@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">LyraWalletManager</string>
+    <string name="str_dialog_accept">Accept</string>
+    <string name="str_dialog_cancel">Refuz</string>
+    <string name="prompt_wallet_name">Nume portofel</string>
+    <string name="prompt_type_wallet_name">Scrie numele portofelului</string>
+    <string name="prompt_type_account_name">Scrie numele contului</string>
+    <string name="prompt_password">Parola</string>
+    <string name="prompt_type_password">Scrie parola</string>
+    <string name="prompt_type_wallet_password">Scrie parola portofelului</string>
+    <string name="prompt_type_account_pkey">Scrie keya privata</string>
+    <string name="prompt_retype_password">Rescrie parola</string>
+    <string name="action_open_wallet_short">Deschide portofelul</string>
+    <string name="action_create_new_wallet_short">Creaza portofel</string>
+    <string name="action_create_new_account_short">Creaza cont</string>
+    <string name="action_recover_account_short">Recupereaza cont</string>
+    <string name="action_new_wallet_short">Portofel nou</string>
+    <string name="pref_network_selection_title">Retea</string>
+    <string name="pref_network_selection_sumary">Selecteaza reteaua: TESTNET sau MAINNET</string>
+    <string name="pref_language_selection_title">Limba</string>
+    <string name="pref_language_selection_sumary">Selecteaza limba: ENG, ROM \\.\\.\\.</string>
+    <string name="str_launcher_send_button">TRIMITE</string>
+    <string name="str_launcher_receive_button">PRIMESTE</string>
+    <string name="str_launcher_close_wallet_short_button">INCHIDE</string>
+    <string name="str_launcher_open_wallet_short_button">DESCHIDE</string>
+</resources>

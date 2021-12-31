@@ -9,7 +9,6 @@
     tools:context="com.lyrawallet.Ui.MyAccount.MyAccount">
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -39,7 +38,6 @@
         app:layout_constraintGuide_begin="0dp" />
 
     <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_midle_v"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"

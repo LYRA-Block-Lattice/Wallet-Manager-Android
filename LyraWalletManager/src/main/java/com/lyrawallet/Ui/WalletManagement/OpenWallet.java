@@ -49,9 +49,8 @@ public class OpenWallet extends Fragment {
             passwordEditText.setError("Minimum " + Global.minCharAllowedOnPassword + " characters.");
         } else {
             // Success, hide keyboard and the key file.
-            Global.walletPassword = passwordEditText.getText().toString();
             Accounts accounts = new Accounts((MainActivity) getActivity());
-            boolean success = accounts.loadAccountsFromDisk(walletNameEditText.getText().toString());
+            boolean success = accounts.loadAccountsFromDisk(walletNameEditText.getText().toString(), passwordEditText.getText().toString());
             if(success) {
                 // Load accounts success.
                 if(Global.selectedAccountNr == -1) {

@@ -105,13 +105,12 @@ public class NewWallet extends Fragment {
                             Snackbar.make(view, "Unable to save wallet.", Snackbar.LENGTH_LONG)
                                     .setAction("", null).show();
                         } else {
-                            Global.walletPassword = password1EditText.getText().toString();
                             Global.walletName = newWalletNameEditText.getText().toString();
                             newWalletNameEditText.setText("");
                             password1EditText.setText("");
                             password2EditText.setText("");
                             Accounts accounts = new Accounts((MainActivity) getActivity());
-                            if(accounts.loadAccountsFromDisk(Global.walletName)) {
+                            if(accounts.loadAccountsFromDisk(Global.walletName, password1EditText.getText().toString())) {
                                 Snackbar.make(view, "Wallet successfully created.", Snackbar.LENGTH_LONG)
                                         .setAction("", null).show();
                                 toNewAccount();

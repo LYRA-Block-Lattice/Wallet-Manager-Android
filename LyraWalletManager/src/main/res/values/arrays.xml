@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Network selection -->
+    <string-array name="pref_network_selection_entries">
+        <item>TESTNET</item>
+        <item>MAINNET</item>
+    </string-array>
+    <string-array name="pref_network_selection_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+    <!-- Language selection -->
+    <string-array name="pref_language_selection_entries">
+        <item>ENG</item>
+        <item>ROM</item>
+    </string-array>
+    <string-array name="pref_language_selection_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+</resources>

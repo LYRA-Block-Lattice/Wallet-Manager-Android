@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 
 import androidx.annotation.Nullable;
 
+import com.lyrawallet.Accounts.Accounts;
 import com.lyrawallet.Api.Network.RpcSocket;
 import com.lyrawallet.Crypto.Signatures;
 import com.lyrawallet.Global;
@@ -28,28 +29,34 @@ public class Rpc extends AsyncTask<String, Void, String[]> implements RpcSocket.
         DONE,
         RUNNING,
         CONNECTION_TIMEOUT,
+        CONNECTION_INTERRUPTED,
         CONNECTION_ERROR,
         CONNECTED,
         EMPTY_RESPONSE,
         ID_MISSMATCH,
         COMPOSE_MESSAGE_ERROR,
         FOUND_DISCONNECTED,
-        ERROR_RECEIVED_JSON
+        ERROR_RECEIVED_JSON,
+        NOT_SIGNING
     }
 
     final WeakReference<RpcTaskInformer> mCallBack;
     private RpcSocket socket = null;
-    private String ip;
     private state internalState = state.IDLE;
-    private int Id = 0;
+    private int Id = 1;
     int timeoutCount = 0;
     private String api = "";
     private String instanceName = "";
     List<String> lastParameters = null;
+    private String password = null;
 
     public Rpc(@Nullable RpcTaskInformer callback) {
-        //ip = nodeIp;
         this.mCallBack = new WeakReference<>(callback);
+    }
+
+    public Rpc(@Nullable RpcTaskInformer callback, String password) {
+        this.mCallBack = new WeakReference<>(callback);
+        this.password = password;
     }
 
     protected void onPreExecute() {
@@ -62,14 +69,13 @@ public class Rpc extends AsyncTask<String, Void, String[]> implements RpcSocket.
     protected String[] doInBackground(String... params) {
         try {
             List<String> paramList = Arrays.asList(params);
-            if(paramList.size() > 3) {
+            if(paramList.size() > 2) {
                 List<String> argList = new ArrayList<>();
-                for (int i = 3; i < paramList.size(); i++) {
+                for (int i = 2; i < paramList.size(); i++) {
                     argList.add(params[i]);
                 }
                 instanceName = params[0];
-                ip = params[1];
-                send(params[2], argList);
+                send(params[1], argList);
             } else {
                 throw new Exception("Rpc.java: invalid arguments: Given" + paramList.size() + " instead of minimum 4 arguments.");
             }
@@ -95,6 +101,7 @@ public class Rpc extends AsyncTask<String, Void, String[]> implements RpcSocket.
             case RUNNING: rsp[1] = "RUNNING"; break;
             case CONNECTION_TIMEOUT: rsp[1] = "CONNECTION_TIMEOUT"; break;
             case CONNECTION_ERROR: rsp[1] = "CONNECTION_ERROR"; break;
+            case CONNECTION_INTERRUPTED: rsp[1] = "CONNECTION_INTERRUPTED"; break;
             case CONNECTED: rsp[1] = "CONNECTED"; break;
             case EMPTY_RESPONSE: rsp[1] = "EMPTY_RESPONSE"; break;
             case ID_MISSMATCH: rsp[1] = "ID_MISSMATCH"; break;
@@ -116,35 +123,27 @@ public class Rpc extends AsyncTask<String, Void, String[]> implements RpcSocket.
 
     public state connect() {
         final Rpc.RpcTaskInformer callBack = mCallBack.get();
-        if(socket == null) {
-            socket = new RpcSocket(ip, this);
-            timeoutCount = Global.connectionTimeout;
-            while(!socket.connected && timeoutCount != 0) {
+        int retryCnt = 10;
+        for (; retryCnt > 0; retryCnt--) {
+            socket = new RpcSocket(Global.getNodeAddress(), this);
+            timeoutCount = Global.rpcConnectionTimeout;
+            while (!socket.connected && timeoutCount != 0) {
                 try {
                     Thread.sleep(10);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                    sendState(state.CONNECTION_TIMEOUT);
-                    return state.CONNECTION_TIMEOUT;
+                    sendState(state.CONNECTION_INTERRUPTED);
+                    return state.CONNECTION_INTERRUPTED;
                 }
                 timeoutCount--;
             }
-        } else {
-            if(!socket.openConnection()) {
-                sendState(state.CONNECTION_ERROR);
-                return state.CONNECTION_ERROR;
+            if (socket.connected) {
+                break;
             }
-            timeoutCount = Global.connectionTimeout;
-            while(!socket.connected && timeoutCount != 0) {
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    sendState(state.CONNECTION_TIMEOUT);
-                    return state.CONNECTION_TIMEOUT;
-                }
-                timeoutCount--;
-            }
+        }
+        if (retryCnt == 0) {
+            sendState(state.CONNECTION_TIMEOUT);
+            return state.CONNECTION_TIMEOUT;
         }
         sendState(state.CONNECTED);
         return state.CONNECTED;
@@ -233,13 +232,20 @@ public class Rpc extends AsyncTask<String, Void, String[]> implements RpcSocket.
                     obj = obj.getJSONObject("result");
                     composeSendResponse(obj.toString());
                 }
+                password = "";
             } else if (!obj.isNull("method")) {
                 String method = obj.getString("method");
                 if (method.equals("Sign")) {
                     composeSendResponse("Sign");
                     JSONArray array = obj.getJSONArray("params");
                     String hash = array.getString(1);
-                    String sig = Signatures.GetSignature(Global.pK, hash);
+                    String pK = Accounts.getPrivateKey(password);
+                    if(pK == null) {
+                        sendState(state.NOT_SIGNING);
+                        internalState = state.IDLE;
+                        return;
+                    }
+                    String sig = Signatures.GetSignature(pK, hash);
                     JSONObject jsonObject = new JSONObject();
                     JSONArray jsonArray = new JSONArray ();
                     jsonObject.put("id", id);

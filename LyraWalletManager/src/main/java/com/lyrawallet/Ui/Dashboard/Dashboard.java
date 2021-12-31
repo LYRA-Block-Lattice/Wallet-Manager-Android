@@ -1,17 +1,23 @@
 package com.lyrawallet.Ui.Dashboard;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.lyrawallet.Accounts.Accounts;
+import com.lyrawallet.MainActivity;
 import com.lyrawallet.R;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
@@ -19,6 +25,7 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.lyrawallet.Ui.Helpers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,37 +82,11 @@ public class Dashboard extends Fragment {
         Button toCloseWalletButton = getActivity().findViewById(R.id.toCloseWallet);
         toCloseWalletButton.setVisibility(View.VISIBLE);
 
-        List<PieEntry> yaxisvalues = new ArrayList<PieEntry>();
-        yaxisvalues.add(new PieEntry(8f, "Green"));
-        yaxisvalues.add(new PieEntry(15f, "Yellow"));
-        yaxisvalues.add(new PieEntry(12f, "Red"));
-        yaxisvalues.add(new PieEntry(25f, "Blue"));
-        yaxisvalues.add(new PieEntry(25f, "Magenta"));
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        // Get the layout inflater
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
 
-        PieDataSet pieData = new PieDataSet(yaxisvalues, "");
-        pieData.setHighlightEnabled(true);
-        pieData.setSliceSpace(2f);
-        pieData.setDrawValues(false);
-        PieData data = new PieData(pieData);
-        data.setValueFormatter(new PercentFormatter());
-        data.setValueTextSize(13f);
-        data.setValueTextColor(Color.DKGRAY);
-
-        PieChart pie_Chart = (PieChart) view.findViewById(R.id.pie_chart);
-        pie_Chart.setData(data);
-        pie_Chart.setUsePercentValues(false);
-        pie_Chart.setHovered(true);
-        pie_Chart.setHasTransientState(true);
-        pie_Chart.setCenterText("Pie");
-        pie_Chart.getDescription().setEnabled(false);
-        pie_Chart.getLegend().setEnabled(false);
-        pie_Chart.setRotationEnabled(false);
-        pie_Chart.setDrawHoleEnabled(true);
-        pie_Chart.setHoleRadius(30f);
-        pie_Chart.setTransparentCircleRadius(60f);
-
-        pieData.setColors(ColorTemplate.COLORFUL_COLORS);
-
-        //pie_Chart.animateXY(1500, 1500);
+        View v = new View((MainActivity) getActivity());
+        //new Accounts((MainActivity) getActivity()).promptForPassword(getContext(), v.getRootView());
     }
 }
