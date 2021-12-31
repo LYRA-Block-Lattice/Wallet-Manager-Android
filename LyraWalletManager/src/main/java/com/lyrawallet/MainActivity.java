@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements WebHttps.WebHttps
         getSupportFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
-                .add(R.id.nav_host_fragment_content_main, OpenWallet.newInstance())
+                .replace(R.id.nav_host_fragment_content_main, OpenWallet.newInstance())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         /*new Rpc(instance).execute("MainCallRpc1",

@@ -27,8 +27,13 @@ public class PreferencesRoot extends PreferenceFragmentCompat {
         Configuration config = resources.getConfiguration();
         config.setLocale(new Locale(localeCode.toLowerCase()));
         resources.updateConfiguration(config, resources.getDisplayMetrics());
-        //getActivity().setContentView(R.layout.content_main);
 
+        Button toDashboardButton = getActivity().findViewById(R.id.toDashboard);
+        toDashboardButton.setText(R.string.str_launcher_dashboard_short_button);
+        Button toOpenWalletButton = getActivity().findViewById(R.id.toOpenWallet);
+        toOpenWalletButton.setText(R.string.str_launcher_open_wallet_short_button);
+        Button toCloseWalletButton = getActivity().findViewById(R.id.toCloseWallet);
+        toCloseWalletButton.setText(R.string.str_launcher_close_wallet_short_button);
     }
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -78,12 +83,11 @@ public class PreferencesRoot extends PreferenceFragmentCompat {
                 public boolean onPreferenceChange(Preference preference, Object value) {
                     if (value.equals("0")) {
                         Global.currentLanguage = Global.language.ENG;
-                        languageSelectorPref.setSummary("Current selected language is: ENG");
+                        languageSelectorPref.setSummary("Current selected language is: EN");
                         setAppLocale("en");
                     } else if (value.equals("1")) {
                         Global.currentLanguage = Global.language.ROM;
-                        languageSelectorPref.setSummary("Current selected language is: ROM");
-                        Locale locale = new Locale("RO");
+                        languageSelectorPref.setSummary("Current selected language is: RO");
                         setAppLocale("ro");
                     }
                     getParentFragmentManager()

@@ -24,4 +24,7 @@
     <string name="str_launcher_receive_button">PRIMESTE</string>
     <string name="str_launcher_close_wallet_short_button">INCHIDE</string>
     <string name="str_launcher_open_wallet_short_button">DESCHIDE</string>
+    <string name="str_launcher_settings_button">SETARI</string>
+    <string name="pref_category_general_title">General</string>
+    <string name="pref_category_account_title">Cont</string>
 </resources>

@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <!--below line is to create preference category-->
-    <PreferenceCategory android:title="General">
-        <DropDownPreference
+    <PreferenceCategory android:title="@string/pref_category_general_title" >
+        <ListPreference
             android:defaultValue="0"
             android:dialogTitle="@string/pref_network_selection_title"
             android:entries="@array/pref_network_selection_entries"
@@ -13,7 +11,7 @@
             android:summary="@string/pref_network_selection_sumary"
             android:title="@string/pref_network_selection_title" />
 
-        <DropDownPreference
+        <ListPreference
             android:defaultValue="0"
             android:dialogTitle="@string/pref_language_selection_title"
             android:entries="@array/pref_language_selection_entries"
@@ -22,8 +20,6 @@
             android:summary="@string/pref_language_selection_sumary"
             android:title="@string/pref_language_selection_title" />
 
-        <!--below switch preference is
-            use for mobile data usage-->
         <SwitchPreference
             android:defaultValue="false"
             android:key="@string/pref_dummy_switch_key"
@@ -36,13 +32,13 @@
             android:dialogTitle="Title1"
             android:dialogMessage="Write what you want"
             android:defaultValue="Some value" />
+    </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/pref_category_account_title">
         <Preference
             android:title="Add new account"
             android:key="@string/prefs_add_new_account"
-            android:summary="Add new account"
-            />
-
+            android:summary="Add new account" />
     </PreferenceCategory>
 
 </PreferenceScreen>

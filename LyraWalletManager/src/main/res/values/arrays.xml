@@ -11,8 +11,8 @@
     </string-array>
     <!-- Language selection -->
     <string-array name="pref_language_selection_entries">
-        <item>ENG</item>
-        <item>ROM</item>
+        <item>EN</item>
+        <item>RO</item>
     </string-array>
     <string-array name="pref_language_selection_values">
         <item>0</item>
