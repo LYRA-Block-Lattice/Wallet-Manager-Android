@@ -44,7 +44,7 @@ public class FragmentPreferencesRoot extends PreferenceFragmentCompat {
 
         setPreferencesFromResource(R.xml.preferences_root, rootKey);
 
-        Preference networkSelectorPref = findPreference("pref_network_selection_key");
+        Preference networkSelectorPref = findPreference(getString(R.string.pref_network_selection_key));
         if (networkSelectorPref instanceof ListPreference) {
             ListPreference listPref = (ListPreference) networkSelectorPref;
             networkSelectorPref.setSummary("Current selected network is: " + listPref.getEntry());
@@ -72,7 +72,7 @@ public class FragmentPreferencesRoot extends PreferenceFragmentCompat {
                 }
             });
         }
-        Preference languageSelectorPref = findPreference("pref_language_selection_key");
+        Preference languageSelectorPref = findPreference(getString(R.string.pref_language_selection_key));
         if (languageSelectorPref instanceof ListPreference) {
             ListPreference listPref = (ListPreference) languageSelectorPref;
             languageSelectorPref.setSummary("Current selected language is: " + listPref.getEntry());
@@ -99,7 +99,20 @@ public class FragmentPreferencesRoot extends PreferenceFragmentCompat {
                 }
             });
         }
-        Preference newAccountButton = findPreference(getString(R.string.prefs_add_new_account));
+        Preference autoCloseSelectorPref = findPreference(getString(R.string.pref_auto_close_selection_key));
+        if(autoCloseSelectorPref != null) {
+            autoCloseSelectorPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                public boolean onPreferenceChange(Preference preference, Object value) {
+                    if (value.equals("N")) {
+                        Global.setInactivityTimeForClose(-1);
+                    } else {
+                        Global.setInactivityTimeForClose(Integer.parseInt(value.toString()));
+                    }
+                    return true;
+                }
+            });
+        }
+        Preference newAccountButton = findPreference(getString(R.string.prefs_add_new_account_key));
         if(newAccountButton != null) {
             newAccountButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override

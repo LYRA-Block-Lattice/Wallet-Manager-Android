@@ -20,6 +20,15 @@
             android:summary="@string/pref_language_selection_sumary"
             android:title="@string/pref_language_selection_title" />
 
+        <ListPreference
+            android:defaultValue="N"
+            android:dialogTitle="@string/pref_auto_close_selection_title"
+            android:entries="@array/pref_auto_close_selection_entries"
+            android:entryValues="@array/pref_auto_close_selection_values"
+            android:key="@string/pref_auto_close_selection_key"
+            android:summary="@string/pref_auto_close_selection_sumary"
+            android:title="@string/pref_auto_close_selection_title" />
+
         <!-- <SwitchPreference
             android:defaultValue="false"
             android:key="@string/pref_dummy_switch_key"
@@ -37,13 +46,19 @@
     <PreferenceCategory android:title="@string/pref_category_account_title">
         <Preference
             android:title="@string/prefs_add_new_account_title"
-            android:key="@string/prefs_add_new_account" />
+            android:key="@string/prefs_add_new_account_key" />
 
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/pref_category_wallet_title">
         <Preference
             android:title="@string/prefs_backup_wallet_title"
             android:key="@string/prefs_backup_wallet_key" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/pref_other_title">
+        <Preference
+            android:summary="@string/pref_description_sumary"
+            android:title="@string/pref_description_title"
+            android:key="@string/pref_dummy_switch_key"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

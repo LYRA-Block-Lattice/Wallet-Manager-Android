@@ -5,24 +5,39 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
+import com.lyrawallet.BuildConfig;
 import com.lyrawallet.Global;
 import com.lyrawallet.MainActivity;
+import com.lyrawallet.R;
 
 import java.util.Locale;
 
-public class PreferencesLoad extends MainActivity{
+public class PreferencesLoad extends MainActivity {
     public PreferencesLoad() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getInstance());
-        setAppLocale(getInstance(), prefs.getString("pref_language_selection_key", "0"));
-        setNetwork(prefs.getString("pref_network_selection_key","0"));
+        if(prefs.contains("wallet_version")) {
+            // In case if preferences configuration need to be updated to a never version
+            new PreferencesUpdate();
+        } else {
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("wallet_version", BuildConfig.VERSION_NAME);
+            editor.apply();
+        }
+        setAppLocale(getInstance(), prefs.getString(getInstance().getString(R.string.pref_language_selection_key), "0"));
+        setNetwork(prefs.getString(getInstance().getString(R.string.pref_network_selection_key),"0"));
+        String inactivityTime = prefs.getString(getInstance().getString(R.string.pref_auto_close_selection_key),"N");
+        if (inactivityTime.equals("N")) {
+            Global.setInactivityTimeForClose(-1);
+        } else {
+            Global.setInactivityTimeForClose(Integer.parseInt(inactivityTime));
+        }
     }
     public PreferencesLoad(MainActivity activity) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
-        setAppLocale(activity, prefs.getString("pref_language_selection_key", "0"));
-        setNetwork(prefs.getString("pref_network_selection_key","0"));
+        setAppLocale(activity, prefs.getString(getInstance().getString(R.string.pref_language_selection_key), "0"));
+        setNetwork(prefs.getString(getInstance().getString(R.string.pref_network_selection_key),"0"));
     }
     public void setAppLocale(MainActivity activity, String localeCode){
         String loc = "en";

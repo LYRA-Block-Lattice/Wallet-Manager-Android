@@ -1,10 +1,17 @@
 <resources>
-    <string name="app_name">LyraWalletManager</string>
+    <string name="app_name" translatable="false">LyraWalletManager</string>
 
     <string name="nav_header_title" translatable="false">Lyra block lattice wallet manager</string>
 
     <string name="charset" translatable="false">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
 
+    <string name="str_Never">Never</string>
+    <string name="str_Minute">Minute</string>
+    <string name="str_Minutes">Minutes</string>
+    <string name="str_Hour">Hour</string>
+    <string name="str_Hours">Hours</string>
+    <string name="str_Day">Day</string>
+    <string name="str_Days">Days</string>
     <string name="str_dialog_title" translatable="false">Unlock wallet</string>
     <string name="str_dialog_message" translatable="false">Enter wallet password</string>
     <string name="str_dialog_accept">Accept</string>
@@ -36,7 +43,7 @@
     <string name="str_something_went_wrong_when_beackup_wallet">Something went wrong when backup the wallet</string>
 
     <string name="prefs_add_new_account_title">Add new account</string>
-    <string name="prefs_add_new_account" translatable="false">prefs_add_new_account</string>
+    <string name="prefs_add_new_account_key" translatable="false">prefs_add_new_account_key</string>
 
     <string name="prefs_backup_wallet_title">Backup wallet</string>
     <string name="prefs_backup_wallet_key" translatable="false">prefs_backup_wallet</string>
@@ -48,14 +55,33 @@
     <string name="pref_category_general_title">General</string>
     <string name="pref_category_account_title">Account</string>
     <string name="pref_category_wallet_title">Wallet</string>
+    <string name="pref_other_title">Other</string>
     <!-- Network selection -->
     <string name="pref_network_selection_title">Network</string>
     <string name="pref_network_selection_sumary">Select network: TESTNET or MAINNET</string>
     <string name="pref_network_selection_key" translatable="false">pref_network_selection_key</string>
     <!-- Language selection -->
     <string name="pref_language_selection_title">Language</string>
-    <string name="pref_language_selection_sumary">Select language: ENG, ROM \.\.\.</string>
+    <string name="pref_language_selection_sumary">Select language: EN, RO \\.\\.\\.</string>
     <string name="pref_language_selection_key" translatable="false">pref_language_selection_key</string>
+    <!-- Auto close selection -->
+    <string name="pref_auto_close_selection_title">Auto exit when no activity</string>
+    <string name="pref_auto_close_selection_sumary">If the wallet is not used in the selected interval, the wallet will close</string>
+    <string name="pref_auto_close_selection_key" translatable="false">pref_auto_close_selection_key</string>
+    <!-- Wallet auto close selection -->
+    <string-array name="pref_auto_close_selection_entries">
+        <item>Never</item>
+        <item>1 Minute</item>
+        <item>5 Minutes</item>
+        <item>10 Minutes</item>
+        <item>30 Minutes</item>
+        <item>1 Hour</item>
+    </string-array>
+    <!-- Other -->
+    <string name="pref_description_title">Version</string>
+    <string name="pref_description_sumary" translatable="false">LyraWalletManager V0.1.0</string>
+    <string name="pref_description_key" translatable="false">pref_description_key</string>
+
 
     <!-- Dummy switch -->
     <string name="pref_dummy_switch_key" translatable="false">pref_dummy_switch_key</string>

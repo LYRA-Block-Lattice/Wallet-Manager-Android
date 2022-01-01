@@ -8,6 +8,7 @@ import android.annotation.SuppressLint;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -48,6 +49,8 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
     protected static void setDeviceOrientation(int orientation) {
         DeviceOrientation = orientation;
     }
+    private Handler UserInputTimeoutHandler;
+    private Runnable UserInputTimeoutRunable;
 
     /******************* Navigation, separate them from button events, for re-usage ***************/
     protected void toOpenWallet() {
@@ -125,6 +128,17 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                 .replace(R.id.nav_host_fragment_content_main, FragmentOpenWallet.newInstance())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
+        UserInputTimeoutHandler = new Handler();
+        UserInputTimeoutRunable = new Runnable() {
+            @Override
+            public void run() {
+                closeWallet();
+            }
+        };
+        int inactivity = Global.getInactivityTimeForClose();
+        if(inactivity != -1) {
+            startHandler(inactivity);
+        }
         /*new WebHttps(this).execute("https://api.latoken.com/v2/ticker", "MainCallHttps1");
         new WebHttps(this).execute("https://api.latoken.com/v2/ticker", "MainCallHttps2");*/
     }
@@ -182,6 +196,27 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
     public void closeWallet(View view) {
         finish();
         System.exit(0);
+    }
+
+    public void closeWallet() {
+        finish();
+        System.exit(0);
+    }
+
+    @Override
+    public void onUserInteraction() {
+        super.onUserInteraction();
+        int inactivity = Global.getInactivityTimeForClose();
+        stopHandler();//stop first and then start
+        if(inactivity != -1) {
+            startHandler(inactivity);
+        }
+    }
+    public void stopHandler() {
+        UserInputTimeoutHandler.removeCallbacks(UserInputTimeoutRunable);
+    }
+    public void startHandler(int inactivityTime) {
+        UserInputTimeoutHandler.postDelayed(UserInputTimeoutRunable, (long) inactivityTime * 60*1000);
     }
     /********************************** Save file dialog & Open file dialog ***********************/
     // Need to be in main activity, they don't work elsewhere, so I put them here.

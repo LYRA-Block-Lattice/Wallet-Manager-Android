@@ -10,16 +10,16 @@ import com.lyrawallet.Ui.FragmentPreferences.FragmentPreferencesRoot;
 import java.util.List;
 
 public class Global {
+// Global enumerations
     public enum network { TESTNET, MAINNET, DEVNET }
-
     public enum language { ENG, ROM }
-
+// Global constants
     final static String DefaultWalletExtension = "lyr";
     final static int RpcConnectionTimeout = 200; // in 10mS steps
     final static int MaxWalletsBackupAllowed = 100;
     final static int MinCharAllowedOnPassword = 8;
     final static int MinCharAllowedOnWalletName = 2;
-
+// Global variables
     private static network CurrentNetwork = network.TESTNET;
     private static language CurrentLanguage = language.ENG;
 
@@ -30,11 +30,13 @@ public class Global {
     private static String SelectedAccountName = "";
     private static int SelectedAccountNr = -1;
     private static String WalletPath = "";
+    private static int InactivityTimeForClose = -1;
 
     private static FragmentDashboard Dashboard = null;
     private static FragmentMyAccountReceive MyAccountReceive = null;
     private static FragmentMyAccountSend MyAccountSend = null;
     private static FragmentPreferencesRoot Settings = null;
+
 
     final static String[] NodeAddressDevNet = new String[]{""};
     final static String[] NodeAddressTestNet = new String[]{
@@ -192,5 +194,12 @@ public class Global {
             default:
                 return "TESTNET";
         }
+    }
+
+    public static void setInactivityTimeForClose(int inactivity) {
+        InactivityTimeForClose = inactivity;
+    }
+    public static int getInactivityTimeForClose() {
+        return InactivityTimeForClose;
     }
 }
