@@ -27,4 +27,14 @@
     <string name="str_launcher_settings_button">SETARI</string>
     <string name="pref_category_general_title">General</string>
     <string name="pref_category_account_title">Cont</string>
+    <string name="prefs_add_new_account_title">Adauga cont</string>
+    <string name="prefs_backup_wallet_title">Salveaza portofel</string>
+    <string name="prefs_restore_wallet_title">Restaureaza portofel</string>
+    <string name="pref_category_wallet_title">Portofel</string>
+    <string name="action_import_wallet_hint">Nume portofel</string>
+    <string name="action_import_wallet_short">Importa portofel</string>
+    <string name="str_wallet_already_exists">Portofelul exista deja</string>
+    <string name="str_minimum_characters_in_name_is">Numarul minim de caractere in nume este</string>
+    <string name="str_something_went_wrong_when_importing_wallet">Ceva sa intamplat incercand sa import portofelul</string>
+    <string name="str_something_went_wrong_when_beackup_wallet">Ceva sa intamplat incercand sa salvez portofelul</string>
 </resources>

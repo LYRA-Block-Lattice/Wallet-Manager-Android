@@ -1,7 +1,6 @@
 package com.lyrawallet.Actions;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
@@ -25,7 +24,7 @@ public class UserRpcActions extends MainActivity implements Rpc.RpcTaskInformer 
     }
 
     public void actionHistory() {
-        new Rpc(this).execute(Global.getCurrentNetworkName() + ";History;" + Global.selectedAccountName,
+        new Rpc(this).execute(Global.getCurrentNetworkName() + ";" + Global.selectedAccountName,
                 "History",
                 Accounts.getAccount(),
                 "0", String.valueOf(System.currentTimeMillis()), "0");
@@ -47,7 +46,7 @@ public class UserRpcActions extends MainActivity implements Rpc.RpcTaskInformer 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String password = String.valueOf(passEditText.getText());
-                        new Rpc(activity, password).execute(Global.getCurrentNetworkName() + ";Receive:" + ";" + Global.selectedAccountName,
+                        new Rpc(activity, password).execute(Global.getCurrentNetworkName() + ";" + Global.selectedAccountName,
                                 "Receive",
                                 Accounts.getAccount());
                     }
@@ -73,7 +72,7 @@ public class UserRpcActions extends MainActivity implements Rpc.RpcTaskInformer 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String password = String.valueOf(passEditText.getText());
-                        new Rpc(activity, password).execute(Global.getCurrentNetworkName() + ";Send;" + Global.selectedAccountName + ";" + token + ";" + destinationId + ";" + amount,
+                        new Rpc(activity, password).execute(Global.getCurrentNetworkName() + ";" + Global.selectedAccountName + ";" + token + ";" + destinationId + ";" + amount,
                                 "Send",
                                 Accounts.getAccount());
                     }
@@ -85,25 +84,25 @@ public class UserRpcActions extends MainActivity implements Rpc.RpcTaskInformer 
 
     @Override
     public void onRpcTaskDone(String[] output) {
-        if(output[1].equals("Receive")) {
+        if(output[0].equals("Receive")) {
             receiveResult = output[0] + "^" + output[1] + "^" + output[2];
             System.out.println(output[0] + "^" + output[1] + "^" + output[2]);
-        } else if(output[1].equals("Send")) {
-            sendResult = output[0] + "^" + output[1] + "^" + output[2];
+        } else if(output[0].equals("Send")) {
+            receiveResult = output[0] + "^" + output[1] + "^" + output[2];
             System.out.println(output[0] + "^" + output[1] + "^" + output[2]);
-        } else if(output[1].equals("History")) {
-            sendResult = output[0] + "^" + output[1] + "^" + output[2];
+        } else if(output[0].equals("History")) {
+            receiveResult = output[0] + "^" + output[1] + "^" + output[2];
             System.out.println(output[0] + "^" + output[1] + "^" + output[2]);
         }
     }
     @Override
     public void onRpcNewEvent(String[] output) {
-        if(output[0].split(";")[1].equals("Receive")) {
-            receiveResult = output[0] + "^" + output[1];
-        } else if(output[0].split(";")[1].equals("Send")) {
-            sendResult = output[0] + "^" + output[1];
-        } else if(output[0].split(";")[1].equals("History")) {
-            sendResult = output[0] + "^" + output[1];
+        if(output[0].equals("Receive")) {
+            sendResult = output[0] + "^" + output[1] + "^" + output[2];
+        } else if(output[0].equals("Send")) {
+            sendResult = output[0] + "^" + output[1] + "^" + output[2];
+        } else if(output[0].equals("History")) {
+            sendResult = output[0] + "^" + output[1] + "^" + output[2];
         }
     }
 }

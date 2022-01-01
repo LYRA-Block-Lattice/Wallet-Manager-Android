@@ -24,13 +24,13 @@ import com.lyrawallet.Storage.KeyStorage;
 import com.lyrawallet.Ui.Helpers;
 import com.lyrawallet.Util.TextFilters;
 
-public class NewAccount extends Fragment {
-    public NewAccount() {
+public class FragmentRecoverAccount extends Fragment {
+    public FragmentRecoverAccount() {
         // Required empty public constructor
     }
 
-    public static NewAccount newInstance() {
-        NewAccount fragment = new NewAccount();
+    public static FragmentRecoverAccount newInstance() {
+        FragmentRecoverAccount fragment = new FragmentRecoverAccount();
         return fragment;
     }
     private void toDashboard() {
@@ -46,16 +46,7 @@ public class NewAccount extends Fragment {
         getParentFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, OpenWallet.newInstance())
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
-    }
-
-    private void toRecoverAccount() {
-        getParentFragmentManager()
-                .beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, RecoverAccount.newInstance())
+                .replace(R.id.nav_host_fragment_content_main, FragmentOpenWallet.newInstance())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
     }
@@ -69,7 +60,7 @@ public class NewAccount extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_new_account, container, false);
+        return inflater.inflate(R.layout.fragment_recover_account, container, false);
     }
 
     @Override
@@ -86,16 +77,16 @@ public class NewAccount extends Fragment {
         Button toCloseWalletButton = getActivity().findViewById(R.id.toCloseWallet);
         toCloseWalletButton.setVisibility(View.INVISIBLE);
 
-        EditText newWalletNameEditText = view.findViewById(R.id.new_account_name);
-        EditText passwordEditText = view.findViewById(R.id.new_account_password);
-        Button showPasswordButton = view.findViewById(R.id.new_account_show_password);
-        Button createAccountButton = view.findViewById(R.id.create_account);
+        EditText newWalletNameEditText = view.findViewById(R.id.recover_account_name);
+        EditText passwordEditText = view.findViewById(R.id.recover_account_password);
+        EditText privateKeyEditText = view.findViewById(R.id.recover_account_key);
+        Button showPasswordButton = view.findViewById(R.id.recover_account_show_password);
         Button recoverAccountButton = view.findViewById(R.id.recover_account);
 
         Helpers.showKeyboard(view, newWalletNameEditText);
         newWalletNameEditText.setFilters(new InputFilter[]{TextFilters.getCharactersDigitsAndSpaceFilter()});
 
-        createAccountButton.setOnClickListener(new View.OnClickListener() {
+        recoverAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (newWalletNameEditText.length() < Global.minCharAllowedOnWalletName) {
@@ -110,8 +101,11 @@ public class NewAccount extends Fragment {
                 } else if (passwordEditText.getText().length() < Global.minCharAllowedOnPassword) {
                     // Error ask for retry.
                     passwordEditText.setError("Minimum " + Global.minCharAllowedOnPassword + " characters.");
+                } else if (!Signatures.ValidatePrivateKey(privateKeyEditText.getText().toString())) {
+                    // Error ask for retry.
+                    privateKeyEditText.setError("Invalid private key.");
                 } else {
-                    if(!KeyStorage.aliasAdd(Global.walletName, newWalletNameEditText.getText().toString(), Signatures.GenerateWallet().first, passwordEditText.getText().toString())) {
+                    if(!KeyStorage.aliasAdd(Global.walletName, newWalletNameEditText.getText().toString(), privateKeyEditText.getText().toString(), passwordEditText.getText().toString())) {
                         Snackbar.make(view, "An error occured when saving new account.", Snackbar.LENGTH_LONG)
                                 .setAction("", null).show();
                     } else {
@@ -129,12 +123,6 @@ public class NewAccount extends Fragment {
                         }
                     }
                 }
-            }
-        });
-        recoverAccountButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toRecoverAccount();
             }
         });
         showPasswordButton.setOnClickListener(new View.OnClickListener() {

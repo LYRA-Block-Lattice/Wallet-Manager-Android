@@ -27,18 +27,18 @@ import com.lyrawallet.Storage.KeyStorage;
 import com.lyrawallet.Ui.Helpers;
 import com.lyrawallet.Util.TextFilters;
 
-public class OpenWallet extends Fragment {
-    public OpenWallet() {
+public class FragmentOpenWallet extends Fragment {
+    public FragmentOpenWallet() {
         // Required empty public constructor
     }
 
-    public static OpenWallet newInstance() {
-        OpenWallet fragment = new OpenWallet();
+    public static FragmentOpenWallet newInstance() {
+        FragmentOpenWallet fragment = new FragmentOpenWallet();
         return fragment;
     }
 
     private void act(View view) {
-        EditText walletNameEditText = getActivity().findViewById(R.id.username);
+        EditText walletNameEditText = getActivity().findViewById(R.id.wallet_name);
         EditText passwordEditText = getActivity().findViewById(R.id.password);
         // Check if minimum characters count in password is satisfied.
         if(walletNameEditText.length() < Global.minCharAllowedOnWalletName) {
@@ -89,7 +89,7 @@ public class OpenWallet extends Fragment {
         getParentFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, NewAccount.newInstance())
+                .replace(R.id.nav_host_fragment_content_main, FragmentNewAccount.newInstance())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
     }
@@ -121,10 +121,11 @@ public class OpenWallet extends Fragment {
         Button toCloseWalletButton = getActivity().findViewById(R.id.toCloseWallet);
         toCloseWalletButton.setVisibility(View.INVISIBLE);
 
-        EditText walletNameEditText = view.findViewById(R.id.username);
+        EditText walletNameEditText = view.findViewById(R.id.wallet_name);
         EditText passwordEditText = view.findViewById(R.id.password);
         Button openWalletButton = view.findViewById(R.id.open_wallet);
         Button newWalletButton = view.findViewById(R.id.new_wallet);
+        Button recoverWalletButton = view.findViewById(R.id.recover_wallet);
         Button showPasswordButton = view.findViewById(R.id.show_password);
 
         Helpers.showKeyboard(view, walletNameEditText);
@@ -193,7 +194,19 @@ public class OpenWallet extends Fragment {
                 getParentFragmentManager()
                         .beginTransaction()
                         .setReorderingAllowed(true)
-                        .replace(R.id.nav_host_fragment_content_main, NewWallet.newInstance())
+                        .replace(R.id.nav_host_fragment_content_main, FragmentNewWallet.newInstance())
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                        .commit();
+            }
+        });
+
+        recoverWalletButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getParentFragmentManager()
+                        .beginTransaction()
+                        .setReorderingAllowed(true)
+                        .replace(R.id.nav_host_fragment_content_main, FragmentImportWallet.newInstance())
                         .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                         .commit();
             }

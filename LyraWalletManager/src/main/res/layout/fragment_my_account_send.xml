@@ -5,6 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:tag="account_send_tag"
-    tools:context="com.lyrawallet.Ui.MyAccountSend.MyAccountSend">
+    tools:context="com.lyrawallet.Ui.MyAccountSend.FragmentMyAccountSend">
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,16 +1,12 @@
 package com.lyrawallet;
 
 import android.util.Pair;
-import android.widget.Spinner;
 
-import androidx.navigation.NavController;
+import com.lyrawallet.Ui.Dashboard.FragmentDashboard;
+import com.lyrawallet.Ui.MyAccountReceive.FragmentMyAccountReceive;
+import com.lyrawallet.Ui.MyAccountSend.FragmentMyAccountSend;
+import com.lyrawallet.Ui.Preferences.FragmentPreferencesRoot;
 
-import com.lyrawallet.Ui.Dashboard.Dashboard;
-import com.lyrawallet.Ui.MyAccountReceive.MyAccountReceive;
-import com.lyrawallet.Ui.MyAccountSend.MyAccountSend;
-import com.lyrawallet.Ui.Preferences.PreferencesRoot;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class Global {
@@ -40,10 +36,10 @@ public class Global {
     public static int minCharAllowedOnPassword = 8;
     public static int minCharAllowedOnWalletName = 2;
 
-    public static Dashboard dashboard = null;
-    public static MyAccountReceive myAccountReceive = null;
-    public static MyAccountSend myAccountSend = null;
-    public static PreferencesRoot settings = null;
+    public static FragmentDashboard dashboard = null;
+    public static FragmentMyAccountReceive myAccountReceive = null;
+    public static FragmentMyAccountSend myAccountSend = null;
+    public static FragmentPreferencesRoot settings = null;
 
     private static final String[] nodeAddressDevNet = new String[]{""};
     private static final String[] nodeAddressTestNet = new String[]{
@@ -62,6 +58,14 @@ public class Global {
             "wss://seed3.mainnet.lyra.live:443/api/v1/socket",
             "wss://seed3.mainnet.lyra.live:443/api/v1/socket"
     };
+
+    public static String getWalletPath(String containerName) {
+        return walletPath + containerName + "." + defaultWalletExtension;
+    }
+
+    public static String getWalletPath() {
+        return walletPath + walletName + "." + defaultWalletExtension;
+    }
 
     public static String getNodeAddress() {
         if(currentNetwork == network.DEVNET) {

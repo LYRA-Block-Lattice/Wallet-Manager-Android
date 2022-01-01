@@ -94,20 +94,20 @@ public class Rpc extends AsyncTask<String, Void, String[]> implements RpcSocket.
     }
 
     private String[] getState(state st) {
-        String[] rsp = new String[]{instanceName, "UNKNOWN_STATE"};
+        String[] rsp = new String[]{api, instanceName, "UNKNOWN_STATE"};
         switch (st) {
-            case IDLE: rsp[1] = "IDLE"; break;
-            case DONE: rsp[1] = "DONE"; break;
-            case RUNNING: rsp[1] = "RUNNING"; break;
-            case CONNECTION_TIMEOUT: rsp[1] = "CONNECTION_TIMEOUT"; break;
-            case CONNECTION_ERROR: rsp[1] = "CONNECTION_ERROR"; break;
-            case CONNECTION_INTERRUPTED: rsp[1] = "CONNECTION_INTERRUPTED"; break;
-            case CONNECTED: rsp[1] = "CONNECTED"; break;
-            case EMPTY_RESPONSE: rsp[1] = "EMPTY_RESPONSE"; break;
-            case ID_MISSMATCH: rsp[1] = "ID_MISSMATCH"; break;
-            case COMPOSE_MESSAGE_ERROR: rsp[1] = "COMPOSE_MESSAGE_ERROR"; break;
-            case FOUND_DISCONNECTED: rsp[1] = "FOUND_DISCONNECTED"; break;
-            case ERROR_RECEIVED_JSON: rsp[1] = "ERROR_RECEIVED_JSON"; break;
+            case IDLE: rsp[2] = "IDLE"; break;
+            case DONE: rsp[2] = "DONE"; break;
+            case RUNNING: rsp[2] = "RUNNING"; break;
+            case CONNECTION_TIMEOUT: rsp[2] = "CONNECTION_TIMEOUT"; break;
+            case CONNECTION_ERROR: rsp[2] = "CONNECTION_ERROR"; break;
+            case CONNECTION_INTERRUPTED: rsp[2] = "CONNECTION_INTERRUPTED"; break;
+            case CONNECTED: rsp[2] = "CONNECTED"; break;
+            case EMPTY_RESPONSE: rsp[2] = "EMPTY_RESPONSE"; break;
+            case ID_MISSMATCH: rsp[2] = "ID_MISSMATCH"; break;
+            case COMPOSE_MESSAGE_ERROR: rsp[2] = "COMPOSE_MESSAGE_ERROR"; break;
+            case FOUND_DISCONNECTED: rsp[2] = "FOUND_DISCONNECTED"; break;
+            case ERROR_RECEIVED_JSON: rsp[2] = "ERROR_RECEIVED_JSON"; break;
         }
         return rsp;
     }
@@ -159,6 +159,7 @@ public class Rpc extends AsyncTask<String, Void, String[]> implements RpcSocket.
             sendState(state.RUNNING);
             return state.RUNNING;
         }
+        this.api = api;
         internalState = state.RUNNING;
         state st = connect();
         if (st != state.CONNECTED) {
@@ -180,7 +181,6 @@ public class Rpc extends AsyncTask<String, Void, String[]> implements RpcSocket.
             return state.COMPOSE_MESSAGE_ERROR;
         }
         this.lastParameters = args;
-        this.api = api;
         if(!socket.send(jsonObject.toString())) {
             sendState(state.FOUND_DISCONNECTED);
             return state.FOUND_DISCONNECTED;
@@ -196,7 +196,7 @@ public class Rpc extends AsyncTask<String, Void, String[]> implements RpcSocket.
 
     private void composeSendResponse(String rsp) {
         final Rpc.RpcTaskInformer callBack = mCallBack.get();
-        String[] r = new String[]{instanceName, api, rsp};
+        String[] r = new String[]{api, instanceName, rsp};
         if(callBack != null) {
             callBack.onRpcTaskDone(r);
         } else {

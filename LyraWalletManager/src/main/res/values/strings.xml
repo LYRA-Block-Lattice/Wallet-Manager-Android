@@ -3,6 +3,7 @@
 
     <string name="nav_header_title" translatable="false">Lyra block lattice wallet manager</string>
 
+    <string name="charset" translatable="false">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
 
     <string name="str_dialog_title" translatable="false">Unlock wallet</string>
     <string name="str_dialog_message" translatable="false">Enter wallet password</string>
@@ -27,14 +28,26 @@
     <string name="action_create_new_account_short">Create account</string>
     <string name="action_recover_account_short">Recover account</string>
     <string name="action_new_wallet_short">New wallet</string>
+    <string name="action_import_wallet_hint">Wallet name</string>
+    <string name="action_import_wallet_short">Import wallet</string>
+    <string name="str_wallet_already_exists">Wallet already exists</string>
+    <string name="str_minimum_characters_in_name_is">Minimum number of characters in name is</string>
+    <string name="str_something_went_wrong_when_importing_wallet">Something went wrong when importing the wallet</string>
+    <string name="str_something_went_wrong_when_beackup_wallet">Something went wrong when backup the wallet</string>
 
-    <string name="charset" translatable="false">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXY Z</string>
-
+    <string name="prefs_add_new_account_title">Add new account</string>
     <string name="prefs_add_new_account" translatable="false">prefs_add_new_account</string>
+
+    <string name="prefs_backup_wallet_title">Backup wallet</string>
+    <string name="prefs_backup_wallet_key" translatable="false">prefs_backup_wallet</string>
+
+    <string name="prefs_restore_wallet_title">Restore wallet</string>
+    <string name="prefs_restore_wallet_key" translatable="false">prefs_restore_wallet</string>
 
     <!-- Preferences menu -->
     <string name="pref_category_general_title">General</string>
     <string name="pref_category_account_title">Account</string>
+    <string name="pref_category_wallet_title">Wallet</string>
     <!-- Network selection -->
     <string name="pref_network_selection_title">Network</string>
     <string name="pref_network_selection_sumary">Select network: TESTNET or MAINNET</string>

@@ -1,36 +1,22 @@
-package com.lyrawallet.Ui.Dashboard;
+package com.lyrawallet.Ui.MyAccountSend;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
-import com.lyrawallet.Accounts.Accounts;
-import com.lyrawallet.MainActivity;
 import com.lyrawallet.R;
-import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.PercentFormatter;
-import com.github.mikephil.charting.utils.ColorTemplate;
-import com.lyrawallet.Ui.Helpers;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class Dashboard extends Fragment {
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link FragmentMyAccountSend#newInstance} factory method to
+ * create an instance of this fragment.
+ */
+public class FragmentMyAccountSend extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -40,19 +26,19 @@ public class Dashboard extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public Dashboard() {
+    public FragmentMyAccountSend() {
         // Required empty public constructor
     }
 
-    public static Dashboard newInstance(String param1, String param2) {
-        Dashboard fragment = new Dashboard();
+    public static FragmentMyAccountSend newInstance(String param1, String param2) {
+        FragmentMyAccountSend fragment = new FragmentMyAccountSend();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
-        @Override
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
@@ -65,7 +51,7 @@ public class Dashboard extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dash, container, false);
+        return inflater.inflate(R.layout.fragment_my_account_send, container, false);
     }
 
     @Override
@@ -76,17 +62,10 @@ public class Dashboard extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         Button toDashboardButton = getActivity().findViewById(R.id.toDashboard);
-        toDashboardButton.setVisibility(View.INVISIBLE);
+        toDashboardButton.setVisibility(View.VISIBLE);
         Button toOpenWalletButton = getActivity().findViewById(R.id.toOpenWallet);
         toOpenWalletButton.setVisibility(View.INVISIBLE);
         Button toCloseWalletButton = getActivity().findViewById(R.id.toCloseWallet);
-        toCloseWalletButton.setVisibility(View.VISIBLE);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        // Get the layout inflater
-        LayoutInflater inflater = requireActivity().getLayoutInflater();
-
-        View v = new View((MainActivity) getActivity());
-        //new Accounts((MainActivity) getActivity()).promptForPassword(getContext(), v.getRootView());
+        toCloseWalletButton.setVisibility(View.INVISIBLE);
     }
 }

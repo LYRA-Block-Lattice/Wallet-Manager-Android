@@ -1,52 +1,53 @@
 package com.lyrawallet;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 
 import android.annotation.SuppressLint;
 import android.content.res.Configuration;
-import android.content.res.Resources;
-import android.os.Build;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.preference.ListPreference;
-import androidx.preference.Preference;
-import androidx.preference.PreferenceManager;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.lyrawallet.PreferencesLoad.PreferencesLoad;
-import com.lyrawallet.Ui.Preferences.PreferencesRoot;
+import com.lyrawallet.Storage.StorageCommon;
+import com.lyrawallet.Ui.Preferences.FragmentPreferencesRoot;
 import com.lyrawallet.Accounts.Accounts;
 import com.lyrawallet.Api.Network.WebHttps;
 import com.lyrawallet.Api.Rpc;
-import com.lyrawallet.Storage.KeyStorage;
-import com.lyrawallet.Ui.Dashboard.Dashboard;
-import com.lyrawallet.Ui.WalletManagement.OpenWallet;
-import com.lyrawallet.Ui.MyAccountReceive.MyAccountReceive;
-import com.lyrawallet.Ui.MyAccountSend.MyAccountSend;
+import com.lyrawallet.Ui.Dashboard.FragmentDashboard;
+import com.lyrawallet.Ui.WalletManagement.FragmentOpenWallet;
+import com.lyrawallet.Ui.MyAccountReceive.FragmentMyAccountReceive;
+import com.lyrawallet.Ui.MyAccountSend.FragmentMyAccountSend;
 
 import java.io.File;
-import java.util.Locale;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class MainActivity extends AppCompatActivity implements WebHttps.WebHttpsTaskInformer, Rpc.RpcTaskInformer {
     protected static MainActivity instance = null;
     int deviceOrientation = 0;
-    void showOpenWalletButtons() {
+    void showOpenWallet() {
         getSupportFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, OpenWallet.newInstance())
+                .replace(R.id.nav_host_fragment_content_main, FragmentOpenWallet.newInstance())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
     }
-    void showDashboardButtons() {
+    void showDashboard() {
         getSupportFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements WebHttps.WebHttps
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
     }
-    void showReceiveButtons() {
+    void showReceive() {
         getSupportFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements WebHttps.WebHttps
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
     }
-    void showSendButtons() {
+    void showSend() {
         getSupportFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements WebHttps.WebHttps
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
     }
-    void showSettingsButtons() {
+    void showSettings() {
         getSupportFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
@@ -92,21 +93,21 @@ public class MainActivity extends AppCompatActivity implements WebHttps.WebHttps
         // Fix UI when Soft Keyboard is visible.
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         if(Global.dashboard == null) {
-            Global.dashboard = Dashboard.newInstance("", "");
+            Global.dashboard = FragmentDashboard.newInstance("", "");
         }
         if(Global.myAccountReceive == null) {
-            Global.myAccountReceive = MyAccountReceive.newInstance("", "");
+            Global.myAccountReceive = FragmentMyAccountReceive.newInstance("", "");
         }
         if(Global.myAccountSend == null) {
-            Global.myAccountSend = MyAccountSend.newInstance("", "");
+            Global.myAccountSend = FragmentMyAccountSend.newInstance("", "");
         }
         if(Global.settings == null) {
-            Global.settings = new PreferencesRoot();
+            Global.settings = new FragmentPreferencesRoot();
         }
         getSupportFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, OpenWallet.newInstance())
+                .replace(R.id.nav_host_fragment_content_main, FragmentOpenWallet.newInstance())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         /*new Rpc(instance).execute("MainCallRpc1",
@@ -163,22 +164,87 @@ public class MainActivity extends AppCompatActivity implements WebHttps.WebHttps
     }
 
     public void dashboard(View view) {
-        showDashboardButtons();
+        showDashboard();
     }
     public void send(View view) {
-        showSendButtons();
+        showSend();
     }
     public void receive(View view) {
-        showReceiveButtons();
+        showReceive();
     }
     public void settings(View view) {
-        showSettingsButtons();
+        showSettings();
     }
     public void openWallet(View view) {
-        showOpenWalletButtons();
+        showOpenWallet();
     }
     public void closeWallet(View view) {
         finish();
         System.exit(0);
+    }
+/************************************** Save file dialog & Open file dialog **************************************/
+    protected void backupWallet(int procedure) {
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("application/" + Global.defaultWalletExtension);
+        intent.putExtra(Intent.EXTRA_TITLE, Global.walletName + "." + Global.defaultWalletExtension);
+        instance.startActivityForResult(intent, procedure);
+    }
+
+    protected void importWallet(int procedure, String walletName) {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("application/" + Global.defaultWalletExtension);
+        intent.setType("*/*");
+        instance.startActivityForResult(intent, procedure);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent resultData) {
+        super.onActivityResult(requestCode, resultCode, resultData);
+        Uri uri = null;
+        if (resultData != null) {
+            uri = resultData.getData();
+            if (resultCode == Activity.RESULT_OK) {
+                if (requestCode == StorageCommon.BACKUP_WALLET) {
+                    try {
+                        OutputStream output = getContentResolver().openOutputStream(uri);
+                        FileInputStream fileInputStream = new FileInputStream(Global.getWalletPath());
+                        byte[] bytes = new byte[(int) fileInputStream.available()];
+                        fileInputStream.read(bytes, 0, bytes.length);
+                        output.write(bytes);
+                        output.flush();
+                        output.close();
+                    } catch (IOException ignored) {
+                        Snackbar.make(this.findViewById(R.id.nav_host_fragment_content_main), getString(R.string.str_something_went_wrong_when_beackup_wallet), Snackbar.LENGTH_LONG)
+                                .setAction("", null).show();
+                    }
+                } else if (requestCode == StorageCommon.IMPORT_WALLET) {
+                    try {
+                        InputStream fileInputStream = getContentResolver().openInputStream(uri);
+                        String path = Global.getWalletPath();
+                        File dstFile = new File(path);
+                        if (!dstFile.exists()) {
+                            FileWriter fiw = new FileWriter(dstFile);
+                            byte[] bytes = new byte[(int) fileInputStream.available()];
+                            fileInputStream.read(bytes, 0, bytes.length);
+                            fiw.write(new String(bytes));
+                            fiw.flush();
+                            fiw.close();
+                            showOpenWallet();
+                            Snackbar.make(findViewById(R.id.nav_host_fragment_content_main), "Saved OK", Snackbar.LENGTH_LONG)
+                                    .setAction("", null).show();
+                        } else {
+                            Snackbar.make(findViewById(R.id.nav_host_fragment_content_main), "File exists", Snackbar.LENGTH_LONG)
+                                    .setAction("", null).show();
+                        }
+                    } catch (IOException e) {
+                        Snackbar.make(findViewById(R.id.nav_host_fragment_content_main), getString(R.string.str_something_went_wrong_when_importing_wallet), Snackbar.LENGTH_LONG)
+                                .setAction("", null).show();
+                    }
+                }
+                //walletName = null;
+            }
+        }
     }
 }

@@ -2,26 +2,23 @@ package com.lyrawallet.Ui.Preferences;
 
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 
 import androidx.fragment.app.FragmentTransaction;
-import androidx.preference.DropDownPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.lyrawallet.Global;
 import com.lyrawallet.R;
-import com.lyrawallet.Ui.WalletManagement.NewAccount;
+import com.lyrawallet.Storage.BackupWallet;
+import com.lyrawallet.Ui.WalletManagement.FragmentNewAccount;
 
 import java.util.Locale;
 
-public class PreferencesRoot extends PreferenceFragmentCompat {
+public class FragmentPreferencesRoot extends PreferenceFragmentCompat {
     private void setAppLocale(String localeCode){
         Resources resources = getActivity().getResources();
         Configuration config = resources.getConfiguration();
@@ -108,9 +105,19 @@ public class PreferencesRoot extends PreferenceFragmentCompat {
                     getParentFragmentManager()
                             .beginTransaction()
                             .setReorderingAllowed(true)
-                            .replace(R.id.nav_host_fragment_content_main, NewAccount.newInstance())
+                            .replace(R.id.nav_host_fragment_content_main, FragmentNewAccount.newInstance())
                             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                             .commit();
+                    return true;
+                }
+            });
+        }
+        Preference newBackupWalletButton = findPreference(getString(R.string.prefs_backup_wallet_key));
+        if(newBackupWalletButton != null) {
+            newBackupWalletButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    new BackupWallet();
                     return true;
                 }
             });

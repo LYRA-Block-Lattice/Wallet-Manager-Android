@@ -9,14 +9,14 @@
     android:paddingRight="@dimen/fragment_horizontal_margin"
     android:paddingBottom="@dimen/fragment_vertical_margin"
     android:tag="open_wallet_tag"
-    tools:context="com.lyrawallet.Ui.WalletManagement.OpenWallet">
+    tools:context="com.lyrawallet.Ui.WalletManagement.FragmentOpenWallet">
 
     <EditText
-        android:id="@+id/username"
+        android:id="@+id/wallet_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="96dp"
+        android:layout_marginTop="32dp"
         android:layout_marginEnd="24dp"
         android:digits="@string/charset"
         android:hint="@string/prompt_wallet_name"
@@ -48,7 +48,7 @@
         android:textAllCaps="false"
         app:layout_constraintEnd_toStartOf="@id/show_password"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/username"
+        app:layout_constraintTop_toBottomOf="@id/wallet_name"
         tools:ignore="TextContrastCheck" />
 
     <Button
@@ -68,7 +68,7 @@
         app:layout_constraintBottom_toTopOf="@id/open_wallet"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/password"
-        app:layout_constraintTop_toBottomOf="@id/username"
+        app:layout_constraintTop_toBottomOf="@id/wallet_name"
         app:layout_constraintVertical_bias="0.0"
         tools:ignore="SpeakableTextPresentCheck" />
 
@@ -77,8 +77,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="300dp"
+        android:layout_marginBottom="340dp"
         android:background="@drawable/fab_normal_button"
         android:enabled="false"
         android:text="@string/action_open_wallet_short"
@@ -94,8 +93,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="256dp"
+        android:layout_marginBottom="285dp"
         android:background="@drawable/fab_normal_button"
         android:text="@string/action_new_wallet_short"
         app:backgroundTint="@color/menu_button_icon_tint"
@@ -103,7 +101,24 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/open_wallet" />
+        app:layout_constraintTop_toBottomOf="@+id/open_wallet"
+        tools:ignore="TextContrastCheck" />
+
+    <Button
+        android:id="@+id/recover_wallet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginBottom="230dp"
+        android:background="@drawable/fab_normal_button"
+        android:text="@string/action_import_wallet_short"
+        app:backgroundTint="@color/menu_button_icon_tint"
+        app:backgroundTintMode="add"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/new_wallet"
+        tools:ignore="TextContrastCheck" />
 
     <ProgressBar
         android:layout_width="wrap_content"

@@ -23,13 +23,13 @@ import com.lyrawallet.Storage.KeyStorage;
 import com.lyrawallet.Ui.Helpers;
 import com.lyrawallet.Util.TextFilters;
 
-public class NewWallet extends Fragment {
-    public NewWallet() {
+public class FragmentNewWallet extends Fragment {
+    public FragmentNewWallet() {
         // Required empty public constructor
     }
 
-    public static NewWallet newInstance() {
-        NewWallet fragment = new NewWallet();
+    public static FragmentNewWallet newInstance() {
+        FragmentNewWallet fragment = new FragmentNewWallet();
         return fragment;
     }
 
@@ -37,7 +37,7 @@ public class NewWallet extends Fragment {
         getParentFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, NewAccount.newInstance())
+                .replace(R.id.nav_host_fragment_content_main, FragmentNewAccount.newInstance())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
     }
@@ -46,7 +46,7 @@ public class NewWallet extends Fragment {
         getParentFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, OpenWallet.newInstance())
+                .replace(R.id.nav_host_fragment_content_main, FragmentOpenWallet.newInstance())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
     }

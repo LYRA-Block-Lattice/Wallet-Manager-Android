@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:tag="my_account_tag"
-    tools:context="com.lyrawallet.Ui.MyAccount.MyAccount">
+    tools:context="com.lyrawallet.Ui.MyAccount.FragmentMyAccount">
 
     <androidx.constraintlayout.widget.Guideline
         android:layout_width="wrap_content"

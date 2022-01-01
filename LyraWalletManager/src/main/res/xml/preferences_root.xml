@@ -20,7 +20,7 @@
             android:summary="@string/pref_language_selection_sumary"
             android:title="@string/pref_language_selection_title" />
 
-        <SwitchPreference
+        <!-- <SwitchPreference
             android:defaultValue="false"
             android:key="@string/pref_dummy_switch_key"
             android:summary="@string/pref_dummy_switch_summary"
@@ -31,14 +31,19 @@
             android:persistent="true"
             android:dialogTitle="Title1"
             android:dialogMessage="Write what you want"
-            android:defaultValue="Some value" />
+            android:defaultValue="Some value" /> -->
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_category_account_title">
         <Preference
-            android:title="Add new account"
-            android:key="@string/prefs_add_new_account"
-            android:summary="Add new account" />
+            android:title="@string/prefs_add_new_account_title"
+            android:key="@string/prefs_add_new_account" />
+
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/pref_category_wallet_title">
+        <Preference
+            android:title="@string/prefs_backup_wallet_title"
+            android:key="@string/prefs_backup_wallet_key" />
     </PreferenceCategory>
 
 </PreferenceScreen>

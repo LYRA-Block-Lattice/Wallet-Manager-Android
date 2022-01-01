@@ -80,7 +80,7 @@ public class KeyStorage {
 
     public static boolean fileExists(String containerName) {
         Status = status.OK;
-        File file = new File(Global.walletPath + containerName + "." +Global.defaultWalletExtension);
+        File file = new File(Global.getWalletPath(containerName));
         if(file.exists())  {
             Status = status.FILE_EXIST;
             return true;
@@ -99,7 +99,7 @@ public class KeyStorage {
             Status = status.FILE_NOT_EXIST;
             return false;
         }
-        File file = new File(Global.walletPath + containerName + "." +Global.defaultWalletExtension);
+        File file = new File(Global.getWalletPath(containerName));
         return file.delete();
     }
 
@@ -116,7 +116,7 @@ public class KeyStorage {
     public static byte[] read(String containerName, String password) {
         //--------------------- Read encrypted container -----------------------//
         Status = status.OK;
-        try (FileInputStream fis = new FileInputStream(Global.walletPath + containerName + "." +Global.defaultWalletExtension)) {
+        try (FileInputStream fis = new FileInputStream(Global.getWalletPath(containerName))) {
             int size = fis.available();
             if(size == 0) {
                 Status = status.FILE_NOT_EXIST;
@@ -226,7 +226,7 @@ public class KeyStorage {
     private static boolean save(String containerName, String data) {
         //------  Save the new wallet file to disk ------------------//
         String encoded = Base58Encoding.EncodeWithCheckSum(data.getBytes(StandardCharsets.UTF_8));
-        File dstFile = new File(Global.walletPath + containerName + "." +Global.defaultWalletExtension);
+        File dstFile = new File(Global.getWalletPath(containerName));
         try {
             FileWriter fiw = new FileWriter(dstFile);
             fiw.write(encoded);
@@ -243,8 +243,8 @@ public class KeyStorage {
         //------  Increase the count of each backup wallet ----------//
         int fileCount = Global.maxWalletsBackupAllowed;
         for (; fileCount > 0; fileCount-- ) {
-            File srcFile = new File(Global.walletPath + containerName + "_" + fileCount + "." +Global.defaultWalletExtension);
-            File dstFile = new File(Global.walletPath + containerName + "_" + (fileCount + 1) + "." +Global.defaultWalletExtension);
+            File srcFile = new File(Global.getWalletPath(containerName + "_" + fileCount));
+            File dstFile = new File(Global.getWalletPath(containerName + "_" + (fileCount + 1)));
             if(dstFile.exists() && fileCount == Global.maxWalletsBackupAllowed) {
                 dstFile.delete();
             } else if(srcFile.exists()) {
@@ -256,9 +256,9 @@ public class KeyStorage {
             }
         }
         //------  Current stored wallet has no count ----------------//
-        File srcFile = new File(Global.walletPath + containerName + "." + Global.defaultWalletExtension);
+        File srcFile = new File(Global.getWalletPath(containerName));
         if(srcFile.exists()) {
-            File dstFile = new File(Global.walletPath + containerName + "_" + 1 + "." + Global.defaultWalletExtension);
+            File dstFile = new File(Global.getWalletPath(containerName + "_" + 1));
             return srcFile.renameTo(dstFile);
         }
         return true;

@@ -1,5 +1,6 @@
-package com.lyrawallet.Ui.MyAccountReceive;
+package com.lyrawallet.Ui.Dashboard;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,14 +10,10 @@ import android.widget.Button;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.lyrawallet.MainActivity;
 import com.lyrawallet.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MyAccountReceive#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class MyAccountReceive extends Fragment {
+public class FragmentDashboard extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -26,19 +23,19 @@ public class MyAccountReceive extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public MyAccountReceive() {
+    public FragmentDashboard() {
         // Required empty public constructor
     }
 
-    public static MyAccountReceive newInstance(String param1, String param2) {
-        MyAccountReceive fragment = new MyAccountReceive();
+    public static FragmentDashboard newInstance(String param1, String param2) {
+        FragmentDashboard fragment = new FragmentDashboard();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
-    @Override
+        @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
@@ -51,7 +48,7 @@ public class MyAccountReceive extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_account_receive, container, false);
+        return inflater.inflate(R.layout.fragment_dash, container, false);
     }
 
     @Override
@@ -62,10 +59,17 @@ public class MyAccountReceive extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         Button toDashboardButton = getActivity().findViewById(R.id.toDashboard);
-        toDashboardButton.setVisibility(View.VISIBLE);
+        toDashboardButton.setVisibility(View.INVISIBLE);
         Button toOpenWalletButton = getActivity().findViewById(R.id.toOpenWallet);
         toOpenWalletButton.setVisibility(View.INVISIBLE);
         Button toCloseWalletButton = getActivity().findViewById(R.id.toCloseWallet);
-        toCloseWalletButton.setVisibility(View.INVISIBLE);
+        toCloseWalletButton.setVisibility(View.VISIBLE);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        // Get the layout inflater
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
+
+        View v = new View((MainActivity) getActivity());
+        //new Accounts((MainActivity) getActivity()).promptForPassword(getContext(), v.getRootView());
     }
 }
