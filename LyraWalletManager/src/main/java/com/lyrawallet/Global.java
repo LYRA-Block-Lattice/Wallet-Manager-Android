@@ -2,47 +2,42 @@ package com.lyrawallet;
 
 import android.util.Pair;
 
-import com.lyrawallet.Ui.Dashboard.FragmentDashboard;
-import com.lyrawallet.Ui.MyAccountReceive.FragmentMyAccountReceive;
-import com.lyrawallet.Ui.MyAccountSend.FragmentMyAccountSend;
-import com.lyrawallet.Ui.Preferences.FragmentPreferencesRoot;
+import com.lyrawallet.Ui.FragmentDashboard.FragmentDashboard;
+import com.lyrawallet.Ui.FragmentMyAccountReceive.FragmentMyAccountReceive;
+import com.lyrawallet.Ui.FragmentMyAccountSend.FragmentMyAccountSend;
+import com.lyrawallet.Ui.FragmentPreferences.FragmentPreferencesRoot;
 
 import java.util.List;
 
 public class Global {
-    public enum network {
-        TESTNET,
-        MAINNET,
-        DEVNET
-    }
+    public enum network { TESTNET, MAINNET, DEVNET }
 
-    public enum language {
-        ENG,
-        ROM
-    }
+    public enum language { ENG, ROM }
 
-    public static network currentNetwork = network.TESTNET;
-    public static language currentLanguage = language.ENG;
+    final static String DefaultWalletExtension = "lyr";
+    final static int RpcConnectionTimeout = 200; // in 10mS steps
+    final static int MaxWalletsBackupAllowed = 100;
+    final static int MinCharAllowedOnPassword = 8;
+    final static int MinCharAllowedOnWalletName = 2;
 
-    public static String accountsContainer = null;
-    public static List<Pair<String, String>> walletAccNameAndId = null;
-    public static String walletName = null;
-    public static String selectedAccountName = "";
-    public static int selectedAccountNr = -1;
-    public static int rpcConnectionTimeout = 200; // in 10mS steps
-    public static String defaultWalletExtension = "lyr";
-    public static int maxWalletsBackupAllowed = 100;
-    public static String walletPath = "";
-    public static int minCharAllowedOnPassword = 8;
-    public static int minCharAllowedOnWalletName = 2;
+    private static network CurrentNetwork = network.TESTNET;
+    private static language CurrentLanguage = language.ENG;
 
-    public static FragmentDashboard dashboard = null;
-    public static FragmentMyAccountReceive myAccountReceive = null;
-    public static FragmentMyAccountSend myAccountSend = null;
-    public static FragmentPreferencesRoot settings = null;
+    private static String AccountsContainer = null;
+    private static List<Pair<String, String>> WalletAccNameAndId = null;
+    private static String WalletName = null;
+    private static String ReceiveWalletPassword = null;
+    private static String SelectedAccountName = "";
+    private static int SelectedAccountNr = -1;
+    private static String WalletPath = "";
 
-    private static final String[] nodeAddressDevNet = new String[]{""};
-    private static final String[] nodeAddressTestNet = new String[]{
+    private static FragmentDashboard Dashboard = null;
+    private static FragmentMyAccountReceive MyAccountReceive = null;
+    private static FragmentMyAccountSend MyAccountSend = null;
+    private static FragmentPreferencesRoot Settings = null;
+
+    final static String[] NodeAddressDevNet = new String[]{""};
+    final static String[] NodeAddressTestNet = new String[]{
             "wss://161.97.166.188:4504/api/v1/socket",
             "wss://173.212.228.110:4504/api/v1/socket",
             "wss://seed.testnet.lyra.live:443/api/v1/socket",
@@ -50,7 +45,7 @@ public class Global {
             "wss://seed3.testnet.lyra.live:443/api/v1/socket",
             "wss://seed3.testnet.lyra.live:443/api/v1/socket"
     };
-    private static final String[] nodeAddressMainNet = new String[]{
+    final static String[] NodeAddressMainNet = new String[]{
             "wss://161.97.166.188:5504/api/v1/socket",
             "wss://173.212.228.110:5504/api/v1/socket",
             "wss://seed1.mainnet.lyra.live:443/api/v1/socket",
@@ -59,30 +54,137 @@ public class Global {
             "wss://seed3.mainnet.lyra.live:443/api/v1/socket"
     };
 
+    public static void setCurrentNetwork(network net) {
+        CurrentNetwork = net;
+    }
+    public static network getCurrentNetwork() {
+        return CurrentNetwork;
+    }
+
+    public static void setCurrentLanguage(language lang) {
+        CurrentLanguage = lang;
+    }
+    public static language getCurrentLanguage() {
+        return CurrentLanguage;
+    }
+
+    public static void setAccountsContainer(String accContainer) {
+        AccountsContainer = accContainer;
+    }
+    public static String getAccountsContainer() {
+        return AccountsContainer;
+    }
+
+    public static void setWalletAccNameAndId(List<Pair<String, String>> wallAccNameId) {
+        WalletAccNameAndId = wallAccNameId;
+    }
+    public static List<Pair<String, String>> getWalletAccNameAndId() {
+        return WalletAccNameAndId;
+    }
+
+    public static void setWalletName(String wallName) {
+        WalletName = wallName;
+    }
+    public static String getWalletName() {
+        return WalletName;
+    }
+
+    public static void setReceiveWalletPassword(String recWallPass) {
+        ReceiveWalletPassword = recWallPass;
+    }
+    public static String getReceiveWalletPassword() {
+        return ReceiveWalletPassword;
+    }
+
+    public static void setSelectedAccountName(String selAccName) {
+        SelectedAccountName = selAccName;
+    }
+    public static String getSelectedAccountName() {
+        return SelectedAccountName;
+    }
+
+    public static void setSelectedAccountNr(int selAccNr) {
+        SelectedAccountNr = selAccNr;
+    }
+    public static int getSelectedAccountNr() {
+        return SelectedAccountNr;
+    }
+
+    public static int getRpcConnectionTimeout() {
+        return RpcConnectionTimeout;
+    }
+
+    public static String getDefaultWalletExtension() {
+        return DefaultWalletExtension;
+    }
+
+    public static int getMaxWalletsBackupAllowed() {
+        return MaxWalletsBackupAllowed;
+    }
+
+    public static void setWalletPath(String wallPath) {
+        WalletPath = wallPath;
+    }
     public static String getWalletPath(String containerName) {
-        return walletPath + containerName + "." + defaultWalletExtension;
+        return WalletPath + containerName + "." + DefaultWalletExtension;
     }
 
     public static String getWalletPath() {
-        return walletPath + walletName + "." + defaultWalletExtension;
+        return WalletPath + WalletName + "." + DefaultWalletExtension;
+    }
+
+    public static int getMinCharAllowedOnPassword() {
+        return MinCharAllowedOnPassword;
+    }
+
+    public static int getMinCharAllowedOnWalletName() {
+        return MinCharAllowedOnWalletName;
+    }
+
+    public static void setDashboard(FragmentDashboard dash) {
+        Dashboard = dash;
+    }
+    public static FragmentDashboard getDashboard() {
+        return Dashboard;
+    }
+
+    public static void setMyAccountReceive(FragmentMyAccountReceive myAccReceive) {
+        MyAccountReceive = myAccReceive;
+    }
+    public static FragmentMyAccountReceive getMyAccountReceive() {
+        return MyAccountReceive;
+    }
+
+    public static void setMyAccountSend(FragmentMyAccountSend myAccSend) {
+        MyAccountSend = myAccSend;
+    }
+    public static FragmentMyAccountSend getMyAccountSend() {
+        return MyAccountSend;
+    }
+
+    public static void setSettings(FragmentPreferencesRoot set) {
+        Settings = set;
+    }
+    public static FragmentPreferencesRoot getSettings() {
+        return Settings;
     }
 
     public static String getNodeAddress() {
-        if(currentNetwork == network.DEVNET) {
-            int nodeNr = (int) (Math.random() * nodeAddressDevNet.length - 1);
-            return nodeAddressDevNet[nodeNr];
-        } else if(currentNetwork == network.TESTNET) {
-            int nodeNr = (int) (Math.random() * nodeAddressTestNet.length - 1);
-            return nodeAddressTestNet[nodeNr];
-        }else if(currentNetwork == network.MAINNET) {
-            int nodeNr = (int) (Math.random() * nodeAddressMainNet.length - 1);
-            return nodeAddressMainNet[nodeNr];
+        if(getCurrentNetwork() == network.DEVNET) {
+            int nodeNr = (int) (Math.random() * NodeAddressDevNet.length - 1);
+            return NodeAddressDevNet[nodeNr];
+        } else if(getCurrentNetwork() == network.TESTNET) {
+            int nodeNr = (int) (Math.random() * NodeAddressTestNet.length - 1);
+            return NodeAddressTestNet[nodeNr];
+        }else if(getCurrentNetwork() == network.MAINNET) {
+            int nodeNr = (int) (Math.random() * NodeAddressMainNet.length - 1);
+            return NodeAddressMainNet[nodeNr];
         }
         return "";
     }
 
     public static String getCurrentNetworkName() {
-        switch(currentNetwork) {
+        switch(getCurrentNetwork()) {
             case DEVNET:
                 return "DEVNET";
             case MAINNET:

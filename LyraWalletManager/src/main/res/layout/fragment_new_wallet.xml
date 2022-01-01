@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/fragment_horizontal_margin"
     android:paddingBottom="@dimen/fragment_vertical_margin"
     android:tag="new_wallet_tag"
-    tools:context="com.lyrawallet.Ui.WalletManagement.FragmentNewWallet">
+    tools:context="com.lyrawallet.Ui.FragmentWalletManagement.FragmentNewWallet">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_middle_v"

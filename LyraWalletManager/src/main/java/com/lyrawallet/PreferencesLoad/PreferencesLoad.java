@@ -15,8 +15,8 @@ import java.util.Locale;
 
 public class PreferencesLoad extends MainActivity{
     public PreferencesLoad() {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(instance);
-        setAppLocale(instance, prefs.getString("pref_language_selection_key", "0"));
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getInstance());
+        setAppLocale(getInstance(), prefs.getString("pref_language_selection_key", "0"));
         setNetwork(prefs.getString("pref_network_selection_key","0"));
     }
     public PreferencesLoad(MainActivity activity) {
@@ -44,13 +44,13 @@ public class PreferencesLoad extends MainActivity{
     public void setNetwork(String network) {
         switch(network) {
             case "1":
-                Global.currentNetwork = Global.network.MAINNET;
+                Global.setCurrentNetwork(Global.network.MAINNET);
                 break;
             case "2":
-                Global.currentNetwork = Global.network.DEVNET;
+                Global.setCurrentNetwork(Global.network.DEVNET);
                 break;
             default:
-                Global.currentNetwork = Global.network.TESTNET;
+                Global.setCurrentNetwork(Global.network.TESTNET);
                 break;
         }
     }

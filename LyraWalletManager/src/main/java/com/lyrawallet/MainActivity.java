@@ -20,14 +20,14 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.snackbar.Snackbar;
 import com.lyrawallet.PreferencesLoad.PreferencesLoad;
 import com.lyrawallet.Storage.StorageCommon;
-import com.lyrawallet.Ui.Preferences.FragmentPreferencesRoot;
+import com.lyrawallet.Ui.UiHelpers;
+import com.lyrawallet.Ui.FragmentPreferences.FragmentPreferencesRoot;
 import com.lyrawallet.Accounts.Accounts;
-import com.lyrawallet.Api.Network.WebHttps;
-import com.lyrawallet.Api.Rpc;
-import com.lyrawallet.Ui.Dashboard.FragmentDashboard;
-import com.lyrawallet.Ui.WalletManagement.FragmentOpenWallet;
-import com.lyrawallet.Ui.MyAccountReceive.FragmentMyAccountReceive;
-import com.lyrawallet.Ui.MyAccountSend.FragmentMyAccountSend;
+import com.lyrawallet.Api.Network.NetworkWebHttps;
+import com.lyrawallet.Ui.FragmentDashboard.FragmentDashboard;
+import com.lyrawallet.Ui.FragmentWalletManagement.FragmentOpenWallet;
+import com.lyrawallet.Ui.FragmentMyAccountReceive.FragmentMyAccountReceive;
+import com.lyrawallet.Ui.FragmentMyAccountSend.FragmentMyAccountSend;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,10 +36,21 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class MainActivity extends AppCompatActivity implements WebHttps.WebHttpsTaskInformer, Rpc.RpcTaskInformer {
-    protected static MainActivity instance = null;
-    int deviceOrientation = 0;
-    void showOpenWallet() {
+public class MainActivity extends AppCompatActivity implements NetworkWebHttps.WebHttpsTaskInformer {
+    private static MainActivity Instance = null;
+    private static int DeviceOrientation = 0;
+    protected static MainActivity getInstance() {
+        return Instance;
+    }
+    protected static int getDeviceOrientation() {
+        return DeviceOrientation;
+    }
+    protected static void setDeviceOrientation(int orientation) {
+        DeviceOrientation = orientation;
+    }
+
+    /******************* Navigation, separate them from button events, for re-usage ***************/
+    protected void toOpenWallet() {
         getSupportFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
@@ -47,81 +58,75 @@ public class MainActivity extends AppCompatActivity implements WebHttps.WebHttps
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
     }
-    void showDashboard() {
+    protected void toDashboard() {
         getSupportFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, Global.dashboard)
+                .replace(R.id.nav_host_fragment_content_main, Global.getDashboard())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
     }
-    void showReceive() {
+    protected void toReceive() {
         getSupportFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, Global.myAccountReceive)
+                .replace(R.id.nav_host_fragment_content_main, Global.getMyAccountReceive())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
     }
-    void showSend() {
+    protected void toSend() {
         getSupportFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, Global.myAccountSend)
+                .replace(R.id.nav_host_fragment_content_main, Global.getMyAccountSend())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
     }
-    void showSettings() {
+    protected void toSettings() {
         getSupportFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, Global.settings)
+                .replace(R.id.nav_host_fragment_content_main, Global.getSettings())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
     }
-
+    /************************************** Events ************************************************/
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        instance = this;
+        Instance = this;
+        // At the moment force device to stay in portrait mode.
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        // Load user preferences.
         new PreferencesLoad();
-        //Get the path of the working directory.
-        Global.walletPath = getApplicationContext().getFilesDir().getPath() + File.separator;
+        // Get the path of the working directory, we cann not get it in a static function in Global class.
+        Global.setWalletPath(getApplicationContext().getFilesDir().getPath() + File.separator);
         setContentView(R.layout.content_main);
-        // Fix UI when Soft Keyboard is visible.
+        // Fix UI when Soft Keyboard is visible, avoiding buttons to disappear when soft keyboard is visible..
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        if(Global.dashboard == null) {
-            Global.dashboard = FragmentDashboard.newInstance("", "");
+        // Create persistent pages and store the pointer for less processing power usage avoiding destruction and reconstruction.
+        if(Global.getDashboard() == null) {
+            Global.setDashboard(FragmentDashboard.newInstance("", ""));
         }
-        if(Global.myAccountReceive == null) {
-            Global.myAccountReceive = FragmentMyAccountReceive.newInstance("", "");
+        if(Global.getMyAccountReceive() == null) {
+            Global.setMyAccountReceive(FragmentMyAccountReceive.newInstance("", ""));
         }
-        if(Global.myAccountSend == null) {
-            Global.myAccountSend = FragmentMyAccountSend.newInstance("", "");
+        if(Global.getMyAccountSend() == null) {
+            Global.setMyAccountSend(FragmentMyAccountSend.newInstance("", ""));
         }
-        if(Global.settings == null) {
-            Global.settings = new FragmentPreferencesRoot();
+        if(Global.getSettings() == null) {
+            Global.setSettings(new FragmentPreferencesRoot());
         }
+        // Show the Open Wallet page.
         getSupportFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.nav_host_fragment_content_main, FragmentOpenWallet.newInstance())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
-        /*new Rpc(instance).execute("MainCallRpc1",
-                "History",
-                "LF6LpgcrANQWrErPcLREAbKzJg9DLeuXXa45cz5hKsUng7aJ2zCrAgHbtkSXv5dXiEfUB8ypN8i3daUkmiJwcX8cbXSv5U",
-                "0", String.valueOf(System.currentTimeMillis()), "0");*/
-        /*new Rpc(this).execute("MainCallRpc2",
-                "Receive",
-                "LF6LpgcrANQWrErPcLREAbKzJg9DLeuXXa45cz5hKsUng7aJ2zCrAgHbtkSXv5dXiEfUB8ypN8i3daUkmiJwcX8cbXSv5U");
-        new WebHttps(this).execute("https://api.latoken.com/v2/ticker", "MainCallHttps1");
+        /*new WebHttps(this).execute("https://api.latoken.com/v2/ticker", "MainCallHttps1");
         new WebHttps(this).execute("https://api.latoken.com/v2/ticker", "MainCallHttps2");*/
-        /* List<Pair<String, String>> accList = new ArrayList<Pair<String, String>>();
-        accList.add(new Pair<>("Test1", Global.pK));
-        accList.add(new Pair<>("Test2", "dkrwRdqNjEEshpLuEPPqc6zM1HM3nzGjsYts39zzA1iUypcpj"));*/
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -134,71 +139,69 @@ public class MainActivity extends AppCompatActivity implements WebHttps.WebHttps
         return true;
     }
     @Override
-    public void onWebHttpsTaskDone(WebHttps instance) {
+    public void onWebHttpsTaskDone(NetworkWebHttps instance) {
+        // Dummy event catcher, for further implementation.
         System.out.println(instance.getInstanceName() + ": " + instance.getContent());
     }
     @Override
-    public void onRpcTaskDone(String[] output) {
-        System.out.println(output[0] + ", " + output[1] + ", " + output[2]);
-    }
-    @Override
-    public void onRpcNewEvent(String[] output) {
-        System.out.println("RPC: " + output[0] + ", " + output[1]);
-    }
-    @Override
     public void onConfigurationChanged(Configuration newConfig) {
+        // Dummy event catcher, for further implementation.
         super.onConfigurationChanged(newConfig);
         int orientation = newConfig.orientation;
-        if(deviceOrientation != orientation) {
-            deviceOrientation = orientation;
+        if(getDeviceOrientation() != orientation) {
+            setDeviceOrientation(orientation);
 
         }
     }
     @Override
     public boolean onKeyDown(int key_code, KeyEvent key_event) {
         if (key_code== KeyEvent.KEYCODE_BACK) {
+            // Prevent back key to take effect, implemented for further development.
             super.onKeyDown(key_code, key_event);
             return false;
         }
         return false;
     }
-
+    /********************************** Go to other windows ***************************************/
+    // Buttons events, for UI navigation.
     public void dashboard(View view) {
-        showDashboard();
+        toDashboard();
     }
     public void send(View view) {
-        showSend();
+        toSend();
     }
     public void receive(View view) {
-        showReceive();
+        toReceive();
     }
     public void settings(View view) {
-        showSettings();
+        toSettings();
     }
     public void openWallet(View view) {
-        showOpenWallet();
+        toOpenWallet();
     }
     public void closeWallet(View view) {
         finish();
         System.exit(0);
     }
-/************************************** Save file dialog & Open file dialog **************************************/
-    protected void backupWallet(int procedure) {
+    /********************************** Save file dialog & Open file dialog ***********************/
+    // Need to be in main activity, they don't work elsewhere, so I put them here.
+    private static String importWalletName = null;
+
+    protected void backUpWallet(int procedure) {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("application/" + Global.defaultWalletExtension);
-        intent.putExtra(Intent.EXTRA_TITLE, Global.walletName + "." + Global.defaultWalletExtension);
-        instance.startActivityForResult(intent, procedure);
+        intent.setType("application/" + Global.getDefaultWalletExtension());
+        intent.putExtra(Intent.EXTRA_TITLE, Global.getWalletName() + "." + Global.getDefaultWalletExtension());
+        Instance.startActivityForResult(intent, procedure);
     }
-
     protected void importWallet(int procedure, String walletName) {
+        importWalletName = walletName;
         Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("application/" + Global.defaultWalletExtension);
+        intent.setType("application/" + Global.getDefaultWalletExtension());
         intent.setType("*/*");
-        instance.startActivityForResult(intent, procedure);
+        Instance.startActivityForResult(intent, procedure);
     }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent resultData) {
         super.onActivityResult(requestCode, resultCode, resultData);
@@ -216,13 +219,14 @@ public class MainActivity extends AppCompatActivity implements WebHttps.WebHttps
                         output.flush();
                         output.close();
                     } catch (IOException ignored) {
+                        UiHelpers.closeKeyboard(findViewById(R.id.nav_host_fragment_content_main));
                         Snackbar.make(this.findViewById(R.id.nav_host_fragment_content_main), getString(R.string.str_something_went_wrong_when_beackup_wallet), Snackbar.LENGTH_LONG)
                                 .setAction("", null).show();
                     }
                 } else if (requestCode == StorageCommon.IMPORT_WALLET) {
                     try {
                         InputStream fileInputStream = getContentResolver().openInputStream(uri);
-                        String path = Global.getWalletPath();
+                        String path = Global.getWalletPath(importWalletName);
                         File dstFile = new File(path);
                         if (!dstFile.exists()) {
                             FileWriter fiw = new FileWriter(dstFile);
@@ -231,19 +235,18 @@ public class MainActivity extends AppCompatActivity implements WebHttps.WebHttps
                             fiw.write(new String(bytes));
                             fiw.flush();
                             fiw.close();
-                            showOpenWallet();
-                            Snackbar.make(findViewById(R.id.nav_host_fragment_content_main), "Saved OK", Snackbar.LENGTH_LONG)
-                                    .setAction("", null).show();
+                            toOpenWallet();
                         } else {
+                            UiHelpers.closeKeyboard(findViewById(R.id.nav_host_fragment_content_main));
                             Snackbar.make(findViewById(R.id.nav_host_fragment_content_main), "File exists", Snackbar.LENGTH_LONG)
                                     .setAction("", null).show();
                         }
                     } catch (IOException e) {
+                        UiHelpers.closeKeyboard(findViewById(R.id.nav_host_fragment_content_main));
                         Snackbar.make(findViewById(R.id.nav_host_fragment_content_main), getString(R.string.str_something_went_wrong_when_importing_wallet), Snackbar.LENGTH_LONG)
                                 .setAction("", null).show();
                     }
                 }
-                //walletName = null;
             }
         }
     }

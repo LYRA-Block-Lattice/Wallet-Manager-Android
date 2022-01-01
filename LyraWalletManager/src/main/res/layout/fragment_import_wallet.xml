@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/fragment_horizontal_margin"
     android:paddingBottom="@dimen/fragment_vertical_margin"
     android:tag="import_wallet_tag"
-    tools:context="com.lyrawallet.Ui.WalletManagement.FragmentImportWallet">
+    tools:context="com.lyrawallet.Ui.FragmentWalletManagement.FragmentImportWallet">
 
     <EditText
         android:id="@+id/wallet_name"

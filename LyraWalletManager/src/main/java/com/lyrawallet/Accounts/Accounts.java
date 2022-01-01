@@ -12,32 +12,32 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.google.android.material.textfield.TextInputLayout;
-import com.lyrawallet.Actions.UserRpcActions;
-import com.lyrawallet.Crypto.Signatures;
+import com.lyrawallet.UserActions.UserActionsRpcNode;
+import com.lyrawallet.Crypto.CryptoSignatures;
 import com.lyrawallet.Global;
 import com.lyrawallet.MainActivity;
 import com.lyrawallet.R;
-import com.lyrawallet.Storage.KeyStorage;
-import com.lyrawallet.Ui.Helpers;
+import com.lyrawallet.Storage.StorageKeys;
+import com.lyrawallet.Ui.UiHelpers;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Accounts {
-    public static String password = null;
-    MainActivity mainActivity = null;
+    private static String Password = null;
+    private MainActivity MainActivity = null;
+
     public Accounts(MainActivity mainActivity) {
-        this.mainActivity = mainActivity;
+        this.MainActivity = mainActivity;
     }
 
     public boolean loadAccountsFromDisk(String walletName, String password) {
         // We get the account/pKys list and store them encrypted to make them globally available.
-        List<Pair<String, String>> recoveredKeys = KeyStorage.containerRead(walletName, password);
+        List<Pair<String, String>> recoveredKeys = StorageKeys.containerRead(walletName, password);
         if(recoveredKeys == null) {
             return false;
         }
-        Global.accountsContainer = KeyStorage.encrypt(recoveredKeys, password);
+        Global.setAccountsContainer(StorageKeys.encrypt(recoveredKeys, password));
         //setSupportActionBar(binding.appBarMain.toolbar);
         // Load account names from encrypted internal container.
         boolean status = loadAccountsFromInternalContainer(password);
@@ -45,25 +45,25 @@ public class Accounts {
             return false;
         }
         // Check if any account is in the container.
-        Spinner accountsSpinner = mainActivity.findViewById(R.id.accountSpinner);
+        Spinner accountsSpinner = MainActivity.findViewById(R.id.accountSpinner);
         if(accountsSpinner.getCount() != 0) {
-            Global.selectedAccountNr = 0;
-            Global.selectedAccountName = accountsSpinner.getSelectedItem().toString();
+            Global.setSelectedAccountNr(0);
+            Global.setSelectedAccountName(accountsSpinner.getSelectedItem().toString());
             //new UserRpcActions().actionHistory();
 
         } else {
-            Global.selectedAccountNr = -1;
-            Global.selectedAccountName = "";
+            Global.setSelectedAccountNr(-1);
+            Global.setSelectedAccountName("");
         }
 
-        Global.walletName = walletName;
+        Global.setWalletName(walletName);
         accountsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Global.selectedAccountName = adapterView.getSelectedItem().toString();// list.get(i).first;
-                Global.selectedAccountNr = i;
-                Global.walletName = walletName;
-                System.out.println(Global.selectedAccountName);
-                new UserRpcActions().actionHistory();
+                Global.setSelectedAccountName(adapterView.getSelectedItem().toString());// list.get(i).first;
+                Global.setSelectedAccountNr(i);
+                Global.setWalletName(walletName);
+                System.out.println(Global.getSelectedAccountName());
+                new UserActionsRpcNode().actionHistory();
             }
 
             public void onNothingSelected(AdapterView<?> adapterView) {
@@ -75,32 +75,32 @@ public class Accounts {
     public boolean loadAccountsFromInternalContainer(String password) {
         // Populate the spinner with the accounts name.
         ArrayList<String> accNameList = new ArrayList<>();
-        Global.walletAccNameAndId = new ArrayList<Pair<String, String>>();
-        List<Pair<String, String>> accKeyList = KeyStorage.decrypt(Global.accountsContainer, password);
+        Global.setWalletAccNameAndId(new ArrayList<Pair<String, String>>());
+        List<Pair<String, String>> accKeyList = StorageKeys.decrypt(Global.getAccountsContainer(), password);
         if(accKeyList != null) {
             for (Pair<String, String> acc: accKeyList) {
                 accNameList.add(acc.first);
-                Global.walletAccNameAndId.add(new Pair<String, String>(acc.first, Signatures.GetAccountIdFromPrivateKey(acc.second)));
+                Global.getWalletAccNameAndId().add(new Pair<String, String>(acc.first, CryptoSignatures.getAccountIdFromPrivateKey(acc.second)));
             }
             if(accNameList.size() != 0) {
-                Global.selectedAccountName = accNameList.get(0);
+                Global.setSelectedAccountName(accNameList.get(0));
             }
         }
-        Spinner accountsSpinner = mainActivity.findViewById(R.id.accountSpinner);
-        ArrayAdapter<String> accountListArrayAdapter = new ArrayAdapter<>(mainActivity, android.R.layout.simple_spinner_item, accNameList);
+        Spinner accountsSpinner = MainActivity.findViewById(R.id.accountSpinner);
+        ArrayAdapter<String> accountListArrayAdapter = new ArrayAdapter<>(MainActivity, android.R.layout.simple_spinner_item, accNameList);
         accountListArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         accountsSpinner.setAdapter(accountListArrayAdapter);
-        if(Global.selectedAccountNr != 0 && Global.selectedAccountNr >= accNameList.size()) {
-            Global.selectedAccountNr = accNameList.size() - 1;
-            accountsSpinner.setSelection(Global.selectedAccountNr);
+        if(Global.getSelectedAccountNr( )!= 0 && Global.getSelectedAccountNr() >= accNameList.size()) {
+            Global.setSelectedAccountNr(accNameList.size() - 1);
+            accountsSpinner.setSelection(Global.getSelectedAccountNr());
         }
         return accKeyList != null;
     }
 
     public static String getPrivateKey() {
-        List<Pair<String, String>> acc = KeyStorage.decrypt(Global.accountsContainer, password);
+        List<Pair<String, String>> acc = StorageKeys.decrypt(Global.getAccountsContainer(), Password);
         for (Pair<String, String> ac: acc) {
-            if(ac.first.equals(Global.selectedAccountName)) {
+            if(ac.first.equals(Global.getSelectedAccountName())) {
                 return ac.second;
             }
         }
@@ -108,9 +108,9 @@ public class Accounts {
     }
 
     public static String getPrivateKey(String password) {
-        List<Pair<String, String>> acc = KeyStorage.decrypt(Global.accountsContainer, password);
+        List<Pair<String, String>> acc = StorageKeys.decrypt(Global.getAccountsContainer(), password);
         for (Pair<String, String> ac: acc) {
-            if(ac.first.equals(Global.selectedAccountName)) {
+            if(ac.first.equals(Global.getSelectedAccountName())) {
                 return ac.second;
             }
         }
@@ -118,12 +118,12 @@ public class Accounts {
     }
 
     public static String getAccount() {
-        List<Pair<String, String>> acc = Global.walletAccNameAndId;
+        List<Pair<String, String>> acc = Global.getWalletAccNameAndId();
         if (acc == null) {
             return null;
         }
         for (Pair<String, String> ac: acc) {
-            if(ac.first.equals(Global.selectedAccountName)) {
+            if(ac.first.equals(Global.getSelectedAccountName())) {
                 return ac.second;
             }
         }
@@ -131,11 +131,11 @@ public class Accounts {
     }
 
     public void promptForPassword(Context c, View view) {
-        password = null;
+        Password = null;
         final EditText passEditText = new EditText(c);
         passEditText.setInputType(InputType.TYPE_NUMBER_VARIATION_PASSWORD);
         passEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
-        Helpers.showKeyboard(view, passEditText);
+        UiHelpers.showKeyboard(view, passEditText);
         AlertDialog dialog = new AlertDialog.Builder(c)
                 .setTitle(R.string.str_dialog_title)
                 .setMessage(R.string.str_dialog_message)
@@ -143,13 +143,13 @@ public class Accounts {
                 .setPositiveButton(R.string.str_dialog_accept, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        password = String.valueOf(passEditText.getText());
+                        Password = String.valueOf(passEditText.getText());
                     }
                 })
                 .setNegativeButton(R.string.str_dialog_cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        password = "";
+                        Password = "";
                     }
                 })
                 .create();
