@@ -40,6 +40,7 @@ public class FragmentNewWallet extends Fragment {
                 .replace(R.id.nav_host_fragment_content_main, FragmentNewAccount.newInstance())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
+        Global.setVisiblePage(Global.visiblePage.NEW_ACCOUNT);
     }
 
     private void toOpenWallet() {
@@ -49,6 +50,7 @@ public class FragmentNewWallet extends Fragment {
                 .replace(R.id.nav_host_fragment_content_main, FragmentOpenWallet.newInstance())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
+        Global.setVisiblePage(Global.visiblePage.OPEN_WALLET);
     }
 
     @Override

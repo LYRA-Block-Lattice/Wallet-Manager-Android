@@ -29,7 +29,7 @@
     to add dashes to your stroke-->
     <stroke
         android:width="1dp"
-        android:color="#CFCFCF" />
+        android:color="@color/launcher_button_2_lighter" />
 
     <!--If you want to add padding-->
     <!-- <padding

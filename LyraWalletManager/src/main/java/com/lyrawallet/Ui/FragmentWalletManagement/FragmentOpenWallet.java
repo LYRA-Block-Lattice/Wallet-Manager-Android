@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -56,7 +57,7 @@ public class FragmentOpenWallet extends Fragment {
                 if(Global.getSelectedAccountNr() == -1) {
                     passwordEditText.setText("");
                     walletNameEditText.setText("");
-                    toCreateAccount();
+                    toNewAccount();
                 } else {
                     passwordEditText.setText("");
                     walletNameEditText.setText("");
@@ -66,7 +67,7 @@ public class FragmentOpenWallet extends Fragment {
             } else {
                 if(StorageKeys.getStatus() == StorageKeys.status.OK) {
                     Global.setWalletName(walletNameEditText.getText().toString());
-                    toCreateAccount();
+                    toNewAccount();
                 } else {
                     // Error ask for retry.
                     walletNameEditText.setError("ERROR: Name and/or password incorrect.");
@@ -83,15 +84,17 @@ public class FragmentOpenWallet extends Fragment {
                 .replace(R.id.nav_host_fragment_content_main, Global.getDashboard())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
+        Global.setVisiblePage(Global.visiblePage.DASHBOARD);
     }
 
-    private void toCreateAccount() {
+    private void toNewAccount() {
         getParentFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.nav_host_fragment_content_main, FragmentNewAccount.newInstance())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
+        Global.setVisiblePage(Global.visiblePage.NEW_ACCOUNT);
     }
 
 
@@ -115,11 +118,21 @@ public class FragmentOpenWallet extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         Button toDashboardButton = getActivity().findViewById(R.id.toDashboard);
-        toDashboardButton.setVisibility(View.INVISIBLE);
+        if(toDashboardButton != null) {
+            toDashboardButton.setVisibility(View.INVISIBLE);
+        }
         Button toOpenWalletButton = getActivity().findViewById(R.id.toOpenWallet);
-        toOpenWalletButton.setVisibility(View.INVISIBLE);
+        if(toOpenWalletButton != null) {
+            toOpenWalletButton.setVisibility(View.INVISIBLE);
+        }
         Button toCloseWalletButton = getActivity().findViewById(R.id.toCloseWallet);
-        toCloseWalletButton.setVisibility(View.INVISIBLE);
+        if(toCloseWalletButton != null) {
+            toCloseWalletButton.setVisibility(View.VISIBLE);
+        }
+        Spinner accountsSpinner = getActivity().findViewById(R.id.accountSpinner);
+        if(accountsSpinner != null) {
+            accountsSpinner.setVisibility(View.VISIBLE);
+        }
 
         EditText walletNameEditText = view.findViewById(R.id.wallet_name);
         EditText passwordEditText = view.findViewById(R.id.password);

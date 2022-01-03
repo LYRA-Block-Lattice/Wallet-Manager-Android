@@ -23,7 +23,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="96dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
         android:digits="@string/charset"
         android:hint="@string/prompt_type_wallet_name"
@@ -77,7 +77,7 @@
         android:textAllCaps="false"
         app:layout_constraintEnd_toStartOf="@id/new_wallet_show_password"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/new_wallet_password1"
+        app:layout_constraintTop_toBottomOf="@+id/new_wallet_password1"
         tools:ignore="TextContrastCheck" />
 
     <Button
@@ -86,19 +86,13 @@
         android:layout_height="48dp"
         android:layout_marginStart="2dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="32dp"
-        android:insetLeft="-0dp"
-        android:insetTop="-0dp"
-        android:insetRight="0dp"
-        android:insetBottom="0dp"
-        android:minHeight="48dp"
+        android:background="@drawable/fab_normal_cornered_buttom"
+        app:backgroundTint="@color/menu_button_icon_tint"
+        app:backgroundTintMode="add"
         app:icon="@drawable/ic_visibility_off_password"
-        app:iconPadding="0dp"
-        app:layout_constraintBottom_toTopOf="@id/create_wallet"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/new_wallet_password1"
-        app:layout_constraintTop_toBottomOf="@id/new_wallet_name"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintTop_toBottomOf="@+id/new_wallet_name"
         tools:ignore="SpeakableTextPresentCheck" />
 
     <Button
@@ -106,15 +100,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
-        android:layout_marginBottom="256dp"
         android:background="@drawable/fab_normal_button"
         android:text="@string/action_create_new_wallet_short"
         app:backgroundTint="@color/menu_button_icon_tint"
         app:backgroundTintMode="add"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/guideline_middle_v"
         app:layout_constraintEnd_toStartOf="@id/guideline_middle_v"
-        app:layout_constraintTop_toBottomOf="@id/new_wallet_password2" />
+        app:layout_constraintStart_toEndOf="@id/guideline_middle_v"
+        app:layout_constraintTop_toBottomOf="@+id/new_wallet_password2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

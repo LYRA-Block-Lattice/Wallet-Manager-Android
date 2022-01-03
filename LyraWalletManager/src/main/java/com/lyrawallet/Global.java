@@ -11,6 +11,19 @@ import java.util.List;
 
 public class Global {
 // Global enumerations
+public enum visiblePage {
+    OPEN_WALLET,
+    IMPORT_WALLET,
+    NEW_WALLET,
+    NEW_ACCOUNT,
+    RECOVER_ACCOUNT,
+    DASHBOARD,
+    MY_ACCOUNT,
+    MY_ACCOUNT_RECEIVE,
+    MY_ACCOUNT_SEND,
+    SETTINGS,
+}
+
     public enum network { TESTNET, MAINNET, DEVNET }
     public enum language { ENG, ROM }
 // Global constants
@@ -20,6 +33,8 @@ public class Global {
     final static int MinCharAllowedOnPassword = 8;
     final static int MinCharAllowedOnWalletName = 2;
 // Global variables
+    private static visiblePage VisiblePage;
+
     private static network CurrentNetwork = network.TESTNET;
     private static language CurrentLanguage = language.ENG;
 
@@ -55,6 +70,13 @@ public class Global {
             "wss://seed3.mainnet.lyra.live:443/api/v1/socket",
             "wss://seed3.mainnet.lyra.live:443/api/v1/socket"
     };
+
+    public static void setVisiblePage(visiblePage v) {
+        VisiblePage = v;
+    }
+    public static visiblePage getVisiblePage() {
+        return VisiblePage;
+    }
 
     public static void setCurrentNetwork(network net) {
         CurrentNetwork = net;

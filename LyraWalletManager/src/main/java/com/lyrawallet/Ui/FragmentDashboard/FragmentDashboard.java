@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Spinner;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -57,11 +58,21 @@ public class FragmentDashboard extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         Button toDashboardButton = getActivity().findViewById(R.id.toDashboard);
-        toDashboardButton.setVisibility(View.INVISIBLE);
+        if(toDashboardButton != null) {
+            toDashboardButton.setVisibility(View.INVISIBLE);
+        }
         Button toOpenWalletButton = getActivity().findViewById(R.id.toOpenWallet);
-        toOpenWalletButton.setVisibility(View.INVISIBLE);
+        if(toOpenWalletButton != null) {
+            toOpenWalletButton.setVisibility(View.INVISIBLE);
+        }
         Button toCloseWalletButton = getActivity().findViewById(R.id.toCloseWallet);
-        toCloseWalletButton.setVisibility(View.VISIBLE);
+        if(toCloseWalletButton != null) {
+            toCloseWalletButton.setVisibility(View.VISIBLE);
+        }
+        Spinner accountsSpinner = getActivity().findViewById(R.id.accountSpinner);
+        if(accountsSpinner != null) {
+            accountsSpinner.setVisibility(View.VISIBLE);
+        }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Get the layout inflater

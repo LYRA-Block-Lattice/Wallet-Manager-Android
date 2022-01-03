@@ -32,7 +32,7 @@ android {
                 cppFlags ''
             }
         }
-        minSdkVersion 23
+        minSdkVersion 24
         applicationIdSuffix 'lyrawalletmanager'
         compileSdkVersion 31
         //noinspection OldTargetApi

@@ -42,6 +42,8 @@
     <string name="str_something_went_wrong_when_importing_wallet">Something went wrong when importing the wallet</string>
     <string name="str_something_went_wrong_when_beackup_wallet">Something went wrong when backup the wallet</string>
 
+    <string name="str_spinner_account_select_hint">Select account</string>
+
     <string name="prefs_add_new_account_title">Add new account</string>
     <string name="prefs_add_new_account_key" translatable="false">prefs_add_new_account_key</string>
 

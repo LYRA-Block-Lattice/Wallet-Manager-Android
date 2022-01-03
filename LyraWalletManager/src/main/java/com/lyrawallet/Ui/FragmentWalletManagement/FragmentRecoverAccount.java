@@ -40,6 +40,7 @@ public class FragmentRecoverAccount extends Fragment {
                 .replace(R.id.nav_host_fragment_content_main, Global.getDashboard())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
+        Global.setVisiblePage(Global.visiblePage.DASHBOARD);
     }
 
     private void toOpenWallet() {
@@ -49,6 +50,7 @@ public class FragmentRecoverAccount extends Fragment {
                 .replace(R.id.nav_host_fragment_content_main, FragmentOpenWallet.newInstance())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
+        Global.setVisiblePage(Global.visiblePage.OPEN_WALLET);
     }
 
     @Override

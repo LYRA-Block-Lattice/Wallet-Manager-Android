@@ -9,18 +9,26 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Pair;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.lyrawallet.Crypto.CryptoSignatures;
 import com.lyrawallet.PreferencesLoad.PreferencesLoad;
 import com.lyrawallet.Storage.StorageCommon;
+import com.lyrawallet.Ui.FragmentWalletManagement.FragmentImportWallet;
+import com.lyrawallet.Ui.FragmentWalletManagement.FragmentNewAccount;
+import com.lyrawallet.Ui.FragmentWalletManagement.FragmentNewWallet;
+import com.lyrawallet.Ui.FragmentWalletManagement.FragmentRecoverAccount;
 import com.lyrawallet.Ui.UiHelpers;
 import com.lyrawallet.Ui.FragmentPreferences.FragmentPreferencesRoot;
 import com.lyrawallet.Accounts.Accounts;
@@ -36,10 +44,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements NetworkWebHttps.WebHttpsTaskInformer {
     private static MainActivity Instance = null;
     private static int DeviceOrientation = 0;
+    private static String ImportWalletName = null;
+    private Handler UserInputTimeoutHandler;
+    private Runnable UserInputTimeoutRunable;
     protected static MainActivity getInstance() {
         return Instance;
     }
@@ -49,9 +61,22 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
     protected static void setDeviceOrientation(int orientation) {
         DeviceOrientation = orientation;
     }
-    private Handler UserInputTimeoutHandler;
-    private Runnable UserInputTimeoutRunable;
-
+    /********************************** Save file dialog & Open file dialog ***********************/
+    protected void backUpWallet(int procedure) {
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("application/" + Global.getDefaultWalletExtension());
+        intent.putExtra(Intent.EXTRA_TITLE, Global.getWalletName() + "." + Global.getDefaultWalletExtension());
+        Instance.startActivityForResult(intent, procedure);
+    }
+    protected void importWallet(int procedure, String walletName) {
+        ImportWalletName = walletName;
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("application/" + Global.getDefaultWalletExtension());
+        intent.setType("*/*");
+        Instance.startActivityForResult(intent, procedure);
+    }
     /******************* Navigation, separate them from button events, for re-usage ***************/
     protected void toOpenWallet() {
         getSupportFragmentManager()
@@ -60,6 +85,43 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                 .replace(R.id.nav_host_fragment_content_main, FragmentOpenWallet.newInstance())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
+        Global.setVisiblePage(Global.visiblePage.OPEN_WALLET);
+    }
+    protected void toImportWallet() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.nav_host_fragment_content_main, FragmentImportWallet.newInstance())
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .commit();
+        Global.setVisiblePage(Global.visiblePage.IMPORT_WALLET);
+    }
+    protected void toNewWallet() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.nav_host_fragment_content_main, FragmentNewWallet.newInstance())
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .commit();
+        Global.setVisiblePage(Global.visiblePage.NEW_WALLET);
+    }
+    protected void toNewAccount() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.nav_host_fragment_content_main, FragmentNewAccount.newInstance())
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .commit();
+        Global.setVisiblePage(Global.visiblePage.NEW_ACCOUNT);
+    }
+    protected void toRecoverAccount() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.nav_host_fragment_content_main, FragmentRecoverAccount.newInstance())
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .commit();
+        Global.setVisiblePage(Global.visiblePage.RECOVER_ACCOUNT);
     }
     protected void toDashboard() {
         getSupportFragmentManager()
@@ -68,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                 .replace(R.id.nav_host_fragment_content_main, Global.getDashboard())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
+        Global.setVisiblePage(Global.visiblePage.DASHBOARD);
     }
     protected void toReceive() {
         getSupportFragmentManager()
@@ -76,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                 .replace(R.id.nav_host_fragment_content_main, Global.getMyAccountReceive())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
+        Global.setVisiblePage(Global.visiblePage.MY_ACCOUNT_RECEIVE);
     }
     protected void toSend() {
         getSupportFragmentManager()
@@ -84,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                 .replace(R.id.nav_host_fragment_content_main, Global.getMyAccountSend())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
+        Global.setVisiblePage(Global.visiblePage.MY_ACCOUNT_SEND);
     }
     protected void toSettings() {
         getSupportFragmentManager()
@@ -92,15 +157,108 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                 .replace(R.id.nav_host_fragment_content_main, Global.getSettings())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
+        Global.setVisiblePage(Global.visiblePage.SETTINGS);
+    }
+
+    protected void setVisiblePage(Global.visiblePage p) {
+        Global.setVisiblePage(p);
+        switch(p) {
+            case IMPORT_WALLET:
+                toImportWallet();
+                break;
+            case NEW_WALLET:
+                toNewWallet();
+                break;
+            case NEW_ACCOUNT:
+                toNewAccount();
+                break;
+            case RECOVER_ACCOUNT:
+                toRecoverAccount();
+                break;
+            case DASHBOARD:
+                toDashboard();
+                break;
+            case MY_ACCOUNT:
+                break;
+            case MY_ACCOUNT_RECEIVE:
+                toReceive();
+                break;
+            case MY_ACCOUNT_SEND:
+                toSend();
+                break;
+            case SETTINGS:
+                toSettings();
+                break;
+            default:
+                toOpenWallet();
+                break;
+        }
+    }
+    /********************************** Go to other windows ***************************************/
+    // Buttons events, for UI navigation.
+    public void dashboard(View view) {
+        toDashboard();
+    }
+    public void send(View view) {
+        toSend();
+    }
+    public void receive(View view) {
+        toReceive();
+    }
+    public void settings(View view) {
+        toSettings();
+    }
+    public void openWallet(View view) {
+        toOpenWallet();
+    }
+    public void closeWallet(View view) {
+        finish();
+        System.exit(0);
+    }
+    public void closeWallet() {
+        finish();
+        System.exit(0);
+    }
+    public void stopHandler() {
+        UserInputTimeoutHandler.removeCallbacks(UserInputTimeoutRunable);
+    }
+    public void startHandler(int inactivityTime) {
+        UserInputTimeoutHandler.postDelayed(UserInputTimeoutRunable, (long) inactivityTime * 60*1000);
     }
     /************************************** Events ************************************************/
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putInt("SHOWN_WINDOW", Global.getVisiblePage().ordinal());
+    }
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Global.visiblePage p = Global.visiblePage.values()[savedInstanceState.getInt("SHOWN_WINDOW")];
+        // Show the same page as when the view was destroyed.
+        setVisiblePage(p);
+        // Restore spinner state.
+        ArrayList<String> accNameList = new ArrayList<>();
+        if(Global.getWalletAccNameAndId() != null) {
+            for (Pair<String, String> acc: Global.getWalletAccNameAndId()) {
+                accNameList.add(acc.first);
+            }
+        }
+        Spinner accountsSpinner = findViewById(R.id.accountSpinner);
+        ArrayAdapter<String> accountListArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, accNameList);
+        accountListArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        accountsSpinner.setAdapter(accountListArrayAdapter);
+        if(Global.getSelectedAccountNr() >= 0) {
+            accountsSpinner.setSelection(Global.getSelectedAccountNr());
+        }
+    }
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Instance = this;
         // At the moment force device to stay in portrait mode.
-        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        //this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         // Load user preferences.
         new PreferencesLoad();
         // Get the path of the working directory, we cann not get it in a static function in Global class.
@@ -121,13 +279,15 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         if(Global.getSettings() == null) {
             Global.setSettings(new FragmentPreferencesRoot());
         }
-        // Show the Open Wallet page.
-        getSupportFragmentManager()
-                .beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, FragmentOpenWallet.newInstance())
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
+        // If the view was restored, load the last visible page enum.
+        if(savedInstanceState != null) {
+            Global.setVisiblePage(Global.visiblePage.values()[savedInstanceState.getInt("SHOWN_WINDOW")]);
+        }
+        // On first launch.
+        if(Global.getVisiblePage() == null) {
+            // Show the Open Wallet page.
+            setVisiblePage(Global.visiblePage.OPEN_WALLET);
+        }
         UserInputTimeoutHandler = new Handler();
         UserInputTimeoutRunable = new Runnable() {
             @Override
@@ -176,33 +336,6 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         }
         return false;
     }
-    /********************************** Go to other windows ***************************************/
-    // Buttons events, for UI navigation.
-    public void dashboard(View view) {
-        toDashboard();
-    }
-    public void send(View view) {
-        toSend();
-    }
-    public void receive(View view) {
-        toReceive();
-    }
-    public void settings(View view) {
-        toSettings();
-    }
-    public void openWallet(View view) {
-        toOpenWallet();
-    }
-    public void closeWallet(View view) {
-        finish();
-        System.exit(0);
-    }
-
-    public void closeWallet() {
-        finish();
-        System.exit(0);
-    }
-
     @Override
     public void onUserInteraction() {
         super.onUserInteraction();
@@ -212,31 +345,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
             startHandler(inactivity);
         }
     }
-    public void stopHandler() {
-        UserInputTimeoutHandler.removeCallbacks(UserInputTimeoutRunable);
-    }
-    public void startHandler(int inactivityTime) {
-        UserInputTimeoutHandler.postDelayed(UserInputTimeoutRunable, (long) inactivityTime * 60*1000);
-    }
-    /********************************** Save file dialog & Open file dialog ***********************/
     // Need to be in main activity, they don't work elsewhere, so I put them here.
-    private static String importWalletName = null;
-
-    protected void backUpWallet(int procedure) {
-        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("application/" + Global.getDefaultWalletExtension());
-        intent.putExtra(Intent.EXTRA_TITLE, Global.getWalletName() + "." + Global.getDefaultWalletExtension());
-        Instance.startActivityForResult(intent, procedure);
-    }
-    protected void importWallet(int procedure, String walletName) {
-        importWalletName = walletName;
-        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("application/" + Global.getDefaultWalletExtension());
-        intent.setType("*/*");
-        Instance.startActivityForResult(intent, procedure);
-    }
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent resultData) {
         super.onActivityResult(requestCode, resultCode, resultData);
@@ -261,7 +370,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                 } else if (requestCode == StorageCommon.IMPORT_WALLET) {
                     try {
                         InputStream fileInputStream = getContentResolver().openInputStream(uri);
-                        String path = Global.getWalletPath(importWalletName);
+                        String path = Global.getWalletPath(ImportWalletName);
                         File dstFile = new File(path);
                         if (!dstFile.exists()) {
                             FileWriter fiw = new FileWriter(dstFile);

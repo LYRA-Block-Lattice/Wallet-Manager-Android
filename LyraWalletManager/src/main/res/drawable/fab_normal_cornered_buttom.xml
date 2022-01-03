@@ -3,15 +3,14 @@
     android:shape="rectangle">
 
     <corners
-        android:bottomRightRadius="5dp"
-        android:radius="30dp" />
+        android:radius="10dp" />
 
     <gradient
-        android:angle="315"
-        android:centerX="0%"
-        android:centerY="0%"
-        android:gradientRadius="0%p"
-        android:startColor="@color/launcher_button_1"
+        android:angle="0"
+        android:centerX="50%"
+        android:centerY="50%"
+        android:gradientRadius="10%p"
+        android:startColor="@color/launcher_button_2"
         android:endColor="@color/launcher_button_2"
         android:type="linear"
         />
@@ -21,8 +20,8 @@
         android:color="#FFFFFF" />-->
 
     <size
-        android:width="32dp"
-        android:height="32dp" />
+        android:width="48dp"
+        android:height="48dp" />
 
     <!--Use android:dashWidth="2dp" and android:dashGap="2dp"
     to add dashes to your stroke-->
@@ -31,10 +30,10 @@
         android:color="@color/launcher_button_2_lighter" />
 
     <!--If you want to add padding-->
-    <padding
-         android:left="0dp"
-         android:top="0dp"
-         android:right="0dp"
-         android:bottom="0dp" />
+    <!-- <padding
+         android:left="10dp"
+         android:top="20dp"
+         android:right="40dp"
+         android:bottom="8dp" />-->
 
 </shape>

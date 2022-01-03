@@ -16,7 +16,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="92dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="24dp"
         android:digits="@string/charset"
         android:hint="@string/action_import_wallet_hint"
@@ -37,15 +37,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
-        android:layout_marginTop="32dp"
-        android:layout_marginBottom="340dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/fab_normal_button"
         android:text="@string/action_import_wallet_short"
         app:backgroundTint="@color/menu_button_icon_tint"
         app:backgroundTintMode="add"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/wallet_name" />
+        app:layout_constraintTop_toBottomOf="@+id/wallet_name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

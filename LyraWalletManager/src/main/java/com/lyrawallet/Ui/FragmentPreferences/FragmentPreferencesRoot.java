@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Spinner;
 
 import androidx.fragment.app.FragmentTransaction;
 import androidx.preference.ListPreference;
@@ -25,23 +26,43 @@ public class FragmentPreferencesRoot extends PreferenceFragmentCompat {
         Configuration config = resources.getConfiguration();
         config.setLocale(new Locale(localeCode.toLowerCase()));
         resources.updateConfiguration(config, resources.getDisplayMetrics());
-
+        // App bar language is not recreated after language is changed, a manual change is needed.
         Button toDashboardButton = getActivity().findViewById(R.id.toDashboard);
-        toDashboardButton.setText(R.string.str_launcher_dashboard_short_button);
+        if(toDashboardButton != null) {
+            toDashboardButton.setText(R.string.str_launcher_dashboard_short_button);
+        }
         Button toOpenWalletButton = getActivity().findViewById(R.id.toOpenWallet);
-        toOpenWalletButton.setText(R.string.str_launcher_open_wallet_short_button);
+        if(toOpenWalletButton != null) {
+            toOpenWalletButton.setText(R.string.str_launcher_open_wallet_short_button);
+        }
         Button toCloseWalletButton = getActivity().findViewById(R.id.toCloseWallet);
-        toCloseWalletButton.setText(R.string.str_launcher_close_wallet_short_button);
+        if(toCloseWalletButton != null) {
+            toCloseWalletButton.setText(R.string.str_launcher_close_wallet_short_button);
+        }
+        Spinner accountsSpinner = getActivity().findViewById(R.id.accountSpinner);
+        if(accountsSpinner != null) {
+            accountsSpinner.setPromptId(R.string.str_spinner_account_select_hint);
+        }
+
     }
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         Button toDashboardButton = getActivity().findViewById(R.id.toDashboard);
-        toDashboardButton.setVisibility(View.VISIBLE);
+        if(toDashboardButton != null) {
+            toDashboardButton.setVisibility(View.VISIBLE);
+        }
         Button toOpenWalletButton = getActivity().findViewById(R.id.toOpenWallet);
-        toOpenWalletButton.setVisibility(View.INVISIBLE);
+        if(toOpenWalletButton != null) {
+            toOpenWalletButton.setVisibility(View.INVISIBLE);
+        }
         Button toCloseWalletButton = getActivity().findViewById(R.id.toCloseWallet);
-        toCloseWalletButton.setVisibility(View.INVISIBLE);
-
+        if(toCloseWalletButton != null) {
+            toCloseWalletButton.setVisibility(View.INVISIBLE);
+        }
+        Spinner accountsSpinner = getActivity().findViewById(R.id.accountSpinner);
+        if(accountsSpinner != null) {
+            accountsSpinner.setVisibility(View.INVISIBLE);
+        }
         setPreferencesFromResource(R.xml.preferences_root, rootKey);
 
         Preference networkSelectorPref = findPreference(getString(R.string.pref_network_selection_key));
