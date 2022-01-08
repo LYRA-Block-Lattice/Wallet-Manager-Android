@@ -122,9 +122,11 @@ public class NetworkRpc extends AsyncTask<String, Void, String[]> implements Net
 
     public state connect() {
         final NetworkRpc.RpcTaskInformer callBack = mCallBack.get();
-        int retryCnt = 10;
-        for (; retryCnt > 0; retryCnt--) {
-            Socket = new NetworkRpcSocket(Global.getNodeAddress(), this);
+        int retryCnt = 0;
+        for (; retryCnt < Global.getMaxRpcConnectRetry(); retryCnt++) {
+            String node = Global.getNodeAddress();
+            System.out.println("Retry: " + retryCnt + "; on node: " + node);
+            Socket = new NetworkRpcSocket(node, this);
             TimeoutCount = Global.getRpcConnectionTimeout();
             while (!Socket.getConnected() && TimeoutCount != 0) {
                 try {
@@ -138,9 +140,11 @@ public class NetworkRpc extends AsyncTask<String, Void, String[]> implements Net
             }
             if (Socket.getConnected()) {
                 break;
+            } else {
+                Socket.closeConnection();
             }
         }
-        if (retryCnt == 0) {
+        if (retryCnt == Global.getMaxRpcConnectRetry()) {
             sendState(state.CONNECTION_TIMEOUT);
             return state.CONNECTION_TIMEOUT;
         }
@@ -171,7 +175,9 @@ public class NetworkRpc extends AsyncTask<String, Void, String[]> implements Net
             jsonObject.put("jsonrpc", "2.0");
             jsonObject.put("method", api);
             for (String arg: args) {
-                jsonArray.put(arg);
+                if(arg != null && !arg.equals("")) {
+                    jsonArray.put(arg);
+                }
             }
             jsonObject.put("params", jsonArray);
         } catch (JSONException e) {
@@ -261,7 +267,11 @@ public class NetworkRpc extends AsyncTask<String, Void, String[]> implements Net
                 composeSendResponse("error");
                 InternalState = state.IDLE;
                 obj = obj.getJSONObject("error");
-                obj = obj.getJSONObject("data");
+                if(!obj.isNull("data")) {
+                    obj = obj.getJSONObject("data");
+                } else if(!obj.isNull("message")) {
+                    obj = obj.getJSONObject("message");
+                }
                 String error = obj.getString("message");
                 System.out.println("RPC ERROR: " + error); // BlockSignatureValidationFailed
                 if(error.equals("BlockSignatureValidationFailed")) {

@@ -2,11 +2,14 @@ package com.lyrawallet;
 
 import android.util.Pair;
 
+import com.lyrawallet.Accounts.Accounts;
+import com.lyrawallet.Api.ApiRpc;
 import com.lyrawallet.Ui.FragmentDashboard.FragmentDashboard;
 import com.lyrawallet.Ui.FragmentMyAccountReceive.FragmentMyAccountReceive;
 import com.lyrawallet.Ui.FragmentMyAccountSend.FragmentMyAccountSend;
 import com.lyrawallet.Ui.FragmentPreferences.FragmentPreferencesRoot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Global {
@@ -28,10 +31,11 @@ public enum visiblePage {
     public enum language { ENG, ROM }
 // Global constants
     final static String DefaultWalletExtension = "lyr";
-    final static int RpcConnectionTimeout = 200; // in 10mS steps
+    final static int RpcConnectionTimeout = 100; // in 10mS steps
     final static int MaxWalletsBackupAllowed = 100;
     final static int MinCharAllowedOnPassword = 8;
     final static int MinCharAllowedOnWalletName = 2;
+    final static int MaxRpcConnectRetry = 5;
 // Global variables
     private static visiblePage VisiblePage;
 
@@ -47,6 +51,8 @@ public enum visiblePage {
     private static String WalletPath = "";
     private static int InactivityTimeForClose = -1;
 
+    private static List<ApiRpc.QueueEntry>ApiRpcQueueActions = new ArrayList<ApiRpc.QueueEntry>();
+
     private static FragmentDashboard Dashboard = null;
     private static FragmentMyAccountReceive MyAccountReceive = null;
     private static FragmentMyAccountSend MyAccountSend = null;
@@ -55,16 +61,16 @@ public enum visiblePage {
 
     final static String[] NodeAddressDevNet = new String[]{""};
     final static String[] NodeAddressTestNet = new String[]{
-            "wss://161.97.166.188:4504/api/v1/socket",
             "wss://173.212.228.110:4504/api/v1/socket",
+            "wss://161.97.166.188:4504/api/v1/socket",
             "wss://seed.testnet.lyra.live:443/api/v1/socket",
             "wss://seed2.testnet.lyra.live:443/api/v1/socket",
             "wss://seed3.testnet.lyra.live:443/api/v1/socket",
             "wss://seed3.testnet.lyra.live:443/api/v1/socket"
     };
     final static String[] NodeAddressMainNet = new String[]{
-            "wss://161.97.166.188:5504/api/v1/socket",
             "wss://173.212.228.110:5504/api/v1/socket",
+            "wss://161.97.166.188:5504/api/v1/socket",
             "wss://seed1.mainnet.lyra.live:443/api/v1/socket",
             "wss://seed2.mainnet.lyra.live:443/api/v1/socket",
             "wss://seed3.mainnet.lyra.live:443/api/v1/socket",
@@ -165,6 +171,10 @@ public enum visiblePage {
         return MinCharAllowedOnWalletName;
     }
 
+    public static int getMaxRpcConnectRetry() {
+        return MaxRpcConnectRetry;
+    }
+
     public static void setDashboard(FragmentDashboard dash) {
         Dashboard = dash;
     }
@@ -207,6 +217,17 @@ public enum visiblePage {
         return "";
     }
 
+    public static String[] getNodeAddressTable() {
+        if(getCurrentNetwork() == network.DEVNET) {
+            return NodeAddressDevNet;
+        } else if(getCurrentNetwork() == network.TESTNET) {
+            return NodeAddressTestNet;
+        }else if(getCurrentNetwork() == network.MAINNET) {
+            return NodeAddressMainNet;
+        }
+        return new String[0];
+    }
+
     public static String getCurrentNetworkName() {
         switch(getCurrentNetwork()) {
             case DEVNET:
@@ -216,6 +237,10 @@ public enum visiblePage {
             default:
                 return "TESTNET";
         }
+    }
+
+    public static String getSelectedAccountId() {
+        return Accounts.getAccount();
     }
 
     public static void setInactivityTimeForClose(int inactivity) {

@@ -56,19 +56,25 @@ public class NetworkRpcSocket {
             }
             @OnMessage
             public void onMessage(String s) {
-                response = s;
-                final RpcSocketTaskInformer callBack = mCallBack.get();
-                if(callBack != null) {
-                    callBack.onRpcSocketTaskDone(thisInstance);
+                // Prevent concurrent action if a response is get after a timeout is declared.
+                if (mWebSocketClient != null) {
+                    response = s;
+                    final RpcSocketTaskInformer callBack = mCallBack.get();
+                    if (callBack != null) {
+                        callBack.onRpcSocketTaskDone(thisInstance);
+                    }
                 }
             }
             @OnMessage
             public void onMessage(ByteBuffer bytes) {
-                String s = new String(bytes.array());
-                response = s;
-                final RpcSocketTaskInformer callBack = mCallBack.get();
-                if(callBack != null) {
-                    callBack.onRpcSocketTaskDone(thisInstance);
+                // Prevent concurrent action if a response is get after a timeout is declared.
+                if (mWebSocketClient != null) {
+                    String s = new String(bytes.array());
+                    response = s;
+                    final RpcSocketTaskInformer callBack = mCallBack.get();
+                    if (callBack != null) {
+                        callBack.onRpcSocketTaskDone(thisInstance);
+                    }
                 }
             }
             @OnClose

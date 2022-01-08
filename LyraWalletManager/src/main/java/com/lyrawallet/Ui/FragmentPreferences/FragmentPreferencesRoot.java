@@ -12,7 +12,8 @@ import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
-import com.lyrawallet.UserActions.UserActionsRpcNode;
+import com.lyrawallet.Accounts.Accounts;
+import com.lyrawallet.Api.ApiRpc;
 import com.lyrawallet.Global;
 import com.lyrawallet.R;
 import com.lyrawallet.Storage.StorageBackUpWallet;
@@ -88,7 +89,7 @@ public class FragmentPreferencesRoot extends PreferenceFragmentCompat {
                         Global.setCurrentNetwork(Global.network.DEVNET);
                         networkSelectorPref.setSummary("Current selected network is: DEVNET");
                     }
-                    new UserActionsRpcNode().actionHistory();
+                    new ApiRpc().act(new ApiRpc.Action().actionHistory(Global.getSelectedAccountId()));
                     return true;
                 }
             });

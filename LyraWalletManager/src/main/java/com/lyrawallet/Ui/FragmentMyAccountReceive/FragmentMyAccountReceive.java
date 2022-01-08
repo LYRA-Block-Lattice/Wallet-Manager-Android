@@ -9,6 +9,8 @@ import android.widget.Button;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.lyrawallet.Api.ApiRpc;
+import com.lyrawallet.Global;
 import com.lyrawallet.R;
 
 public class FragmentMyAccountReceive extends Fragment {
@@ -45,5 +47,7 @@ public class FragmentMyAccountReceive extends Fragment {
         toOpenWalletButton.setVisibility(View.INVISIBLE);
         Button toCloseWalletButton = getActivity().findViewById(R.id.toCloseWallet);
         toCloseWalletButton.setVisibility(View.INVISIBLE);
+
+        new ApiRpc().act(new ApiRpc.Action().actionReceive(Global.getSelectedAccountId()));
     }
 }

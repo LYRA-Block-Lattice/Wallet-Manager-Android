@@ -12,7 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import com.lyrawallet.UserActions.UserActionsRpcNode;
+import com.lyrawallet.Api.ApiRpc;
 import com.lyrawallet.Crypto.CryptoSignatures;
 import com.lyrawallet.Global;
 import com.lyrawallet.MainActivity;
@@ -63,9 +63,8 @@ public class Accounts {
                 Global.setSelectedAccountNr(i);
                 Global.setWalletName(walletName);
                 System.out.println(Global.getSelectedAccountName());
-                new UserActionsRpcNode().actionHistory();
+                new ApiRpc().act(new ApiRpc.Action().actionHistory(Global.getSelectedAccountId()));
             }
-
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
