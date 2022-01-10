@@ -2,27 +2,25 @@ package com.lyrawallet;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 
 import android.annotation.SuppressLint;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Pair;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
-import com.lyrawallet.Crypto.CryptoSignatures;
 import com.lyrawallet.PreferencesLoad.PreferencesLoad;
 import com.lyrawallet.Storage.StorageCommon;
 import com.lyrawallet.Ui.FragmentWalletManagement.FragmentImportWallet;
@@ -33,10 +31,10 @@ import com.lyrawallet.Ui.UiHelpers;
 import com.lyrawallet.Ui.FragmentPreferences.FragmentPreferencesRoot;
 import com.lyrawallet.Accounts.Accounts;
 import com.lyrawallet.Api.Network.NetworkWebHttps;
-import com.lyrawallet.Ui.FragmentDashboard.FragmentDashboard;
+import com.lyrawallet.Ui.FragmentAccount.FragmentAccount;
 import com.lyrawallet.Ui.FragmentWalletManagement.FragmentOpenWallet;
-import com.lyrawallet.Ui.FragmentMyAccountReceive.FragmentMyAccountReceive;
-import com.lyrawallet.Ui.FragmentMyAccountSend.FragmentMyAccountSend;
+import com.lyrawallet.Ui.FragmentReceive.FragmentReceive;
+import com.lyrawallet.Ui.FragmentSend.FragmentSend;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -44,14 +42,20 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
+import java.lang.reflect.Array;
+import java.util.List;
+
+import kotlin.UInt;
+import np.com.susanthapa.curved_bottom_navigation.CbnMenuItem;
+import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView;
 
 public class MainActivity extends AppCompatActivity implements NetworkWebHttps.WebHttpsTaskInformer {
     private static MainActivity Instance = null;
     private static int DeviceOrientation = 0;
     private static String ImportWalletName = null;
     private Handler UserInputTimeoutHandler;
-    private Runnable UserInputTimeoutRunable;
+    //BottomNavigationView bottomNavigationView;
+    CurvedBottomNavigationView bottomNavigationView;
     protected static MainActivity getInstance() {
         return Instance;
     }
@@ -123,14 +127,14 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                 .commit();
         Global.setVisiblePage(Global.visiblePage.RECOVER_ACCOUNT);
     }
-    protected void toDashboard() {
+    protected void toWallet() {
         getSupportFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.nav_host_fragment_content_main, Global.getDashboard())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
-        Global.setVisiblePage(Global.visiblePage.DASHBOARD);
+        Global.setVisiblePage(Global.visiblePage.WALLET);
     }
     protected void toReceive() {
         getSupportFragmentManager()
@@ -175,8 +179,8 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
             case RECOVER_ACCOUNT:
                 toRecoverAccount();
                 break;
-            case DASHBOARD:
-                toDashboard();
+            case WALLET:
+                toWallet();
                 break;
             case MY_ACCOUNT:
                 break;
@@ -197,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
     /********************************** Go to other windows ***************************************/
     // Buttons events, for UI navigation.
     public void dashboard(View view) {
-        toDashboard();
+        toWallet();
     }
     public void send(View view) {
         toSend();
@@ -220,14 +224,14 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         System.exit(0);
     }
     public void stopHandler() {
-        UserInputTimeoutHandler.removeCallbacks(UserInputTimeoutRunable);
+        UserInputTimeoutHandler.removeCallbacks(UserInputTimeoutRunnable);
     }
     public void startHandler(int inactivityTime) {
-        UserInputTimeoutHandler.postDelayed(UserInputTimeoutRunable, (long) inactivityTime * 60*1000);
+        UserInputTimeoutHandler.postDelayed(UserInputTimeoutRunnable, (long) inactivityTime * 60*1000);
     }
     /************************************** Events ************************************************/
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
+    public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putInt("SHOWN_WINDOW", Global.getVisiblePage().ordinal());
     }
@@ -237,20 +241,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         Global.visiblePage p = Global.visiblePage.values()[savedInstanceState.getInt("SHOWN_WINDOW")];
         // Show the same page as when the view was destroyed.
         setVisiblePage(p);
-        // Restore spinner state.
-        ArrayList<String> accNameList = new ArrayList<>();
-        if(Global.getWalletAccNameAndId() != null) {
-            for (Pair<String, String> acc: Global.getWalletAccNameAndId()) {
-                accNameList.add(acc.first);
-            }
-        }
-        Spinner accountsSpinner = findViewById(R.id.accountSpinner);
-        ArrayAdapter<String> accountListArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, accNameList);
-        accountListArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        accountsSpinner.setAdapter(accountListArrayAdapter);
-        if(Global.getSelectedAccountNr() >= 0) {
-            accountsSpinner.setSelection(Global.getSelectedAccountNr());
-        }
+        Accounts.restoreAccountSelectSpinner(this);
     }
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -268,13 +259,13 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         // Create persistent pages and store the pointer for less processing power usage avoiding destruction and reconstruction.
         if(Global.getDashboard() == null) {
-            Global.setDashboard(FragmentDashboard.newInstance("", ""));
+            Global.setDashboard(FragmentAccount.newInstance("", ""));
         }
         if(Global.getMyAccountReceive() == null) {
-            Global.setMyAccountReceive(FragmentMyAccountReceive.newInstance("", ""));
+            Global.setMyAccountReceive(FragmentReceive.newInstance("", ""));
         }
         if(Global.getMyAccountSend() == null) {
-            Global.setMyAccountSend(FragmentMyAccountSend.newInstance("", ""));
+            Global.setMyAccountSend(FragmentSend.newInstance("", ""));
         }
         if(Global.getSettings() == null) {
             Global.setSettings(new FragmentPreferencesRoot());
@@ -289,16 +280,58 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
             setVisiblePage(Global.visiblePage.OPEN_WALLET);
         }
         UserInputTimeoutHandler = new Handler();
-        UserInputTimeoutRunable = new Runnable() {
-            @Override
-            public void run() {
-                closeWallet();
-            }
-        };
         int inactivity = Global.getInactivityTimeForClose();
         if(inactivity != -1) {
             startHandler(inactivity);
         }
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        CbnMenuItem[] menuItems = new CbnMenuItem[]{
+                new CbnMenuItem(
+                        R.drawable.ic_outline_payments_48, // the icon
+                        R.drawable.ic_outline_payments_48, // the AVD that will be shown in FAB
+                        R.id.staking // optional if you use Jetpack Navigation
+                ),
+                new CbnMenuItem(
+                        R.drawable.ic_round_swap_horiz_48,
+                        R.drawable.ic_round_swap_horiz_48,
+                        R.id.swap
+                ),
+                new CbnMenuItem(
+                        R.drawable.ic_outline_account_balance_wallet_48,
+                        R.drawable.ic_outline_account_balance_wallet_48,
+                        R.id.wallet
+                ),
+                new CbnMenuItem(
+                        R.drawable.ic_outline_grid_view_48,
+                        R.drawable.ic_outline_grid_view_48,
+                        R.id.dex
+                ),
+                new CbnMenuItem(
+                        R.drawable.ic_baseline_more_horiz_48,
+                        R.drawable.ic_baseline_more_horiz_48,
+                        R.id.settings
+                )
+        };
+        bottomNavigationView.setMenuItems(menuItems, 2);
+        bottomNavigationView.setOnMenuItemClickListener ((CbnMenuItem cbnMenuItem, Integer index) -> {
+            switch (cbnMenuItem.component3()) {
+                case R.id.staking:
+                case R.id.swap:
+                    toSend();
+                    return null;
+                case R.id.wallet:
+                    toWallet();
+                    return null;
+                case R.id.dex:
+                case R.id.settings:
+                    toSettings();
+                    return null;
+                default:
+                    break;
+            }
+            return null;
+        });
+
         /*new WebHttps(this).execute("https://api.latoken.com/v2/ticker", "MainCallHttps1");
         new WebHttps(this).execute("https://api.latoken.com/v2/ticker", "MainCallHttps2");*/
     }
@@ -345,6 +378,12 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
             startHandler(inactivity);
         }
     }
+    private final Runnable UserInputTimeoutRunnable = new Runnable() {
+        @Override
+        public void run() {
+            closeWallet();
+        }
+    };
     // Need to be in main activity, they don't work elsewhere, so I put them here.
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent resultData) {

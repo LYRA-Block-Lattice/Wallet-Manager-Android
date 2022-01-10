@@ -13,4 +13,9 @@
     <color name="launcher_button_1">#01f1fa</color>
     <color name="launcher_button_2">@color/color_dark_500</color>
     <color name="launcher_button_2_lighter">@color/color_dark_700</color>
+
+    <color name="dashboard_header_color">#5C16FF</color>
+    <color name="dashboard_arrow_send_receive_stroke_color">#7E47FF</color>
+    <color name="dashboard_foreground_color">@color/white</color>
+
 </resources>

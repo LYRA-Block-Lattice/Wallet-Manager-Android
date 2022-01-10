@@ -57,16 +57,7 @@ public class PreferencesLoad extends MainActivity {
     }
 
     public void setNetwork(String network) {
-        switch(network) {
-            case "1":
-                Global.setCurrentNetwork(Global.network.MAINNET);
-                break;
-            case "2":
-                Global.setCurrentNetwork(Global.network.DEVNET);
-                break;
-            default:
-                Global.setCurrentNetwork(Global.network.TESTNET);
-                break;
-        }
+        int net = Integer.parseInt(network);
+        Global.setCurrentNetwork(Global.networkName[net]);
     }
 }

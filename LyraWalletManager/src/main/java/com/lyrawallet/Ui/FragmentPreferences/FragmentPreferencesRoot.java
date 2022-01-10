@@ -28,18 +28,6 @@ public class FragmentPreferencesRoot extends PreferenceFragmentCompat {
         config.setLocale(new Locale(localeCode.toLowerCase()));
         resources.updateConfiguration(config, resources.getDisplayMetrics());
         // App bar language is not recreated after language is changed, a manual change is needed.
-        Button toDashboardButton = getActivity().findViewById(R.id.toDashboard);
-        if(toDashboardButton != null) {
-            toDashboardButton.setText(R.string.str_launcher_dashboard_short_button);
-        }
-        Button toOpenWalletButton = getActivity().findViewById(R.id.toOpenWallet);
-        if(toOpenWalletButton != null) {
-            toOpenWalletButton.setText(R.string.str_launcher_open_wallet_short_button);
-        }
-        Button toCloseWalletButton = getActivity().findViewById(R.id.toCloseWallet);
-        if(toCloseWalletButton != null) {
-            toCloseWalletButton.setText(R.string.str_launcher_close_wallet_short_button);
-        }
         Spinner accountsSpinner = getActivity().findViewById(R.id.accountSpinner);
         if(accountsSpinner != null) {
             accountsSpinner.setPromptId(R.string.str_spinner_account_select_hint);
@@ -48,18 +36,6 @@ public class FragmentPreferencesRoot extends PreferenceFragmentCompat {
     }
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        Button toDashboardButton = getActivity().findViewById(R.id.toDashboard);
-        if(toDashboardButton != null) {
-            toDashboardButton.setVisibility(View.VISIBLE);
-        }
-        Button toOpenWalletButton = getActivity().findViewById(R.id.toOpenWallet);
-        if(toOpenWalletButton != null) {
-            toOpenWalletButton.setVisibility(View.INVISIBLE);
-        }
-        Button toCloseWalletButton = getActivity().findViewById(R.id.toCloseWallet);
-        if(toCloseWalletButton != null) {
-            toCloseWalletButton.setVisibility(View.INVISIBLE);
-        }
         Spinner accountsSpinner = getActivity().findViewById(R.id.accountSpinner);
         if(accountsSpinner != null) {
             accountsSpinner.setVisibility(View.INVISIBLE);
@@ -69,7 +45,7 @@ public class FragmentPreferencesRoot extends PreferenceFragmentCompat {
         Preference networkSelectorPref = findPreference(getString(R.string.pref_network_selection_key));
         if (networkSelectorPref instanceof ListPreference) {
             ListPreference listPref = (ListPreference) networkSelectorPref;
-            networkSelectorPref.setSummary("Current selected network is: " + listPref.getEntry());
+            networkSelectorPref.setSummary(getString(R.string.pref_network_selection_current_selection) + ": " + listPref.getEntry());
         }
         if(networkSelectorPref != null) {
             networkSelectorPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -79,17 +55,10 @@ public class FragmentPreferencesRoot extends PreferenceFragmentCompat {
             });
             networkSelectorPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 public boolean onPreferenceChange(Preference preference, Object value) {
-                    if (value.equals("0")) {
-                        Global.setCurrentNetwork(Global.network.TESTNET);
-                        networkSelectorPref.setSummary("Current selected network is: TESTNET");
-                    } else if (value.equals("1")) {
-                        Global.setCurrentNetwork(Global.network.MAINNET);
-                        networkSelectorPref.setSummary("Current selected network is: MAINNET");
-                    } else if (value.equals("2")) {
-                        Global.setCurrentNetwork(Global.network.DEVNET);
-                        networkSelectorPref.setSummary("Current selected network is: DEVNET");
-                    }
-                    new ApiRpc().act(new ApiRpc.Action().actionHistory(Global.getSelectedAccountId()));
+                    int net = Integer.parseInt(value.toString());
+                    Global.setCurrentNetwork(Global.networkName[net]);
+                    networkSelectorPref.setSummary(getString(R.string.pref_network_selection_current_selection) + ": " + Global.networkName[net]);
+                    new ApiRpc().act(new ApiRpc.Action().actionHistory(Global.str_api_rpc_purpose_history_disk_storage, Global.getCurrentNetworkName(), Global.getSelectedAccountName(), Global.getSelectedAccountId()));
                     return true;
                 }
             });
@@ -97,20 +66,15 @@ public class FragmentPreferencesRoot extends PreferenceFragmentCompat {
         Preference languageSelectorPref = findPreference(getString(R.string.pref_language_selection_key));
         if (languageSelectorPref instanceof ListPreference) {
             ListPreference listPref = (ListPreference) languageSelectorPref;
-            languageSelectorPref.setSummary("Current selected language is: " + listPref.getEntry());
+            languageSelectorPref.setSummary(getString(R.string.pref_language_selection_current_selection) + ": " + listPref.getEntry());
         }
         if(languageSelectorPref != null) {
             languageSelectorPref.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 public boolean onPreferenceChange(Preference preference, Object value) {
-                    if (value.equals("0")) {
-                        Global.setCurrentLanguage(Global.language.ENG);
-                        languageSelectorPref.setSummary("Current selected language is: EN");
-                        setAppLocale("en");
-                    } else if (value.equals("1")) {
-                        Global.setCurrentLanguage(Global.language.ROM);
-                        languageSelectorPref.setSummary("Current selected language is: RO");
-                        setAppLocale("ro");
-                    }
+                    int lang = Integer.parseInt(value.toString());
+                    Global.setCurrentLanguage(Global.languageName[lang]);
+                    setAppLocale(Global.languageName[lang]);
+                    languageSelectorPref.setSummary(getString(R.string.pref_language_selection_current_selection) + ": " + Global.languageName[lang]);
                     getParentFragmentManager()
                             .beginTransaction()
                             .setReorderingAllowed(true)

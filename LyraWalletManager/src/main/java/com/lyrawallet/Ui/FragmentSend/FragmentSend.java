@@ -1,4 +1,4 @@
-package com.lyrawallet.Ui.FragmentMyAccountSend;
+package com.lyrawallet.Ui.FragmentSend;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,21 +10,20 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.lyrawallet.Api.ApiRpc;
-import com.lyrawallet.Global;
 import com.lyrawallet.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link FragmentMyAccountSend#newInstance} factory method to
+ * Use the {@link FragmentSend#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentMyAccountSend extends Fragment {
-    public FragmentMyAccountSend() {
+public class FragmentSend extends Fragment {
+    public FragmentSend() {
         // Required empty public constructor
     }
 
-    public static FragmentMyAccountSend newInstance(String param1, String param2) {
-        FragmentMyAccountSend fragment = new FragmentMyAccountSend();
+    public static FragmentSend newInstance(String param1, String param2) {
+        FragmentSend fragment = new FragmentSend();
         return fragment;
     }
     @Override
@@ -36,7 +35,7 @@ public class FragmentMyAccountSend extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_account_send, container, false);
+        return inflater.inflate(R.layout.fragment_send, container, false);
     }
 
     @Override
@@ -46,13 +45,6 @@ public class FragmentMyAccountSend extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        Button toDashboardButton = getActivity().findViewById(R.id.toDashboard);
-        toDashboardButton.setVisibility(View.VISIBLE);
-        Button toOpenWalletButton = getActivity().findViewById(R.id.toOpenWallet);
-        toOpenWalletButton.setVisibility(View.INVISIBLE);
-        Button toCloseWalletButton = getActivity().findViewById(R.id.toCloseWallet);
-        toCloseWalletButton.setVisibility(View.INVISIBLE);
-
         new ApiRpc().act(new ApiRpc.Action().actionPool("LYR", "tether/LTT"));
     }
 }

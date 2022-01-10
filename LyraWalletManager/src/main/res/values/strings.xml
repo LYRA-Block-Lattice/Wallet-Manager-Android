@@ -62,10 +62,13 @@
     <string name="pref_network_selection_title">Network</string>
     <string name="pref_network_selection_sumary">Select network: TESTNET or MAINNET</string>
     <string name="pref_network_selection_key" translatable="false">pref_network_selection_key</string>
+    <string name="pref_network_selection_current_selection">Current selected network is</string>
     <!-- Language selection -->
     <string name="pref_language_selection_title">Language</string>
     <string name="pref_language_selection_sumary">Select language: EN, RO \\.\\.\\.</string>
     <string name="pref_language_selection_key" translatable="false">pref_language_selection_key</string>
+    <string name="pref_language_selection_current_selection">Current selected language is</string>
+
     <!-- Auto close selection -->
     <string name="pref_auto_close_selection_title">Auto exit when no activity</string>
     <string name="pref_auto_close_selection_sumary">If the wallet is not used in the selected interval, the wallet will close</string>

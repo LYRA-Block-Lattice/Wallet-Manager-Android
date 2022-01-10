@@ -10,12 +10,15 @@ import android.widget.EditText;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.lyrawallet.Global;
 import com.lyrawallet.R;
 import com.lyrawallet.Storage.StorageImportWallet;
 import com.lyrawallet.Ui.UiHelpers;
 
 import java.io.File;
+
+import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView;
 
 public class FragmentImportWallet extends Fragment {
     public FragmentImportWallet() {
@@ -46,12 +49,8 @@ public class FragmentImportWallet extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        Button toDashboardButton = getActivity().findViewById(R.id.toDashboard);
-        toDashboardButton.setVisibility(View.INVISIBLE);
-        Button toOpenWalletButton = getActivity().findViewById(R.id.toOpenWallet);
-        toOpenWalletButton.setVisibility(View.VISIBLE);
-        Button toCloseWalletButton = getActivity().findViewById(R.id.toCloseWallet);
-        toCloseWalletButton.setVisibility(View.INVISIBLE);
+        CurvedBottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setVisibility(View.GONE);
 
         EditText walletNameEditText = view.findViewById(R.id.wallet_name);
         Button importWalletButton = view.findViewById(R.id.import_wallet);

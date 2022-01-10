@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:tag="account_send_tag"
-    tools:context="com.lyrawallet.Ui.FragmentMyAccountSend.FragmentMyAccountSend">
+    android:tag="account_staking_tag"
+    tools:context="com.lyrawallet.Ui.FragmentStaking.FragmentStaking" >
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,7 +7,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior" >
 
     <include
-        android:id="@+id/include"
+        android:id="@+id/includeTop"
         layout="@layout/app_bar_main" />
 
     <FrameLayout
@@ -16,9 +16,19 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:defaultNavHost="true"
+        app:layout_constraintBottom_toTopOf="@+id/includeBottom"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/includeTop" />
+
+    <include
+        android:id="@+id/includeBottom"
+        layout="@layout/content_bottom_menu"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/includeTop"
+        app:layout_constraintStart_toStartOf="@+id/includeTop" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

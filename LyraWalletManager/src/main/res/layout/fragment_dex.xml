@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:tag="account_receive_tag"
-    tools:context="com.lyrawallet.Ui.FragmentMyAccountReceive.FragmentMyAccountReceive" >
+    android:tag="account_dex_tag"
+    tools:context="com.lyrawallet.Ui.FragmentDex.FragmentDex" >
 
 </androidx.constraintlayout.widget.ConstraintLayout>

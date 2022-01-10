@@ -58,4 +58,6 @@
     <string name="pref_other_title">Altele</string>
     <string name="pref_description_title">Versiune</string>
     <string name="str_spinner_account_select_hint">Selecteaza cont</string>
+    <string name="pref_language_selection_current_selection">Limba selectată este</string>
+    <string name="pref_network_selection_current_selection">Reteaua selectată este</string>
 </resources>

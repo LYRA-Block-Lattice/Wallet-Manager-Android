@@ -20,19 +20,6 @@
       "filters": [
         {
           "filterType": "ABI",
-          "value": "x86"
-        }
-      ],
-      "attributes": [],
-      "versionCode": 1,
-      "versionName": "0.1.0test",
-      "outputFile": "LyraWalletManager-x86-release.apk"
-    },
-    {
-      "type": "ONE_OF_MANY",
-      "filters": [
-        {
-          "filterType": "ABI",
           "value": "x86_64"
         }
       ],
@@ -40,6 +27,19 @@
       "versionCode": 1,
       "versionName": "0.1.0test",
       "outputFile": "LyraWalletManager-x86_64-release.apk"
+    },
+    {
+      "type": "ONE_OF_MANY",
+      "filters": [
+        {
+          "filterType": "ABI",
+          "value": "x86"
+        }
+      ],
+      "attributes": [],
+      "versionCode": 1,
+      "versionName": "0.1.0test",
+      "outputFile": "LyraWalletManager-x86-release.apk"
     },
     {
       "type": "ONE_OF_MANY",

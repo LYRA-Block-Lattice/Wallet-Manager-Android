@@ -20,6 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.lyrawallet.Accounts.Accounts;
 import com.lyrawallet.Global;
 import com.lyrawallet.MainActivity;
@@ -27,6 +28,8 @@ import com.lyrawallet.R;
 import com.lyrawallet.Storage.StorageKeys;
 import com.lyrawallet.Ui.UiHelpers;
 import com.lyrawallet.Util.UtilTextFilters;
+
+import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView;
 
 public class FragmentOpenWallet extends Fragment {
     public FragmentOpenWallet() {
@@ -62,7 +65,7 @@ public class FragmentOpenWallet extends Fragment {
                     passwordEditText.setText("");
                     walletNameEditText.setText("");
                     UiHelpers.closeKeyboard(view);
-                    toDashboard();
+                    toWallet();
                 }
             } else {
                 if(StorageKeys.getStatus() == StorageKeys.status.OK) {
@@ -77,14 +80,16 @@ public class FragmentOpenWallet extends Fragment {
         }
     }
 
-    private void toDashboard() {
+    private void toWallet() {
+        CurvedBottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setVisibility(View.VISIBLE);
         getParentFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.nav_host_fragment_content_main, Global.getDashboard())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
-        Global.setVisiblePage(Global.visiblePage.DASHBOARD);
+        Global.setVisiblePage(Global.visiblePage.WALLET);
     }
 
     private void toNewAccount() {
@@ -117,18 +122,9 @@ public class FragmentOpenWallet extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        Button toDashboardButton = getActivity().findViewById(R.id.toDashboard);
-        if(toDashboardButton != null) {
-            toDashboardButton.setVisibility(View.INVISIBLE);
-        }
-        Button toOpenWalletButton = getActivity().findViewById(R.id.toOpenWallet);
-        if(toOpenWalletButton != null) {
-            toOpenWalletButton.setVisibility(View.INVISIBLE);
-        }
-        Button toCloseWalletButton = getActivity().findViewById(R.id.toCloseWallet);
-        if(toCloseWalletButton != null) {
-            toCloseWalletButton.setVisibility(View.VISIBLE);
-        }
+        CurvedBottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setVisibility(View.GONE);
+
         Spinner accountsSpinner = getActivity().findViewById(R.id.accountSpinner);
         if(accountsSpinner != null) {
             accountsSpinner.setVisibility(View.VISIBLE);
@@ -168,7 +164,7 @@ public class FragmentOpenWallet extends Fragment {
                     if(passwordEditText.getText().length() < Global.getMinCharAllowedOnPassword() + 1) {
                         passwordEditText.setError("Minimum " + Global.getMinCharAllowedOnPassword() + " characters.");
                     } else {
-                        toDashboard();
+                        toWallet();
                         EditText password = getActivity().findViewById(R.id.password);
                         UiHelpers.closeKeyboard(view);
                         password.setError(null);

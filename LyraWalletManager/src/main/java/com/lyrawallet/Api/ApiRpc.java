@@ -4,15 +4,12 @@ import static com.lyrawallet.Api.ApiRpc.ProfitingType.*;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.media.audiofx.AcousticEchoCanceler;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.EditText;
 
-import androidx.core.util.Pools;
-
-import com.lyrawallet.Accounts.Accounts;
+import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
 import com.lyrawallet.Api.Network.NetworkRpc;
 import com.lyrawallet.Global;
 import com.lyrawallet.MainActivity;
@@ -82,6 +79,9 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
     }
     public static class Action {
         String Api = null;
+        String Network = null;
+        String ActionPurpose = null;
+        String AccountName = null;
         String AccountId = null;
         String DestinationAccountId = null;
         String Name = null;
@@ -109,6 +109,15 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
 
         String getApi() {
             return Api;
+        }
+        String getNetwork() {
+            return Network;
+        }
+        public String getActionPurpose() {
+            return ActionPurpose;
+        }
+        String getAccName() {
+            return AccountName;
         }
         String getAccountId() {
             return AccountId;
@@ -267,11 +276,20 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
 
         }
 
-        public Action(String action) {
+        public Action(String actionString) {
             try {
-                JSONObject obj = new JSONObject(action);
+                JSONObject obj = new JSONObject(actionString);
                 if(!obj.isNull("api")) {
                     Api = obj.getString("api");
+                }
+                if(!obj.isNull("network")) {
+                    Network = obj.getString("network");
+                }
+                if(!obj.isNull("action_purpose")) {
+                    ActionPurpose = obj.getString("action_purpose");
+                }
+                if(!obj.isNull("account_name")) {
+                    AccountName = obj.getString("account_name");
                 }
                 if(!obj.isNull("account_id")) {
                     AccountId = obj.getString("account_id");
@@ -356,6 +374,15 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                 if (Api != null) {
                     obj.put("api", Api);
                 }
+                if (Network != null) {
+                    obj.put("network", Network);
+                }
+                if (ActionPurpose != null) {
+                    obj.put("action_purpose", ActionPurpose);
+                }
+                if (AccountName != null) {
+                    obj.put("account_name", AccountName);
+                }
                 if (AccountId != null) {
                     obj.put("account_id", AccountId);
                 }
@@ -434,9 +461,22 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
             return obj.toString();
         }
 
+        public Action actionHistory(String actionPurpose, String network, String accountName, String accountId) {
+            actionHistory(accountName, accountId);
+            ActionPurpose = actionPurpose;
+            Network = network;
+            return this;
+        }
+        public Action actionHistory(String accountName, String accountId) {
+            actionHistory(accountId);
+            AccountName = accountName;
+            return this;
+        }
         public Action actionHistory(String accountId) {
             if(Api == null) {
                 Api = "History";
+                ActionPurpose = "";
+                AccountName = null;
             } else {
                 Api = Api + "/" + "History";
             }
@@ -623,7 +663,7 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
     public String SendResult = null;
 
     public ApiRpc() {
-
+        ParentInstance = getInstance();
     }
 
     private boolean actWithPwd(Action action, String password) {
@@ -678,6 +718,7 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
         }
         return true;
     }
+    private static MainActivity ParentInstance = null;
 
     public boolean act(Action action) {
         if(action.getApi().split("/").length == 0) {
@@ -702,13 +743,13 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
             default:
                 break;
         }
-        final EditText passEditText = new EditText(getInstance());
+        final EditText passEditText = new EditText(ParentInstance);
         // Put EditText in password mode
         passEditText.setInputType(InputType.TYPE_NUMBER_VARIATION_PASSWORD);
         passEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
-        View v = new View(getInstance());
+        View v = new View(ParentInstance);
         UiHelpers.showKeyboard(v.getRootView(), passEditText);
-        AlertDialog dialog = new AlertDialog.Builder(getInstance())
+        AlertDialog dialog = new AlertDialog.Builder(ParentInstance)
                 .setTitle(R.string.str_dialog_title)
                 .setMessage(R.string.str_dialog_message)
                 .setView(passEditText)
@@ -724,13 +765,19 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
         dialog.show();
         return true;
     }
+
+    static public String getHistoryFileName(Action ac) {
+        return Global.getWalletName() + "_" + ac.getAccName() + "_" + ac.getNetwork();
+    }
+
     @Override
     public void onRpcTaskDone(String[] output) {
-        if(output[0].equals("Receive")) {
+        ApiRpc.Action ac = new ApiRpc.Action(output[1]);
+        if(output[0].equals("History")) {
+            ApiRpcActionsHistory.store(ac, output[2]);
+        } else if(output[0].equals("Receive")) {
             ReceiveResult = output[0] + "^" + output[1] + "^" + output[2];
         } else if(output[0].equals("Send")) {
-            ReceiveResult = output[0] + "^" + output[1] + "^" + output[2];
-        } else if(output[0].equals("History")) {
             ReceiveResult = output[0] + "^" + output[1] + "^" + output[2];
         }
         ReceiveResult = output[0] + "^" + output[1] + "^" + output[2];
@@ -738,6 +785,7 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
     }
     @Override
     public void onRpcNewEvent(String[] output) {
+        /*
         if(output[0].equals("Receive")) {
             SendResult = output[0] + "^" + output[1] + "^" + output[2];
         } else if(output[0].equals("Send")) {
@@ -747,5 +795,6 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
         }
         SendResult = output[0] + "^" + output[1] + "^" + output[2];
         System.out.println(SendResult);
+         */
     }
 }

@@ -1,4 +1,4 @@
-package com.lyrawallet.Ui.FragmentMyAccount;
+package com.lyrawallet.Ui.FragmentReceive;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,15 +9,17 @@ import android.widget.Button;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.lyrawallet.Api.ApiRpc;
+import com.lyrawallet.Global;
 import com.lyrawallet.R;
 
-public class FragmentMyAccount extends Fragment {
-    public FragmentMyAccount() {
+public class FragmentReceive extends Fragment {
+    public FragmentReceive() {
         // Required empty public constructor
     }
 
-    public static FragmentMyAccount newInstance(String param1, String param2) {
-        FragmentMyAccount fragment = new FragmentMyAccount();
+    public static FragmentReceive newInstance(String param1, String param2) {
+        FragmentReceive fragment = new FragmentReceive();
         return fragment;
     }
     @Override
@@ -29,7 +31,7 @@ public class FragmentMyAccount extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_account, container, false);
+        return inflater.inflate(R.layout.fragment_receive, container, false);
     }
 
     @Override
@@ -39,9 +41,6 @@ public class FragmentMyAccount extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        Button toDashboardButton = getActivity().findViewById(R.id.toDashboard);
-        toDashboardButton.setVisibility(View.VISIBLE);
-        Button toOpenWalletButton = getActivity().findViewById(R.id.toOpenWallet);
-        toOpenWalletButton.setVisibility(View.INVISIBLE);
+        new ApiRpc().act(new ApiRpc.Action().actionReceive(Global.getSelectedAccountId()));
     }
 }

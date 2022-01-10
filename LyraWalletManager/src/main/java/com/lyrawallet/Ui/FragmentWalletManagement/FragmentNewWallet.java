@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.lyrawallet.Accounts.Accounts;
 import com.lyrawallet.Global;
@@ -22,6 +23,8 @@ import com.lyrawallet.R;
 import com.lyrawallet.Storage.StorageKeys;
 import com.lyrawallet.Ui.UiHelpers;
 import com.lyrawallet.Util.UtilTextFilters;
+
+import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView;
 
 public class FragmentNewWallet extends Fragment {
     public FragmentNewWallet() {
@@ -72,12 +75,8 @@ public class FragmentNewWallet extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        Button toDashboardButton = getActivity().findViewById(R.id.toDashboard);
-        toDashboardButton.setVisibility(View.INVISIBLE);
-        Button toOpenWalletButton = getActivity().findViewById(R.id.toOpenWallet);
-        toOpenWalletButton.setVisibility(View.VISIBLE);
-        Button toCloseWalletButton = getActivity().findViewById(R.id.toCloseWallet);
-        toCloseWalletButton.setVisibility(View.INVISIBLE);
+        CurvedBottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setVisibility(View.GONE);
 
         EditText newWalletNameEditText = view.findViewById(R.id.new_wallet_name);
         EditText password1EditText = view.findViewById(R.id.new_wallet_password1);

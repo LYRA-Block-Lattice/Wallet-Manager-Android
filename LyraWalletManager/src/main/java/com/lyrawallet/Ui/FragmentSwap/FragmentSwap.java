@@ -1,11 +1,10 @@
-package com.lyrawallet.Ui.FragmentDashboard;
+package com.lyrawallet.Ui.FragmentSwap;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Spinner;
 
 import androidx.annotation.Nullable;
@@ -14,7 +13,7 @@ import androidx.fragment.app.Fragment;
 import com.lyrawallet.MainActivity;
 import com.lyrawallet.R;
 
-public class FragmentDashboard extends Fragment {
+public class FragmentSwap extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -22,12 +21,12 @@ public class FragmentDashboard extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public FragmentDashboard() {
+    public FragmentSwap() {
         // Required empty public constructor
     }
 
-    public static FragmentDashboard newInstance(String param1, String param2) {
-        FragmentDashboard fragment = new FragmentDashboard();
+    public static FragmentSwap newInstance(String param1, String param2) {
+        FragmentSwap fragment = new FragmentSwap();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -47,7 +46,7 @@ public class FragmentDashboard extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_dash, container, false);
+        return inflater.inflate(R.layout.fragment_swap, container, false);
     }
 
     @Override
@@ -57,18 +56,6 @@ public class FragmentDashboard extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        Button toDashboardButton = getActivity().findViewById(R.id.toDashboard);
-        if(toDashboardButton != null) {
-            toDashboardButton.setVisibility(View.INVISIBLE);
-        }
-        Button toOpenWalletButton = getActivity().findViewById(R.id.toOpenWallet);
-        if(toOpenWalletButton != null) {
-            toOpenWalletButton.setVisibility(View.INVISIBLE);
-        }
-        Button toCloseWalletButton = getActivity().findViewById(R.id.toCloseWallet);
-        if(toCloseWalletButton != null) {
-            toCloseWalletButton.setVisibility(View.VISIBLE);
-        }
         Spinner accountsSpinner = getActivity().findViewById(R.id.accountSpinner);
         if(accountsSpinner != null) {
             accountsSpinner.setVisibility(View.VISIBLE);

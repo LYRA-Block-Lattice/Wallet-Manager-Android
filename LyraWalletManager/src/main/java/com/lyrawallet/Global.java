@@ -3,13 +3,11 @@ package com.lyrawallet;
 import android.util.Pair;
 
 import com.lyrawallet.Accounts.Accounts;
-import com.lyrawallet.Api.ApiRpc;
-import com.lyrawallet.Ui.FragmentDashboard.FragmentDashboard;
-import com.lyrawallet.Ui.FragmentMyAccountReceive.FragmentMyAccountReceive;
-import com.lyrawallet.Ui.FragmentMyAccountSend.FragmentMyAccountSend;
+import com.lyrawallet.Ui.FragmentAccount.FragmentAccount;
+import com.lyrawallet.Ui.FragmentReceive.FragmentReceive;
+import com.lyrawallet.Ui.FragmentSend.FragmentSend;
 import com.lyrawallet.Ui.FragmentPreferences.FragmentPreferencesRoot;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Global {
@@ -20,30 +18,32 @@ public enum visiblePage {
     NEW_WALLET,
     NEW_ACCOUNT,
     RECOVER_ACCOUNT,
-    DASHBOARD,
+    WALLET,
     MY_ACCOUNT,
     MY_ACCOUNT_RECEIVE,
     MY_ACCOUNT_SEND,
     SETTINGS,
 }
 
-    public enum network { TESTNET, MAINNET, DEVNET }
-    public enum language { ENG, ROM }
-// Global constants
-    final static String DefaultWalletExtension = "lyr";
-    final static int RpcConnectionTimeout = 100; // in 10mS steps
-    final static int MaxWalletsBackupAllowed = 100;
-    final static int MinCharAllowedOnPassword = 8;
-    final static int MinCharAllowedOnWalletName = 2;
-    final static int MaxRpcConnectRetry = 5;
+    // Global constants
+    public final static String[] networkName = { "TESTNET", "MAINNET", "DEVNET" };
+    public final static String[] languageName = {"EN", "RO"};
+    public final static String DefaultWalletExtension = "lyr";
+    public final static int RpcConnectionTimeout = 100; // in 10mS steps
+    public final static int MaxWalletsBackupAllowed = 100;
+    public final static int MinCharAllowedOnPassword = 8;
+    public final static int MinCharAllowedOnWalletName = 2;
+    public final static int MaxRpcConnectRetry = 5;
+
+    public final static String str_api_rpc_purpose_history_disk_storage = "disk_storage";
 // Global variables
     private static visiblePage VisiblePage;
 
-    private static network CurrentNetwork = network.TESTNET;
-    private static language CurrentLanguage = language.ENG;
+    private static String CurrentNetwork = networkName[0];
+    private static String CurrentLanguage = languageName[0];
 
     private static String AccountsContainer = null;
-    private static List<Pair<String, String>> WalletAccNameAndId = null;
+    private static List<Pair<String, String>> WalletAccNameAndIdList = null;
     private static String WalletName = null;
     private static String ReceiveWalletPassword = null;
     private static String SelectedAccountName = "";
@@ -51,11 +51,9 @@ public enum visiblePage {
     private static String WalletPath = "";
     private static int InactivityTimeForClose = -1;
 
-    private static List<ApiRpc.QueueEntry>ApiRpcQueueActions = new ArrayList<ApiRpc.QueueEntry>();
-
-    private static FragmentDashboard Dashboard = null;
-    private static FragmentMyAccountReceive MyAccountReceive = null;
-    private static FragmentMyAccountSend MyAccountSend = null;
+    private static FragmentAccount Dashboard = null;
+    private static FragmentReceive MyAccountReceive = null;
+    private static FragmentSend MyAccountSend = null;
     private static FragmentPreferencesRoot Settings = null;
 
 
@@ -84,17 +82,17 @@ public enum visiblePage {
         return VisiblePage;
     }
 
-    public static void setCurrentNetwork(network net) {
+    public static void setCurrentNetwork(String net) {
         CurrentNetwork = net;
     }
-    public static network getCurrentNetwork() {
+    public static String getCurrentNetwork() {
         return CurrentNetwork;
     }
 
-    public static void setCurrentLanguage(language lang) {
+    public static void setCurrentLanguage(String lang) {
         CurrentLanguage = lang;
     }
-    public static language getCurrentLanguage() {
+    public static String getCurrentLanguage() {
         return CurrentLanguage;
     }
 
@@ -105,11 +103,11 @@ public enum visiblePage {
         return AccountsContainer;
     }
 
-    public static void setWalletAccNameAndId(List<Pair<String, String>> wallAccNameId) {
-        WalletAccNameAndId = wallAccNameId;
+    public static void setWalletAccNameAndIdList(List<Pair<String, String>> wallAccNameId) {
+        WalletAccNameAndIdList = wallAccNameId;
     }
-    public static List<Pair<String, String>> getWalletAccNameAndId() {
-        return WalletAccNameAndId;
+    public static List<Pair<String, String>> getWalletAccNameAndIdList() {
+        return WalletAccNameAndIdList;
     }
 
     public static void setWalletName(String wallName) {
@@ -175,24 +173,24 @@ public enum visiblePage {
         return MaxRpcConnectRetry;
     }
 
-    public static void setDashboard(FragmentDashboard dash) {
+    public static void setDashboard(FragmentAccount dash) {
         Dashboard = dash;
     }
-    public static FragmentDashboard getDashboard() {
+    public static FragmentAccount getDashboard() {
         return Dashboard;
     }
 
-    public static void setMyAccountReceive(FragmentMyAccountReceive myAccReceive) {
+    public static void setMyAccountReceive(FragmentReceive myAccReceive) {
         MyAccountReceive = myAccReceive;
     }
-    public static FragmentMyAccountReceive getMyAccountReceive() {
+    public static FragmentReceive getMyAccountReceive() {
         return MyAccountReceive;
     }
 
-    public static void setMyAccountSend(FragmentMyAccountSend myAccSend) {
+    public static void setMyAccountSend(FragmentSend myAccSend) {
         MyAccountSend = myAccSend;
     }
-    public static FragmentMyAccountSend getMyAccountSend() {
+    public static FragmentSend getMyAccountSend() {
         return MyAccountSend;
     }
 
@@ -204,39 +202,33 @@ public enum visiblePage {
     }
 
     public static String getNodeAddress() {
-        if(getCurrentNetwork() == network.DEVNET) {
-            int nodeNr = (int) (Math.random() * NodeAddressDevNet.length - 1);
-            return NodeAddressDevNet[nodeNr];
-        } else if(getCurrentNetwork() == network.TESTNET) {
-            int nodeNr = (int) (Math.random() * NodeAddressTestNet.length - 1);
-            return NodeAddressTestNet[nodeNr];
-        }else if(getCurrentNetwork() == network.MAINNET) {
-            int nodeNr = (int) (Math.random() * NodeAddressMainNet.length - 1);
-            return NodeAddressMainNet[nodeNr];
+        int nodeNr = 0;
+        switch (getCurrentNetwork()) {
+            case "DEVNET":
+                nodeNr = (int) (Math.random() * NodeAddressDevNet.length - 1);
+                return NodeAddressDevNet[nodeNr];
+            case "MAINNET":
+                nodeNr = (int) (Math.random() * NodeAddressMainNet.length - 1);
+                return NodeAddressMainNet[nodeNr];
+            default:
+                nodeNr = (int) (Math.random() * NodeAddressTestNet.length - 1);
+                return NodeAddressTestNet[nodeNr];
         }
-        return "";
     }
 
     public static String[] getNodeAddressTable() {
-        if(getCurrentNetwork() == network.DEVNET) {
-            return NodeAddressDevNet;
-        } else if(getCurrentNetwork() == network.TESTNET) {
-            return NodeAddressTestNet;
-        }else if(getCurrentNetwork() == network.MAINNET) {
-            return NodeAddressMainNet;
+        switch (getCurrentNetwork()) {
+            case "DEVNET":
+                return NodeAddressDevNet;
+            case "MAINNET":
+                return NodeAddressMainNet;
+            default:
+                return NodeAddressTestNet;
         }
-        return new String[0];
     }
 
     public static String getCurrentNetworkName() {
-        switch(getCurrentNetwork()) {
-            case DEVNET:
-                return "DEVNET";
-            case MAINNET:
-                return "MAINNET";
-            default:
-                return "TESTNET";
-        }
+        return getCurrentNetwork();
     }
 
     public static String getSelectedAccountId() {

@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.lyrawallet.Accounts.Accounts;
 import com.lyrawallet.Crypto.CryptoSignatures;
@@ -24,6 +25,8 @@ import com.lyrawallet.Storage.StorageKeys;
 import com.lyrawallet.Ui.UiHelpers;
 import com.lyrawallet.Util.UtilTextFilters;
 
+import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView;
+
 public class FragmentNewAccount extends Fragment {
     public FragmentNewAccount() {
         // Required empty public constructor
@@ -33,14 +36,16 @@ public class FragmentNewAccount extends Fragment {
         FragmentNewAccount fragment = new FragmentNewAccount();
         return fragment;
     }
-    private void toDashboard() {
+    private void toWallet() {
+        CurvedBottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.onMenuItemClick(2);
         getParentFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.nav_host_fragment_content_main, Global.getDashboard())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
-        Global.setVisiblePage(Global.visiblePage.DASHBOARD);
+        Global.setVisiblePage(Global.visiblePage.WALLET);
     }
 
     private void toOpenWallet() {
@@ -82,12 +87,8 @@ public class FragmentNewAccount extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        Button toDashboardButton = getActivity().findViewById(R.id.toDashboard);
-        toDashboardButton.setVisibility(View.VISIBLE);
-        Button toOpenWalletButton = getActivity().findViewById(R.id.toOpenWallet);
-        toOpenWalletButton.setVisibility(View.INVISIBLE);
-        Button toCloseWalletButton = getActivity().findViewById(R.id.toCloseWallet);
-        toCloseWalletButton.setVisibility(View.INVISIBLE);
+        CurvedBottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setVisibility(View.GONE);
 
         EditText newWalletNameEditText = view.findViewById(R.id.new_account_name);
         EditText passwordEditText = view.findViewById(R.id.new_account_password);
@@ -129,7 +130,7 @@ public class FragmentNewAccount extends Fragment {
                             toOpenWallet();
                         } else {
                             UiHelpers.closeKeyboard(view);
-                            toDashboard();
+                            toWallet();
                         }
                     }
                 }

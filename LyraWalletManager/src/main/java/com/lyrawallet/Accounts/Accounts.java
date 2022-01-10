@@ -57,29 +57,19 @@ public class Accounts {
         }
 
         Global.setWalletName(walletName);
-        accountsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Global.setSelectedAccountName(adapterView.getSelectedItem().toString());// list.get(i).first;
-                Global.setSelectedAccountNr(i);
-                Global.setWalletName(walletName);
-                System.out.println(Global.getSelectedAccountName());
-                new ApiRpc().act(new ApiRpc.Action().actionHistory(Global.getSelectedAccountId()));
-            }
-            public void onNothingSelected(AdapterView<?> adapterView) {
-            }
-        });
+        restoreAccountSelectSpinner(MainActivity);
         return true;
     }
 
     public boolean loadAccountsFromInternalContainer(String password) {
         // Populate the spinner with the accounts name.
         ArrayList<String> accNameList = new ArrayList<>();
-        Global.setWalletAccNameAndId(new ArrayList<Pair<String, String>>());
+        Global.setWalletAccNameAndIdList(new ArrayList<Pair<String, String>>());
         List<Pair<String, String>> accKeyList = StorageKeys.decrypt(Global.getAccountsContainer(), password);
         if(accKeyList != null) {
             for (Pair<String, String> acc: accKeyList) {
                 accNameList.add(acc.first);
-                Global.getWalletAccNameAndId().add(new Pair<String, String>(acc.first, CryptoSignatures.getAccountIdFromPrivateKey(acc.second)));
+                Global.getWalletAccNameAndIdList().add(new Pair<String, String>(acc.first, CryptoSignatures.getAccountIdFromPrivateKey(acc.second)));
             }
             if(accNameList.size() != 0) {
                 Global.setSelectedAccountName(accNameList.get(0));
@@ -117,7 +107,7 @@ public class Accounts {
     }
 
     public static String getAccount() {
-        List<Pair<String, String>> acc = Global.getWalletAccNameAndId();
+        List<Pair<String, String>> acc = Global.getWalletAccNameAndIdList();
         if (acc == null) {
             return null;
         }
@@ -153,5 +143,35 @@ public class Accounts {
                 })
                 .create();
         dialog.show();
+    }
+
+    public static void restoreAccountSelectSpinner(MainActivity mainActivity) {
+        // Restore spinner state.
+        ArrayList<String> accNameList = new ArrayList<>();
+        if(Global.getWalletAccNameAndIdList() != null) {
+            for (Pair<String, String> acc: Global.getWalletAccNameAndIdList()) {
+                accNameList.add(acc.first);
+            }
+        }
+        Spinner accountsSpinner = mainActivity.findViewById(R.id.accountSpinner);
+        ArrayAdapter<String> accountListArrayAdapter = new ArrayAdapter<>(mainActivity, android.R.layout.simple_spinner_item, accNameList);
+        accountListArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        accountsSpinner.setAdapter(accountListArrayAdapter);
+        if(Global.getSelectedAccountNr() >= 0) {
+            accountsSpinner.setSelection(Global.getSelectedAccountNr());
+        }
+        accountsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(view != null) {
+                    Global.setSelectedAccountName(adapterView.getSelectedItem().toString());
+                    Global.setSelectedAccountNr(i);
+                    Global.setWalletName(Global.getWalletName());
+                    System.out.println(Global.getSelectedAccountName());
+                    new ApiRpc().act(new ApiRpc.Action().actionHistory(Global.str_api_rpc_purpose_history_disk_storage, Global.getCurrentNetworkName(), Global.getSelectedAccountName(), Global.getSelectedAccountId()));
+                }
+            }
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
     }
 }
