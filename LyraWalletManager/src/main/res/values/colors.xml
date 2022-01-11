@@ -14,8 +14,11 @@
     <color name="launcher_button_2">@color/color_dark_500</color>
     <color name="launcher_button_2_lighter">@color/color_dark_700</color>
 
-    <color name="dashboard_header_color">#5C16FF</color>
-    <color name="dashboard_arrow_send_receive_stroke_color">#7E47FF</color>
-    <color name="dashboard_foreground_color">@color/white</color>
+    <color name="page_foreground">@color/white</color>
+    <color name="page_header_1">#594AE2</color>
+    <color name="page_header_2">#4B8EF1</color>
+    <color name="page_receive_send">#3949AB</color>
+    <color name="page_receive_send_stroke">#5664BA</color>
 
+    <color name="more_tint">#000</color>
 </resources>

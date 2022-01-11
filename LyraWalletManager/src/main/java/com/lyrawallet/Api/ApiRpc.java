@@ -1,6 +1,9 @@
 package com.lyrawallet.Api;
 
-import static com.lyrawallet.Api.ApiRpc.ProfitingType.*;
+import static com.lyrawallet.Api.ApiRpc.ProfitingType.MERCHANT;
+import static com.lyrawallet.Api.ApiRpc.ProfitingType.NODE;
+import static com.lyrawallet.Api.ApiRpc.ProfitingType.ORACLE;
+import static com.lyrawallet.Api.ApiRpc.ProfitingType.YIELD;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;

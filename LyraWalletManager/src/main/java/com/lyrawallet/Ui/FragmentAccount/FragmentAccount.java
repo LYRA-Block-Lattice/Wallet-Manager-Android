@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Spinner;
 
 import androidx.annotation.Nullable;
@@ -13,7 +12,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.lyrawallet.MainActivity;
 import com.lyrawallet.R;
@@ -92,6 +90,28 @@ public class FragmentAccount extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+
+    public void populateHistory(View view) {
+        //View v = new View((MainActivity) getActivity());
+        account_history_recicler = getActivity().findViewById(R.id.account_history_recicler);
+        listener = new ClickListener() {
+            @Override
+            public void click(int index){
+                //Toast.makeText(v,"clicked item index is "+index,Toast.LENGTH_LONG).show();
+                Snackbar.make(view, "clicked item index is "+index, Snackbar.LENGTH_LONG)
+                        .setAction("", null).show();
+            }
+        };
+        List<AccountHistoryEntry> list = new ArrayList<>();
+        list = getData();
+        adapter
+                = new AccountHistoryGaleryAdapter(
+                list, getActivity(), listener);
+        account_history_recicler.setAdapter(adapter);
+        account_history_recicler.setLayoutManager(
+                new LinearLayoutManager(getActivity()));
+    }
+
         @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,36 +137,6 @@ public class FragmentAccount extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         CurvedBottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setVisibility(View.VISIBLE);
-
-        UiHelpers.closeKeyboard(view);
-
-        Spinner accountsSpinner = getActivity().findViewById(R.id.accountSpinner);
-        if(accountsSpinner != null) {
-            accountsSpinner.setVisibility(View.VISIBLE);
-        }
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        // Get the layout inflater
-        LayoutInflater inflater = requireActivity().getLayoutInflater();
-
-        View v = new View((MainActivity) getActivity());
-        //new Accounts((MainActivity) getActivity()).promptForPassword(getContext(), v.getRootView());
-        account_history_recicler = getActivity().findViewById(R.id.account_history_recicler);
-        listener = new ClickListener() {
-            @Override
-            public void click(int index){
-                //Toast.makeText(v,"clicked item index is "+index,Toast.LENGTH_LONG).show();
-                Snackbar.make(view, "clicked item index is "+index, Snackbar.LENGTH_LONG)
-                        .setAction("", null).show();
-            }
-        };
-        List<AccountHistoryEntry> list = new ArrayList<>();
-        list = getData();
-        adapter
-                = new AccountHistoryGaleryAdapter(
-                list, getActivity(), listener);
-        account_history_recicler.setAdapter(adapter);
-        account_history_recicler.setLayoutManager(
-                new LinearLayoutManager(getActivity()));
+        populateHistory(view);
     }
 }

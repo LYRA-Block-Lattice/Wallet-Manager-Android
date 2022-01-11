@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment;
 import com.lyrawallet.MainActivity;
 import com.lyrawallet.R;
 
+import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView;
+
 public class FragmentSwap extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -56,10 +58,8 @@ public class FragmentSwap extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        Spinner accountsSpinner = getActivity().findViewById(R.id.accountSpinner);
-        if(accountsSpinner != null) {
-            accountsSpinner.setVisibility(View.VISIBLE);
-        }
+        CurvedBottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setVisibility(View.VISIBLE);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         // Get the layout inflater

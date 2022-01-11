@@ -26,23 +26,6 @@
                 app:popupTheme="@style/Theme.LyraWalletAndroid.PopupOverlay"
                 tools:visibility="invisible" />
 
-            <Spinner
-                android:id="@+id/accountSpinner"
-                android:layout_width="120dp"
-                android:layout_height="48dp"
-                android:layout_gravity="end"
-                android:layout_marginEnd="8dp"
-                android:background="@drawable/fab_spinner_account_select_no_outline"
-                android:minHeight="48dp"
-                android:popupBackground="@drawable/fab_spinner_account_select_outline"
-                android:spinnerMode="dialog"
-                android:prompt="@string/str_spinner_account_select_hint"
-                app:backgroundTint="@color/menu_button_icon_tint"
-                app:backgroundTintMode="add"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/toolbar"
-                tools:ignore="SpeakableTextPresentCheck" />
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

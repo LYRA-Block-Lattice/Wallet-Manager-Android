@@ -20,6 +20,7 @@
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/LyraWalletManager/src/main/res/menu/activity_main_drawer.xml" value="0.24256410256410257" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/LyraWalletManager/src/main/res/menu/main.xml" value="0.2101851851851852" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/LyraWalletManager/src/main/res/xml/root_preferences.xml" value="0.22010869565217392" />
+        <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/drawable/aaaaa.xml" value="1.0" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/drawable/avd_dashboard.xml" value="0.8594847775175644" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/drawable/avd_notification.xml" value="0.8594847775175644" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/drawable/fab_bottom_menu_shape.xml" value="0.8608597285067874" />
@@ -41,15 +42,20 @@
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/drawable/ic_lyra_dashboard_background.xml" value="0.8594847775175644" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/drawable/ic_menu_dashboard_background.xml" value="0.2859375" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/drawable/ic_menu_dashboard_foreground.xml" value="0.2859375" />
+        <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/drawable/ic_outline_account_balance_wallet_24.xml" value="0.64375" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/drawable/ic_outline_account_balance_wallet_48.xml" value="0.8594847775175644" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/drawable/ic_outline_arrow_downward_48.xml" value="0.8594847775175644" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/drawable/ic_outline_arrow_upward_48.xml" value="0.8594847775175644" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/drawable/ic_outline_article_36.xml" value="0.8594847775175644" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/drawable/ic_outline_grid_view_48.xml" value="0.8594847775175644" />
+        <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/drawable/ic_outline_network_wifi_48.xml" value="0.64375" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/drawable/ic_outline_payments_48.xml" value="0.8594847775175644" />
+        <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/drawable/ic_outline_search_48.xml" value="0.64375" />
+        <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/drawable/ic_outline_settings_48.xml" value="0.64375" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/drawable/ic_round_swap_horiz_48.xml" value="0.8594847775175644" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/drawable/ic_visibility_on_password.xml" value="0.2859375" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/drawable/side_nav_bar.xml" value="0.2859375" />
+        <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/layout/account_spinnoer_row.xml" value="0.551762114537445" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/layout/app_bar_main.xml" value="0.45863309352517984" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/layout/content_bottom_menu.xml" value="0.5376984126984127" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/layout/content_main.xml" value="0.5208333333333334" />
@@ -58,10 +64,11 @@
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/layout/fragment_backup_wallet.xml" value="0.5565476190476191" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/layout/fragment_dash.xml" value="0.246875" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/layout/fragment_dex.xml" value="0.5376984126984127" />
-        <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/layout/fragment_import_wallet.xml" value="0.8629976580796253" />
+        <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/layout/fragment_import_wallet.xml" value="0.5562060889929742" />
+        <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/layout/fragment_more.xml" value="0.435515873015873" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/layout/fragment_my_account.xml" value="0.5376984126984127" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/layout/fragment_my_account_receive.xml" value="0.5376984126984127" />
-        <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/layout/fragment_new_account.xml" value="0.5208333333333334" />
+        <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/layout/fragment_new_account.xml" value="0.5562060889929742" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/layout/fragment_new_wallet.xml" value="0.6130952380952381" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/layout/fragment_open_wallet.xml" value="0.5535714285714286" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/layout/fragment_receive.xml" value="0.5376984126984127" />

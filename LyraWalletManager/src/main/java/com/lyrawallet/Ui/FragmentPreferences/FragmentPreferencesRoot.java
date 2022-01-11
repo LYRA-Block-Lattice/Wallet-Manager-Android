@@ -1,10 +1,11 @@
 package com.lyrawallet.Ui.FragmentPreferences;
 
+import android.app.Activity;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Spinner;
 
 import androidx.fragment.app.FragmentTransaction;
@@ -12,7 +13,6 @@ import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
-import com.lyrawallet.Accounts.Accounts;
 import com.lyrawallet.Api.ApiRpc;
 import com.lyrawallet.Global;
 import com.lyrawallet.R;
@@ -21,26 +21,69 @@ import com.lyrawallet.Ui.FragmentWalletManagement.FragmentNewAccount;
 
 import java.util.Locale;
 
+import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView;
+
 public class FragmentPreferencesRoot extends PreferenceFragmentCompat {
+    private void toMore() {
+        Activity activity = getActivity();
+        if(activity != null) {
+            CurvedBottomNavigationView bottomNavigationView = activity.findViewById(R.id.bottomNavigationView);
+            bottomNavigationView.setVisibility(View.VISIBLE);
+            new Handler().postDelayed(new Runnable() {
+                public void run() {
+                    bottomNavigationView.onMenuItemClick(Global.visiblePage.MORE.ordinal());
+                }
+            }, 50);
+        }
+        //bottomNavigationView.onMenuItemClick(Global.visiblePage.ACCOUNT.ordinal());
+        getParentFragmentManager()
+                .beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.nav_host_fragment_content_main, Global.getFragmentMore())
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .commit();
+        Global.setVisiblePage(Global.visiblePage.MORE);
+    }
+
+    private void toNewAccount() {
+        getParentFragmentManager()
+                .beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.nav_host_fragment_content_main, FragmentNewAccount.newInstance())
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .commit();
+        Global.setVisiblePage(Global.visiblePage.NEW_ACCOUNT);
+    }
+
     private void setAppLocale(String localeCode){
         Resources resources = getActivity().getResources();
         Configuration config = resources.getConfiguration();
         config.setLocale(new Locale(localeCode.toLowerCase()));
         resources.updateConfiguration(config, resources.getDisplayMetrics());
         // App bar language is not recreated after language is changed, a manual change is needed.
-        Spinner accountsSpinner = getActivity().findViewById(R.id.accountSpinner);
-        if(accountsSpinner != null) {
-            accountsSpinner.setPromptId(R.string.str_spinner_account_select_hint);
-        }
-
     }
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        Spinner accountsSpinner = getActivity().findViewById(R.id.accountSpinner);
-        if(accountsSpinner != null) {
-            accountsSpinner.setVisibility(View.INVISIBLE);
-        }
         setPreferencesFromResource(R.xml.preferences_root, rootKey);
+
+        Activity activity = getActivity();
+        if(activity != null) {
+            CurvedBottomNavigationView bottomNavigationView = activity.findViewById(R.id.bottomNavigationView);
+            if(bottomNavigationView != null) {
+                bottomNavigationView.setVisibility(View.GONE);
+            }
+        }
+
+        Preference backPref = findPreference(getString(R.string.prefs_back_key));
+        if(backPref != null) {
+            backPref.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    toMore();
+                    return true;
+                }
+            });
+        }
 
         Preference networkSelectorPref = findPreference(getString(R.string.pref_network_selection_key));
         if (networkSelectorPref instanceof ListPreference) {
@@ -75,12 +118,7 @@ public class FragmentPreferencesRoot extends PreferenceFragmentCompat {
                     Global.setCurrentLanguage(Global.languageName[lang]);
                     setAppLocale(Global.languageName[lang]);
                     languageSelectorPref.setSummary(getString(R.string.pref_language_selection_current_selection) + ": " + Global.languageName[lang]);
-                    getParentFragmentManager()
-                            .beginTransaction()
-                            .setReorderingAllowed(true)
-                            .replace(R.id.nav_host_fragment_content_main, Global.getDashboard())
-                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                            .commit();
+                    toMore();
                     return true;
                 }
             });
@@ -103,12 +141,7 @@ public class FragmentPreferencesRoot extends PreferenceFragmentCompat {
             newAccountButton.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
-                    getParentFragmentManager()
-                            .beginTransaction()
-                            .setReorderingAllowed(true)
-                            .replace(R.id.nav_host_fragment_content_main, FragmentNewAccount.newInstance())
-                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                            .commit();
+                    toNewAccount();
                     return true;
                 }
             });

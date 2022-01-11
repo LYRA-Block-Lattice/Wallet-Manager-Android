@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:title="@string/prefs_back_title"
+        android:key="@string/prefs_back_key"
+        android:icon="@drawable/ic_baseline_arrow_back_24" />
     <PreferenceCategory android:title="@string/pref_category_general_title" >
         <ListPreference
             android:defaultValue="0"
@@ -9,7 +13,8 @@
             android:entryValues="@array/pref_network_selection_values"
             android:key="@string/pref_network_selection_key"
             android:summary="@string/pref_network_selection_sumary"
-            android:title="@string/pref_network_selection_title" />
+            android:title="@string/pref_network_selection_title"
+            android:icon="@drawable/ic_outline_network_wifi_24"/>
 
         <ListPreference
             android:defaultValue="0"
@@ -18,7 +23,8 @@
             android:entryValues="@array/pref_language_selection_values"
             android:key="@string/pref_language_selection_key"
             android:summary="@string/pref_language_selection_sumary"
-            android:title="@string/pref_language_selection_title" />
+            android:title="@string/pref_language_selection_title"
+            android:icon="@drawable/ic_baseline_language_24"/>
 
         <ListPreference
             android:defaultValue="N"
@@ -27,7 +33,8 @@
             android:entryValues="@array/pref_auto_close_selection_values"
             android:key="@string/pref_auto_close_selection_key"
             android:summary="@string/pref_auto_close_selection_sumary"
-            android:title="@string/pref_auto_close_selection_title" />
+            android:title="@string/pref_auto_close_selection_title"
+            android:icon="@drawable/ic_baseline_exit_to_app_24"/>
 
         <!-- <SwitchPreference
             android:defaultValue="false"
@@ -46,13 +53,15 @@
     <PreferenceCategory android:title="@string/pref_category_account_title">
         <Preference
             android:title="@string/prefs_add_new_account_title"
-            android:key="@string/prefs_add_new_account_key" />
+            android:key="@string/prefs_add_new_account_key"
+            android:icon="@drawable/ic_outline_account_tree_24"/>
 
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/pref_category_wallet_title">
         <Preference
             android:title="@string/prefs_backup_wallet_title"
-            android:key="@string/prefs_backup_wallet_key" />
+            android:key="@string/prefs_backup_wallet_key"
+            android:icon="@drawable/ic_outline_settings_backup_restore_24"/>
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/pref_other_title">
         <Preference

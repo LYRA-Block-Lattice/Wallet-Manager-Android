@@ -45,10 +45,10 @@ public class Accounts {
             return false;
         }
         // Check if any account is in the container.
-        Spinner accountsSpinner = MainActivity.findViewById(R.id.accountSpinner);
-        if(accountsSpinner.getCount() != 0) {
+        if(Global.getWalletAccNameAndIdList().size() != 0) {
             Global.setSelectedAccountNr(0);
-            Global.setSelectedAccountName(accountsSpinner.getSelectedItem().toString());
+            Pair<String, String> acc = Global.getWalletAccNameAndIdList().get(0);
+            Global.setSelectedAccountName(acc.first);
             //new UserRpcActions().actionHistory();
 
         } else {
@@ -57,7 +57,7 @@ public class Accounts {
         }
 
         Global.setWalletName(walletName);
-        restoreAccountSelectSpinner(MainActivity);
+        //restoreAccountSelectSpinner(MainActivity);
         return true;
     }
 
@@ -74,14 +74,6 @@ public class Accounts {
             if(accNameList.size() != 0) {
                 Global.setSelectedAccountName(accNameList.get(0));
             }
-        }
-        Spinner accountsSpinner = MainActivity.findViewById(R.id.accountSpinner);
-        ArrayAdapter<String> accountListArrayAdapter = new ArrayAdapter<>(MainActivity, android.R.layout.simple_spinner_item, accNameList);
-        accountListArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        accountsSpinner.setAdapter(accountListArrayAdapter);
-        if(Global.getSelectedAccountNr( )!= 0 && Global.getSelectedAccountNr() >= accNameList.size()) {
-            Global.setSelectedAccountNr(accNameList.size() - 1);
-            accountsSpinner.setSelection(Global.getSelectedAccountNr());
         }
         return accKeyList != null;
     }
@@ -143,35 +135,5 @@ public class Accounts {
                 })
                 .create();
         dialog.show();
-    }
-
-    public static void restoreAccountSelectSpinner(MainActivity mainActivity) {
-        // Restore spinner state.
-        ArrayList<String> accNameList = new ArrayList<>();
-        if(Global.getWalletAccNameAndIdList() != null) {
-            for (Pair<String, String> acc: Global.getWalletAccNameAndIdList()) {
-                accNameList.add(acc.first);
-            }
-        }
-        Spinner accountsSpinner = mainActivity.findViewById(R.id.accountSpinner);
-        ArrayAdapter<String> accountListArrayAdapter = new ArrayAdapter<>(mainActivity, android.R.layout.simple_spinner_item, accNameList);
-        accountListArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        accountsSpinner.setAdapter(accountListArrayAdapter);
-        if(Global.getSelectedAccountNr() >= 0) {
-            accountsSpinner.setSelection(Global.getSelectedAccountNr());
-        }
-        accountsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(view != null) {
-                    Global.setSelectedAccountName(adapterView.getSelectedItem().toString());
-                    Global.setSelectedAccountNr(i);
-                    Global.setWalletName(Global.getWalletName());
-                    System.out.println(Global.getSelectedAccountName());
-                    new ApiRpc().act(new ApiRpc.Action().actionHistory(Global.str_api_rpc_purpose_history_disk_storage, Global.getCurrentNetworkName(), Global.getSelectedAccountName(), Global.getSelectedAccountId()));
-                }
-            }
-            public void onNothingSelected(AdapterView<?> adapterView) {
-            }
-        });
     }
 }

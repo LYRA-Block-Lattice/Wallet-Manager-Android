@@ -1,16 +1,14 @@
 package com.lyrawallet;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-
-import android.annotation.SuppressLint;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -19,22 +17,25 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.lyrawallet.Accounts.Accounts;
+import com.lyrawallet.Api.Network.NetworkWebHttps;
 import com.lyrawallet.PreferencesLoad.PreferencesLoad;
 import com.lyrawallet.Storage.StorageCommon;
+import com.lyrawallet.Ui.FragmentAccount.FragmentAccount;
+import com.lyrawallet.Ui.FragmentDex.FragmentDex;
+import com.lyrawallet.Ui.FragmentMore.FragmentMore;
+import com.lyrawallet.Ui.FragmentPreferences.FragmentPreferencesRoot;
+import com.lyrawallet.Ui.FragmentReceive.FragmentReceive;
+import com.lyrawallet.Ui.FragmentSend.FragmentSend;
+import com.lyrawallet.Ui.FragmentStaking.FragmentStaking;
+import com.lyrawallet.Ui.FragmentSwap.FragmentSwap;
 import com.lyrawallet.Ui.FragmentWalletManagement.FragmentImportWallet;
 import com.lyrawallet.Ui.FragmentWalletManagement.FragmentNewAccount;
 import com.lyrawallet.Ui.FragmentWalletManagement.FragmentNewWallet;
+import com.lyrawallet.Ui.FragmentWalletManagement.FragmentOpenWallet;
 import com.lyrawallet.Ui.FragmentWalletManagement.FragmentRecoverAccount;
 import com.lyrawallet.Ui.UiHelpers;
-import com.lyrawallet.Ui.FragmentPreferences.FragmentPreferencesRoot;
-import com.lyrawallet.Accounts.Accounts;
-import com.lyrawallet.Api.Network.NetworkWebHttps;
-import com.lyrawallet.Ui.FragmentAccount.FragmentAccount;
-import com.lyrawallet.Ui.FragmentWalletManagement.FragmentOpenWallet;
-import com.lyrawallet.Ui.FragmentReceive.FragmentReceive;
-import com.lyrawallet.Ui.FragmentSend.FragmentSend;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -42,28 +43,16 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Array;
-import java.util.List;
 
-import kotlin.UInt;
 import np.com.susanthapa.curved_bottom_navigation.CbnMenuItem;
 import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView;
 
 public class MainActivity extends AppCompatActivity implements NetworkWebHttps.WebHttpsTaskInformer {
     private static MainActivity Instance = null;
-    private static int DeviceOrientation = 0;
     private static String ImportWalletName = null;
     private Handler UserInputTimeoutHandler;
-    //BottomNavigationView bottomNavigationView;
-    CurvedBottomNavigationView bottomNavigationView;
     protected static MainActivity getInstance() {
         return Instance;
-    }
-    protected static int getDeviceOrientation() {
-        return DeviceOrientation;
-    }
-    protected static void setDeviceOrientation(int orientation) {
-        DeviceOrientation = orientation;
     }
     /********************************** Save file dialog & Open file dialog ***********************/
     protected void backUpWallet(int procedure) {
@@ -127,38 +116,74 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                 .commit();
         Global.setVisiblePage(Global.visiblePage.RECOVER_ACCOUNT);
     }
-    protected void toWallet() {
+    protected void toStaking() {
         getSupportFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, Global.getDashboard())
+                .replace(R.id.nav_host_fragment_content_main, Global.getFragmentStaking())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
-        Global.setVisiblePage(Global.visiblePage.WALLET);
+        Global.setVisiblePage(Global.visiblePage.STAKING);
+    }
+    protected void toSwap() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.nav_host_fragment_content_main, Global.getFragmentSwap())
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .commit();
+        Global.setVisiblePage(Global.visiblePage.SWAP);
+    }
+    protected void toAccount() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.nav_host_fragment_content_main, Global.getFragmentAccount())
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .commit();
+        Global.setVisiblePage(Global.visiblePage.ACCOUNT);
+    }
+    protected void toDex() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.nav_host_fragment_content_main, Global.getFragmentDex())
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .commit();
+        Global.setVisiblePage(Global.visiblePage.DEX);
+    }
+    protected void toMore() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.nav_host_fragment_content_main, Global.getFragmentMore())
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .commit();
+        Global.setVisiblePage(Global.visiblePage.MORE);
     }
     protected void toReceive() {
         getSupportFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, Global.getMyAccountReceive())
+                .replace(R.id.nav_host_fragment_content_main, Global.getFragmentReceive())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
-        Global.setVisiblePage(Global.visiblePage.MY_ACCOUNT_RECEIVE);
+        Global.setVisiblePage(Global.visiblePage.RECEIVE);
     }
     protected void toSend() {
         getSupportFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, Global.getMyAccountSend())
+                .replace(R.id.nav_host_fragment_content_main, Global.getFragmentSend())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
-        Global.setVisiblePage(Global.visiblePage.MY_ACCOUNT_SEND);
+        Global.setVisiblePage(Global.visiblePage.SEND);
     }
     protected void toSettings() {
         getSupportFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, Global.getSettings())
+                .replace(R.id.nav_host_fragment_content_main, Global.getFragmentSettings())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.SETTINGS);
@@ -167,6 +192,21 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
     protected void setVisiblePage(Global.visiblePage p) {
         Global.setVisiblePage(p);
         switch(p) {
+            case STAKING:
+                toStaking();
+                break;
+            case SWAP:
+                toSwap();
+                break;
+            case ACCOUNT:
+                toAccount();
+                break;
+            case DEX:
+                toDex();
+                break;
+            case MORE:
+                toMore();
+                break;
             case IMPORT_WALLET:
                 toImportWallet();
                 break;
@@ -179,15 +219,10 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
             case RECOVER_ACCOUNT:
                 toRecoverAccount();
                 break;
-            case WALLET:
-                toWallet();
-                break;
-            case MY_ACCOUNT:
-                break;
-            case MY_ACCOUNT_RECEIVE:
+            case RECEIVE:
                 toReceive();
                 break;
-            case MY_ACCOUNT_SEND:
+            case SEND:
                 toSend();
                 break;
             case SETTINGS:
@@ -201,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
     /********************************** Go to other windows ***************************************/
     // Buttons events, for UI navigation.
     public void dashboard(View view) {
-        toWallet();
+        toAccount();
     }
     public void send(View view) {
         toSend();
@@ -241,7 +276,18 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         Global.visiblePage p = Global.visiblePage.values()[savedInstanceState.getInt("SHOWN_WINDOW")];
         // Show the same page as when the view was destroyed.
         setVisiblePage(p);
-        Accounts.restoreAccountSelectSpinner(this);
+        //Accounts.restoreAccountSelectSpinner(this);
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                if (Global.getVisiblePage().ordinal() < Global.visiblePage.OPEN_WALLET.ordinal()) {
+                    CurvedBottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+                    bottomNavigationView.onMenuItemClick(Global.getVisiblePage().ordinal());
+                    if(Global.getVisiblePage() == Global.visiblePage.ACCOUNT) {
+                        Global.getFragmentAccount().populateHistory(findViewById(R.id.nav_host_fragment_content_main));
+                    }
+                }
+            }
+        }, 10);
     }
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -258,17 +304,29 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         // Fix UI when Soft Keyboard is visible, avoiding buttons to disappear when soft keyboard is visible..
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         // Create persistent pages and store the pointer for less processing power usage avoiding destruction and reconstruction.
-        if(Global.getDashboard() == null) {
-            Global.setDashboard(FragmentAccount.newInstance("", ""));
+        if(Global.getFragmentStaking() == null) {
+            Global.setFragmentStaking(FragmentStaking.newInstance("", ""));
         }
-        if(Global.getMyAccountReceive() == null) {
-            Global.setMyAccountReceive(FragmentReceive.newInstance("", ""));
+        if(Global.getFragmentSwap() == null) {
+            Global.setFragmentSwap(FragmentSwap.newInstance("", ""));
         }
-        if(Global.getMyAccountSend() == null) {
-            Global.setMyAccountSend(FragmentSend.newInstance("", ""));
+        if(Global.getFragmentAccount() == null) {
+            Global.setFragmentAccount(FragmentAccount.newInstance("", ""));
         }
-        if(Global.getSettings() == null) {
-            Global.setSettings(new FragmentPreferencesRoot());
+        if(Global.getFragmentDex() == null) {
+            Global.setFragmentDex(FragmentDex.newInstance("", ""));
+        }
+        if(Global.getFragmentMore() == null) {
+            Global.setFragmentMore(FragmentMore.newInstance("", ""));
+        }
+        if(Global.getFragmentReceive() == null) {
+            Global.setFragmentReceive(FragmentReceive.newInstance("", ""));
+        }
+        if(Global.getFragmentSend() == null) {
+            Global.setFragmentSend(FragmentSend.newInstance("", ""));
+        }
+        if(Global.getFragmentSettings() == null) {
+            Global.setFragmentSettings(new FragmentPreferencesRoot());
         }
         // If the view was restored, load the last visible page enum.
         if(savedInstanceState != null) {
@@ -284,47 +342,51 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         if(inactivity != -1) {
             startHandler(inactivity);
         }
-        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        CurvedBottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         CbnMenuItem[] menuItems = new CbnMenuItem[]{
                 new CbnMenuItem(
-                        R.drawable.ic_outline_payments_48, // the icon
-                        R.drawable.ic_outline_payments_48, // the AVD that will be shown in FAB
-                        R.id.staking // optional if you use Jetpack Navigation
+                        R.drawable.ic_outline_payments_24, // the icon
+                        R.drawable.ic_outline_payments_24, // the AVD that will be shown in FAB
+                        Global.visiblePage.STAKING.ordinal() // optional if you use Jetpack Navigation
                 ),
                 new CbnMenuItem(
-                        R.drawable.ic_round_swap_horiz_48,
-                        R.drawable.ic_round_swap_horiz_48,
-                        R.id.swap
+                        R.drawable.ic_round_swap_horiz_24,
+                        R.drawable.ic_round_swap_horiz_24,
+                        Global.visiblePage.SWAP.ordinal()
                 ),
                 new CbnMenuItem(
-                        R.drawable.ic_outline_account_balance_wallet_48,
-                        R.drawable.ic_outline_account_balance_wallet_48,
-                        R.id.wallet
+                        R.drawable.ic_outline_account_balance_wallet_24,
+                        R.drawable.ic_outline_account_balance_wallet_24,
+                        Global.visiblePage.ACCOUNT.ordinal()
                 ),
                 new CbnMenuItem(
-                        R.drawable.ic_outline_grid_view_48,
-                        R.drawable.ic_outline_grid_view_48,
-                        R.id.dex
+                        R.drawable.ic_outline_grid_view_24,
+                        R.drawable.ic_outline_grid_view_24,
+                        Global.visiblePage.DEX.ordinal()
                 ),
                 new CbnMenuItem(
-                        R.drawable.ic_baseline_more_horiz_48,
-                        R.drawable.ic_baseline_more_horiz_48,
-                        R.id.settings
+                        R.drawable.ic_baseline_more_horiz_24,
+                        R.drawable.ic_baseline_more_horiz_24,
+                        Global.visiblePage.MORE.ordinal()
                 )
         };
         bottomNavigationView.setMenuItems(menuItems, 2);
         bottomNavigationView.setOnMenuItemClickListener ((CbnMenuItem cbnMenuItem, Integer index) -> {
-            switch (cbnMenuItem.component3()) {
-                case R.id.staking:
-                case R.id.swap:
-                    toSend();
+            switch (Global.visiblePage.values()[cbnMenuItem.component3()]) {
+                case STAKING:
+                    toStaking();
                     return null;
-                case R.id.wallet:
-                    toWallet();
+                case SWAP:
+                    toSwap();
                     return null;
-                case R.id.dex:
-                case R.id.settings:
-                    toSettings();
+                case ACCOUNT:
+                    toAccount();
+                    return null;
+                case DEX:
+                    toDex();
+                    return null;
+                case MORE:
+                    toMore();
                     return null;
                 default:
                     break;
@@ -355,8 +417,8 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         // Dummy event catcher, for further implementation.
         super.onConfigurationChanged(newConfig);
         int orientation = newConfig.orientation;
-        if(getDeviceOrientation() != orientation) {
-            setDeviceOrientation(orientation);
+        if(Global.getDeviceOrientation() != orientation) {
+            Global.setDeviceOrientation(orientation);
 
         }
     }

@@ -11,12 +11,24 @@
     android:tag="open_wallet_tag"
     tools:context="com.lyrawallet.Ui.FragmentWalletManagement.FragmentOpenWallet">
 
+    <Button
+        android:id="@+id/openToWalletButton"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:drawableLeft="@drawable/ic_baseline_arrow_back_24"
+        android:textAlignment="textStart"
+        android:textColor="@color/more_tint"
+        android:theme="@style/CardView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
         android:id="@+id/wallet_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:digits="@string/charset"
         android:hint="@string/prompt_wallet_name"
@@ -29,7 +41,7 @@
         android:singleLine="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/openToWalletButton"
         tools:ignore="TextContrastCheck" />
 
     <EditText
@@ -123,5 +135,16 @@
         app:layout_constraintStart_toStartOf="@id/password"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.3" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/action_open_wallet_short"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

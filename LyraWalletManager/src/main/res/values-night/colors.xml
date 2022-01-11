@@ -13,4 +13,12 @@
     <color name="launcher_button_1">#A5A5A5</color>
     <color name="launcher_button_2">@color/color_dark_500</color>
     <color name="launcher_button_2_lighter">@color/color_dark_700</color>
+
+    <color name="page_foreground">@color/white</color>
+    <color name="page_header_1">@color/color_dark_200</color>
+    <color name="page_header_2">@color/color_dark_700</color>
+
+    <color name="page_receive_send">@color/color_dark_500</color>
+    <color name="page_receive_send_stroke">@color/color_light_200</color>
+    <color name="more_tint">#FFF</color>
 </resources>

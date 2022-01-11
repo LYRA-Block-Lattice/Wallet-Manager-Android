@@ -18,12 +18,24 @@
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5" />
 
+    <Button
+        android:id="@+id/newToOpenButton"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:drawableLeft="@drawable/ic_baseline_arrow_back_24"
+        android:textAlignment="textStart"
+        android:textColor="@color/more_tint"
+        android:theme="@style/CardView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <EditText
         android:id="@+id/new_wallet_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="24dp"
         android:digits="@string/charset"
         android:hint="@string/prompt_type_wallet_name"
@@ -36,7 +48,7 @@
         android:singleLine="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newToOpenButton"
         tools:ignore="TextContrastCheck" />
 
     <EditText
@@ -109,5 +121,16 @@
         app:layout_constraintEnd_toStartOf="@id/guideline_middle_v"
         app:layout_constraintStart_toEndOf="@id/guideline_middle_v"
         app:layout_constraintTop_toBottomOf="@+id/new_wallet_password2" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/action_create_new_wallet_short"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -21,7 +21,10 @@
     <string name="str_launcher_close_wallet_short_button">CLOSE</string>
     <string name="str_launcher_send_button">SEND</string>
     <string name="str_launcher_receive_button">RECEIVE</string>
+    <string name="str_launcher_network_button">NETWORK</string>
+    <string name="str_launcher_explorer_button">EXPLORER</string>
     <string name="str_launcher_settings_button">SETTINGS</string>
+    <string name="str_launcher_about_us_button">About Us</string>
     <string name="prompt_wallet_name">Wallet name</string>
     <string name="prompt_type_wallet_name">Type wallet name</string>
     <string name="prompt_type_account_name">Type account name</string>
@@ -43,6 +46,9 @@
     <string name="str_something_went_wrong_when_beackup_wallet">Something went wrong when backup the wallet</string>
 
     <string name="str_spinner_account_select_hint">Select account</string>
+
+    <string name="prefs_back_title"> </string>
+    <string name="prefs_back_key" translatable="false">prefs_back</string>
 
     <string name="prefs_add_new_account_title">Add new account</string>
     <string name="prefs_add_new_account_key" translatable="false">prefs_add_new_account_key</string>

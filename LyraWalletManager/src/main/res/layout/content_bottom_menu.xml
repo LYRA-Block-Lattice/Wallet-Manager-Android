@@ -22,30 +22,15 @@
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:cbn_selectedColor="@color/dashboard_foreground_color"
+        app:cbn_selectedColor="@color/page_foreground"
         app:cbn_unSelectedColor="@color/grey_light"
         app:cbn_animDuration="300"
         app:cbn_fabElevation="4dp"
         app:cbn_elevation="6dp"
-        app:cbn_fabBg="#1E88E5"
-        app:cbn_bg="#1E88E5"
+        app:cbn_fabBg="@color/page_header_2"
+        app:cbn_bg="@color/page_header_2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <!-- <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/fab_bottom_menu_shape"
-        app:backgroundTintMode="multiply"
-        app:iconTint="@color/dashboard_foreground_color"
-        app:itemIconTint="@color/dashboard_foreground_color"
-        app:itemTextColor="@color/dashboard_foreground_color"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/bottom_nav_menu" /> -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

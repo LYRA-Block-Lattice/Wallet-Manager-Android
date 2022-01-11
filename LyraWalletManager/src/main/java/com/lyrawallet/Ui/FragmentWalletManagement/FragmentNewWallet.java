@@ -14,7 +14,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.lyrawallet.Accounts.Accounts;
 import com.lyrawallet.Global;
@@ -83,6 +82,13 @@ public class FragmentNewWallet extends Fragment {
         EditText password2EditText = view.findViewById(R.id.new_wallet_password2);
         Button showPasswordButton = view.findViewById(R.id.new_wallet_show_password);
         Button createWalletButton = view.findViewById(R.id.create_wallet);
+
+        Button newToOpenButton = (Button) view.findViewById(R.id.newToOpenButton);
+        newToOpenButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                toOpenWallet();
+            }
+        });
 
         UiHelpers.showKeyboard(view, newWalletNameEditText);
         newWalletNameEditText.setFilters(new InputFilter[]{UtilTextFilters.getCharactersDigitsAndSpaceFilter()});

@@ -4,24 +4,31 @@ import android.util.Pair;
 
 import com.lyrawallet.Accounts.Accounts;
 import com.lyrawallet.Ui.FragmentAccount.FragmentAccount;
+import com.lyrawallet.Ui.FragmentDex.FragmentDex;
+import com.lyrawallet.Ui.FragmentMore.FragmentMore;
+import com.lyrawallet.Ui.FragmentPreferences.FragmentPreferencesRoot;
 import com.lyrawallet.Ui.FragmentReceive.FragmentReceive;
 import com.lyrawallet.Ui.FragmentSend.FragmentSend;
-import com.lyrawallet.Ui.FragmentPreferences.FragmentPreferencesRoot;
+import com.lyrawallet.Ui.FragmentStaking.FragmentStaking;
+import com.lyrawallet.Ui.FragmentSwap.FragmentSwap;
 
 import java.util.List;
 
 public class Global {
 // Global enumerations
 public enum visiblePage {
+    STAKING,
+    SWAP,
+    ACCOUNT,
+    DEX,
+    MORE,
     OPEN_WALLET,
     IMPORT_WALLET,
     NEW_WALLET,
     NEW_ACCOUNT,
     RECOVER_ACCOUNT,
-    WALLET,
-    MY_ACCOUNT,
-    MY_ACCOUNT_RECEIVE,
-    MY_ACCOUNT_SEND,
+    RECEIVE,
+    SEND,
     SETTINGS,
 }
 
@@ -51,10 +58,16 @@ public enum visiblePage {
     private static String WalletPath = "";
     private static int InactivityTimeForClose = -1;
 
-    private static FragmentAccount Dashboard = null;
-    private static FragmentReceive MyAccountReceive = null;
-    private static FragmentSend MyAccountSend = null;
-    private static FragmentPreferencesRoot Settings = null;
+    private static int DeviceOrientation = 0;
+
+    private static FragmentStaking FragmentStaking = null;
+    private static FragmentSwap FragmentSwap = null;
+    private static FragmentAccount FragmentAccount = null;
+    private static FragmentDex FragmentDex = null;
+    private static FragmentMore FragmentMore = null;
+    private static FragmentReceive FragmentReceive = null;
+    private static FragmentSend FragmentSend = null;
+    private static FragmentPreferencesRoot FragmentSettings = null;
 
 
     final static String[] NodeAddressDevNet = new String[]{""};
@@ -74,6 +87,13 @@ public enum visiblePage {
             "wss://seed3.mainnet.lyra.live:443/api/v1/socket",
             "wss://seed3.mainnet.lyra.live:443/api/v1/socket"
     };
+
+    public static int getDeviceOrientation() {
+        return DeviceOrientation;
+    }
+    public static void setDeviceOrientation(int orientation) {
+        DeviceOrientation = orientation;
+    }
 
     public static void setVisiblePage(visiblePage v) {
         VisiblePage = v;
@@ -173,32 +193,60 @@ public enum visiblePage {
         return MaxRpcConnectRetry;
     }
 
-    public static void setDashboard(FragmentAccount dash) {
-        Dashboard = dash;
+    public static void setFragmentStaking(FragmentStaking dash) {
+        FragmentStaking = dash;
     }
-    public static FragmentAccount getDashboard() {
-        return Dashboard;
-    }
-
-    public static void setMyAccountReceive(FragmentReceive myAccReceive) {
-        MyAccountReceive = myAccReceive;
-    }
-    public static FragmentReceive getMyAccountReceive() {
-        return MyAccountReceive;
+    public static FragmentStaking getFragmentStaking() {
+        return FragmentStaking;
     }
 
-    public static void setMyAccountSend(FragmentSend myAccSend) {
-        MyAccountSend = myAccSend;
+    public static void setFragmentSwap(FragmentSwap dash) {
+        FragmentSwap = dash;
     }
-    public static FragmentSend getMyAccountSend() {
-        return MyAccountSend;
+    public static FragmentSwap getFragmentSwap() {
+        return FragmentSwap;
     }
 
-    public static void setSettings(FragmentPreferencesRoot set) {
-        Settings = set;
+    public static void setFragmentAccount(FragmentAccount dash) {
+        FragmentAccount = dash;
     }
-    public static FragmentPreferencesRoot getSettings() {
-        return Settings;
+    public static FragmentAccount getFragmentAccount() {
+        return FragmentAccount;
+    }
+
+    public static void setFragmentDex(FragmentDex dash) {
+        FragmentDex = dash;
+    }
+    public static FragmentDex getFragmentDex() {
+        return FragmentDex;
+    }
+
+    public static void setFragmentMore(FragmentMore dash) {
+        FragmentMore = dash;
+    }
+    public static FragmentMore getFragmentMore() {
+        return FragmentMore;
+    }
+
+    public static void setFragmentReceive(FragmentReceive myAccReceive) {
+        FragmentReceive = myAccReceive;
+    }
+    public static FragmentReceive getFragmentReceive() {
+        return FragmentReceive;
+    }
+
+    public static void setFragmentSend(FragmentSend myAccSend) {
+        FragmentSend = myAccSend;
+    }
+    public static FragmentSend getFragmentSend() {
+        return FragmentSend;
+    }
+
+    public static void setFragmentSettings(FragmentPreferencesRoot set) {
+        FragmentSettings = set;
+    }
+    public static FragmentPreferencesRoot getFragmentSettings() {
+        return FragmentSettings;
     }
 
     public static String getNodeAddress() {

@@ -41,6 +41,7 @@
     <string name="str_launcher_open_wallet_short_button">DESCHIDE</string>
     <string name="str_launcher_settings_button">SETĂRI</string>
     <string name="pref_category_general_title">General</string>
+    <string name="prefs_back_title"> </string>
     <string name="pref_category_account_title">Cont</string>
     <string name="prefs_add_new_account_title">Adauga cont</string>
     <string name="prefs_backup_wallet_title">Salvează portofel</string>
@@ -60,4 +61,7 @@
     <string name="str_spinner_account_select_hint">Selecteaza cont</string>
     <string name="pref_language_selection_current_selection">Limba selectată este</string>
     <string name="pref_network_selection_current_selection">Reteaua selectată este</string>
+    <string name="str_launcher_network_button">RETEA</string>
+    <string name="str_launcher_explorer_button">EXPLORER</string>
+    <string name="str_launcher_about_us_button">Despre Noi</string>
 </resources>

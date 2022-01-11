@@ -14,7 +14,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.lyrawallet.Accounts.Accounts;
 import com.lyrawallet.Crypto.CryptoSignatures;
@@ -36,16 +35,26 @@ public class FragmentRecoverAccount extends Fragment {
         FragmentRecoverAccount fragment = new FragmentRecoverAccount();
         return fragment;
     }
-    private void toWallet() {
+    private void toAccount() {
         CurvedBottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
         bottomNavigationView.onMenuItemClick(2);
         getParentFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, Global.getDashboard())
+                .replace(R.id.nav_host_fragment_content_main, Global.getFragmentAccount())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
-        Global.setVisiblePage(Global.visiblePage.WALLET);
+        Global.setVisiblePage(Global.visiblePage.ACCOUNT);
+    }
+
+    private void toNewAccount() {
+        getParentFragmentManager()
+                .beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.nav_host_fragment_content_main, FragmentNewAccount.newInstance())
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .commit();
+        Global.setVisiblePage(Global.visiblePage.NEW_ACCOUNT);
     }
 
     private void toOpenWallet() {
@@ -89,6 +98,13 @@ public class FragmentRecoverAccount extends Fragment {
         UiHelpers.showKeyboard(view, newWalletNameEditText);
         newWalletNameEditText.setFilters(new InputFilter[]{UtilTextFilters.getCharactersDigitsAndSpaceFilter()});
 
+        Button recoverToWalletButton = (Button) view.findViewById(R.id.recoverToWalletButton);
+        recoverToWalletButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                toNewAccount();
+            }
+        });
+
         recoverAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -123,7 +139,7 @@ public class FragmentRecoverAccount extends Fragment {
                             toOpenWallet();
                         } else {
                             UiHelpers.closeKeyboard(view);
-                            toWallet();
+                            toAccount();
                         }
                     }
                 }
