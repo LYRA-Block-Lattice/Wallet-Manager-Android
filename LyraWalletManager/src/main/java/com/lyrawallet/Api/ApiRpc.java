@@ -12,6 +12,7 @@ import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.EditText;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
 import com.lyrawallet.Api.Network.NetworkRpc;
 import com.lyrawallet.Global;
@@ -22,6 +23,7 @@ import com.lyrawallet.Ui.UiHelpers;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
 import java.util.Locale;
 
 public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
@@ -110,89 +112,89 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
         String DaysToStake = null;
         String CompoundMode = null;
 
-        String getApi() {
+        public String getApi() {
             return Api;
         }
-        String getNetwork() {
+        public String getNetwork() {
             return Network;
         }
         public String getActionPurpose() {
             return ActionPurpose;
         }
-        String getAccName() {
+        public String getAccName() {
             return AccountName;
         }
-        String getAccountId() {
+        public String getAccountId() {
             return AccountId;
         }
-        String getDestinationAccountId() {
+        public String getDestinationAccountId() {
             return DestinationAccountId;
         }
-        String getName() {
+        public String getName() {
             return Name;
         }
-        String getDomain() {
+        public String getDomain() {
             return Domain;
         }
-        String getToken0 () {
+        public String getToken0 () {
             return Token0;
         }
-        String getToken1() {
+        public String getToken1() {
             return Token1;
         }
-        String getProfitingAccountId() {
+        public String getProfitingAccountId() {
             return ProfitingAccountId;
         }
-        String getTokenToSwap() {
+        public String getTokenToSwap() {
             return TokenToSwap;
         }
-        String getPoolId() {
+        public String getPoolId() {
             return PoolId;
         }
-        String getSwapFrom() {
+        public String getSwapFrom() {
             return SwapFrom;
         }
-        String getVoteFor() {
+        public String getVoteFor() {
             return VoteFor;
         }
-        String getStakingAccountId() {
+        public String getStakingAccountId() {
             return StakingAccountId;
         }
 
-        String getPType() {
+        public String getPType() {
             return PType;
         }
-        String getSupply() {
+        public String getSupply() {
             return Supply;
         }
-        String getShareRatio() {
+        public String getShareRatio() {
             return ShareRatio;
         }
-        String getToken0Amount() {
+        public String getToken0Amount() {
             return Token0Amount;
         }
-        String getToken1Amount() {
+        public String getToken1Amount() {
             return Token1Amount;
         }
-        String getAmount() {
+        public String getAmount() {
             return Amount;
         }
-        String getAmountToSwap() {
+        public String getAmountToSwap() {
             return AmountToSwap;
         }
-        String getAmountToGet() {
+        public String getAmountToGet() {
             return AmountToGet;
         }
-        String getSlippage() {
+        public String getSlippage() {
             return Slippage;
         }
-        String getMaxVoter() {
+        public String getMaxVoter() {
             return MaxVoter;
         }
-        String getDaysToStake() {
+        public String getDaysToStake() {
             return DaysToStake;
         }
-        String getCompoundMode() {
+        public String getCompoundMode() {
             return CompoundMode;
         }
 
@@ -730,7 +732,7 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
         switch(action.getApi().split("/")[0]) {
             case "History":
                 new NetworkRpc(this).execute(action.toString(), "History", action.getAccountId(),
-                        "0", String.valueOf(System.currentTimeMillis()), "0");
+                "0", String.valueOf(System.currentTimeMillis()), "0");
                 return true;
             case "Balance":
                 new NetworkRpc(this).execute(action.toString(), "Balance", action.getAccountId());
@@ -769,22 +771,28 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
         return true;
     }
 
-    static public String getHistoryFileName(Action ac) {
-        return Global.getWalletName() + "_" + ac.getAccName() + "_" + ac.getNetwork();
-    }
-
     @Override
     public void onRpcTaskDone(String[] output) {
         ApiRpc.Action ac = new ApiRpc.Action(output[1]);
-        if(output[0].equals("History")) {
-            ApiRpcActionsHistory.store(ac, output[2]);
-        } else if(output[0].equals("Receive")) {
-            ReceiveResult = output[0] + "^" + output[1] + "^" + output[2];
-        } else if(output[0].equals("Send")) {
-            ReceiveResult = output[0] + "^" + output[1] + "^" + output[2];
-        }
-        ReceiveResult = output[0] + "^" + output[1] + "^" + output[2];
-        System.out.println(ReceiveResult);
+        //getInstance().runOnUiThread(new Runnable() {
+            //public void run() {
+                switch (output[0]) {
+                    case "History":
+                        ApiRpcActionsHistory.store(ac, output[2]);
+                        /*List<ApiRpcActionsHistory.HistoryEntry> historyList = new ApiRpcActionsHistory().loadHistory(ac);
+                        if (historyList != null) {
+                            Global.setWalletHistory(ac.getAccName(), historyList);
+                        }*/
+                        break;
+                    case "Receive":
+                    case "Send":
+                        ReceiveResult = output[0] + "^" + output[1] + "^" + output[2];
+                        break;
+                }
+                ReceiveResult = output[0] + "^" + output[1] + "^" + output[2];
+                System.out.println(ReceiveResult);
+            //}
+        //});
     }
     @Override
     public void onRpcNewEvent(String[] output) {
@@ -799,5 +807,7 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
         SendResult = output[0] + "^" + output[1] + "^" + output[2];
         System.out.println(SendResult);
          */
+        /*Snackbar.make(getInstance().findViewById(R.id.nav_host_fragment_content_main), output[2], Snackbar.LENGTH_LONG)
+                .setAction("", null).show();*/
     }
 }

@@ -3,6 +3,7 @@ package com.lyrawallet;
 import android.util.Pair;
 
 import com.lyrawallet.Accounts.Accounts;
+import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
 import com.lyrawallet.Ui.FragmentAccount.FragmentAccount;
 import com.lyrawallet.Ui.FragmentDex.FragmentDex;
 import com.lyrawallet.Ui.FragmentMore.FragmentMore;
@@ -12,6 +13,7 @@ import com.lyrawallet.Ui.FragmentSend.FragmentSend;
 import com.lyrawallet.Ui.FragmentStaking.FragmentStaking;
 import com.lyrawallet.Ui.FragmentSwap.FragmentSwap;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Global {
@@ -36,11 +38,13 @@ public enum visiblePage {
     public final static String[] networkName = { "TESTNET", "MAINNET", "DEVNET" };
     public final static String[] languageName = {"EN", "RO"};
     public final static String DefaultWalletExtension = "lyr";
-    public final static int RpcConnectionTimeout = 100; // in 10mS steps
+    public final static int RpcConnectionTimeout = 200; // in 10mS steps
     public final static int MaxWalletsBackupAllowed = 100;
     public final static int MinCharAllowedOnPassword = 8;
     public final static int MinCharAllowedOnWalletName = 2;
     public final static int MaxRpcConnectRetry = 5;
+    // Preference key names
+    public final static String keyCustomLyraPriceInUsd = "lyra_price_in_usd";
 
     public final static String str_api_rpc_purpose_history_disk_storage = "disk_storage";
 // Global variables
@@ -51,28 +55,24 @@ public enum visiblePage {
 
     private static String AccountsContainer = null;
     private static List<Pair<String, String>> WalletAccNameAndIdList = null;
+    private static List<Pair<String, Pair<Integer, String>>> WalletHistory = null;
     private static String WalletName = null;
     private static String ReceiveWalletPassword = null;
     private static String SelectedAccountName = "";
     private static int SelectedAccountNr = -1;
     private static String WalletPath = "";
     private static int InactivityTimeForClose = -1;
+    private static String WalletPassword = "";
+
+    private static double LyraPriceInUsd = 0.00015f;
 
     private static int DeviceOrientation = 0;
-
-    private static FragmentStaking FragmentStaking = null;
-    private static FragmentSwap FragmentSwap = null;
-    private static FragmentAccount FragmentAccount = null;
-    private static FragmentDex FragmentDex = null;
-    private static FragmentMore FragmentMore = null;
-    private static FragmentReceive FragmentReceive = null;
-    private static FragmentSend FragmentSend = null;
-    private static FragmentPreferencesRoot FragmentSettings = null;
 
 
     final static String[] NodeAddressDevNet = new String[]{""};
     final static String[] NodeAddressTestNet = new String[]{
             "wss://173.212.228.110:4504/api/v1/socket",
+            "wss://81.196.64.78:4504/api/v1/socket",
             "wss://161.97.166.188:4504/api/v1/socket",
             "wss://seed.testnet.lyra.live:443/api/v1/socket",
             "wss://seed2.testnet.lyra.live:443/api/v1/socket",
@@ -81,6 +81,7 @@ public enum visiblePage {
     };
     final static String[] NodeAddressMainNet = new String[]{
             "wss://173.212.228.110:5504/api/v1/socket",
+            "wss://81.196.64.78:5504/api/v1/socket",
             "wss://161.97.166.188:5504/api/v1/socket",
             "wss://seed1.mainnet.lyra.live:443/api/v1/socket",
             "wss://seed2.mainnet.lyra.live:443/api/v1/socket",
@@ -128,6 +129,35 @@ public enum visiblePage {
     }
     public static List<Pair<String, String>> getWalletAccNameAndIdList() {
         return WalletAccNameAndIdList;
+    }
+
+    public static void setWalletHistory(String accountName, String history) {
+        if(WalletHistory != null) {
+            for (int i = 0; i < WalletHistory.size(); i++) {
+                Pair<String, Pair<Integer, String>> acc = WalletHistory.get(i);
+                if (acc.first.equals(accountName)) {
+                    int cnt = acc.second.first;
+                    WalletHistory.remove(i);
+                    WalletHistory.add(new Pair<>(accountName, new Pair<>(cnt, history)));
+                    return;
+                }
+            }
+        } else {
+            WalletHistory = new ArrayList<>();
+        }
+        WalletHistory.add(new Pair<>(accountName, new Pair<>(0, history)));
+    }
+
+    public static Pair<Integer, String> getWalletHistory(String accountName) {
+        if(WalletHistory != null) {
+            for (int i = 0; i < WalletHistory.size(); i++) {
+                Pair<String, Pair<Integer, String>> acc = WalletHistory.get(i);
+                if (acc.first.equals(accountName)) {
+                    return acc.second;
+                }
+            }
+        }
+        return null;
     }
 
     public static void setWalletName(String wallName) {
@@ -193,62 +223,6 @@ public enum visiblePage {
         return MaxRpcConnectRetry;
     }
 
-    public static void setFragmentStaking(FragmentStaking dash) {
-        FragmentStaking = dash;
-    }
-    public static FragmentStaking getFragmentStaking() {
-        return FragmentStaking;
-    }
-
-    public static void setFragmentSwap(FragmentSwap dash) {
-        FragmentSwap = dash;
-    }
-    public static FragmentSwap getFragmentSwap() {
-        return FragmentSwap;
-    }
-
-    public static void setFragmentAccount(FragmentAccount dash) {
-        FragmentAccount = dash;
-    }
-    public static FragmentAccount getFragmentAccount() {
-        return FragmentAccount;
-    }
-
-    public static void setFragmentDex(FragmentDex dash) {
-        FragmentDex = dash;
-    }
-    public static FragmentDex getFragmentDex() {
-        return FragmentDex;
-    }
-
-    public static void setFragmentMore(FragmentMore dash) {
-        FragmentMore = dash;
-    }
-    public static FragmentMore getFragmentMore() {
-        return FragmentMore;
-    }
-
-    public static void setFragmentReceive(FragmentReceive myAccReceive) {
-        FragmentReceive = myAccReceive;
-    }
-    public static FragmentReceive getFragmentReceive() {
-        return FragmentReceive;
-    }
-
-    public static void setFragmentSend(FragmentSend myAccSend) {
-        FragmentSend = myAccSend;
-    }
-    public static FragmentSend getFragmentSend() {
-        return FragmentSend;
-    }
-
-    public static void setFragmentSettings(FragmentPreferencesRoot set) {
-        FragmentSettings = set;
-    }
-    public static FragmentPreferencesRoot getFragmentSettings() {
-        return FragmentSettings;
-    }
-
     public static String getNodeAddress() {
         int nodeNr = 0;
         switch (getCurrentNetwork()) {
@@ -288,5 +262,19 @@ public enum visiblePage {
     }
     public static int getInactivityTimeForClose() {
         return InactivityTimeForClose;
+    }
+
+    public static void setWalletPassword( String pass) {
+        WalletPassword = pass;
+    }
+    public static String getWalletPassword() {
+        return WalletPassword;
+    }
+
+    public static void setLyraPriceInUsd( double price) {
+        LyraPriceInUsd = price;
+    }
+    public static double getLyraPriceInUsd() {
+        return LyraPriceInUsd;
     }
 }

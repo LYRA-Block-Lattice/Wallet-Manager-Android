@@ -1,27 +1,13 @@
 <resources>
     <string name="app_name" translatable="false">LyraWalletManager</string>
 
-    <string name="nav_header_title" translatable="false">Lyra block lattice wallet manager</string>
-
     <string name="charset" translatable="false">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
 
-    <string name="str_Never">Never</string>
-    <string name="str_Minute">Minute</string>
-    <string name="str_Minutes">Minutes</string>
-    <string name="str_Hour">Hour</string>
-    <string name="str_Hours">Hours</string>
-    <string name="str_Day">Day</string>
-    <string name="str_Days">Days</string>
     <string name="str_dialog_title" translatable="false">Unlock wallet</string>
     <string name="str_dialog_message" translatable="false">Enter wallet password</string>
     <string name="str_dialog_accept">Accept</string>
     <string name="str_dialog_cancel">Cancel</string>
-    <string name="str_launcher_dashboard_short_button" translatable="false">DASH</string>
-    <string name="str_launcher_open_wallet_short_button">OPEN</string>
-    <string name="str_launcher_close_wallet_short_button">CLOSE</string>
-    <string name="str_launcher_send_button">SEND</string>
     <string name="str_launcher_receive_button">RECEIVE</string>
-    <string name="str_launcher_network_button">NETWORK</string>
     <string name="str_launcher_explorer_button">EXPLORER</string>
     <string name="str_launcher_settings_button">SETTINGS</string>
     <string name="str_launcher_about_us_button">About Us</string>
@@ -56,9 +42,6 @@
     <string name="prefs_backup_wallet_title">Backup wallet</string>
     <string name="prefs_backup_wallet_key" translatable="false">prefs_backup_wallet</string>
 
-    <string name="prefs_restore_wallet_title">Restore wallet</string>
-    <string name="prefs_restore_wallet_key" translatable="false">prefs_restore_wallet</string>
-
     <!-- Preferences menu -->
     <string name="pref_category_general_title">General</string>
     <string name="pref_category_account_title">Account</string>
@@ -91,12 +74,9 @@
     <!-- Other -->
     <string name="pref_description_title">Version</string>
     <string name="pref_description_sumary" translatable="false">LyraWalletManager V0.1.0</string>
-    <string name="pref_description_key" translatable="false">pref_description_key</string>
 
 
     <!-- Dummy switch -->
     <string name="pref_dummy_switch_key" translatable="false">pref_dummy_switch_key</string>
-    <string name="pref_dummy_switch_summary" translatable="false">This is a dummy switch</string>
-    <string name="pref_dummy_switch_title" translatable="false">This is dumb</string>
     <!-- ************************************************************************************** -->
 </resources>

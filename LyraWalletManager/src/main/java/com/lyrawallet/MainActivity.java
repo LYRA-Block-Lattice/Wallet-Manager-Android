@@ -19,6 +19,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.lyrawallet.Accounts.Accounts;
+import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
 import com.lyrawallet.Api.Network.NetworkWebHttps;
 import com.lyrawallet.PreferencesLoad.PreferencesLoad;
 import com.lyrawallet.Storage.StorageCommon;
@@ -120,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         getSupportFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, Global.getFragmentStaking())
+                .replace(R.id.nav_host_fragment_content_main, FragmentStaking.newInstance("", ""))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.STAKING);
@@ -129,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         getSupportFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, Global.getFragmentSwap())
+                .replace(R.id.nav_host_fragment_content_main, FragmentSwap.newInstance("", ""))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.SWAP);
@@ -138,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         getSupportFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, Global.getFragmentAccount())
+                .replace(R.id.nav_host_fragment_content_main, FragmentAccount.newInstance("", ""))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.ACCOUNT);
@@ -147,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         getSupportFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, Global.getFragmentDex())
+                .replace(R.id.nav_host_fragment_content_main, FragmentDex.newInstance("", ""))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.DEX);
@@ -156,7 +157,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         getSupportFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, Global.getFragmentMore())
+                .replace(R.id.nav_host_fragment_content_main, FragmentMore.newInstance("", ""))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.MORE);
@@ -165,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         getSupportFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, Global.getFragmentReceive())
+                .replace(R.id.nav_host_fragment_content_main, FragmentReceive.newInstance("", ""))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.RECEIVE);
@@ -174,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         getSupportFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, Global.getFragmentSend())
+                .replace(R.id.nav_host_fragment_content_main, FragmentSend.newInstance("", ""))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.SEND);
@@ -183,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         getSupportFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, Global.getFragmentSettings())
+                .replace(R.id.nav_host_fragment_content_main, new FragmentPreferencesRoot())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.SETTINGS);
@@ -199,6 +200,9 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                 toSwap();
                 break;
             case ACCOUNT:
+                ApiRpcActionsHistory.load(ApiRpcActionsHistory.getHistoryFileName());
+                /*Snackbar.make(findViewById(R.id.nav_host_fragment_content_main), Global.getWalletHistory( ApiRpcActionsHistory.getHistoryFileName()).second, Snackbar.LENGTH_LONG)
+                        .setAction("", null).show();*/
                 toAccount();
                 break;
             case DEX:
@@ -275,19 +279,16 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         super.onRestoreInstanceState(savedInstanceState);
         Global.visiblePage p = Global.visiblePage.values()[savedInstanceState.getInt("SHOWN_WINDOW")];
         // Show the same page as when the view was destroyed.
-        setVisiblePage(p);
         //Accounts.restoreAccountSelectSpinner(this);
+        setVisiblePage(p);
         new Handler().postDelayed(new Runnable() {
             public void run() {
                 if (Global.getVisiblePage().ordinal() < Global.visiblePage.OPEN_WALLET.ordinal()) {
                     CurvedBottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
                     bottomNavigationView.onMenuItemClick(Global.getVisiblePage().ordinal());
-                    if(Global.getVisiblePage() == Global.visiblePage.ACCOUNT) {
-                        Global.getFragmentAccount().populateHistory(findViewById(R.id.nav_host_fragment_content_main));
-                    }
                 }
             }
-        }, 10);
+        }, 50);
     }
     @SuppressLint("SourceLockedOrientationActivity")
     @Override
@@ -304,30 +305,6 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         // Fix UI when Soft Keyboard is visible, avoiding buttons to disappear when soft keyboard is visible..
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         // Create persistent pages and store the pointer for less processing power usage avoiding destruction and reconstruction.
-        if(Global.getFragmentStaking() == null) {
-            Global.setFragmentStaking(FragmentStaking.newInstance("", ""));
-        }
-        if(Global.getFragmentSwap() == null) {
-            Global.setFragmentSwap(FragmentSwap.newInstance("", ""));
-        }
-        if(Global.getFragmentAccount() == null) {
-            Global.setFragmentAccount(FragmentAccount.newInstance("", ""));
-        }
-        if(Global.getFragmentDex() == null) {
-            Global.setFragmentDex(FragmentDex.newInstance("", ""));
-        }
-        if(Global.getFragmentMore() == null) {
-            Global.setFragmentMore(FragmentMore.newInstance("", ""));
-        }
-        if(Global.getFragmentReceive() == null) {
-            Global.setFragmentReceive(FragmentReceive.newInstance("", ""));
-        }
-        if(Global.getFragmentSend() == null) {
-            Global.setFragmentSend(FragmentSend.newInstance("", ""));
-        }
-        if(Global.getFragmentSettings() == null) {
-            Global.setFragmentSettings(new FragmentPreferencesRoot());
-        }
         // If the view was restored, load the last visible page enum.
         if(savedInstanceState != null) {
             Global.setVisiblePage(Global.visiblePage.values()[savedInstanceState.getInt("SHOWN_WINDOW")]);
@@ -370,7 +347,12 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                         Global.visiblePage.MORE.ordinal()
                 )
         };
-        bottomNavigationView.setMenuItems(menuItems, 2);
+        if (Global.getVisiblePage().ordinal() < Global.visiblePage.OPEN_WALLET.ordinal()) {
+            bottomNavigationView.setMenuItems(menuItems, Global.getVisiblePage().ordinal());
+        } else {
+            bottomNavigationView.setMenuItems(menuItems, 2);
+            bottomNavigationView.setVisibility(View.GONE);
+        }
         bottomNavigationView.setOnMenuItemClickListener ((CbnMenuItem cbnMenuItem, Integer index) -> {
             switch (Global.visiblePage.values()[cbnMenuItem.component3()]) {
                 case STAKING:
@@ -393,7 +375,10 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
             }
             return null;
         });
-
+        if(Global.getVisiblePage() == Global.visiblePage.ACCOUNT) {
+            ApiRpcActionsHistory.load(ApiRpcActionsHistory.getHistoryFileName());
+        }
+        setVisiblePage(Global.getVisiblePage());
         /*new WebHttps(this).execute("https://api.latoken.com/v2/ticker", "MainCallHttps1");
         new WebHttps(this).execute("https://api.latoken.com/v2/ticker", "MainCallHttps2");*/
     }

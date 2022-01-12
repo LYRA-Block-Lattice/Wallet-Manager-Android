@@ -10,7 +10,6 @@
     <color name="grey_light">#FFD0D0D0</color>
     <color name="menu_button_text">#C0C0C0</color>
     <color name="menu_button_icon_tint">#66000000</color>
-    <color name="launcher_button_1">#A5A5A5</color>
     <color name="launcher_button_2">@color/color_dark_500</color>
     <color name="launcher_button_2_lighter">@color/color_dark_700</color>
 

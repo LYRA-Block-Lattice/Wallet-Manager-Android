@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.lyrawallet.Global;
 import com.lyrawallet.R;
 import com.lyrawallet.Storage.StorageImportWallet;
+import com.lyrawallet.Ui.FragmentAccount.FragmentAccount;
 import com.lyrawallet.Ui.UiHelpers;
 
 import java.io.File;
@@ -46,7 +47,7 @@ public class FragmentImportWallet extends Fragment {
         getParentFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, Global.getFragmentAccount())
+                .replace(R.id.nav_host_fragment_content_main, FragmentAccount.newInstance("", ""))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.ACCOUNT);

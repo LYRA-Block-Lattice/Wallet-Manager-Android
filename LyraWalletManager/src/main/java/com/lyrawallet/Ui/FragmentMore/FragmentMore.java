@@ -21,6 +21,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.lyrawallet.Api.ApiRpc;
 import com.lyrawallet.Global;
 import com.lyrawallet.R;
+import com.lyrawallet.Ui.FragmentPreferences.FragmentPreferencesRoot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +53,7 @@ public class FragmentMore extends Fragment {
         getParentFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, Global.getFragmentSettings())
+                .replace(R.id.nav_host_fragment_content_main, new FragmentPreferencesRoot())
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.SETTINGS);

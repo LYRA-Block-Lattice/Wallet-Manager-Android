@@ -17,6 +17,7 @@ import com.lyrawallet.Api.ApiRpc;
 import com.lyrawallet.Global;
 import com.lyrawallet.R;
 import com.lyrawallet.Storage.StorageBackUpWallet;
+import com.lyrawallet.Ui.FragmentMore.FragmentMore;
 import com.lyrawallet.Ui.FragmentWalletManagement.FragmentNewAccount;
 
 import java.util.Locale;
@@ -39,7 +40,7 @@ public class FragmentPreferencesRoot extends PreferenceFragmentCompat {
         getParentFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, Global.getFragmentMore())
+                .replace(R.id.nav_host_fragment_content_main, FragmentMore.newInstance("", ""))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.MORE);
