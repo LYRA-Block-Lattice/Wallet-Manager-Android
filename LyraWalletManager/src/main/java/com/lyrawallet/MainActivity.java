@@ -15,10 +15,13 @@ import android.view.WindowManager;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.lyrawallet.Accounts.Accounts;
+import com.lyrawallet.Api.ApiRpc;
 import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
 import com.lyrawallet.Api.Network.NetworkWebHttps;
 import com.lyrawallet.PreferencesLoad.PreferencesLoad;
@@ -44,6 +47,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import np.com.susanthapa.curved_bottom_navigation.CbnMenuItem;
 import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView;
@@ -55,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
     protected static MainActivity getInstance() {
         return Instance;
     }
+    private boolean selectOnly = false;
     /********************************** Save file dialog & Open file dialog ***********************/
     protected void backUpWallet(int procedure) {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
@@ -77,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                 .beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.nav_host_fragment_content_main, FragmentOpenWallet.newInstance())
+                .addToBackStack(String.valueOf(Global.visiblePage.OPEN_WALLET.ordinal()))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.OPEN_WALLET);
@@ -86,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                 .beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.nav_host_fragment_content_main, FragmentImportWallet.newInstance())
+                .addToBackStack(String.valueOf(Global.visiblePage.IMPORT_WALLET.ordinal()))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.IMPORT_WALLET);
@@ -95,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                 .beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.nav_host_fragment_content_main, FragmentNewWallet.newInstance())
+                .addToBackStack(String.valueOf(Global.visiblePage.NEW_WALLET.ordinal()))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.NEW_WALLET);
@@ -104,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                 .beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.nav_host_fragment_content_main, FragmentNewAccount.newInstance())
+                .addToBackStack(String.valueOf(Global.visiblePage.NEW_ACCOUNT.ordinal()))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.NEW_ACCOUNT);
@@ -113,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                 .beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.nav_host_fragment_content_main, FragmentRecoverAccount.newInstance())
+                .addToBackStack(String.valueOf(Global.visiblePage.RECOVER_ACCOUNT.ordinal()))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.RECOVER_ACCOUNT);
@@ -122,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                 .beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.nav_host_fragment_content_main, FragmentStaking.newInstance("", ""))
+                .addToBackStack(String.valueOf(Global.visiblePage.STAKING.ordinal()))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.STAKING);
@@ -131,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                 .beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.nav_host_fragment_content_main, FragmentSwap.newInstance("", ""))
+                .addToBackStack(String.valueOf(Global.visiblePage.SWAP.ordinal()))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.SWAP);
@@ -140,6 +154,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                 .beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.nav_host_fragment_content_main, FragmentAccount.newInstance("", ""))
+                .addToBackStack(String.valueOf(Global.visiblePage.ACCOUNT.ordinal()))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.ACCOUNT);
@@ -149,6 +164,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                 .beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.nav_host_fragment_content_main, FragmentDex.newInstance("", ""))
+                .addToBackStack(String.valueOf(Global.visiblePage.DEX.ordinal()))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.DEX);
@@ -158,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                 .beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.nav_host_fragment_content_main, FragmentMore.newInstance("", ""))
+                .addToBackStack(String.valueOf(Global.visiblePage.MORE.ordinal()))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.MORE);
@@ -167,6 +184,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                 .beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.nav_host_fragment_content_main, FragmentReceive.newInstance("", ""))
+                .addToBackStack(String.valueOf(Global.visiblePage.RECEIVE.ordinal()))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.RECEIVE);
@@ -176,6 +194,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                 .beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.nav_host_fragment_content_main, FragmentSend.newInstance("", ""))
+                .addToBackStack(String.valueOf(Global.visiblePage.SEND.ordinal()))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.SEND);
@@ -185,6 +204,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                 .beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.nav_host_fragment_content_main, new FragmentPreferencesRoot())
+                .addToBackStack(String.valueOf(Global.visiblePage.SETTINGS.ordinal()))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.SETTINGS);
@@ -192,6 +212,10 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
 
     protected void setVisiblePage(Global.visiblePage p) {
         Global.setVisiblePage(p);
+        if(selectOnly) {
+            selectOnly = false;
+            return;
+        }
         switch(p) {
             case STAKING:
                 toStaking();
@@ -200,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                 toSwap();
                 break;
             case ACCOUNT:
-                ApiRpcActionsHistory.load(ApiRpcActionsHistory.getHistoryFileName());
+                //ApiRpcActionsHistory.load(ApiRpcActionsHistory.getHistoryFileName());
                 /*Snackbar.make(findViewById(R.id.nav_host_fragment_content_main), Global.getWalletHistory( ApiRpcActionsHistory.getHistoryFileName()).second, Snackbar.LENGTH_LONG)
                         .setAction("", null).show();*/
                 toAccount();
@@ -306,17 +330,17 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         // Create persistent pages and store the pointer for less processing power usage avoiding destruction and reconstruction.
         // If the view was restored, load the last visible page enum.
-        if(savedInstanceState != null) {
+        if (savedInstanceState != null) {
             Global.setVisiblePage(Global.visiblePage.values()[savedInstanceState.getInt("SHOWN_WINDOW")]);
         }
         // On first launch.
-        if(Global.getVisiblePage() == null) {
+        if (Global.getVisiblePage() == null) {
             // Show the Open Wallet page.
             setVisiblePage(Global.visiblePage.OPEN_WALLET);
         }
         UserInputTimeoutHandler = new Handler();
         int inactivity = Global.getInactivityTimeForClose();
-        if(inactivity != -1) {
+        if (inactivity != -1) {
             startHandler(inactivity);
         }
         CurvedBottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
@@ -353,34 +377,27 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
             bottomNavigationView.setMenuItems(menuItems, 2);
             bottomNavigationView.setVisibility(View.GONE);
         }
-        bottomNavigationView.setOnMenuItemClickListener ((CbnMenuItem cbnMenuItem, Integer index) -> {
-            switch (Global.visiblePage.values()[cbnMenuItem.component3()]) {
-                case STAKING:
-                    toStaking();
-                    return null;
-                case SWAP:
-                    toSwap();
-                    return null;
-                case ACCOUNT:
-                    toAccount();
-                    return null;
-                case DEX:
-                    toDex();
-                    return null;
-                case MORE:
-                    toMore();
-                    return null;
-                default:
-                    break;
-            }
+        bottomNavigationView.setOnMenuItemClickListener((CbnMenuItem cbnMenuItem, Integer index) -> {
+            setVisiblePage(Global.visiblePage.values()[cbnMenuItem.component3()]);
             return null;
         });
-        if(Global.getVisiblePage() == Global.visiblePage.ACCOUNT) {
-            ApiRpcActionsHistory.load(ApiRpcActionsHistory.getHistoryFileName());
-        }
         setVisiblePage(Global.getVisiblePage());
         /*new WebHttps(this).execute("https://api.latoken.com/v2/ticker", "MainCallHttps1");
         new WebHttps(this).execute("https://api.latoken.com/v2/ticker", "MainCallHttps2");*/
+
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if( Global.getSelectedAccountName().length() != 0) {
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            new ApiRpc().act(new ApiRpc.Action().actionHistory(Global.str_api_rpc_purpose_history_disk_storage, Global.getCurrentNetworkName(), Global.getSelectedAccountName(), Global.getSelectedAccountId()));
+                        }
+                    });
+                }
+            }
+        }, 1000, 60 * 1000);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -407,11 +424,39 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
 
         }
     }
+    public Fragment getVisibleFragment(){
+        FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
+        List<Fragment> fragments = fragmentManager.getFragments();
+        if(fragments != null){
+            for(Fragment fragment : fragments){
+                if(fragment != null && fragment.isVisible())
+                    return fragment;
+            }
+        }
+        return null;
+    }
     @Override
     public boolean onKeyDown(int key_code, KeyEvent key_event) {
         if (key_code== KeyEvent.KEYCODE_BACK) {
             // Prevent back key to take effect, implemented for further development.
             super.onKeyDown(key_code, key_event);
+            if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
+                getSupportFragmentManager().popBackStack();
+                FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
+                FragmentManager.BackStackEntry entry =  fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 2);
+                CurvedBottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+                Global.setVisiblePage(Global.visiblePage.values()[Integer.parseInt(entry.getName())]);
+                if (Global.getVisiblePage().ordinal() < Global.visiblePage.OPEN_WALLET.ordinal()) {
+                    selectOnly = true;
+                    bottomNavigationView.onMenuItemClick(Global.getVisiblePage().ordinal());
+                } else {
+                    //bottomNavigationView.setMenuItems(menuItems, 2);
+                    bottomNavigationView.setVisibility(View.GONE);
+                }
+            } else {
+                finish();
+                System.exit(0);
+            }
             return false;
         }
         return false;

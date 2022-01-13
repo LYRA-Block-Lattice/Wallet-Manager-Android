@@ -5,7 +5,9 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Spinner;
 
 import androidx.fragment.app.FragmentTransaction;
@@ -26,24 +28,24 @@ import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView;
 
 public class FragmentPreferencesRoot extends PreferenceFragmentCompat {
     private void toMore() {
-        Activity activity = getActivity();
-        if(activity != null) {
-            CurvedBottomNavigationView bottomNavigationView = activity.findViewById(R.id.bottomNavigationView);
-            bottomNavigationView.setVisibility(View.VISIBLE);
-            new Handler().postDelayed(new Runnable() {
-                public void run() {
-                    bottomNavigationView.onMenuItemClick(Global.visiblePage.MORE.ordinal());
-                }
-            }, 50);
-        }
-        //bottomNavigationView.onMenuItemClick(Global.visiblePage.ACCOUNT.ordinal());
         getParentFragmentManager()
                 .beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.nav_host_fragment_content_main, FragmentMore.newInstance("", ""))
+                .addToBackStack(null)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.MORE);
+        Activity activity = getActivity();
+        if(activity != null) {
+            CurvedBottomNavigationView bottomNavigationView = activity.findViewById(R.id.bottomNavigationView);
+            bottomNavigationView.setVisibility(View.VISIBLE);
+            //new Handler().postDelayed(new Runnable() {
+            //public void run() {
+            bottomNavigationView.onMenuItemClick(Global.visiblePage.MORE.ordinal());
+            //}
+            //}, 200);
+        }
     }
 
     private void toNewAccount() {
@@ -51,6 +53,7 @@ public class FragmentPreferencesRoot extends PreferenceFragmentCompat {
                 .beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.nav_host_fragment_content_main, FragmentNewAccount.newInstance())
+                .addToBackStack(null)
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.NEW_ACCOUNT);
@@ -66,7 +69,10 @@ public class FragmentPreferencesRoot extends PreferenceFragmentCompat {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.preferences_root, rootKey);
+    }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Activity activity = getActivity();
         if(activity != null) {
             CurvedBottomNavigationView bottomNavigationView = activity.findViewById(R.id.bottomNavigationView);
@@ -157,5 +163,7 @@ public class FragmentPreferencesRoot extends PreferenceFragmentCompat {
                 }
             });
         }
+        View v = super.onCreateView(inflater, container, savedInstanceState);
+        return v;//inflater.inflate(R.layout.fragment_settings, container, false);
     }
 }

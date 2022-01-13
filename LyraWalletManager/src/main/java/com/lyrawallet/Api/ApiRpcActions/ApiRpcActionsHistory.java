@@ -1,6 +1,7 @@
 package com.lyrawallet.Api.ApiRpcActions;
 
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.util.Pair;
 
 import androidx.preference.PreferenceManager;
@@ -8,7 +9,9 @@ import androidx.preference.PreferenceManager;
 import com.lyrawallet.Api.ApiRpc;
 import com.lyrawallet.Global;
 import com.lyrawallet.MainActivity;
+import com.lyrawallet.R;
 import com.lyrawallet.Storage.StorageHistory;
+import com.lyrawallet.Ui.FragmentAccount.FragmentAccount;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,6 +20,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ApiRpcActionsHistory extends MainActivity {
     public static class HistoryEntry {
@@ -119,15 +124,22 @@ public class ApiRpcActionsHistory extends MainActivity {
     }
 
     public static void store(ApiRpc.Action ac, String networkData) {
-        int countArrayStored = 0;
         if(ac.getActionPurpose().equals(Global.str_api_rpc_purpose_history_disk_storage)) {
             Pair<Integer, String> h = Global.getWalletHistory(getHistoryFileName(ac));
             if(networkData != null) {
-                if (h == null || h.second.length() != networkData.length()) {
-                    Global.setWalletHistory(getHistoryFileName(ac), networkData);
+                if (h == null || h.second == null || h.second.length() != networkData.length()) {
+                    // Run set history on another thread.
+                    Timer timer = new Timer();
+                    timer.scheduleAtFixedRate(new TimerTask() {
+                        public void run() {
+                            timer.cancel();
+                            Global.setWalletHistory(getHistoryFileName(ac), networkData);
+                        }
+                    }, 100, 100);
                 }
             }
             String storedData = StorageHistory.read( getHistoryFileName(ac), Global.getWalletPassword());
+            int countArrayStored = 0;
             if(storedData != null) {
                 try {
                     JSONArray arrayStored = new JSONArray(storedData);
@@ -195,4 +207,52 @@ public class ApiRpcActionsHistory extends MainActivity {
         }
         return 0;
     }
+
+    // Sample data for RecyclerView
+    private List<FragmentAccount.AccountHistoryEntry> getData() {
+        Pair<Integer, String> historyAndCnt = Global.getWalletHistory(ApiRpcActionsHistory.getHistoryFileName());
+        return getData(historyAndCnt);
+    }
+    public static List<FragmentAccount.AccountHistoryEntry> getData(Pair<Integer, String> historyAndCnt) {
+        //List<ApiRpcActionsHistory.HistoryEntry> historyList = ApiRpcActionsHistory.loadHistory(ApiRpcActionsHistory.load(ApiRpcActionsHistory.getHistoryFileName()));
+
+        if(historyAndCnt == null || historyAndCnt.second == null) {
+            return null;
+        }
+        List<ApiRpcActionsHistory.HistoryEntry> historyList = ApiRpcActionsHistory.loadHistory(historyAndCnt.second);
+        if(historyList == null) {
+            return null;
+        }
+        List<FragmentAccount.AccountHistoryEntry> List = new ArrayList<>();
+        for (int i = 0; i < historyList.size(); i++) {
+            int size = historyList.get(i).getChanges().size();
+            Pair<String, Double> tokenAmount;
+            if(size > 1) {
+                tokenAmount = historyList.get(i).getChanges().get(1);
+            } else  {
+                tokenAmount = historyList.get(i).getChanges().get(0);
+            }
+            int icon = R.mipmap.ic_unknown_foreground;
+            switch (tokenAmount.first) {
+                case "LYR":
+                    icon = R.mipmap.ic_lyra_foreground;
+                    break;
+                case "tether/USDC":
+                    icon = R.mipmap.ic_usdc_foreground;
+                    break;
+                case "tether/USDT":
+                    icon = R.mipmap.ic_usdt_foreground;
+                    break;
+                case "tether/ETH":
+                    icon = R.mipmap.ic_eth_foreground;
+                    break;
+                default:
+                    icon = R.mipmap.ic_unknown_foreground;
+            }
+            List.add(0, new FragmentAccount.AccountHistoryEntry(icon,
+                    tokenAmount.first, tokenAmount.second, 0.00021f));
+        }
+        return List;
+    }
+
 }

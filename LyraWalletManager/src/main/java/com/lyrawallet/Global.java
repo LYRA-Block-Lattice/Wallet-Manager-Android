@@ -38,7 +38,7 @@ public enum visiblePage {
     public final static String[] networkName = { "TESTNET", "MAINNET", "DEVNET" };
     public final static String[] languageName = {"EN", "RO"};
     public final static String DefaultWalletExtension = "lyr";
-    public final static int RpcConnectionTimeout = 200; // in 10mS steps
+    public final static int RpcConnectionTimeout = 100; // in 10mS steps
     public final static int MaxWalletsBackupAllowed = 100;
     public final static int MinCharAllowedOnPassword = 8;
     public final static int MinCharAllowedOnWalletName = 2;
@@ -56,6 +56,7 @@ public enum visiblePage {
     private static String AccountsContainer = null;
     private static List<Pair<String, String>> WalletAccNameAndIdList = null;
     private static List<Pair<String, Pair<Integer, String>>> WalletHistory = null;
+    private static List<Pair<String, List<FragmentAccount.AccountHistoryEntry>>> FragmentAccountHistory = null;
     private static String WalletName = null;
     private static String ReceiveWalletPassword = null;
     private static String SelectedAccountName = "";
@@ -139,6 +140,7 @@ public enum visiblePage {
                     int cnt = acc.second.first;
                     WalletHistory.remove(i);
                     WalletHistory.add(new Pair<>(accountName, new Pair<>(cnt, history)));
+                    setFragmentAccountHistory(accountName, ApiRpcActionsHistory.getData(new Pair<>(cnt, history)));
                     return;
                 }
             }
@@ -146,12 +148,41 @@ public enum visiblePage {
             WalletHistory = new ArrayList<>();
         }
         WalletHistory.add(new Pair<>(accountName, new Pair<>(0, history)));
+        setFragmentAccountHistory(accountName, ApiRpcActionsHistory.getData(new Pair<>(0, history)));
     }
 
     public static Pair<Integer, String> getWalletHistory(String accountName) {
         if(WalletHistory != null) {
             for (int i = 0; i < WalletHistory.size(); i++) {
                 Pair<String, Pair<Integer, String>> acc = WalletHistory.get(i);
+                if (acc.first.equals(accountName)) {
+                    return acc.second;
+                }
+            }
+        }
+        return null;
+    }
+
+    public static void setFragmentAccountHistory(String accountName, List<FragmentAccount.AccountHistoryEntry> history) {
+        if(FragmentAccountHistory != null) {
+            for (int i = 0; i < FragmentAccountHistory.size(); i++) {
+                Pair<String, List<FragmentAccount.AccountHistoryEntry>> acc = FragmentAccountHistory.get(i);
+                if (acc.first.equals(accountName)) {
+                    FragmentAccountHistory.remove(i);
+                    FragmentAccountHistory.add(new Pair<>(accountName, history));
+                    return;
+                }
+            }
+        } else {
+            FragmentAccountHistory = new ArrayList<>();
+        }
+        FragmentAccountHistory.add(new Pair<>(accountName, history));
+    }
+
+    public static List<FragmentAccount.AccountHistoryEntry> getFragmentAccountHistory(String accountName) {
+        if(FragmentAccountHistory != null) {
+            for (int i = 0; i < FragmentAccountHistory.size(); i++) {
+                Pair<String, List<FragmentAccount.AccountHistoryEntry>> acc = FragmentAccountHistory.get(i);
                 if (acc.first.equals(accountName)) {
                     return acc.second;
                 }

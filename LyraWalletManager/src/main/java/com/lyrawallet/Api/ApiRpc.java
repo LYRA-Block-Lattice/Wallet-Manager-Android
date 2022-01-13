@@ -774,8 +774,8 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
     @Override
     public void onRpcTaskDone(String[] output) {
         ApiRpc.Action ac = new ApiRpc.Action(output[1]);
-        //getInstance().runOnUiThread(new Runnable() {
-            //public void run() {
+        getInstance().runOnUiThread(new Runnable() {
+            public void run() {
                 switch (output[0]) {
                     case "History":
                         ApiRpcActionsHistory.store(ac, output[2]);
@@ -791,8 +791,8 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                 }
                 ReceiveResult = output[0] + "^" + output[1] + "^" + output[2];
                 System.out.println(ReceiveResult);
-            //}
-        //});
+            }
+        });
     }
     @Override
     public void onRpcNewEvent(String[] output) {

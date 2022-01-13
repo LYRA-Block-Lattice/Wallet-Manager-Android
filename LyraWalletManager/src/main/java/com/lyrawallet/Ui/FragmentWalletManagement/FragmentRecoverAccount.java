@@ -43,6 +43,7 @@ public class FragmentRecoverAccount extends Fragment {
                 .beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.nav_host_fragment_content_main, FragmentAccount.newInstance("", ""))
+                .addToBackStack(String.valueOf(Global.visiblePage.ACCOUNT.ordinal()))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.ACCOUNT);
@@ -53,6 +54,7 @@ public class FragmentRecoverAccount extends Fragment {
                 .beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.nav_host_fragment_content_main, FragmentNewAccount.newInstance())
+                .addToBackStack(String.valueOf(Global.visiblePage.NEW_ACCOUNT.ordinal()))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.NEW_ACCOUNT);
@@ -63,6 +65,7 @@ public class FragmentRecoverAccount extends Fragment {
                 .beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.nav_host_fragment_content_main, FragmentOpenWallet.newInstance())
+                .addToBackStack(String.valueOf(Global.visiblePage.OPEN_WALLET.ordinal()))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.OPEN_WALLET);

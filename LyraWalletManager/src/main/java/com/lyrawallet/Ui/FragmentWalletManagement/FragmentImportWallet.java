@@ -36,6 +36,7 @@ public class FragmentImportWallet extends Fragment {
                 .beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.nav_host_fragment_content_main, FragmentOpenWallet.newInstance())
+                .addToBackStack(String.valueOf(Global.visiblePage.OPEN_WALLET.ordinal()))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.OPEN_WALLET);
@@ -48,6 +49,7 @@ public class FragmentImportWallet extends Fragment {
                 .beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.nav_host_fragment_content_main, FragmentAccount.newInstance("", ""))
+                .addToBackStack(String.valueOf(Global.visiblePage.ACCOUNT.ordinal()))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.ACCOUNT);

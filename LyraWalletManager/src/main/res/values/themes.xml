@@ -13,6 +13,8 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="android:textSize">13sp</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+
     </style>
 
     <style name="Theme.LyraWalletAndroid.NoActionBar">
@@ -23,5 +25,7 @@
     <style name="Theme.LyraWalletAndroid.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.LyraWalletAndroid.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
 
 </resources>

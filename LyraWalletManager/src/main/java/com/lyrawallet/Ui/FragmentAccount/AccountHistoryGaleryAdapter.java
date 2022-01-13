@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.lyrawallet.R;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,6 +27,16 @@ public class AccountHistoryGaleryAdapter extends RecyclerView.Adapter<AccountHis
         this.context = context;
         this.listener = listener;
     }
+
+    public List<FragmentAccount.AccountHistoryEntry> getDataSet(){
+        return list;
+    }
+
+    public void setDataSet(List<FragmentAccount.AccountHistoryEntry> newDataSet){
+        this.list = newDataSet;
+        notifyDataSetChanged();
+    }
+
 
     @Override
     public AccountHistoryViewHolder

@@ -54,6 +54,7 @@ public class FragmentMore extends Fragment {
                 .beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.nav_host_fragment_content_main, new FragmentPreferencesRoot())
+                .addToBackStack(String.valueOf(Global.visiblePage.SETTINGS.ordinal()))
                 .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                 .commit();
         Global.setVisiblePage(Global.visiblePage.SETTINGS);
@@ -85,11 +86,17 @@ public class FragmentMore extends Fragment {
         accountsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if(view != null) {
+                    if(Global.getSelectedAccountNr() != i) {
+                        activity.runOnUiThread(new Runnable() {
+                            public void run() {
+                                new ApiRpc().act(new ApiRpc.Action().actionHistory(Global.str_api_rpc_purpose_history_disk_storage, Global.getCurrentNetworkName(), Global.getSelectedAccountName(), Global.getSelectedAccountId()));
+                            }
+                        });
+                    }
                     Global.setSelectedAccountName(adapterView.getSelectedItem().toString());
                     Global.setSelectedAccountNr(i);
                     Global.setWalletName(Global.getWalletName());
                     System.out.println(Global.getSelectedAccountName());
-                    new ApiRpc().act(new ApiRpc.Action().actionHistory(Global.str_api_rpc_purpose_history_disk_storage, Global.getCurrentNetworkName(), Global.getSelectedAccountName(), Global.getSelectedAccountId()));
                 }
             }
             public void onNothingSelected(AdapterView<?> adapterView) {
