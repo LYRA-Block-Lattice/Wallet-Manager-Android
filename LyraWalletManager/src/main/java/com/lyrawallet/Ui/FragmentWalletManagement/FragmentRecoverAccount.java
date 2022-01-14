@@ -12,7 +12,6 @@ import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.lyrawallet.Accounts.Accounts;
@@ -21,7 +20,7 @@ import com.lyrawallet.Global;
 import com.lyrawallet.MainActivity;
 import com.lyrawallet.R;
 import com.lyrawallet.Storage.StorageKeys;
-import com.lyrawallet.Ui.FragmentAccount.FragmentAccount;
+import com.lyrawallet.Ui.FragmentManager;
 import com.lyrawallet.Ui.UiHelpers;
 import com.lyrawallet.Util.UtilTextFilters;
 
@@ -35,40 +34,6 @@ public class FragmentRecoverAccount extends Fragment {
     public static FragmentRecoverAccount newInstance() {
         FragmentRecoverAccount fragment = new FragmentRecoverAccount();
         return fragment;
-    }
-    private void toAccount() {
-        CurvedBottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.onMenuItemClick(2);
-        getParentFragmentManager()
-                .beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, FragmentAccount.newInstance("", ""))
-                .addToBackStack(String.valueOf(Global.visiblePage.ACCOUNT.ordinal()))
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
-        Global.setVisiblePage(Global.visiblePage.ACCOUNT);
-    }
-
-    private void toNewAccount() {
-        getParentFragmentManager()
-                .beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, FragmentNewAccount.newInstance())
-                .addToBackStack(String.valueOf(Global.visiblePage.NEW_ACCOUNT.ordinal()))
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
-        Global.setVisiblePage(Global.visiblePage.NEW_ACCOUNT);
-    }
-
-    private void toOpenWallet() {
-        getParentFragmentManager()
-                .beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, FragmentOpenWallet.newInstance())
-                .addToBackStack(String.valueOf(Global.visiblePage.OPEN_WALLET.ordinal()))
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
-        Global.setVisiblePage(Global.visiblePage.OPEN_WALLET);
     }
 
     @Override
@@ -102,13 +67,6 @@ public class FragmentRecoverAccount extends Fragment {
         UiHelpers.showKeyboard(view, newWalletNameEditText);
         newWalletNameEditText.setFilters(new InputFilter[]{UtilTextFilters.getCharactersDigitsAndSpaceFilter()});
 
-        Button recoverToWalletButton = (Button) view.findViewById(R.id.recoverToWalletButton);
-        recoverToWalletButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                toNewAccount();
-            }
-        });
-
         recoverAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -140,10 +98,10 @@ public class FragmentRecoverAccount extends Fragment {
                         if(!success) {
                             Snackbar.make(view, "An error occured when reloading wallet.", Snackbar.LENGTH_LONG)
                                     .setAction("", null).show();
-                            toOpenWallet();
+                            new FragmentManager().goToOpenWallet();
                         } else {
                             UiHelpers.closeKeyboard(view);
-                            toAccount();
+                            new FragmentManager().goToAccount();
                         }
                     }
                 }

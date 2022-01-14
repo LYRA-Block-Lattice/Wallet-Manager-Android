@@ -1,7 +1,6 @@
 package com.lyrawallet.Api.ApiRpcActions;
 
 import android.content.SharedPreferences;
-import android.os.Handler;
 import android.util.Pair;
 
 import androidx.preference.PreferenceManager;
@@ -249,7 +248,7 @@ public class ApiRpcActionsHistory extends MainActivity {
                 default:
                     icon = R.mipmap.ic_unknown_foreground;
             }
-            List.add(0, new FragmentAccount.AccountHistoryEntry(icon,
+            List.add(0, new FragmentAccount.AccountHistoryEntry(historyList.get(i).getHeight(), icon,
                     tokenAmount.first, tokenAmount.second, 0.00021f));
         }
         return List;

@@ -76,6 +76,46 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <Button
+                android:id="@+id/newAccountButton"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:drawableLeft="@drawable/ic_outline_account_tree_24"
+                android:text="@string/str_launcher_new_account_button"
+                android:textAlignment="textStart"
+                android:textColor="@color/more_tint"
+                android:theme="@style/CardView" />
+
+            <TableRow
+                android:id="@+id/hr4"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#AAA"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/backupWalletButton"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:drawableLeft="@drawable/ic_outline_settings_backup_restore_24"
+                android:text="@string/str_launcher_backup_wallet_button"
+                android:textAlignment="textStart"
+                android:textColor="@color/more_tint"
+                android:theme="@style/CardView" />
+
+            <TableRow
+                android:id="@+id/hr5"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#AAA"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
                 android:id="@+id/settingsButton"
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="match_parent"
@@ -87,7 +127,7 @@
                 android:theme="@style/CardView" />
 
             <TableRow
-                android:id="@+id/hr4"
+                android:id="@+id/hr6"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#AAA"
@@ -107,7 +147,7 @@
                 android:theme="@style/CardView" />
 
             <TableRow
-                android:id="@+id/hr5"
+                android:id="@+id/hr7"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#AAA"

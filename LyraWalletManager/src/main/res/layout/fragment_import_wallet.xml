@@ -11,18 +11,6 @@
     android:tag="import_wallet_tag"
     tools:context="com.lyrawallet.Ui.FragmentWalletManagement.FragmentImportWallet">
 
-    <Button
-        android:id="@+id/importToWalletButton"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:drawableLeft="@drawable/ic_baseline_arrow_back_24"
-        android:textAlignment="textStart"
-        android:textColor="@color/more_tint"
-        android:theme="@style/CardView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <EditText
         android:id="@+id/wallet_name"
         android:layout_width="0dp"
@@ -41,7 +29,7 @@
         android:singleLine="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/importToWalletButton"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
         tools:ignore="TextContrastCheck" />
 
     <Button

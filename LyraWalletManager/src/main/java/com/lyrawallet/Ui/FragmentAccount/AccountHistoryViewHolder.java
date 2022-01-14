@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.lyrawallet.R;
 
 public class AccountHistoryViewHolder extends RecyclerView.ViewHolder {
+    TextView Height;
     ImageView TickerImage;
     TextView TickerName;
     TextView Quantity;
@@ -18,6 +19,9 @@ public class AccountHistoryViewHolder extends RecyclerView.ViewHolder {
 
     AccountHistoryViewHolder(View itemView) {
         super(itemView);
+        Height
+                = (TextView) itemView
+                .findViewById(R.id.wallet_tr_entry_card_height);
         TickerImage
                 = (ImageView) itemView
                 .findViewById(R.id.tickerImageView);

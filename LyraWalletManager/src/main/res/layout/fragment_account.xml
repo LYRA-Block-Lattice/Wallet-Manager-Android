@@ -7,21 +7,14 @@
     android:layout_height="match_parent"
     android:tag="wallet_tag">
 
-    <ProgressBar
-        android:id="@+id/fragment_account_progressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/nestedScrollView"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollViewAccount"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/nestedScrollView" />
-
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScrollView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -182,6 +175,7 @@
                     android:orientation="horizontal"
                     app:layout_constraintGuide_end="0dp" />
 
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -191,6 +185,16 @@
 
             </androidx.recyclerview.widget.RecyclerView>
 
+            <ProgressBar
+                android:id="@+id/fragment_account_progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:layout_constraintBottom_toBottomOf="@+id/nestedScrollView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/guideline_bottom" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

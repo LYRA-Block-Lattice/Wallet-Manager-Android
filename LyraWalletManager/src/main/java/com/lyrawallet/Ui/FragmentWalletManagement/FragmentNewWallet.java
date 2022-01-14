@@ -12,7 +12,6 @@ import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.lyrawallet.Accounts.Accounts;
@@ -20,6 +19,7 @@ import com.lyrawallet.Global;
 import com.lyrawallet.MainActivity;
 import com.lyrawallet.R;
 import com.lyrawallet.Storage.StorageKeys;
+import com.lyrawallet.Ui.FragmentManager;
 import com.lyrawallet.Ui.UiHelpers;
 import com.lyrawallet.Util.UtilTextFilters;
 
@@ -33,28 +33,6 @@ public class FragmentNewWallet extends Fragment {
     public static FragmentNewWallet newInstance() {
         FragmentNewWallet fragment = new FragmentNewWallet();
         return fragment;
-    }
-
-    private void toNewAccount() {
-        getParentFragmentManager()
-                .beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, FragmentNewAccount.newInstance())
-                .addToBackStack(String.valueOf(Global.visiblePage.NEW_ACCOUNT.ordinal()))
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
-        Global.setVisiblePage(Global.visiblePage.NEW_ACCOUNT);
-    }
-
-    private void toOpenWallet() {
-        getParentFragmentManager()
-                .beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, FragmentOpenWallet.newInstance())
-                .addToBackStack(String.valueOf(Global.visiblePage.OPEN_WALLET.ordinal()))
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
-        Global.setVisiblePage(Global.visiblePage.OPEN_WALLET);
     }
 
     @Override
@@ -84,13 +62,6 @@ public class FragmentNewWallet extends Fragment {
         EditText password2EditText = view.findViewById(R.id.new_wallet_password2);
         Button showPasswordButton = view.findViewById(R.id.new_wallet_show_password);
         Button createWalletButton = view.findViewById(R.id.create_wallet);
-
-        Button newToOpenButton = (Button) view.findViewById(R.id.newToOpenButton);
-        newToOpenButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                toOpenWallet();
-            }
-        });
 
         UiHelpers.showKeyboard(view, newWalletNameEditText);
         newWalletNameEditText.setFilters(new InputFilter[]{UtilTextFilters.getCharactersDigitsAndSpaceFilter()});
@@ -123,11 +94,11 @@ public class FragmentNewWallet extends Fragment {
                             if(accounts.loadAccountsFromDisk(Global.getWalletName(), password1EditText.getText().toString())) {
                                 Snackbar.make(view, "Wallet successfully created.", Snackbar.LENGTH_LONG)
                                         .setAction("", null).show();
-                                toNewAccount();
+                                new FragmentManager().goToNewAccount();
                             } else {
                                 Snackbar.make(view, "That is not a wallet file.", Snackbar.LENGTH_LONG)
                                         .setAction("", null).show();
-                                toOpenWallet();
+                                new FragmentManager().goToOpenWallet();
                             }
                         }
                     }

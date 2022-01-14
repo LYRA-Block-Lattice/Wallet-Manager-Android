@@ -16,29 +16,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.lyrawallet.Accounts.Accounts;
 import com.lyrawallet.Api.ApiRpc;
-import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
 import com.lyrawallet.Api.Network.NetworkWebHttps;
 import com.lyrawallet.PreferencesLoad.PreferencesLoad;
 import com.lyrawallet.Storage.StorageCommon;
-import com.lyrawallet.Ui.FragmentAccount.FragmentAccount;
-import com.lyrawallet.Ui.FragmentDex.FragmentDex;
-import com.lyrawallet.Ui.FragmentMore.FragmentMore;
-import com.lyrawallet.Ui.FragmentPreferences.FragmentPreferencesRoot;
-import com.lyrawallet.Ui.FragmentReceive.FragmentReceive;
-import com.lyrawallet.Ui.FragmentSend.FragmentSend;
-import com.lyrawallet.Ui.FragmentStaking.FragmentStaking;
-import com.lyrawallet.Ui.FragmentSwap.FragmentSwap;
-import com.lyrawallet.Ui.FragmentWalletManagement.FragmentImportWallet;
-import com.lyrawallet.Ui.FragmentWalletManagement.FragmentNewAccount;
-import com.lyrawallet.Ui.FragmentWalletManagement.FragmentNewWallet;
-import com.lyrawallet.Ui.FragmentWalletManagement.FragmentOpenWallet;
-import com.lyrawallet.Ui.FragmentWalletManagement.FragmentRecoverAccount;
+import com.lyrawallet.Ui.FragmentManager;
 import com.lyrawallet.Ui.UiHelpers;
 
 import java.io.File;
@@ -61,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
     protected static MainActivity getInstance() {
         return Instance;
     }
-    private boolean selectOnly = false;
+    protected boolean selectOnly = false;
     /********************************** Save file dialog & Open file dialog ***********************/
     protected void backUpWallet(int procedure) {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
@@ -79,137 +64,6 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         Instance.startActivityForResult(intent, procedure);
     }
     /******************* Navigation, separate them from button events, for re-usage ***************/
-    protected void toOpenWallet() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, FragmentOpenWallet.newInstance())
-                .addToBackStack(String.valueOf(Global.visiblePage.OPEN_WALLET.ordinal()))
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
-        Global.setVisiblePage(Global.visiblePage.OPEN_WALLET);
-    }
-    protected void toImportWallet() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, FragmentImportWallet.newInstance())
-                .addToBackStack(String.valueOf(Global.visiblePage.IMPORT_WALLET.ordinal()))
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
-        Global.setVisiblePage(Global.visiblePage.IMPORT_WALLET);
-    }
-    protected void toNewWallet() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, FragmentNewWallet.newInstance())
-                .addToBackStack(String.valueOf(Global.visiblePage.NEW_WALLET.ordinal()))
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
-        Global.setVisiblePage(Global.visiblePage.NEW_WALLET);
-    }
-    protected void toNewAccount() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, FragmentNewAccount.newInstance())
-                .addToBackStack(String.valueOf(Global.visiblePage.NEW_ACCOUNT.ordinal()))
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
-        Global.setVisiblePage(Global.visiblePage.NEW_ACCOUNT);
-    }
-    protected void toRecoverAccount() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, FragmentRecoverAccount.newInstance())
-                .addToBackStack(String.valueOf(Global.visiblePage.RECOVER_ACCOUNT.ordinal()))
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
-        Global.setVisiblePage(Global.visiblePage.RECOVER_ACCOUNT);
-    }
-    protected void toStaking() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, FragmentStaking.newInstance("", ""))
-                .addToBackStack(String.valueOf(Global.visiblePage.STAKING.ordinal()))
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
-        Global.setVisiblePage(Global.visiblePage.STAKING);
-    }
-    protected void toSwap() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, FragmentSwap.newInstance("", ""))
-                .addToBackStack(String.valueOf(Global.visiblePage.SWAP.ordinal()))
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
-        Global.setVisiblePage(Global.visiblePage.SWAP);
-    }
-    protected void toAccount() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, FragmentAccount.newInstance("", ""))
-                .addToBackStack(String.valueOf(Global.visiblePage.ACCOUNT.ordinal()))
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
-        Global.setVisiblePage(Global.visiblePage.ACCOUNT);
-    }
-    protected void toDex() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, FragmentDex.newInstance("", ""))
-                .addToBackStack(String.valueOf(Global.visiblePage.DEX.ordinal()))
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
-        Global.setVisiblePage(Global.visiblePage.DEX);
-    }
-    protected void toMore() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, FragmentMore.newInstance("", ""))
-                .addToBackStack(String.valueOf(Global.visiblePage.MORE.ordinal()))
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
-        Global.setVisiblePage(Global.visiblePage.MORE);
-    }
-    protected void toReceive() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, FragmentReceive.newInstance("", ""))
-                .addToBackStack(String.valueOf(Global.visiblePage.RECEIVE.ordinal()))
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
-        Global.setVisiblePage(Global.visiblePage.RECEIVE);
-    }
-    protected void toSend() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, FragmentSend.newInstance("", ""))
-                .addToBackStack(String.valueOf(Global.visiblePage.SEND.ordinal()))
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
-        Global.setVisiblePage(Global.visiblePage.SEND);
-    }
-    protected void toSettings() {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, new FragmentPreferencesRoot())
-                .addToBackStack(String.valueOf(Global.visiblePage.SETTINGS.ordinal()))
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
-        Global.setVisiblePage(Global.visiblePage.SETTINGS);
-    }
-
     protected void setVisiblePage(Global.visiblePage p) {
         Global.setVisiblePage(p);
         if(selectOnly) {
@@ -218,65 +72,53 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         }
         switch(p) {
             case STAKING:
-                toStaking();
+                new FragmentManager().goToStaking();
                 break;
             case SWAP:
-                toSwap();
+                new FragmentManager().goToSwap();
                 break;
             case ACCOUNT:
-                //ApiRpcActionsHistory.load(ApiRpcActionsHistory.getHistoryFileName());
-                /*Snackbar.make(findViewById(R.id.nav_host_fragment_content_main), Global.getWalletHistory( ApiRpcActionsHistory.getHistoryFileName()).second, Snackbar.LENGTH_LONG)
-                        .setAction("", null).show();*/
-                toAccount();
+                new FragmentManager().goToAccount();
                 break;
             case DEX:
-                toDex();
+                new FragmentManager().goToDex();
                 break;
             case MORE:
-                toMore();
+                new FragmentManager().goToMore();
                 break;
             case IMPORT_WALLET:
-                toImportWallet();
+                new FragmentManager().goToImportWallet();
                 break;
             case NEW_WALLET:
-                toNewWallet();
+                new FragmentManager().goToNewWallet();
                 break;
             case NEW_ACCOUNT:
-                toNewAccount();
+                new FragmentManager().goToNewAccount();
                 break;
             case RECOVER_ACCOUNT:
-                toRecoverAccount();
+                new FragmentManager().goToRecoverAccount();
                 break;
             case RECEIVE:
-                toReceive();
+                new FragmentManager().goToReceive();
                 break;
             case SEND:
-                toSend();
+                new FragmentManager().goToSend();
                 break;
             case SETTINGS:
-                toSettings();
+                new FragmentManager().goToPreferences();
                 break;
             default:
-                toOpenWallet();
+                new FragmentManager().goToOpenWallet();
                 break;
         }
     }
     /********************************** Go to other windows ***************************************/
     // Buttons events, for UI navigation.
-    public void dashboard(View view) {
-        toAccount();
-    }
     public void send(View view) {
-        toSend();
+        new FragmentManager().goToSend();
     }
     public void receive(View view) {
-        toReceive();
-    }
-    public void settings(View view) {
-        toSettings();
-    }
-    public void openWallet(View view) {
-        toOpenWallet();
+        new FragmentManager().goToReceive();
     }
     public void closeWallet(View view) {
         finish();
@@ -425,7 +267,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         }
     }
     public Fragment getVisibleFragment(){
-        FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
+        androidx.fragment.app.FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
         List<Fragment> fragments = fragmentManager.getFragments();
         if(fragments != null){
             for(Fragment fragment : fragments){
@@ -440,10 +282,10 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         if (key_code== KeyEvent.KEYCODE_BACK) {
             // Prevent back key to take effect, implemented for further development.
             super.onKeyDown(key_code, key_event);
-            if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
-                getSupportFragmentManager().popBackStack();
-                FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
-                FragmentManager.BackStackEntry entry =  fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 2);
+            androidx.fragment.app.FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
+            if (fragmentManager.getBackStackEntryCount() > 1) {
+                fragmentManager.popBackStack();
+                androidx.fragment.app.FragmentManager.BackStackEntry entry =  fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 2);
                 CurvedBottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
                 Global.setVisiblePage(Global.visiblePage.values()[Integer.parseInt(entry.getName())]);
                 if (Global.getVisiblePage().ordinal() < Global.visiblePage.OPEN_WALLET.ordinal()) {
@@ -510,7 +352,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                             fiw.write(new String(bytes));
                             fiw.flush();
                             fiw.close();
-                            toOpenWallet();
+                            new FragmentManager().goToOpenWallet();
                         } else {
                             UiHelpers.closeKeyboard(findViewById(R.id.nav_host_fragment_content_main));
                             Snackbar.make(findViewById(R.id.nav_host_fragment_content_main), "File exists", Snackbar.LENGTH_LONG)

@@ -9,12 +9,10 @@ import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.lyrawallet.Global;
 import com.lyrawallet.R;
 import com.lyrawallet.Storage.StorageImportWallet;
-import com.lyrawallet.Ui.FragmentAccount.FragmentAccount;
 import com.lyrawallet.Ui.UiHelpers;
 
 import java.io.File;
@@ -29,30 +27,6 @@ public class FragmentImportWallet extends Fragment {
     public static FragmentImportWallet newInstance() {
         FragmentImportWallet fragment = new FragmentImportWallet();
         return fragment;
-    }
-
-    private void toOpenWallet() {
-        getParentFragmentManager()
-                .beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, FragmentOpenWallet.newInstance())
-                .addToBackStack(String.valueOf(Global.visiblePage.OPEN_WALLET.ordinal()))
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
-        Global.setVisiblePage(Global.visiblePage.OPEN_WALLET);
-    }
-
-    private void toAccount() {
-        CurvedBottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.setVisibility(View.VISIBLE);
-        getParentFragmentManager()
-                .beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, FragmentAccount.newInstance("", ""))
-                .addToBackStack(String.valueOf(Global.visiblePage.ACCOUNT.ordinal()))
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
-        Global.setVisiblePage(Global.visiblePage.ACCOUNT);
     }
 
     @Override
@@ -81,19 +55,7 @@ public class FragmentImportWallet extends Fragment {
         Button importWalletButton = view.findViewById(R.id.import_wallet);
 
         UiHelpers.showKeyboard(view, walletNameEditText);
-
-        Button importToWalletButton = (Button) view.findViewById(R.id.importToWalletButton);
-        importToWalletButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                if(Global.getWalletName() == null) {
-                    toOpenWallet();
-                } else {
-                    toAccount();
-                }
-            }
-        });
-
-
+        
         importWalletButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

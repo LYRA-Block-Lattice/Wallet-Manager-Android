@@ -16,12 +16,12 @@ import android.widget.Spinner;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.lyrawallet.Api.ApiRpc;
 import com.lyrawallet.Global;
 import com.lyrawallet.R;
-import com.lyrawallet.Ui.FragmentPreferences.FragmentPreferencesRoot;
+import com.lyrawallet.Storage.StorageBackUpWallet;
+import com.lyrawallet.Ui.FragmentManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,17 +47,6 @@ public class FragmentMore extends Fragment {
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
-    }
-
-    protected void toSettings() {
-        getParentFragmentManager()
-                .beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, new FragmentPreferencesRoot())
-                .addToBackStack(String.valueOf(Global.visiblePage.SETTINGS.ordinal()))
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
-        Global.setVisiblePage(Global.visiblePage.SETTINGS);
     }
 
     private void populateAccountSpinner(Activity activity) {
@@ -137,29 +126,43 @@ public class FragmentMore extends Fragment {
                     return;
                 }
                 Button explorerButton = (Button) activity.findViewById(R.id.explorerButton);
-                explorerButton.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        String url = "http://www.google.com";
-                        switch (Global.getCurrentNetworkName()) {
-                            case "MAINNET":
-                                url = "https://nebula.lyra.live/";
-                                break;
-                            case "DEVNET":
-                                url = "";
-                                break;
-                            default:
-                                url = "https://nebulatestnet.lyra.live/";
-                                break;
-                        }
+                if(explorerButton != null) {
+                    explorerButton.setOnClickListener(new View.OnClickListener() {
+                        public void onClick(View v) {
+                            String url = "http://www.google.com";
+                            switch (Global.getCurrentNetworkName()) {
+                                case "MAINNET":
+                                    url = "https://nebula.lyra.live/";
+                                    break;
+                                case "DEVNET":
+                                    url = "";
+                                    break;
+                                default:
+                                    url = "https://nebulatestnet.lyra.live/";
+                                    break;
+                            }
 
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                        startActivity(browserIntent);
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                            startActivity(browserIntent);
+                        }
+                    });
+                }
+                Button newAccountButton = (Button) activity.findViewById(R.id.newAccountButton);
+                newAccountButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        new FragmentManager().goToNewAccount();
+                    }
+                });
+                Button backupWalletButton = (Button) activity.findViewById(R.id.backupWalletButton);
+                backupWalletButton.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        new StorageBackUpWallet();
                     }
                 });
                 Button settingsButton = (Button) activity.findViewById(R.id.settingsButton);
                 settingsButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-                        toSettings();
+                        new FragmentManager().goToPreferences();
                     }
                 });
                 Button aboutButton = (Button) activity.findViewById(R.id.aboutButton);

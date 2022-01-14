@@ -13,19 +13,17 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.lyrawallet.Accounts.Accounts;
 import com.lyrawallet.Global;
 import com.lyrawallet.MainActivity;
 import com.lyrawallet.R;
 import com.lyrawallet.Storage.StorageKeys;
-import com.lyrawallet.Ui.FragmentAccount.FragmentAccount;
+import com.lyrawallet.Ui.FragmentManager;
 import com.lyrawallet.Ui.UiHelpers;
 import com.lyrawallet.Util.UtilTextFilters;
 
@@ -60,17 +58,17 @@ public class FragmentOpenWallet extends Fragment {
                 if(Global.getSelectedAccountNr() == -1) {
                     passwordEditText.setText("");
                     walletNameEditText.setText("");
-                    toNewAccount();
+                    new FragmentManager().goToNewAccount();
                 } else {
                     passwordEditText.setText("");
                     walletNameEditText.setText("");
                     UiHelpers.closeKeyboard(view);
-                    toAccount();
+                    new FragmentManager().goToAccount();
                 }
             } else {
                 if(StorageKeys.getStatus() == StorageKeys.status.OK) {
                     Global.setWalletName(walletNameEditText.getText().toString());
-                    toNewAccount();
+                    new FragmentManager().goToNewAccount();
                 } else {
                     // Error ask for retry.
                     walletNameEditText.setError("ERROR: Name and/or password incorrect.");
@@ -79,53 +77,6 @@ public class FragmentOpenWallet extends Fragment {
             }
         }
     }
-
-    private void toAccount() {
-        CurvedBottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.setVisibility(View.VISIBLE);
-        getParentFragmentManager()
-                .beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, FragmentAccount.newInstance("", ""))
-                .addToBackStack(String.valueOf(Global.visiblePage.ACCOUNT.ordinal()))
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
-        Global.setVisiblePage(Global.visiblePage.ACCOUNT);
-    }
-
-    private void toNewAccount() {
-        getParentFragmentManager()
-                .beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, FragmentNewAccount.newInstance())
-                .addToBackStack(String.valueOf(Global.visiblePage.NEW_ACCOUNT.ordinal()))
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
-        Global.setVisiblePage(Global.visiblePage.NEW_ACCOUNT);
-    }
-
-    private void toNewWallet() {
-        getParentFragmentManager()
-                .beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, FragmentNewWallet.newInstance())
-                .addToBackStack(String.valueOf(Global.visiblePage.NEW_WALLET.ordinal()))
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
-        Global.setVisiblePage(Global.visiblePage.NEW_WALLET);
-    }
-
-    private void toImportWallet() {
-        getParentFragmentManager()
-                .beginTransaction()
-                .setReorderingAllowed(true)
-                .replace(R.id.nav_host_fragment_content_main, FragmentImportWallet.newInstance())
-                .addToBackStack(String.valueOf(Global.visiblePage.IMPORT_WALLET.ordinal()))
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
-        Global.setVisiblePage(Global.visiblePage.IMPORT_WALLET);
-    }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -156,17 +107,6 @@ public class FragmentOpenWallet extends Fragment {
         Button recoverWalletButton = view.findViewById(R.id.recover_wallet);
         Button showPasswordButton = view.findViewById(R.id.show_password);
 
-        Button openToWalletButton = (Button) view.findViewById(R.id.openToWalletButton);
-        openToWalletButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                toAccount();
-            }
-        });
-
-        if(Global.getWalletName() == null) {
-            openToWalletButton.setVisibility(View.INVISIBLE);
-        }
-
         UiHelpers.showKeyboard(view, walletNameEditText);
         walletNameEditText.setFilters(new InputFilter[]{UtilTextFilters.getCharactersDigitsAndSpaceFilter()});
         walletNameEditText.addTextChangedListener(new TextWatcher() {
@@ -194,7 +134,7 @@ public class FragmentOpenWallet extends Fragment {
                     if(passwordEditText.getText().length() < Global.getMinCharAllowedOnPassword() + 1) {
                         passwordEditText.setError("Minimum " + Global.getMinCharAllowedOnPassword() + " characters.");
                     } else {
-                        toAccount();
+                        new FragmentManager().goToAccount();
                         EditText password = getActivity().findViewById(R.id.password);
                         UiHelpers.closeKeyboard(view);
                         password.setError(null);
@@ -230,14 +170,14 @@ public class FragmentOpenWallet extends Fragment {
         newWalletButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toNewWallet();
+                new FragmentManager().goToNewWallet();
             }
         });
 
         recoverWalletButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                toImportWallet();
+                new FragmentManager().goToImportWallet();
             }
         });
 

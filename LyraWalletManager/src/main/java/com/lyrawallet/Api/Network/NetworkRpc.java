@@ -204,6 +204,7 @@ public class NetworkRpc extends AsyncTask<String, Void, String[]> implements Net
         String[] r = new String[]{Api, InstanceName, rsp};
         if(callBack != null) {
             callBack.onRpcTaskDone(r);
+            this.cancel(true);
         } else {
             System.out.println("Rpc.java: RPC task done callback = null");
         }

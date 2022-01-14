@@ -52,4 +52,6 @@
     <string name="pref_network_selection_current_selection">Reteaua selectată este</string>
     <string name="str_launcher_explorer_button">EXPLORER</string>
     <string name="str_launcher_about_us_button">Despre Noi</string>
+    <string name="str_launcher_new_account_button">CONT NOU</string>
+    <string name="str_launcher_backup_wallet_button">SALVEAZĂ PORTOFEL</string>
 </resources>

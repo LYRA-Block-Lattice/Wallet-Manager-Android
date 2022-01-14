@@ -3,10 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <Preference
-        android:title="@string/prefs_back_title"
-        android:key="@string/prefs_back_key"
-        android:icon="@drawable/ic_baseline_arrow_back_24" />
     <PreferenceCategory android:title="@string/pref_category_general_title" >
         <ListPreference
             android:defaultValue="0"
@@ -52,19 +48,6 @@
             android:defaultValue="Some value" /> -->
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/pref_category_account_title">
-        <Preference
-            android:title="@string/prefs_add_new_account_title"
-            android:key="@string/prefs_add_new_account_key"
-            android:icon="@drawable/ic_outline_account_tree_24"/>
-
-    </PreferenceCategory>
-    <PreferenceCategory android:title="@string/pref_category_wallet_title">
-        <Preference
-            android:title="@string/prefs_backup_wallet_title"
-            android:key="@string/prefs_backup_wallet_key"
-            android:icon="@drawable/ic_outline_settings_backup_restore_24"/>
-    </PreferenceCategory>
     <PreferenceCategory android:title="@string/pref_other_title">
         <Preference
             android:summary="@string/pref_description_sumary"
