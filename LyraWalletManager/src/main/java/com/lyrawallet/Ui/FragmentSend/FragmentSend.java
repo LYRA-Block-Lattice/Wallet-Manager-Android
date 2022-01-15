@@ -1,5 +1,6 @@
 package com.lyrawallet.Ui.FragmentSend;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -11,15 +12,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import com.google.zxing.integration.android.IntentIntegrator;
 import com.lyrawallet.Api.ApiRpc;
-import com.lyrawallet.Global;
+import com.lyrawallet.MainActivity;
 import com.lyrawallet.R;
-import com.lyrawallet.Ui.FragmentManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -164,7 +166,17 @@ public class FragmentSend extends Fragment {
         ImageButton qrButton = (ImageButton) view.findViewById(R.id.send_token_select_spinner_entry_button_qr);
         qrButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
+                Activity activity = getActivity();
+                if(activity == null) {
+                    return;
+                }
+                IntentIntegrator integrator = new IntentIntegrator(activity);
+                integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+                integrator.setPrompt("Scan");
+                integrator.setCameraId(0);
+                integrator.setBeepEnabled(false);
+                integrator.setBarcodeImageEnabled(false);
+                integrator.initiateScan();
             }
         });
         ImageButton bookAccountButton = (ImageButton) view.findViewById(R.id.send_token_select_spinner_entry_button_book);
@@ -185,6 +197,12 @@ public class FragmentSend extends Fragment {
 
             }
         });
+
+        SpinnerAdapter ad = tokenSpinner.getAdapter();
+        Object item = ad.getItem(0);
+        tokenSpinner.setSelection(2);
+        System.out.println(ad);
+
 
     }
 }

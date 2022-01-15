@@ -1,8 +1,11 @@
 package com.lyrawallet;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +14,10 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,13 +25,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.lyrawallet.Accounts.Accounts;
 import com.lyrawallet.Api.ApiRpc;
 import com.lyrawallet.Api.Network.NetworkWebHttps;
+import com.lyrawallet.Crypto.CryptoSignatures;
 import com.lyrawallet.PreferencesLoad.PreferencesLoad;
 import com.lyrawallet.Storage.StorageCommon;
 import com.lyrawallet.Ui.FragmentManager;
 import com.lyrawallet.Ui.UiHelpers;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -33,6 +47,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -163,6 +178,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         Instance = this;
         // At the moment force device to stay in portrait mode.
         //this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        requestPermissions(new String[]{Manifest.permission.CAMERA}, 1011);
         // Load user preferences.
         new PreferencesLoad();
         // Get the path of the working directory, we cann not get it in a static function in Global class.
@@ -318,6 +334,29 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
             closeWallet();
         }
     };
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 1011: {
+
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // Here user granted the permission
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(MainActivity.this, "Permission denied to read your Camera", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+        }
+    }
     // Need to be in main activity, they don't work elsewhere, so I put them here.
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent resultData) {
@@ -363,7 +402,57 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                         Snackbar.make(findViewById(R.id.nav_host_fragment_content_main), getString(R.string.str_something_went_wrong_when_importing_wallet), Snackbar.LENGTH_LONG)
                                 .setAction("", null).show();
                     }
+                } else if (requestCode == StorageCommon.QR_SCAN) {
+                    IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, resultData);
+                    if(result != null) {
+                        if(result.getContents() != null){
+                            EditText recipientAddressEditText = (EditText) findViewById(R.id.send_token_recipient_address_value);
+                            if(recipientAddressEditText != null) {
+                                try {
+                                    JSONObject obj = new JSONObject(result.getContents());
+                                    if(!obj.isNull("id")) {
+                                        String id = obj.getString("id");
+                                        recipientAddressEditText.setText(id);
+                                    }
+                                    if(!obj.isNull("amount")) {
+                                        double amount = obj.getDouble("amount");
+                                        EditText tokenAmountEditText = (EditText) findViewById(R.id.send_token_amount_value);
+                                        if(tokenAmountEditText != null) {
+                                            tokenAmountEditText.setText(String.format(Locale.US, "%f", amount));
+                                        }
+                                    }
+                                    if(!obj.isNull("ticker")) {
+                                        String ticker = obj.getString("ticker");
+                                        Spinner tokenSpinner = (Spinner) findViewById(R.id.sendTokenSelectSpinner);
+                                        if(tokenSpinner != null) {
+                                            SpinnerAdapter adapter = tokenSpinner.getAdapter();
+                                            for (int i = 0; i < adapter.getCount(); i++) {
+                                                Object item = adapter.getItem(i);
+                                                if(ticker.equals(item.toString())) {
+                                                    tokenSpinner.setSelection(i);
+                                                    break;
+                                                }
+                                            }
+                                            System.out.println(adapter);
+                                        }
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                    if (CryptoSignatures.validateAccountId(result.getContents())) {
+                                        recipientAddressEditText.setText(result.getContents());
+                                    } else {
+                                        Toast.makeText(this, "Scanned: Invalid address", Toast.LENGTH_LONG).show();
+                                        recipientAddressEditText.setText("");
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        super.onActivityResult(requestCode, resultCode, resultData);
+                    }
                 }
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                //handle cancel
             }
         }
     }
