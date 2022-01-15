@@ -10,7 +10,7 @@
             android:entries="@array/pref_network_selection_entries"
             android:entryValues="@array/pref_network_selection_values"
             android:key="@string/pref_network_selection_key"
-            android:summary="@string/pref_network_selection_sumary"
+            android:summary="@string/pref_network_selection_summary"
             android:title="@string/pref_network_selection_title"
             android:icon="@drawable/ic_outline_network_wifi_24"/>
 
@@ -20,7 +20,7 @@
             android:entries="@array/pref_language_selection_entries"
             android:entryValues="@array/pref_language_selection_values"
             android:key="@string/pref_language_selection_key"
-            android:summary="@string/pref_language_selection_sumary"
+            android:summary="@string/pref_language_selection_summary"
             android:title="@string/pref_language_selection_title"
             android:icon="@drawable/ic_baseline_language_24"/>
 
@@ -30,7 +30,7 @@
             android:entries="@array/pref_auto_close_selection_entries"
             android:entryValues="@array/pref_auto_close_selection_values"
             android:key="@string/pref_auto_close_selection_key"
-            android:summary="@string/pref_auto_close_selection_sumary"
+            android:summary="@string/pref_auto_close_selection_summary"
             android:title="@string/pref_auto_close_selection_title"
             android:icon="@drawable/ic_baseline_exit_to_app_24"/>
 
@@ -50,7 +50,7 @@
 
     <PreferenceCategory android:title="@string/pref_other_title">
         <Preference
-            android:summary="@string/pref_description_sumary"
+            android:summary="@string/pref_description_summary"
             android:title="@string/pref_description_title"
             android:key="@string/pref_dummy_switch_key"/>
     </PreferenceCategory>

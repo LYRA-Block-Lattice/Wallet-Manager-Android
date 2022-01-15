@@ -337,7 +337,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                         output.close();
                     } catch (IOException ignored) {
                         UiHelpers.closeKeyboard(findViewById(R.id.nav_host_fragment_content_main));
-                        Snackbar.make(this.findViewById(R.id.nav_host_fragment_content_main), getString(R.string.str_something_went_wrong_when_beackup_wallet), Snackbar.LENGTH_LONG)
+                        Snackbar.make(this.findViewById(R.id.nav_host_fragment_content_main), getString(R.string.str_something_went_wrong_when_backup_wallet), Snackbar.LENGTH_LONG)
                                 .setAction("", null).show();
                     }
                 } else if (requestCode == StorageCommon.IMPORT_WALLET) {

@@ -23,7 +23,7 @@
                 android:layout_height="75dp"
                 android:layout_gravity="start|center_vertical"
                 android:background="@drawable/fab_dashboard_header_color"
-                android:text="More"
+                android:text="@string/str_dialog_more"
                 android:gravity="center"
                 android:textAlignment="textStart"
                 android:textColor="@color/page_foreground"

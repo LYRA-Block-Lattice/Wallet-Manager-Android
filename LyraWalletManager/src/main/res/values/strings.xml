@@ -7,6 +7,8 @@
     <string name="str_dialog_message" translatable="false">Enter wallet password</string>
     <string name="str_dialog_accept">Accept</string>
     <string name="str_dialog_cancel">Cancel</string>
+    <string name="str_dialog_more">More</string>
+    <string name="str_dialog_send">Send</string>
     <string name="str_launcher_receive_button">RECEIVE</string>
     <string name="str_launcher_explorer_button">EXPLORER</string>
     <string name="str_launcher_new_account_button">NEW ACCOUNT</string>
@@ -19,7 +21,7 @@
     <string name="prompt_password">Password</string>
     <string name="prompt_type_password">Type password</string>
     <string name="prompt_type_wallet_password">Type wallet password</string>
-    <string name="prompt_type_account_pkey">Type private key</string>
+    <string name="prompt_type_account_private_key">Type private key</string>
     <string name="prompt_retype_password">Retype password</string>
     <string name="action_open_wallet_short">Open wallet</string>
     <string name="action_create_new_wallet_short">Create new wallet</string>
@@ -31,9 +33,15 @@
     <string name="str_wallet_already_exists">Wallet already exists</string>
     <string name="str_minimum_characters_in_name_is">Minimum number of characters in name is</string>
     <string name="str_something_went_wrong_when_importing_wallet">Something went wrong when importing the wallet</string>
-    <string name="str_something_went_wrong_when_beackup_wallet">Something went wrong when backup the wallet</string>
+    <string name="str_something_went_wrong_when_backup_wallet">Something went wrong when backup the wallet</string>
 
     <string name="str_spinner_account_select_hint">Select account</string>
+
+    <string name="send_token_select_spinner_description">Select token</string>
+    <string name="send_token_recipient_address_hint">Recipient address...</string>
+    <string name="send_token_amount_to_send_hint">Amount</string>
+    <string name="send_token_amount_to_send_max">MAX</string>
+    <string name="send_token_send_next">Next…</string>
 
     <string name="prefs_back_title"> </string>
     <string name="prefs_back_key" translatable="false">prefs_back</string>
@@ -51,18 +59,18 @@
     <string name="pref_other_title">Other</string>
     <!-- Network selection -->
     <string name="pref_network_selection_title">Network</string>
-    <string name="pref_network_selection_sumary">Select network: TESTNET or MAINNET</string>
+    <string name="pref_network_selection_summary">Select network: TESTNET or MAINNET</string>
     <string name="pref_network_selection_key" translatable="false">pref_network_selection_key</string>
     <string name="pref_network_selection_current_selection">Current selected network is</string>
     <!-- Language selection -->
     <string name="pref_language_selection_title">Language</string>
-    <string name="pref_language_selection_sumary">Select language: EN, RO \\.\\.\\.</string>
+    <string name="pref_language_selection_summary">Select language: EN, RO \\.\\.\\.</string>
     <string name="pref_language_selection_key" translatable="false">pref_language_selection_key</string>
     <string name="pref_language_selection_current_selection">Current selected language is</string>
 
     <!-- Auto close selection -->
     <string name="pref_auto_close_selection_title">Auto exit when no activity</string>
-    <string name="pref_auto_close_selection_sumary">If the wallet is not used in the selected interval, the wallet will close</string>
+    <string name="pref_auto_close_selection_summary">If the wallet is not used in the selected interval, the wallet will close</string>
     <string name="pref_auto_close_selection_key" translatable="false">pref_auto_close_selection_key</string>
     <!-- Wallet auto close selection -->
     <string-array name="pref_auto_close_selection_entries">
@@ -75,7 +83,7 @@
     </string-array>
     <!-- Other -->
     <string name="pref_description_title">Version</string>
-    <string name="pref_description_sumary" translatable="false">LyraWalletManager V0.1.0</string>
+    <string name="pref_description_summary" translatable="false">LyraWalletManager V0.1.0</string>
 
 
     <!-- Dummy switch -->

@@ -7,17 +7,26 @@
     <color name="color_light_700">#8C8C8C</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="grey_light">#FFD0D0D0</color>
-    <color name="menu_button_text">#C0C0C0</color>
-    <color name="menu_button_icon_tint">#66000000</color>
-    <color name="launcher_button_2">@color/color_dark_500</color>
-    <color name="launcher_button_2_lighter">@color/color_dark_700</color>
+    <color name="grey_light">#C8C8C8</color>
+    <color name="grey_dark">#00373737</color>
 
+    <color name="button_icon_tint">#66000000</color>
+    <color name="button_2">@color/color_dark_500</color>
+    <color name="button_2_focused">@color/color_dark_700</color>
+    <color name="button_2_pressed">@color/color_dark_500</color>
+    <color name="button_2_stroke">@color/color_dark_700</color>
+    <color name="button_2_stroke_focused">@color/color_dark_500</color>
+    <color name="button_2_stroke_pressed">@color/color_dark_200</color>
+
+    <color name="page_background">#000000</color>
     <color name="page_foreground">@color/white</color>
+    <color name="page_text">@color/white</color>
     <color name="page_header_1">@color/color_dark_200</color>
     <color name="page_header_2">@color/color_dark_700</color>
 
-    <color name="page_receive_send">@color/color_dark_500</color>
-    <color name="page_receive_send_stroke">@color/color_light_200</color>
     <color name="more_tint">#FFF</color>
+
+    <color name="send_token_select_spinner_tint">#000</color>
+    <color name="send_token_select_spinner_tint_stroke">#333</color>
+    <color name="send_token_select_spinner_text">@color/white</color>
 </resources>

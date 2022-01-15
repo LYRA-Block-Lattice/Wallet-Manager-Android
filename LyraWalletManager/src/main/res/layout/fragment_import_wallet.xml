@@ -40,7 +40,7 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/fab_normal_button"
         android:text="@string/action_import_wallet_short"
-        app:backgroundTint="@color/menu_button_icon_tint"
+        app:backgroundTint="@color/button_icon_tint"
         app:backgroundTintMode="add"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
