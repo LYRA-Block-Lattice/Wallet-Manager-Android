@@ -29,4 +29,9 @@
     <color name="send_token_select_spinner_tint">#000</color>
     <color name="send_token_select_spinner_tint_stroke">#333</color>
     <color name="send_token_select_spinner_text">@color/white</color>
+
+
+    <color name="send_token_verify_placeholder_tint">#111</color>
+    <color name="send_token_verify_placeholder_tint_stroke">#444</color>
+
 </resources>

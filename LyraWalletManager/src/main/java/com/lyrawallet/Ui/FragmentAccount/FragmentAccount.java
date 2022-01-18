@@ -100,8 +100,12 @@ public class FragmentAccount extends Fragment {
                     refreshInProgress = false;
                     return;
                 }
+                ProgressBar progress = activity.findViewById(R.id.fragment_account_progressBar);
                 if(entryList == EntryList) {
                     refreshInProgress = false;
+                    if(progress != null) {
+                        progress.setVisibility(View.GONE);
+                    }
                     return;
                 }
                 EntryList = entryList;
@@ -124,7 +128,6 @@ public class FragmentAccount extends Fragment {
                 addCnt = 0;
                 addMoreEntrys();
                 refreshInProgress = false;
-                ProgressBar progress = activity.findViewById(R.id.fragment_account_progressBar);
                 if(progress != null) {
                     progress.setVisibility(View.GONE);
                 }

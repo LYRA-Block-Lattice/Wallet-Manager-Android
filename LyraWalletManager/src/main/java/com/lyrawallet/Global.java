@@ -1,41 +1,36 @@
 package com.lyrawallet;
 
+import static com.lyrawallet.R.mipmap.*;
+
 import android.util.Pair;
 
 import com.lyrawallet.Accounts.Accounts;
 import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
 import com.lyrawallet.Ui.FragmentAccount.FragmentAccount;
-import com.lyrawallet.Ui.FragmentDex.FragmentDex;
-import com.lyrawallet.Ui.FragmentMore.FragmentMore;
-import com.lyrawallet.Ui.FragmentPreferences.FragmentPreferencesRoot;
-import com.lyrawallet.Ui.FragmentReceive.FragmentReceive;
-import com.lyrawallet.Ui.FragmentSend.FragmentSend;
-import com.lyrawallet.Ui.FragmentStaking.FragmentStaking;
-import com.lyrawallet.Ui.FragmentSwap.FragmentSwap;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Global {
-// Global enumerations
-public enum visiblePage {
-    STAKING,
-    SWAP,
-    ACCOUNT,
-    DEX,
-    MORE,
-    OPEN_WALLET,
-    IMPORT_WALLET,
-    NEW_WALLET,
-    NEW_ACCOUNT,
-    RECOVER_ACCOUNT,
-    RECEIVE,
-    SEND,
-    SETTINGS,
-}
+    // Global enumerations
+    public enum visiblePage {
+        STAKING,
+        SWAP,
+        ACCOUNT,
+        DEX,
+        MORE,
+        OPEN_WALLET,
+        IMPORT_WALLET,
+        NEW_WALLET,
+        NEW_ACCOUNT,
+        RECOVER_ACCOUNT,
+        RECEIVE,
+        SEND,
+        SETTINGS,
+    }
 
     // Global constants
-    public final static String[] networkName = { "TESTNET", "MAINNET", "DEVNET" };
+    public final static String[] networkName = {"TESTNET", "MAINNET", "DEVNET"};
     public final static String[] languageName = {"EN", "RO"};
     public final static String DefaultWalletExtension = "lyr";
     public final static int RpcConnectionTimeout = 100; // in 10mS steps
@@ -43,11 +38,19 @@ public enum visiblePage {
     public final static int MinCharAllowedOnPassword = 8;
     public final static int MinCharAllowedOnWalletName = 2;
     public final static int MaxRpcConnectRetry = 5;
+    public final static Pair<String, Integer>[] TokenIconList = new Pair[]{
+            new Pair<>("UNKNOWN", ic_unknown_foreground),
+            new Pair<>("LYR", ic_lyra_foreground),
+            new Pair<>("$ETH", ic_eth_foreground),
+            new Pair<>("$USDC", ic_usdc_foreground),
+            new Pair<>("$USDT", ic_usdt_foreground),
+    };
     // Preference key names
     public final static String keyCustomLyraPriceInUsd = "lyra_price_in_usd";
 
     public final static String str_api_rpc_purpose_history_disk_storage = "disk_storage";
-// Global variables
+    public final static String str_api_rpc_purpose_send_manual = "user_send";
+    // Global variables
     private static visiblePage VisiblePage;
 
     private static String CurrentNetwork = networkName[0];

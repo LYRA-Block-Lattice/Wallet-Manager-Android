@@ -17,13 +17,15 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.lyrawallet.Accounts.Accounts;
+import com.lyrawallet.Api.ApiRpc;
 import com.lyrawallet.Global;
 import com.lyrawallet.MainActivity;
 import com.lyrawallet.R;
 import com.lyrawallet.Storage.StorageKeys;
-import com.lyrawallet.Ui.FragmentManager;
+import com.lyrawallet.Ui.FragmentManagerUser;
 import com.lyrawallet.Ui.UiHelpers;
 import com.lyrawallet.Util.UtilTextFilters;
 
@@ -58,17 +60,25 @@ public class FragmentOpenWallet extends Fragment {
                 if(Global.getSelectedAccountNr() == -1) {
                     passwordEditText.setText("");
                     walletNameEditText.setText("");
-                    new FragmentManager().goToNewAccount();
+                    new FragmentManagerUser().goToNewAccount();
                 } else {
                     passwordEditText.setText("");
                     walletNameEditText.setText("");
                     UiHelpers.closeKeyboard(view);
-                    new FragmentManager().goToAccount();
+                    FragmentActivity activity = getActivity();
+                    if (activity != null) {
+                        activity.runOnUiThread(new Runnable() {
+                            public void run() {
+                                new ApiRpc().act(new ApiRpc.Action().actionHistory(Global.str_api_rpc_purpose_history_disk_storage, Global.getCurrentNetworkName(), Global.getSelectedAccountName(), Global.getSelectedAccountId()));
+                            }
+                        });
+                    }
+                    new FragmentManagerUser().goToAccount();
                 }
             } else {
                 if(StorageKeys.getStatus() == StorageKeys.status.OK) {
                     Global.setWalletName(walletNameEditText.getText().toString());
-                    new FragmentManager().goToNewAccount();
+                    new FragmentManagerUser().goToNewAccount();
                 } else {
                     // Error ask for retry.
                     walletNameEditText.setError("ERROR: Name and/or password incorrect.");
@@ -134,7 +144,7 @@ public class FragmentOpenWallet extends Fragment {
                     if(passwordEditText.getText().length() < Global.getMinCharAllowedOnPassword() + 1) {
                         passwordEditText.setError("Minimum " + Global.getMinCharAllowedOnPassword() + " characters.");
                     } else {
-                        new FragmentManager().goToAccount();
+                        new FragmentManagerUser().goToAccount();
                         EditText password = getActivity().findViewById(R.id.password);
                         UiHelpers.closeKeyboard(view);
                         password.setError(null);
@@ -170,14 +180,14 @@ public class FragmentOpenWallet extends Fragment {
         newWalletButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new FragmentManager().goToNewWallet();
+                new FragmentManagerUser().goToNewWallet();
             }
         });
 
         recoverWalletButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new FragmentManager().goToImportWallet();
+                new FragmentManagerUser().goToImportWallet();
             }
         });
 

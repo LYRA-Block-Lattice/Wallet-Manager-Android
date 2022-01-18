@@ -5,11 +5,11 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Pair;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
@@ -23,6 +23,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -33,10 +34,10 @@ import com.lyrawallet.Api.Network.NetworkWebHttps;
 import com.lyrawallet.Crypto.CryptoSignatures;
 import com.lyrawallet.PreferencesLoad.PreferencesLoad;
 import com.lyrawallet.Storage.StorageCommon;
-import com.lyrawallet.Ui.FragmentManager;
+import com.lyrawallet.Ui.FragmentManagerUser;
 import com.lyrawallet.Ui.UiHelpers;
+import com.lyrawallet.Ui.UtilGetData;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -48,6 +49,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -58,10 +60,10 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
     private static MainActivity Instance = null;
     private static String ImportWalletName = null;
     private Handler UserInputTimeoutHandler;
+    private Boolean PushToBackStack = true;
     protected static MainActivity getInstance() {
         return Instance;
     }
-    protected boolean selectOnly = false;
     /********************************** Save file dialog & Open file dialog ***********************/
     protected void backUpWallet(int procedure) {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
@@ -81,59 +83,56 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
     /******************* Navigation, separate them from button events, for re-usage ***************/
     protected void setVisiblePage(Global.visiblePage p) {
         Global.setVisiblePage(p);
-        if(selectOnly) {
-            selectOnly = false;
-            return;
-        }
+        PushToBackStack = true;
         switch(p) {
             case STAKING:
-                new FragmentManager().goToStaking();
+                new FragmentManagerUser().goToStaking();
                 break;
             case SWAP:
-                new FragmentManager().goToSwap();
+                new FragmentManagerUser().goToSwap();
                 break;
             case ACCOUNT:
-                new FragmentManager().goToAccount();
+                new FragmentManagerUser().goToAccount();
                 break;
             case DEX:
-                new FragmentManager().goToDex();
+                new FragmentManagerUser().goToDex();
                 break;
             case MORE:
-                new FragmentManager().goToMore();
+                new FragmentManagerUser().goToMore();
                 break;
             case IMPORT_WALLET:
-                new FragmentManager().goToImportWallet();
+                new FragmentManagerUser().goToImportWallet();
                 break;
             case NEW_WALLET:
-                new FragmentManager().goToNewWallet();
+                new FragmentManagerUser().goToNewWallet();
                 break;
             case NEW_ACCOUNT:
-                new FragmentManager().goToNewAccount();
+                new FragmentManagerUser().goToNewAccount();
                 break;
             case RECOVER_ACCOUNT:
-                new FragmentManager().goToRecoverAccount();
+                new FragmentManagerUser().goToRecoverAccount();
                 break;
             case RECEIVE:
-                new FragmentManager().goToReceive();
+                new FragmentManagerUser().goToReceive();
                 break;
             case SEND:
-                new FragmentManager().goToSend();
+                new FragmentManagerUser().goToSend();
                 break;
             case SETTINGS:
-                new FragmentManager().goToPreferences();
+                new FragmentManagerUser().goToPreferences();
                 break;
             default:
-                new FragmentManager().goToOpenWallet();
+                new FragmentManagerUser().goToOpenWallet();
                 break;
         }
     }
     /********************************** Go to other windows ***************************************/
     // Buttons events, for UI navigation.
     public void send(View view) {
-        new FragmentManager().goToSend();
+        new FragmentManagerUser().goToSend();
     }
     public void receive(View view) {
-        new FragmentManager().goToReceive();
+        new FragmentManagerUser().goToReceive();
     }
     public void closeWallet(View view) {
         finish();
@@ -236,13 +235,20 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
             bottomNavigationView.setVisibility(View.GONE);
         }
         bottomNavigationView.setOnMenuItemClickListener((CbnMenuItem cbnMenuItem, Integer index) -> {
-            setVisiblePage(Global.visiblePage.values()[cbnMenuItem.component3()]);
+            FragmentManager fragmentManager = this.getSupportFragmentManager();
+            FragmentManager.BackStackEntry entry =  fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1);
+            //if(index != Integer.parseInt(entry.getName())) {
+            if(PushToBackStack) { // If the back button is press, we need to ignore this event, the page is pop from tha backstack.
+                setVisiblePage(Global.visiblePage.values()[index]);
+            }
+            PushToBackStack = true;
             return null;
         });
         setVisiblePage(Global.getVisiblePage());
         /*new WebHttps(this).execute("https://api.latoken.com/v2/ticker", "MainCallHttps1");
         new WebHttps(this).execute("https://api.latoken.com/v2/ticker", "MainCallHttps2");*/
 
+        // Call get history each 60 seconds.
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -273,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         System.out.println(instance.getInstanceName() + ": " + instance.getContent());
     }
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(@NonNull Configuration newConfig) {
         // Dummy event catcher, for further implementation.
         super.onConfigurationChanged(newConfig);
         int orientation = newConfig.orientation;
@@ -285,11 +291,9 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
     public Fragment getVisibleFragment(){
         androidx.fragment.app.FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
         List<Fragment> fragments = fragmentManager.getFragments();
-        if(fragments != null){
-            for(Fragment fragment : fragments){
-                if(fragment != null && fragment.isVisible())
-                    return fragment;
-            }
+        for(Fragment fragment : fragments){
+            if(fragment != null && fragment.isVisible())
+                return fragment;
         }
         return null;
     }
@@ -298,24 +302,25 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         if (key_code== KeyEvent.KEYCODE_BACK) {
             // Prevent back key to take effect, implemented for further development.
             super.onKeyDown(key_code, key_event);
-            androidx.fragment.app.FragmentManager fragmentManager = MainActivity.this.getSupportFragmentManager();
+            FragmentManager fragmentManager = this.getSupportFragmentManager();
             if (fragmentManager.getBackStackEntryCount() > 1) {
                 fragmentManager.popBackStack();
-                androidx.fragment.app.FragmentManager.BackStackEntry entry =  fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 2);
+                FragmentManager.BackStackEntry entry =  fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 2);
                 CurvedBottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
-                Global.setVisiblePage(Global.visiblePage.values()[Integer.parseInt(entry.getName())]);
+                Global.setVisiblePage(Global.visiblePage.values()[Integer.parseInt(Objects.requireNonNull(entry.getName()))]);
                 if (Global.getVisiblePage().ordinal() < Global.visiblePage.OPEN_WALLET.ordinal()) {
-                    selectOnly = true;
+                    // If not visible, we will return to the same position, select event will not be triggered, so we need to let "PushToBackStack" ad true;
+                    if(bottomNavigationView.getVisibility() == View.VISIBLE) {
+                        PushToBackStack = false;
+                    }
                     bottomNavigationView.onMenuItemClick(Global.getVisiblePage().ordinal());
                 } else {
-                    //bottomNavigationView.setMenuItems(menuItems, 2);
                     bottomNavigationView.setVisibility(View.GONE);
                 }
             } else {
                 finish();
                 System.exit(0);
             }
-            return false;
         }
         return false;
     }
@@ -334,30 +339,21 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
             closeWallet();
         }
     };
-
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case 1011: {
-
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // Here user granted the permission
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                    Toast.makeText(MainActivity.this, "Permission denied to read your Camera", Toast.LENGTH_SHORT).show();
-                }
-                return;
+        if (requestCode == 1011) {// If request is cancelled, the result arrays are empty.
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Here user granted the permission
+            } else {
+                // permission denied, boo! Disable the
+                // functionality that depends on this permission.
+                Toast.makeText(MainActivity.this, "Permission denied to read your Camera", Toast.LENGTH_SHORT).show();
             }
         }
     }
-    // Need to be in main activity, they don't work elsewhere, so I put them here.
+    // Need to be in main activity, don't work elsewhere, so I put them here.
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent resultData) {
         super.onActivityResult(requestCode, resultCode, resultData);
@@ -391,7 +387,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                             fiw.write(new String(bytes));
                             fiw.flush();
                             fiw.close();
-                            new FragmentManager().goToOpenWallet();
+                            new FragmentManagerUser().goToOpenWallet();
                         } else {
                             UiHelpers.closeKeyboard(findViewById(R.id.nav_host_fragment_content_main));
                             Snackbar.make(findViewById(R.id.nav_host_fragment_content_main), "File exists", Snackbar.LENGTH_LONG)
@@ -414,23 +410,45 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                                         String id = obj.getString("id");
                                         recipientAddressEditText.setText(id);
                                     }
+                                    double amount = 0f;
                                     if(!obj.isNull("amount")) {
-                                        double amount = obj.getDouble("amount");
-                                        EditText tokenAmountEditText = (EditText) findViewById(R.id.send_token_amount_value);
-                                        if(tokenAmountEditText != null) {
-                                            tokenAmountEditText.setText(String.format(Locale.US, "%f", amount));
-                                        }
+                                        amount = obj.getDouble("amount");
                                     }
                                     if(!obj.isNull("ticker")) {
                                         String ticker = obj.getString("ticker");
                                         Spinner tokenSpinner = (Spinner) findViewById(R.id.sendTokenSelectSpinner);
                                         if(tokenSpinner != null) {
                                             SpinnerAdapter adapter = tokenSpinner.getAdapter();
-                                            for (int i = 0; i < adapter.getCount(); i++) {
-                                                Object item = adapter.getItem(i);
-                                                if(ticker.equals(item.toString())) {
+                                            List<Pair<String, Double>> balances = UtilGetData.getAvailableTokenList();
+                                            for (Pair<String, Double> t: balances) {
+                                                if(t.first.equals(ticker)) {
+                                                    double max = t.second;
+                                                    if(ticker.equals("LYR")) {
+                                                        max -= GlobalLyra.LYRA_TX_FEE;
+                                                    }
+                                                    if(amount > max) {
+                                                        EditText tokenAmountEditText = (EditText) findViewById(R.id.send_token_amount_value);
+                                                        if(tokenAmountEditText != null) {
+                                                            tokenAmountEditText.setError(getString(R.string.main_activity_not_enough_tokens_into_account));
+                                                        }
+                                                    }
+                                                    break;
+                                                }
+                                            }
+                                            int i = 0;
+                                            for (; i < adapter.getCount(); i++) {
+                                                if(ticker.equals(adapter.getItem(i).toString())) {
                                                     tokenSpinner.setSelection(i);
                                                     break;
+                                                }
+                                            }
+                                            EditText tokenAmountEditText = (EditText) findViewById(R.id.send_token_amount_value);
+                                            if(tokenAmountEditText != null) {
+                                                if(i != adapter.getCount()) {
+                                                    tokenAmountEditText.setText(String.format(Locale.US, "%f", amount));
+                                                } else { // Token not found in current account.
+                                                    tokenAmountEditText.setError(getString(R.string.main_activity_token_not_found_in_current_account));
+                                                    tokenAmountEditText.setText(String.format(Locale.US, "%f", 0f));
                                                 }
                                             }
                                             System.out.println(adapter);

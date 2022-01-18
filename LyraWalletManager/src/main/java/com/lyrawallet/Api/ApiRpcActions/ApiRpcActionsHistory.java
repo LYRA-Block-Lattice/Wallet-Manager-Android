@@ -46,7 +46,9 @@ public class ApiRpcActionsHistory extends MainActivity {
                 SendAccountId = obj.getString("SendAccountId");
                 SendHash = obj.getString("SendHash");
                 RecvAccountId = obj.getString("RecvAccountId");
-                RecvHash = obj.getString("RecvHash");
+                if(!obj.isNull("RecvHash"))
+                    RecvHash = obj.getString("RecvHash");
+
                 JSONObject o = obj.getJSONObject("Changes");
                 for (Iterator<String> it = o.keys(); it.hasNext(); ) {
                     String key = it.next();
@@ -77,7 +79,6 @@ public class ApiRpcActionsHistory extends MainActivity {
                         }
                     }
                 }
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -150,7 +151,7 @@ public class ApiRpcActionsHistory extends MainActivity {
             try {
                 if(networkData != null) {
                     JSONArray arrayNetwork = new JSONArray(networkData);
-                    if(countArrayStored != arrayNetwork.length()) {
+                    if(countArrayStored != arrayNetwork.length() || !networkData.equals(storedData)) {
                         StorageHistory.save( getHistoryFileName(ac), networkData, Global.getWalletPassword());
                     }
                 }
@@ -231,22 +232,12 @@ public class ApiRpcActionsHistory extends MainActivity {
             } else  {
                 tokenAmount = historyList.get(i).getChanges().get(0);
             }
-            int icon = R.mipmap.ic_unknown_foreground;
-            switch (tokenAmount.first) {
-                case "LYR":
-                    icon = R.mipmap.ic_lyra_foreground;
+            int icon = Global.TokenIconList[0].second;
+            for (Pair<String, Integer> k: Global.TokenIconList) {
+                if(k.first.equals(tokenAmount.first)) {
+                    icon = k.second;
                     break;
-                case "tether/USDC":
-                    icon = R.mipmap.ic_usdc_foreground;
-                    break;
-                case "tether/USDT":
-                    icon = R.mipmap.ic_usdt_foreground;
-                    break;
-                case "tether/ETH":
-                    icon = R.mipmap.ic_eth_foreground;
-                    break;
-                default:
-                    icon = R.mipmap.ic_unknown_foreground;
+                }
             }
             List.add(0, new FragmentAccount.AccountHistoryEntry(historyList.get(i).getHeight(), icon,
                     tokenAmount.first, tokenAmount.second, 0.00021f));

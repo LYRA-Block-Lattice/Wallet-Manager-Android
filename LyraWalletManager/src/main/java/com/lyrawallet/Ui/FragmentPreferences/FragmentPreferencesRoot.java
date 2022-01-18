@@ -14,7 +14,7 @@ import androidx.preference.PreferenceFragmentCompat;
 import com.lyrawallet.Api.ApiRpc;
 import com.lyrawallet.Global;
 import com.lyrawallet.R;
-import com.lyrawallet.Ui.FragmentManager;
+import com.lyrawallet.Ui.FragmentManagerUser;
 
 import java.util.Locale;
 
@@ -71,7 +71,7 @@ public class FragmentPreferencesRoot extends PreferenceFragmentCompat {
                     Global.setCurrentLanguage(Global.languageName[lang]);
                     setAppLocale(Global.languageName[lang]);
                     languageSelectorPref.setSummary(getString(R.string.pref_language_selection_current_selection) + ": " + Global.languageName[lang]);
-                    new FragmentManager().goToMore();
+                    new FragmentManagerUser().goToMore();
                     return true;
                 }
             });

@@ -38,9 +38,9 @@ public class SendTokensSpinnerAdapter extends ArrayAdapter<String> {
         View row = inflater.inflate(R.layout.send_token_select_spinner_entry, parent, false);
 
         TextView textView = (TextView) row.findViewById(R.id.send_token_select_spinner_entry_text);
-        textView.setText(contentArray[position]);
-
         ImageView imageView = (ImageView)row.findViewById(R.id.send_token_select_spinner_entry_image);
+
+        textView.setText(contentArray[position]);
         imageView.setImageResource(imageArray[position]);
         return row;
     }

@@ -29,4 +29,8 @@
     <color name="send_token_select_spinner_tint">#FFF</color>
     <color name="send_token_select_spinner_tint_stroke">#CCC</color>
     <color name="send_token_select_spinner_text">@color/black</color>
+
+    <color name="send_token_verify_placeholder_tint">#FFF</color>
+    <color name="send_token_verify_placeholder_tint_stroke">#CCC</color>
+
 </resources>

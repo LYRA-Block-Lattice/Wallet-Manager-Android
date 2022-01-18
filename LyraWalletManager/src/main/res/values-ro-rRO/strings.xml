@@ -61,4 +61,14 @@
     <string name="send_token_amount_to_send_hint">Cantitate</string>
     <string name="send_token_amount_to_send_max">MAX</string>
     <string name="send_token_send_next">Mai departe…</string>
+    <string name="send_token_disponible">Disponibil</string>
+    <string name="main_activity_not_enough_tokens_into_account">Nu sunt destui tokeni in cont</string>
+    <string name="main_activity_token_not_found_in_current_account">Tokenul cerut nu exista in acest cont</string>
+    <string name="send1">De trimis</string>
+    <string name="send2">Trimite</string>
+    <string name="from">De la</string>
+    <string name="to">Catre</string>
+    <string name="network_fee">Cost trimitere</string>
+    <string name="total_spent">Total cheltuit</string>
+    <string name="Wallet">Portofel</string>
 </resources>

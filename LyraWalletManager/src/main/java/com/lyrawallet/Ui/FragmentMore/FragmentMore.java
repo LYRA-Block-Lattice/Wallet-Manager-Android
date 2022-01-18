@@ -2,6 +2,7 @@ package com.lyrawallet.Ui.FragmentMore;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.hardware.biometrics.BiometricManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -21,7 +23,9 @@ import com.lyrawallet.Api.ApiRpc;
 import com.lyrawallet.Global;
 import com.lyrawallet.R;
 import com.lyrawallet.Storage.StorageBackUpWallet;
-import com.lyrawallet.Ui.FragmentManager;
+import com.lyrawallet.Ui.FragmentManagerUser;
+
+import org.bouncycastle.util.StringList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,64 +119,82 @@ public class FragmentMore extends Fragment {
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        /*View view = getView();
+        if(view != null) {
+            Spinner accountsSpinner = view.findViewById(R.id.accountSpinner);
+            SpinnerAdapter accountListArrayAdapter = accountsSpinner.getAdapter();
+            String[] arr = new String[accountListArrayAdapter.getCount()];
+            for (int i = 0; i < accountListArrayAdapter.getCount(); i++) {
+                arr[i] =accountListArrayAdapter.getItem(i).toString();
+            }
+            outState.putStringArray("spinner_items", arr);
+        }*/
+    }
+
+    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         CurvedBottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setVisibility(View.VISIBLE);
 
-        new Handler().postDelayed(new Runnable() {
-            public void run() {
-                Activity activity = getActivity();
-                if(activity == null) {
-                    return;
-                }
-                Button explorerButton = (Button) activity.findViewById(R.id.explorerButton);
-                if(explorerButton != null) {
-                    explorerButton.setOnClickListener(new View.OnClickListener() {
-                        public void onClick(View v) {
-                            String url = "http://www.google.com";
-                            switch (Global.getCurrentNetworkName()) {
-                                case "MAINNET":
-                                    url = "https://nebula.lyra.live/";
-                                    break;
-                                case "DEVNET":
-                                    url = "";
-                                    break;
-                                default:
-                                    url = "https://nebulatestnet.lyra.live/";
-                                    break;
-                            }
+        Activity activity = getActivity();
+        if (activity == null) {
+            return;
+        }
+        Button explorerButton = (Button) activity.findViewById(R.id.explorerButton);
+        if (explorerButton != null) {
+            explorerButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    String url = "http://www.google.com";
+                    switch (Global.getCurrentNetworkName()) {
+                        case "MAINNET":
+                            url = "https://nebula.lyra.live/";
+                            break;
+                        case "DEVNET":
+                            url = "";
+                            break;
+                        default:
+                            url = "https://nebulatestnet.lyra.live/";
+                            break;
+                    }
 
-                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                            startActivity(browserIntent);
-                        }
-                    });
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(browserIntent);
                 }
-                Button newAccountButton = (Button) activity.findViewById(R.id.newAccountButton);
-                newAccountButton.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        new FragmentManager().goToNewAccount();
-                    }
-                });
-                Button backupWalletButton = (Button) activity.findViewById(R.id.backupWalletButton);
-                backupWalletButton.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        new StorageBackUpWallet();
-                    }
-                });
-                Button settingsButton = (Button) activity.findViewById(R.id.settingsButton);
-                settingsButton.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-                        new FragmentManager().goToPreferences();
-                    }
-                });
-                Button aboutButton = (Button) activity.findViewById(R.id.aboutButton);
-                aboutButton.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
-
-                    }
-                });
-                populateAccountSpinner(activity);
+            });
+        }
+        Button newAccountButton = (Button) activity.findViewById(R.id.newAccountButton);
+        newAccountButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                new FragmentManagerUser().goToNewAccount();
             }
-        }, 50);
+        });
+        Button backupWalletButton = (Button) activity.findViewById(R.id.backupWalletButton);
+        backupWalletButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                new StorageBackUpWallet();
+            }
+        });
+        Button settingsButton = (Button) activity.findViewById(R.id.settingsButton);
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                new FragmentManagerUser().goToPreferences();
+            }
+        });
+        Button aboutButton = (Button) activity.findViewById(R.id.aboutButton);
+        aboutButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+            }
+        });
+        //if (savedInstanceState == null) {
+            populateAccountSpinner(activity);
+        /*} else {
+            Spinner accountsSpinner = activity.findViewById(R.id.accountSpinner);
+            ArrayAdapter<String> accountListArrayAdapter = new ArrayAdapter<>(activity, android.R.layout.simple_spinner_dropdown_item, savedInstanceState.getStringArray("spinner_items"));
+            accountListArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            accountsSpinner.setAdapter(accountListArrayAdapter);
+        }*/
     }
 }

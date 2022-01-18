@@ -27,6 +27,8 @@ public class CryptoSignatures {
 
 
     public static boolean validateAccountId(String AccountId) {
+        if(AccountId.length() < 1)
+            return false;
         if (AccountId.charAt(0) != GlobalLyra.ADDRESSPREFIX)
             return false;
         byte[] res = CryptoBase58Encoding.DecodeAccountId(AccountId);

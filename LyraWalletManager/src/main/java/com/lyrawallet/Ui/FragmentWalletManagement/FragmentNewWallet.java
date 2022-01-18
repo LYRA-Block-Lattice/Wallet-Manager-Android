@@ -19,7 +19,7 @@ import com.lyrawallet.Global;
 import com.lyrawallet.MainActivity;
 import com.lyrawallet.R;
 import com.lyrawallet.Storage.StorageKeys;
-import com.lyrawallet.Ui.FragmentManager;
+import com.lyrawallet.Ui.FragmentManagerUser;
 import com.lyrawallet.Ui.UiHelpers;
 import com.lyrawallet.Util.UtilTextFilters;
 
@@ -94,11 +94,11 @@ public class FragmentNewWallet extends Fragment {
                             if(accounts.loadAccountsFromDisk(Global.getWalletName(), password1EditText.getText().toString())) {
                                 Snackbar.make(view, "Wallet successfully created.", Snackbar.LENGTH_LONG)
                                         .setAction("", null).show();
-                                new FragmentManager().goToNewAccount();
+                                new FragmentManagerUser().goToNewAccount();
                             } else {
                                 Snackbar.make(view, "That is not a wallet file.", Snackbar.LENGTH_LONG)
                                         .setAction("", null).show();
-                                new FragmentManager().goToOpenWallet();
+                                new FragmentManagerUser().goToOpenWallet();
                             }
                         }
                     }

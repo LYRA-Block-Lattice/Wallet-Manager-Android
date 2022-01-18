@@ -12,15 +12,17 @@ import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.lyrawallet.Accounts.Accounts;
+import com.lyrawallet.Api.ApiRpc;
 import com.lyrawallet.Crypto.CryptoSignatures;
 import com.lyrawallet.Global;
 import com.lyrawallet.MainActivity;
 import com.lyrawallet.R;
 import com.lyrawallet.Storage.StorageKeys;
-import com.lyrawallet.Ui.FragmentManager;
+import com.lyrawallet.Ui.FragmentManagerUser;
 import com.lyrawallet.Ui.UiHelpers;
 import com.lyrawallet.Util.UtilTextFilters;
 
@@ -95,10 +97,18 @@ public class FragmentNewAccount extends Fragment {
                         if(!success) {
                             Snackbar.make(view, "An error occured when reloading wallet.", Snackbar.LENGTH_LONG)
                                     .setAction("", null).show();
-                            new FragmentManager().goToOpenWallet();
+                            new FragmentManagerUser().goToOpenWallet();
                         } else {
                             UiHelpers.closeKeyboard(view);
-                            new FragmentManager().goToAccount();
+                            FragmentActivity activity = getActivity();
+                            if (activity != null) {
+                                activity.runOnUiThread(new Runnable() {
+                                    public void run() {
+                                        new ApiRpc().act(new ApiRpc.Action().actionHistory(Global.str_api_rpc_purpose_history_disk_storage, Global.getCurrentNetworkName(), Global.getSelectedAccountName(), Global.getSelectedAccountId()));
+                                    }
+                                });
+                            }
+                            new FragmentManagerUser().goToAccount();
                         }
                     }
                 }
@@ -107,7 +117,7 @@ public class FragmentNewAccount extends Fragment {
         recoverAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new FragmentManager().goToRecoverAccount();
+                new FragmentManagerUser().goToRecoverAccount();
             }
         });
         showPasswordButton.setOnClickListener(new View.OnClickListener() {

@@ -3,6 +3,14 @@
 
     <string name="charset" translatable="false">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
 
+    <string name="send1">Send</string>
+    <string name="send2">Send</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="network_fee">Network Fee</string>
+    <string name="total_spent">Total Spent</string>
+    <string name="Wallet">Wallet</string>
+
     <string name="str_dialog_title" translatable="false">Unlock wallet</string>
     <string name="str_dialog_message" translatable="false">Enter wallet password</string>
     <string name="str_dialog_accept">Accept</string>
@@ -37,11 +45,15 @@
 
     <string name="str_spinner_account_select_hint">Select account</string>
 
+    <string name="main_activity_not_enough_tokens_into_account">Not enough tokens into account</string>
+    <string name="main_activity_token_not_found_in_current_account">Token not found in current account</string>
+
     <string name="send_token_select_spinner_description">Select token</string>
     <string name="send_token_recipient_address_hint">Recipient address...</string>
     <string name="send_token_amount_to_send_hint">Amount</string>
     <string name="send_token_amount_to_send_max">MAX</string>
     <string name="send_token_send_next">Next…</string>
+    <string name="send_token_disponible">Disponible</string>
 
     <string name="prefs_back_title"> </string>
     <string name="prefs_back_key" translatable="false">prefs_back</string>
