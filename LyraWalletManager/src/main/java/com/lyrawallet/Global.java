@@ -64,11 +64,12 @@ public class Global {
     private static String ReceiveWalletPassword = null;
     private static String SelectedAccountName = "";
     private static int SelectedAccountNr = -1;
+    private static List<Pair<String, Boolean>>  UnreceivedBalance = null;
     private static String WalletPath = "";
     private static int InactivityTimeForClose = -1;
     private static String WalletPassword = "";
 
-    private static double LyraPriceInUsd = 0.00015f;
+    private static List<Pair<Double, Pair<String, String>>> TokenPrice = null;
 
     private static int DeviceOrientation = 0;
 
@@ -133,6 +134,33 @@ public class Global {
     }
     public static List<Pair<String, String>> getWalletAccNameAndIdList() {
         return WalletAccNameAndIdList;
+    }
+
+    public static void setUnreceivedBalance(String accountName, boolean unreceived) {
+        if(UnreceivedBalance != null) {
+            for (int i = 0; i < UnreceivedBalance.size(); i++) {
+                Pair<String, Boolean> acc = UnreceivedBalance.get(i);
+                if (acc.first.equals(accountName)) {
+                    UnreceivedBalance.remove(i);
+                    UnreceivedBalance.add(new Pair<>(accountName, unreceived));
+                    return;
+                }
+            }
+        } else {
+            UnreceivedBalance = new ArrayList<>();
+        }
+        UnreceivedBalance.add(new Pair<>(accountName, unreceived));
+    }
+    public static boolean getUnreceivedBalance(String accountName) {
+        if(UnreceivedBalance != null) {
+            for (int i = 0; i < UnreceivedBalance.size(); i++) {
+                Pair<String, Boolean> acc = UnreceivedBalance.get(i);
+                if (acc.first.equals(accountName)) {
+                    return acc.second;
+                }
+            }
+        }
+        return false;
     }
 
     public static void setWalletHistory(String accountName, String history) {
@@ -305,10 +333,31 @@ public class Global {
         return WalletPassword;
     }
 
-    public static void setLyraPriceInUsd( double price) {
-        LyraPriceInUsd = price;
+    public static void setTokenPrice(Pair<String, String> pair, double price) {
+        if(TokenPrice == null) {
+            TokenPrice = new ArrayList<>();
+            TokenPrice.add(new Pair<Double, Pair<String, String>>(price, pair));
+        } else {
+            for (int i = 0; i < TokenPrice.size(); i++) {
+                Pair<Double, Pair<String, String>> p = TokenPrice.get(i);
+                if((pair.first.equals(p.second.first) && pair.second.equals(p.second.second)) ||
+                        (pair.first.equals(p.second.second) && pair.second.equals(p.second.first))) {
+                    TokenPrice.remove(i);
+                    TokenPrice.add(new Pair<Double, Pair<String, String>>(price, pair));
+                    return;
+                }
+            }
+        }
     }
-    public static double getLyraPriceInUsd() {
-        return LyraPriceInUsd;
+    public static double getTokenPrice(Pair<String, String> pair) {
+        for (int i = 0; i < TokenPrice.size(); i++) {
+            Pair<Double, Pair<String, String>> p = TokenPrice.get(i);
+            if(pair.first.equals(p.second.first) && pair.second.equals(p.second.second)) {
+                return p.first;
+            } else if (pair.first.equals(p.second.second) && pair.second.equals(p.second.first)) {
+                return 1f / p.first;
+            }
+        }
+        return 0f;
     }
 }

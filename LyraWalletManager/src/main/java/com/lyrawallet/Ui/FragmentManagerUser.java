@@ -77,7 +77,6 @@ public class FragmentManagerUser extends MainActivity {
     public void goToNewAccount() {
         Global.setVisiblePage(Global.visiblePage.NEW_ACCOUNT);
         if(getCurrentFragment() != Global.visiblePage.NEW_ACCOUNT.ordinal()) {
-        } else {
             getInstance().getSupportFragmentManager()
                     .beginTransaction()
                     .setReorderingAllowed(true)

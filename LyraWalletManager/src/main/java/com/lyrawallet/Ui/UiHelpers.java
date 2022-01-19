@@ -1,13 +1,22 @@
 package com.lyrawallet.Ui;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
 import com.lyrawallet.Crypto.CryptoSignatures;
 import com.lyrawallet.MainActivity;
 
@@ -59,5 +68,39 @@ public class UiHelpers {
         if(!CryptoSignatures.validateAccountId(id))
             return "";
         return String.format(Locale.US, "%s...%s", id.substring(0, len), id.substring(id.length() - 1 - len));
+    }
+
+    public static Bitmap textToImageEncode(String Value, ImageView qrImageView) throws WriterException {
+        BitMatrix bitMatrix;
+        try {
+            bitMatrix = new MultiFormatWriter().encode(
+                    Value,
+                    BarcodeFormat.QR_CODE,
+                    qrImageView.getWidth(), qrImageView.getHeight(), null
+            );
+        } catch (IllegalArgumentException Illegalargumentexception) {
+            return null;
+        }
+        int bitMatrixWidth = bitMatrix.getWidth();
+        int bitMatrixHeight = bitMatrix.getHeight();
+        final int rectangleSize = 8;
+        Bitmap bitmap = Bitmap.createBitmap(bitMatrixWidth * rectangleSize, bitMatrixHeight * rectangleSize, Bitmap.Config.RGB_565);
+        Canvas canvas = new Canvas(bitmap);
+        Paint p = new Paint();
+        p.setStyle(Paint.Style.FILL_AND_STROKE);
+        p.setAntiAlias(true);
+        p.setFilterBitmap(true);
+        p.setDither(true);
+        for (int y = 0; y < bitMatrixHeight; y++) {
+            for (int x = 0; x < bitMatrixWidth; x++) {
+                int color = bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE;
+                p.setColor(color);
+                canvas.drawRect(x * rectangleSize, y * rectangleSize, x * rectangleSize + rectangleSize,
+                        y * rectangleSize + rectangleSize, p);
+            }
+        }
+        qrImageView.setImageBitmap(bitmap);
+        qrImageView.draw(canvas);
+        return bitmap;
     }
 }

@@ -2,20 +2,13 @@ package com.lyrawallet.Ui.FragmentSend;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
-import android.graphics.Point;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Pair;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.WindowMetrics;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,28 +18,19 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.lyrawallet.Api.ApiRpc;
-import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
 import com.lyrawallet.Crypto.CryptoSignatures;
 import com.lyrawallet.Global;
 import com.lyrawallet.GlobalLyra;
-import com.lyrawallet.MainActivity;
 import com.lyrawallet.R;
 import com.lyrawallet.Ui.UiHelpers;
 import com.lyrawallet.Ui.UtilGetData;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -82,9 +66,8 @@ public class FragmentSend extends Fragment {
 
     public static List<Integer> getData(List<String> tokenNames) {
         List<Integer > List = new ArrayList<>();
-        if(tokenNames == null) {
+        if(tokenNames == null)
             return null;
-        }
         for (int i = 0; i < tokenNames.size(); i++) {
             int icon = Global.TokenIconList[0].second;
             for (Pair<String, Integer> k: Global.TokenIconList) {
@@ -100,27 +83,22 @@ public class FragmentSend extends Fragment {
 
     private boolean checkSend() {
         Activity activity = getActivity();
-        if(activity == null) {
+        if(activity == null)
             return false;
-        }
         Button nextButton = (Button) activity.findViewById(R.id.send_token_next_button);
-        if(nextButton == null) {
+        if(nextButton == null)
             return false;
-        }
         nextButton.setEnabled(false);
         Spinner tokenSpinner = (Spinner) activity.findViewById(R.id.sendTokenSelectSpinner);
         EditText recipientAddressEditText = (EditText) activity.findViewById(R.id.send_token_recipient_address_value);
-        if(!CryptoSignatures.validateAccountId(recipientAddressEditText.getText().toString())) {
+        if(!CryptoSignatures.validateAccountId(recipientAddressEditText.getText().toString()))
             return false;
-        }
         EditText tokenAmountEditText = (EditText) activity.findViewById(R.id.send_token_amount_value);
-        if (tokenSpinner == null) {
+        if (tokenSpinner == null)
             return false;
-        }
         SpinnerAdapter adapter = tokenSpinner.getAdapter();
-        if (adapter == null) {
+        if (adapter == null)
             return false;
-        }
         try {
             if (!UtilGetData.checkEnoughTokens(adapter.getItem(tokenSpinner.getSelectedItemPosition()).toString(),
                     Double.parseDouble(tokenAmountEditText.getText().toString()),
@@ -154,22 +132,18 @@ public class FragmentSend extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        CurvedBottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
+        Activity activity = getActivity();
+        if(activity == null)
+            return;
+        CurvedBottomNavigationView bottomNavigationView = activity.findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setVisibility(View.GONE);
-
-        new ApiRpc().act(new ApiRpc.Action().actionPool("LYR", "tether/LTT"));
-
+        //new ApiRpc().act(new ApiRpc.Action().actionPool("LYR", "tether/LTT"));
         Spinner tokenSpinner = (Spinner) view.findViewById(R.id.sendTokenSelectSpinner);
-        /*ArrayAdapter<String> adapter = new ArrayAdapter<String>(view.getContext(), R.layout.send_token_select_spinner_entry_first,
-                R.id.send_token_select_spinner_entry_text, getActivity().fileList());*/
         List<String> tickerList = new ArrayList<>();
         Balances = UtilGetData.getAvailableTokenList();
         for (int i = 0; i < Balances.size(); i++) {
             tickerList.add(Balances.get(i).first.replace("tether/", "$"));
         }
-        FragmentActivity activity = getActivity();
-        /*SendTokensGalleryAdapter adapter = new SendTokensGalleryAdapter(view.getContext(), R.layout.send_token_select_spinner_entry,
-                getData(tickerList));*/
         EditText recipientAddressEditText = (EditText) view.findViewById(R.id.send_token_recipient_address_value);
         if(recipientAddressEditText != null) {
             recipientAddressEditText.addTextChangedListener(new TextWatcher() {
@@ -219,7 +193,7 @@ public class FragmentSend extends Fragment {
                                 max -= GlobalLyra.LYRA_TX_FEE;
                             }
                         }
-                        tokenAmountEditText.setHint(String.format("%s: %s", getString(R.string.send_token_disponible), max));
+                        tokenAmountEditText.setHint(String.format("%s: %s", getString(R.string.send_token_available), max));
                         //tokenAmountEditText.setText("");
                         checkSend();
                     }
@@ -232,9 +206,8 @@ public class FragmentSend extends Fragment {
         qrButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Activity activity = getActivity();
-                if(activity == null) {
+                if(activity == null)
                     return;
-                }
                 IntentIntegrator integrator = new IntentIntegrator(activity);
                 integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
                 integrator.setPrompt("Scan");
@@ -260,9 +233,8 @@ public class FragmentSend extends Fragment {
                         if (Balances.get(i).first.equals(adapter.getItem(tokenSpinner.getSelectedItemPosition()).toString())) {
                             double max = Balances.get(i).second;
                             if(max >= GlobalLyra.LYRA_TX_FEE) {
-                                if (Balances.get(i).first.equals("LYR")) {
+                                if (Balances.get(i).first.equals("LYR"))
                                     max -= GlobalLyra.LYRA_TX_FEE;
-                                }
                                 EditText tokenAmountEditText = (EditText) view.findViewById(R.id.send_token_amount_value);
                                 tokenAmountEditText.setText(String.format(Locale.US, "%f", max));
                             }
@@ -296,7 +268,6 @@ public class FragmentSend extends Fragment {
                         }
                     });
                     EditText recipientAddressEditText = (EditText) activity.findViewById(R.id.send_token_recipient_address_value);
-
                     TextView sendValueTextView = (TextView) mView.findViewById(R.id.dialog_send_value);
                     TextView sendFromTextView = (TextView) mView.findViewById(R.id.dialog_send_from_value);
                     TextView sendToTextView = (TextView) mView.findViewById(R.id.dialog_send_to_value);
@@ -308,7 +279,6 @@ public class FragmentSend extends Fragment {
                                 .setAction("", null).show();
                         return;
                     }
-
                     Spinner tokenSpinner = (Spinner) activity.findViewById(R.id.sendTokenSelectSpinner);
                     SpinnerAdapter adapter = tokenSpinner.getAdapter();
                     EditText tokenAmountEditText = (EditText) view.findViewById(R.id.send_token_amount_value);
@@ -331,20 +301,18 @@ public class FragmentSend extends Fragment {
                     sendToTextView.setText(UiHelpers.getShortAccountId(recipientAddressEditText.getText().toString(), 7));
                     networkFeeTextView.setText(String.format(Locale.US, "%s LYR", GlobalLyra.LYRA_TX_FEE));
                     String s;
-                    if(tokenToSend.equals("LYR")) {
+                    if(tokenToSend.equals("LYR"))
                         s = String.format(Locale.US, "%f", Double.parseDouble(tokenAmountEditText.getText().toString()) + GlobalLyra.LYRA_TX_FEE);
-                    } else {
+                    else
                         s = String.format(Locale.US, "%f", Double.parseDouble(tokenAmountEditText.getText().toString()));
-                    }
                     totalSpendTextView.setText(String.format(Locale.US, "%s %s", s, tokenToSend));
 
                     Button sendButton = (Button) mView.findViewById(R.id.dialog_send_token_button);
                     sendButton.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
                             Activity activity = getActivity();
-                            if (activity == null) {
+                            if (activity == null)
                                 return;
-                            }
                             activity.runOnUiThread(new Runnable() {
                                 public void run() {
                                     try {
@@ -353,6 +321,7 @@ public class FragmentSend extends Fragment {
                                                 Double.parseDouble(tokenAmountEditText.getText().toString()),
                                                 tokenToSend.replace("$", "tether/"),
                                                 recipientAddressEditText.getText().toString()));
+                                        alertDialog.dismiss();
                                     } catch (NumberFormatException ex) {
                                         Snackbar.make(view, "An error occurred when trying to send.", Snackbar.LENGTH_LONG)
                                                 .setAction("", null).show();

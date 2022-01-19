@@ -11,6 +11,7 @@ import com.lyrawallet.MainActivity;
 import com.lyrawallet.R;
 import com.lyrawallet.Storage.StorageHistory;
 import com.lyrawallet.Ui.FragmentAccount.FragmentAccount;
+import com.lyrawallet.Util.Concatenate;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,6 +20,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -31,12 +33,48 @@ public class ApiRpcActionsHistory extends MainActivity {
         private String SendHash = null;
         private String RecvAccountId = null;
         private String RecvHash = null;
-        private List<Pair<String, Double>> Changes = new ArrayList<>();
-        private List<Pair<String, Double>> Balances = new ArrayList<>();
+        private final List<Pair<String, Double>> Changes = new ArrayList<>();
+        private final List<Pair<String, Double>> Balances = new ArrayList<>();
 
         HistoryEntry() {
 
         }
+
+        public static String toJson(String data, String sendAccountId, String recvAccountId, Pair<String, Double> changes) {
+            try {
+                JSONArray objRet = new JSONArray(data);
+                JSONObject objEntry;
+                if(objRet.length() == 0)
+                    objEntry = new JSONObject();
+                else
+                    objEntry = objRet.getJSONObject(objRet.length() - 1);
+
+                objEntry.put("Height", 0);
+                objEntry.put("IsReceive", false);
+                objEntry.put("TimeStamp", 0L);
+                objEntry.put("SendAccountId", sendAccountId);
+                objEntry.put("SendHash", "");
+                objEntry.put("RecvAccountId", recvAccountId);
+                objEntry.put("RecvHash", "");
+                JSONObject objChanges = new JSONObject();
+                objChanges.put(changes.first, String.format(Locale.US, "%f", changes.second));
+                objEntry.put("Changes", objChanges);
+                if(objRet.length() == 0) {
+                    JSONObject objBalances = new JSONObject();
+                    objBalances.put("LYR", "0");
+                    objEntry.put("Balances", objBalances);
+                } else {
+                    JSONObject en = objRet.getJSONObject(objRet.length() - 1).getJSONObject("Balances");
+                    objEntry.put("Balances", en);
+                }
+                objRet.put(objEntry);
+                return objRet.toString();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return data;
+        }
+
         public HistoryEntry fromJson(String data) {
             try {
                 JSONObject obj = new JSONObject(data);
@@ -115,17 +153,16 @@ public class ApiRpcActionsHistory extends MainActivity {
 
     }
 
-    static public String getHistoryFileName(ApiRpc.Action ac) {
-        return Global.getWalletName() + "_" + ac.getAccName() + "_" + ac.getNetwork();
-    }
+    public static void store(ApiRpc.Action ac, String networkData, String insertedData) {
 
-    static public String getHistoryFileName() {
-        return Global.getWalletName() + "_" + Global.getSelectedAccountName() + "_" + Global.getCurrentNetworkName();
     }
-
     public static void store(ApiRpc.Action ac, String networkData) {
-        if(ac.getActionPurpose().equals(Global.str_api_rpc_purpose_history_disk_storage)) {
-            Pair<Integer, String> h = Global.getWalletHistory(getHistoryFileName(ac));
+        boolean isStore = false;
+        if(ac.getActionPurpose() != null) {
+            isStore = ac.getActionPurpose().equals(Global.str_api_rpc_purpose_history_disk_storage);
+        }
+        if(ac.getApi().equals("Send") || isStore) {
+            Pair<Integer, String> h = Global.getWalletHistory(Concatenate.getHistoryFileName(ac));
             if(networkData != null) {
                 if (h == null || h.second == null || h.second.length() != networkData.length()) {
                     // Run set history on another thread.
@@ -133,12 +170,12 @@ public class ApiRpcActionsHistory extends MainActivity {
                     timer.scheduleAtFixedRate(new TimerTask() {
                         public void run() {
                             timer.cancel();
-                            Global.setWalletHistory(getHistoryFileName(ac), networkData);
+                            Global.setWalletHistory(Concatenate.getHistoryFileName(ac), networkData);
                         }
                     }, 100, 100);
                 }
             }
-            String storedData = StorageHistory.read( getHistoryFileName(ac), Global.getWalletPassword());
+            String storedData = StorageHistory.read( Concatenate.getHistoryFileName(ac), Global.getWalletPassword());
             int countArrayStored = 0;
             if(storedData != null) {
                 try {
@@ -152,7 +189,7 @@ public class ApiRpcActionsHistory extends MainActivity {
                 if(networkData != null) {
                     JSONArray arrayNetwork = new JSONArray(networkData);
                     if(countArrayStored != arrayNetwork.length() || !networkData.equals(storedData)) {
-                        StorageHistory.save( getHistoryFileName(ac), networkData, Global.getWalletPassword());
+                        StorageHistory.save( Concatenate.getHistoryFileName(ac), networkData, Global.getWalletPassword());
                     }
                 }
             } catch (JSONException e) {
@@ -162,8 +199,8 @@ public class ApiRpcActionsHistory extends MainActivity {
     }
 
     public static String load(ApiRpc.Action ac) {
-        String h = StorageHistory.read( getHistoryFileName(ac), Global.getWalletPassword());
-        Global.setWalletHistory( getHistoryFileName(ac), h);
+        String h = StorageHistory.read( Concatenate.getHistoryFileName(ac), Global.getWalletPassword());
+        Global.setWalletHistory( Concatenate.getHistoryFileName(ac), h);
         return h;
     }
 
@@ -174,7 +211,7 @@ public class ApiRpcActionsHistory extends MainActivity {
     }
 
     public List<HistoryEntry> loadHistory(ApiRpc.Action ac) {
-        return loadHistory(StorageHistory.read( getHistoryFileName(ac), Global.getWalletPassword()));
+        return loadHistory(StorageHistory.read( Concatenate.getHistoryFileName(ac), Global.getWalletPassword()));
     }
 
     public static List<HistoryEntry> loadHistory(String data) {
@@ -182,7 +219,8 @@ public class ApiRpcActionsHistory extends MainActivity {
             return null;
         }
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getInstance().getBaseContext());
-        double lyraPriceInUsd = Double.parseDouble(preferences.getString(Global.keyCustomLyraPriceInUsd, String.valueOf(Global.getLyraPriceInUsd())));
+        /*double lyraPriceInUsd = Double.parseDouble(preferences.getString(Global.keyCustomLyraPriceInUsd,
+                String.valueOf(Global.getLyraPriceInUsd(new Pair<>("LYR", "USD")))));*/
         List<HistoryEntry> historyList = new ArrayList<HistoryEntry>();
         try {
             JSONArray arrObj = new JSONArray(data);
@@ -210,7 +248,7 @@ public class ApiRpcActionsHistory extends MainActivity {
 
     // Sample data for RecyclerView
     private List<FragmentAccount.AccountHistoryEntry> getData() {
-        Pair<Integer, String> historyAndCnt = Global.getWalletHistory(ApiRpcActionsHistory.getHistoryFileName());
+        Pair<Integer, String> historyAndCnt = Global.getWalletHistory(Concatenate.getHistoryFileName());
         return getData(historyAndCnt);
     }
     public static List<FragmentAccount.AccountHistoryEntry> getData(Pair<Integer, String> historyAndCnt) {

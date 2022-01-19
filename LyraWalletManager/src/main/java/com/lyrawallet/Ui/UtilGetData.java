@@ -4,6 +4,7 @@ import android.util.Pair;
 
 import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
 import com.lyrawallet.Global;
+import com.lyrawallet.Util.Concatenate;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,7 +17,7 @@ import java.util.List;
 public class UtilGetData {
     public static List<Pair<String, Double>> getAvailableTokenList() {
         List<Pair<String, Double>> balances = new ArrayList<>();
-        Pair<Integer, String> history = Global.getWalletHistory(ApiRpcActionsHistory.getHistoryFileName());
+        Pair<Integer, String> history = Global.getWalletHistory(Concatenate.getHistoryFileName());
         try {
             JSONArray arrayStored = new JSONArray(history.second);
             if(arrayStored.length() != 0) {
@@ -36,7 +37,7 @@ public class UtilGetData {
                     }
                 }
             }
-        } catch (JSONException e) {
+        } catch (JSONException | NullPointerException e) {
             e.printStackTrace();
         }
         return balances;

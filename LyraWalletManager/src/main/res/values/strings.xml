@@ -10,6 +10,7 @@
     <string name="network_fee">Network Fee</string>
     <string name="total_spent">Total Spent</string>
     <string name="Wallet">Wallet</string>
+    <string name="Ok">Ok</string>
 
     <string name="str_dialog_title" translatable="false">Unlock wallet</string>
     <string name="str_dialog_message" translatable="false">Enter wallet password</string>
@@ -17,6 +18,7 @@
     <string name="str_dialog_cancel">Cancel</string>
     <string name="str_dialog_more">More</string>
     <string name="str_dialog_send">Send</string>
+    <string name="str_dialog_receive">Receive</string>
     <string name="str_launcher_receive_button">RECEIVE</string>
     <string name="str_launcher_explorer_button">EXPLORER</string>
     <string name="str_launcher_new_account_button">NEW ACCOUNT</string>
@@ -53,7 +55,13 @@
     <string name="send_token_amount_to_send_hint">Amount</string>
     <string name="send_token_amount_to_send_max">MAX</string>
     <string name="send_token_send_next">Next…</string>
-    <string name="send_token_disponible">Disponible</string>
+    <string name="send_token_available">Available</string>
+    <string name="send_successful">Successfully send</string>
+    <string name="send_sending">Sending</string>
+
+    <string name="receive_account_address">Account address</string>
+    <string name="receive_scan_or_copy_address">Scan or copy address</string>
+    <string name="receive_scan_address_copied">Address cpoied</string>
 
     <string name="prefs_back_title"> </string>
     <string name="prefs_back_key" translatable="false">prefs_back</string>

@@ -20,10 +20,12 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.lyrawallet.Api.ApiRpc;
+import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
 import com.lyrawallet.Global;
 import com.lyrawallet.R;
 import com.lyrawallet.Storage.StorageBackUpWallet;
 import com.lyrawallet.Ui.FragmentManagerUser;
+import com.lyrawallet.Util.Concatenate;
 
 import org.bouncycastle.util.StringList;
 
@@ -80,15 +82,20 @@ public class FragmentMore extends Fragment {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if(view != null) {
                     if(Global.getSelectedAccountNr() != i) {
+                        Global.setSelectedAccountName(adapterView.getSelectedItem().toString());
+                        Global.setSelectedAccountNr(i);
+                        Global.setWalletName(Global.getWalletName());
                         activity.runOnUiThread(new Runnable() {
                             public void run() {
-                                new ApiRpc().act(new ApiRpc.Action().actionHistory(Global.str_api_rpc_purpose_history_disk_storage, Global.getCurrentNetworkName(), Global.getSelectedAccountName(), Global.getSelectedAccountId()));
+                                Global.setUnreceivedBalance(Concatenate.getHistoryFileName(),false);
+                                new ApiRpc().act(new ApiRpc.Action().actionBalance(Global.getSelectedAccountId()));
+                                if(Global.getWalletHistory(Concatenate.getHistoryFileName()) == null) {
+                                    new ApiRpc().act(new ApiRpc.Action().actionHistory(Global.str_api_rpc_purpose_history_disk_storage,
+                                            Global.getCurrentNetworkName(), Global.getSelectedAccountName(), Global.getSelectedAccountId()));
+                                }
                             }
                         });
                     }
-                    Global.setSelectedAccountName(adapterView.getSelectedItem().toString());
-                    Global.setSelectedAccountNr(i);
-                    Global.setWalletName(Global.getWalletName());
                     System.out.println(Global.getSelectedAccountName());
                 }
             }

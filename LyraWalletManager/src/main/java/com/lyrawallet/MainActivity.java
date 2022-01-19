@@ -189,6 +189,9 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         // If the view was restored, load the last visible page enum.
         if (savedInstanceState != null) {
             Global.setVisiblePage(Global.visiblePage.values()[savedInstanceState.getInt("SHOWN_WINDOW")]);
+        } else {
+            // Set initial price list.
+            Global.setTokenPrice(new Pair<String, String>("LYR", "USD"), 0.00025f);
         }
         // On first launch.
         if (Global.getVisiblePage() == null) {
@@ -248,20 +251,35 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         /*new WebHttps(this).execute("https://api.latoken.com/v2/ticker", "MainCallHttps1");
         new WebHttps(this).execute("https://api.latoken.com/v2/ticker", "MainCallHttps2");*/
 
-        // Call get history each 60 seconds.
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
+        // Call get history/het prices every 120 seconds.
+        Timer timerHistory = new Timer();
+        timerHistory.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                new NetworkWebHttps(getInstance()).execute("https://api.latoken.com/v2/ticker/LYR/USDT", "MainCallHttpsLyrUsdtPair");
+                if( Global.getSelectedAccountName().length() != 0) {
+                    runOnUiThread(new Runnable() {
+                        public void run() {
+                            new ApiRpc().act(new ApiRpc.Action().actionHistory(Global.str_api_rpc_purpose_history_disk_storage,
+                                    Global.getCurrentNetworkName(), Global.getSelectedAccountName(), Global.getSelectedAccountId()));
+                        }
+                    });
+                }
+            }
+        }, 1000, 120 * 1000);
+        Timer timerBalance = new Timer();
+        timerBalance.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 if( Global.getSelectedAccountName().length() != 0) {
                     runOnUiThread(new Runnable() {
                         public void run() {
-                            new ApiRpc().act(new ApiRpc.Action().actionHistory(Global.str_api_rpc_purpose_history_disk_storage, Global.getCurrentNetworkName(), Global.getSelectedAccountName(), Global.getSelectedAccountId()));
+                            new ApiRpc().act(new ApiRpc.Action().actionBalance(Global.getSelectedAccountId()));
                         }
                     });
                 }
             }
-        }, 1000, 60 * 1000);
+        }, 1000, 30 * 1000);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -277,6 +295,14 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
     public void onWebHttpsTaskDone(NetworkWebHttps instance) {
         // Dummy event catcher, for further implementation.
         System.out.println(instance.getInstanceName() + ": " + instance.getContent());
+        if(instance.getInstanceName().equals("MainCallHttpsLyrUsdtPair")) {
+            try {
+                JSONObject obj = new JSONObject(instance.getContent());
+                Global.setTokenPrice(new Pair<String, String>("LYR", "USD"), Double.parseDouble(obj.getString("lastPrice")));
+            } catch (JSONException | NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
     }
     @Override
     public void onConfigurationChanged(@NonNull Configuration newConfig) {

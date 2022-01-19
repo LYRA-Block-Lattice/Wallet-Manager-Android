@@ -5,12 +5,17 @@ import static com.lyrawallet.Api.ApiRpc.ProfitingType.NODE;
 import static com.lyrawallet.Api.ApiRpc.ProfitingType.ORACLE;
 import static com.lyrawallet.Api.ApiRpc.ProfitingType.YIELD;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.os.Handler;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Pair;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
@@ -18,7 +23,10 @@ import com.lyrawallet.Api.Network.NetworkRpc;
 import com.lyrawallet.Global;
 import com.lyrawallet.MainActivity;
 import com.lyrawallet.R;
+import com.lyrawallet.Storage.StorageHistory;
+import com.lyrawallet.Ui.FragmentManagerUser;
 import com.lyrawallet.Ui.UiHelpers;
+import com.lyrawallet.Util.Concatenate;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -724,6 +732,7 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
         return true;
     }
     private static MainActivity ParentInstance = null;
+    AlertDialog dialogWindow;
 
     public boolean act(Action action) {
         if(action.getApi().split("/").length == 0) {
@@ -748,26 +757,55 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
             default:
                 break;
         }
-        final EditText passEditText = new EditText(ParentInstance);
-        // Put EditText in password mode
-        passEditText.setInputType(InputType.TYPE_NUMBER_VARIATION_PASSWORD);
-        passEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
-        View v = new View(ParentInstance);
-        UiHelpers.showKeyboard(v.getRootView(), passEditText);
-        AlertDialog dialog = new AlertDialog.Builder(ParentInstance)
-                .setTitle(R.string.str_dialog_title)
-                .setMessage(R.string.str_dialog_message)
-                .setView(passEditText)
-                .setPositiveButton(R.string.str_dialog_accept, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String password = String.valueOf(passEditText.getText());
-                        actWithPwd(action, password);
-                    }
-                })
-                .setNegativeButton(R.string.str_dialog_cancel, null)
-                .create();
-        dialog.show();
+        if(Global.getWalletPassword().length() < Global.MinCharAllowedOnPassword) {
+            final EditText passEditText = new EditText(ParentInstance);
+            // Put EditText in password mode
+            passEditText.setInputType(InputType.TYPE_NUMBER_VARIATION_PASSWORD);
+            passEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+            View v = new View(ParentInstance);
+            UiHelpers.showKeyboard(v.getRootView(), passEditText);
+            AlertDialog dialog = new AlertDialog.Builder(ParentInstance)
+                    .setTitle(R.string.str_dialog_title)
+                    .setMessage(R.string.str_dialog_message)
+                    .setView(passEditText)
+                    .setPositiveButton(R.string.str_dialog_accept, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String password = String.valueOf(passEditText.getText());
+                            actWithPwd(action, password);
+                            dialogWindow = new AlertDialog.Builder(ParentInstance)
+                                    .setTitle(R.string.send_sending)
+                                    .setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                        }
+                                    })
+                                    .create();
+                            dialogWindow.show();
+                        }
+                    })
+                    .setNegativeButton(R.string.str_dialog_cancel, null)
+                    .create();
+            dialog.show();
+        } else {
+            actWithPwd(action, Global.getWalletPassword());
+            dialogWindow = new AlertDialog.Builder(ParentInstance)
+                    .setTitle(R.string.send_sending)
+                    .setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    })
+                    .create();
+            dialogWindow.show();
+        }
+
+        /*Pair<Integer, String> h = Global.getWalletHistory(Concatenate.getHistoryFileName());
+        if(h != null) {
+            String newH = ApiRpcActionsHistory.HistoryEntry.toJson( h.second, action.getAccountId(), action.getDestinationAccountId(),
+                    new Pair<String, Double>(action.getToken0(), Double.parseDouble(action.getAmount())));
+            ApiRpcActionsHistory.store(action, newH);
+        }*/
         return true;
     }
 
@@ -776,18 +814,83 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
         ApiRpc.Action ac = new ApiRpc.Action(output[1]);
         getInstance().runOnUiThread(new Runnable() {
             public void run() {
-                switch (output[0]) {
-                    case "History":
-                        ApiRpcActionsHistory.store(ac, output[2]);
+                if (output[0].equals("History")) {
+                    ApiRpcActionsHistory.store(ac, output[2]);
                         /*List<ApiRpcActionsHistory.HistoryEntry> historyList = new ApiRpcActionsHistory().loadHistory(ac);
                         if (historyList != null) {
                             Global.setWalletHistory(ac.getAccName(), historyList);
                         }*/
-                        break;
-                    case "Receive":
-                    case "Send":
-                        ReceiveResult = output[0] + "^" + output[1] + "^" + output[2];
-                        break;
+                } else if (output[0].equals("Send")) {
+                    ReceiveResult = output[0] + "^" + output[1] + "^" + output[2];
+                    Activity activity = getInstance();
+                    if(activity == null) {
+                        return;
+                    }
+                    EditText recipientAddressEditText = (EditText) activity.findViewById(R.id.send_token_recipient_address_value);
+                    EditText tokenAmountEditText = (EditText) activity.findViewById(R.id.send_token_amount_value);
+                    if(recipientAddressEditText != null && tokenAmountEditText != null) {
+                        try {
+                            //JSONObject objCmd = new JSONObject(output[1]);
+                            /*if (!objCmd.isNull("account_id") && !objCmd.isNull("destination_account_id")) */{
+                                // Filter to show the message for the currently selected account and selected destination.
+                                /*if (objCmd.getString("account_id").equals(Global.getSelectedAccountId()) &&
+                                        objCmd.getString("destination_account_id").equals(recipientAddressEditText.getText().toString()))*/ {
+                                    JSONObject objRsp = new JSONObject(output[2]);
+                                    if (!objRsp.isNull("txHash")) { // If thHash is present, the transaction is successfully send.
+                                        Spinner tokenSpinner = (Spinner) activity.findViewById(R.id.sendTokenSelectSpinner);
+                                        SpinnerAdapter adapter = tokenSpinner.getAdapter();
+                                        String tokenToSend = adapter.getItem(tokenSpinner.getSelectedItemPosition()).toString();
+                                        new Handler().postDelayed(new Runnable() {
+                                            public void run() {
+                                                getInstance().runOnUiThread(new Runnable() {
+                                                    public void run() {
+                                                        new ApiRpc().act(new ApiRpc.Action().actionHistory(Global.str_api_rpc_purpose_history_disk_storage,
+                                                                Global.getCurrentNetworkName(), Global.getSelectedAccountName(), Global.getSelectedAccountId()));
+                                                    }
+                                                });
+                                            }
+                                        }, 2000);
+                                        if(dialogWindow != null) {
+                                            dialogWindow.dismiss();
+                                        }
+                                        dialogWindow = new AlertDialog.Builder(ParentInstance)
+                                                .setTitle(R.string.send_successful)
+                                                .setMessage(String.format(Locale.US, "%s: %f %s\n%s: %s-%d (%s)\n%s: %s",
+                                                        activity.getString(R.string.send1), Double.parseDouble(tokenAmountEditText.getText().toString()), tokenToSend,
+                                                        activity.getString(R.string.from), activity.getString(R.string.Wallet), Global.getSelectedAccountNr() + 1, UiHelpers.getShortAccountId(Global.getSelectedAccountId(), 4),
+                                                        activity.getString(R.string.to), UiHelpers.getShortAccountId(recipientAddressEditText.getText().toString(), 7)))
+                                                .setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                    }
+                                                })
+                                                .create();
+                                        dialogWindow.show();
+                                        recipientAddressEditText.setText("");
+                                        tokenAmountEditText.setText("");
+                                        new FragmentManagerUser().goToAccount();
+                                    }
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+
+                    }
+                } else if(output[0].equals("Receive")) {
+
+                } else if(output[0].equals("Balance")) {
+                    try {
+                        JSONObject objCmd = new JSONObject(output[2]);
+                        if(!objCmd.isNull("unreceived")) {
+                            if (objCmd.getBoolean("unreceived")) {
+
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
                 ReceiveResult = output[0] + "^" + output[1] + "^" + output[2];
                 System.out.println(ReceiveResult);

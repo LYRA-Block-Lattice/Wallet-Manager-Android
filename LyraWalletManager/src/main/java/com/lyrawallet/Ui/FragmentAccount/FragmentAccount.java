@@ -1,10 +1,13 @@
 package com.lyrawallet.Ui.FragmentAccount;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
@@ -17,23 +20,29 @@ import com.google.android.material.snackbar.Snackbar;
 import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
 import com.lyrawallet.Global;
 import com.lyrawallet.R;
+import com.lyrawallet.Util.Concatenate;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView;
 
 public class FragmentAccount extends Fragment {
-
+    static FragmentAccount fInstance = null;
     Timer timer;
-
     List<AccountHistoryEntry> EntryList = new ArrayList<>();
     AccountHistoryGalleryAdapter adapter;
     private NestedScrollView nestedSV;
     private boolean refreshInProgress = false;
     int addCnt = 0;
+    static private Pair<Integer, String> history;
 
     public static class AccountHistoryEntry {
         int Height;
@@ -60,6 +69,7 @@ public class FragmentAccount extends Fragment {
 
     public FragmentAccount() {
         // Required empty public constructor
+        fInstance = this;
     }
 
     public static FragmentAccount newInstance() {
@@ -95,7 +105,7 @@ public class FragmentAccount extends Fragment {
                     refreshInProgress = false;
                     return;
                 }
-                List<AccountHistoryEntry> entryList = Global.getFragmentAccountHistory(ApiRpcActionsHistory.getHistoryFileName());
+                List<AccountHistoryEntry> entryList = Global.getFragmentAccountHistory(Concatenate.getHistoryFileName());
                 if (entryList == null || EntryList == null) {
                     refreshInProgress = false;
                     return;
@@ -130,6 +140,36 @@ public class FragmentAccount extends Fragment {
                 refreshInProgress = false;
                 if(progress != null) {
                     progress.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    public static void setAccountValue(View view) {
+        TextView accountValueLyr = (TextView) view.findViewById(R.id.accountValueLyr_textView);
+        TextView accountValueUsd = (TextView) view.findViewById(R.id.accountValueUsd_textView);
+        history = Global.getWalletHistory(Concatenate.getHistoryFileName());
+        if(history == null || fInstance == null)
+            return;
+        if(accountValueLyr == null || accountValueUsd == null || history.second == null)
+            return;
+        if(fInstance.getActivity() == null)
+            return;
+        fInstance.getActivity().runOnUiThread(new Runnable() {
+            public void run() {
+                try {
+                    JSONArray arr = new JSONArray(history.second);
+                    if (arr.length() == 0) {
+                        accountValueLyr.setText(String.format(Locale.US, "%d %s", 0, "LYR"));
+                        accountValueUsd.setText(String.format(Locale.US, "%d %s", 0, "USD"));
+                    } else {
+                        JSONObject obj = arr.getJSONObject(arr.length() - 1);
+                        double valueLyr = Double.parseDouble(obj.getJSONObject("Balances").getString("LYR"));
+                        accountValueLyr.setText(String.format(Locale.US, "%f %s", valueLyr, "LYR"));
+                        accountValueUsd.setText(String.format(Locale.US, "%.2f %s", valueLyr * Global.getTokenPrice(new Pair<>("LYR", "USD")), "USD"));
+                    }
+                } catch (JSONException | NumberFormatException e) {
+                    e.printStackTrace();
                 }
             }
         });
@@ -186,7 +226,8 @@ public class FragmentAccount extends Fragment {
         EntryList = new ArrayList<>();
         /*Snackbar.make(view, "account created", Snackbar.LENGTH_LONG)
                 .setAction("", null).show();*/
-        ApiRpcActionsHistory.load(ApiRpcActionsHistory.getHistoryFileName());
+        ApiRpcActionsHistory.load(Concatenate.getHistoryFileName());
+        setAccountValue(view);
         refreshInProgress = false;
         // Refresh recycler once every 5 seconds, first start after 700mS to avoid UI freezing..
         timer = new Timer();
@@ -198,16 +239,17 @@ public class FragmentAccount extends Fragment {
                     if (!refreshInProgress) {
                         refreshInProgress = true;
                         populateHistory(view, savedInstanceState);
+                        setAccountValue(view);
                     }
                 }
             }
         }, 700, 5000);
 
-        /*new Handler().postDelayed(new Runnable() {
+        new Handler().postDelayed(new Runnable() {
             public void run() {
-                ApiRpcActionsHistory.load(ApiRpcActionsHistory.getHistoryFileName());
+                ApiRpcActionsHistory.load(Concatenate.getHistoryFileName());
             }
-        }, 700);*/
+        }, 700);
     }
 
     @Override
