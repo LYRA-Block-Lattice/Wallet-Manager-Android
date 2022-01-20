@@ -69,8 +69,8 @@ public class FragmentSend extends Fragment {
         if(tokenNames == null)
             return null;
         for (int i = 0; i < tokenNames.size(); i++) {
-            int icon = Global.TokenIconList[0].second;
-            for (Pair<String, Integer> k: Global.TokenIconList) {
+            int icon = GlobalLyra.TokenIconList[0].second;
+            for (Pair<String, Integer> k: GlobalLyra.TokenIconList) {
                 if(k.first.equals(tokenNames.get(i))) {
                     icon = k.second;
                     break;
@@ -175,6 +175,13 @@ public class FragmentSend extends Fragment {
                 @Override
                 public void onTextChanged(CharSequence s, int start,
                                           int before, int count) {
+                    if(s.length() > 0) {
+                        try {
+                            Double.parseDouble(s.toString());
+                        } catch (NumberFormatException e) {
+                            tokenAmountEditText.setText(s.subSequence(0, before - 1));
+                        }
+                    }
                     checkSend();
                 }
             });
@@ -255,7 +262,7 @@ public class FragmentSend extends Fragment {
                         return;
                     }
                     UiHelpers.closeKeyboard(view);
-                    final AlertDialog.Builder alert = new AlertDialog.Builder(activity,R.style.SendDialogTheme);
+                    final AlertDialog.Builder alert = new AlertDialog.Builder(activity,R.style.GeneralDialogTheme);
                     View mView = getLayoutInflater().inflate(R.layout.dialog_send,null);
                     alert.setView(mView);
                     final AlertDialog alertDialog = alert.create();

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Confirm action"
+        android:text="@string/Confirm_action"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -53,7 +53,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:gravity="start|center_vertical"
-                android:text="@string/send1"
+                android:text="@string/Send1"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -76,7 +76,7 @@
                 android:layout_height="32dp"
                 android:layout_marginStart="16dp"
                 android:gravity="start|center_vertical"
-                android:text="@string/from"
+                android:text="@string/From"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/dialog_send_text" />
@@ -98,7 +98,7 @@
                 android:layout_height="32dp"
                 android:layout_marginStart="16dp"
                 android:gravity="start|center_vertical"
-                android:text="@string/to"
+                android:text="@string/To"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/dialog_send_from_text" />
@@ -120,7 +120,7 @@
                 android:layout_height="32dp"
                 android:layout_marginStart="16dp"
                 android:gravity="start|center_vertical"
-                android:text="@string/network_fee"
+                android:text="@string/NetworkFee"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/dialog_send_to_text" />
@@ -142,7 +142,7 @@
                 android:layout_height="32dp"
                 android:layout_marginStart="16dp"
                 android:gravity="start|center_vertical"
-                android:text="@string/total_spent"
+                android:text="@string/TotalSpent"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/dialog_send_network_fee_text" />
@@ -179,7 +179,7 @@
         android:backgroundTintMode="add"
         android:insetTop="0dp"
         android:insetBottom="0dp"
-        android:text="@string/send2"
+        android:text="@string/Send2"
         android:textAllCaps="true"
         app:cornerRadius="@dimen/button_round_corner"
         app:layout_constraintEnd_toEndOf="parent"

@@ -77,6 +77,9 @@ public class FragmentAccount extends Fragment {
     }
 
     private boolean addMoreEntrys() {
+        return addMoreEntrys(50);
+    }
+    private boolean addMoreEntrys(int entryNr) {
         if (addCnt < EntryList.size()) {
             if(addCnt <  EntryList.size() - 50) {
                 adapter.addDataSet(EntryList.subList(addCnt, addCnt + 50));

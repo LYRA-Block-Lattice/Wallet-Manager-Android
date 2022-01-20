@@ -27,6 +27,7 @@ public class Global {
         RECEIVE,
         SEND,
         SETTINGS,
+        DIALOG_RECEIVE
     }
 
     // Global constants
@@ -38,13 +39,6 @@ public class Global {
     public final static int MinCharAllowedOnPassword = 8;
     public final static int MinCharAllowedOnWalletName = 2;
     public final static int MaxRpcConnectRetry = 5;
-    public final static Pair<String, Integer>[] TokenIconList = new Pair[]{
-            new Pair<>("UNKNOWN", ic_unknown_foreground),
-            new Pair<>("LYR", ic_lyra_foreground),
-            new Pair<>("$ETH", ic_eth_foreground),
-            new Pair<>("$USDC", ic_usdc_foreground),
-            new Pair<>("$USDT", ic_usdt_foreground),
-    };
     // Preference key names
     public final static String keyCustomLyraPriceInUsd = "lyra_price_in_usd";
 
@@ -67,6 +61,7 @@ public class Global {
     private static List<Pair<String, Boolean>>  UnreceivedBalance = null;
     private static String WalletPath = "";
     private static int InactivityTimeForClose = -1;
+    private static boolean PasswordSaveAllowed = false;
     private static String WalletPassword = "";
 
     private static List<Pair<Double, Pair<String, String>>> TokenPrice = null;
@@ -324,6 +319,13 @@ public class Global {
     }
     public static int getInactivityTimeForClose() {
         return InactivityTimeForClose;
+    }
+
+    public static void setPasswordSaveAllowed(boolean allowed) {
+        PasswordSaveAllowed = allowed;
+    }
+    public static boolean getPasswordSaveAllowed() {
+        return PasswordSaveAllowed;
     }
 
     public static void setWalletPassword( String pass) {

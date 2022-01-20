@@ -3,22 +3,27 @@
 
     <string name="charset" translatable="false">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
 
-    <string name="send1">Send</string>
-    <string name="send2">Send</string>
-    <string name="from">From</string>
-    <string name="to">To</string>
-    <string name="network_fee">Network Fee</string>
-    <string name="total_spent">Total Spent</string>
+    <string name="Send1">Send</string>
+    <string name="Send2">Send</string>
+    <string name="From">From</string>
+    <string name="To">To</string>
+    <string name="NetworkFee">Network Fee</string>
+    <string name="TotalSpent">Total Spent</string>
     <string name="Wallet">Wallet</string>
     <string name="Ok">Ok</string>
+    <string name="Accept">Accept</string>
+    <string name="Cancel">Cancel</string>
+    <string name="More">More</string>
+    <string name="Send">Send</string>
+    <string name="Receive">Receive</string>
+    <string name="Request">Request</string>
+    <string name="Confirm_action">Confirm action</string>
+    <string name="Request_token">Request token</string>
 
     <string name="str_dialog_title" translatable="false">Unlock wallet</string>
     <string name="str_dialog_message" translatable="false">Enter wallet password</string>
-    <string name="str_dialog_accept">Accept</string>
-    <string name="str_dialog_cancel">Cancel</string>
-    <string name="str_dialog_more">More</string>
-    <string name="str_dialog_send">Send</string>
-    <string name="str_dialog_receive">Receive</string>
+
+
     <string name="str_launcher_receive_button">RECEIVE</string>
     <string name="str_launcher_explorer_button">EXPLORER</string>
     <string name="str_launcher_new_account_button">NEW ACCOUNT</string>
@@ -51,7 +56,7 @@
     <string name="main_activity_token_not_found_in_current_account">Token not found in current account</string>
 
     <string name="send_token_select_spinner_description">Select token</string>
-    <string name="send_token_recipient_address_hint">Recipient address...</string>
+    <string name="send_token_recipient_address_hint">Recipient address…</string>
     <string name="send_token_amount_to_send_hint">Amount</string>
     <string name="send_token_amount_to_send_max">MAX</string>
     <string name="send_token_send_next">Next…</string>
@@ -61,7 +66,7 @@
 
     <string name="receive_account_address">Account address</string>
     <string name="receive_scan_or_copy_address">Scan or copy address</string>
-    <string name="receive_scan_address_copied">Address cpoied</string>
+    <string name="receive_scan_address_copied">Address copied</string>
 
     <string name="prefs_back_title"> </string>
     <string name="prefs_back_key" translatable="false">prefs_back</string>
@@ -100,6 +105,16 @@
         <item>10 Minutes</item>
         <item>30 Minutes</item>
         <item>1 Hour</item>
+    </string-array>
+
+    <!-- Password store selection -->
+    <string name="pref_password_store_selection_title">Select if password will be saved for further transaction signature</string>
+    <string name="pref_password_store_selection_summary">Select if current wallet instance will store the wallet password to automatically use it when a transaction is sent</string>
+    <string name="pref_password_store_selection_key" translatable="false">pref_password_store_selection_key</string>
+    <!-- Wallet password store selection -->
+    <string-array name="pref_password_store_selection_entries">
+        <item>I am an paranoid and I never store the wallet password</item>
+        <item>I am so lazy that I don\'t want to write the password every time a transaction is sent</item>
     </string-array>
     <!-- Other -->
     <string name="pref_description_title">Version</string>

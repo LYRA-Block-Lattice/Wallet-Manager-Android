@@ -7,6 +7,7 @@ import androidx.preference.PreferenceManager;
 
 import com.lyrawallet.Api.ApiRpc;
 import com.lyrawallet.Global;
+import com.lyrawallet.GlobalLyra;
 import com.lyrawallet.MainActivity;
 import com.lyrawallet.R;
 import com.lyrawallet.Storage.StorageHistory;
@@ -270,8 +271,8 @@ public class ApiRpcActionsHistory extends MainActivity {
             } else  {
                 tokenAmount = historyList.get(i).getChanges().get(0);
             }
-            int icon = Global.TokenIconList[0].second;
-            for (Pair<String, Integer> k: Global.TokenIconList) {
+            int icon = GlobalLyra.TokenIconList[0].second;
+            for (Pair<String, Integer> k: GlobalLyra.TokenIconList) {
                 if(k.first.equals(tokenAmount.first)) {
                     icon = k.second;
                     break;

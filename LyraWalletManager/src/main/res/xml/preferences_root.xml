@@ -34,6 +34,16 @@
             android:title="@string/pref_auto_close_selection_title"
             android:icon="@drawable/ic_baseline_exit_to_app_24"/>
 
+        <ListPreference
+            android:defaultValue="N"
+            android:dialogTitle="@string/pref_password_store_selection_title"
+            android:entries="@array/pref_password_store_selection_entries"
+            android:entryValues="@array/pref_password_store_selection_values"
+            android:key="@string/pref_password_store_selection_key"
+            android:summary="@string/pref_password_store_selection_summary"
+            android:title="@string/pref_password_store_selection_title"
+            android:icon="@drawable/ic_outline_save_24"/>
+
         <!-- <SwitchPreference
             android:defaultValue="false"
             android:key="@string/pref_dummy_switch_key"

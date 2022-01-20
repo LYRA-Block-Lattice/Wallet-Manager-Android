@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="SendDialogTheme" parent="android:Theme.DeviceDefault.Dialog.NoActionBar">
+    <style name="GeneralDialogTheme" parent="android:Theme.DeviceDefault.Dialog.NoActionBar">
 
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">fill_parent</item>

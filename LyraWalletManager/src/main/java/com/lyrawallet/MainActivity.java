@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
     private static MainActivity Instance = null;
     private static String ImportWalletName = null;
     private Handler UserInputTimeoutHandler;
-    private Boolean PushToBackStack = true;
+    private static Boolean PushToBackStack = true;
     protected static MainActivity getInstance() {
         return Instance;
     }
@@ -120,6 +120,9 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                 break;
             case SETTINGS:
                 new FragmentManagerUser().goToPreferences();
+                break;
+            case DIALOG_RECEIVE:
+                new FragmentManagerUser().goToDialogReceive();
                 break;
             default:
                 new FragmentManagerUser().goToOpenWallet();
@@ -323,31 +326,36 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         }
         return null;
     }
+
+    public static void goBack() {
+        FragmentManager fragmentManager = getInstance().getSupportFragmentManager();
+        if (fragmentManager.getBackStackEntryCount() > 1) {
+            fragmentManager.popBackStack();
+            FragmentManager.BackStackEntry entry =  fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 2);
+            CurvedBottomNavigationView bottomNavigationView = getInstance().findViewById(R.id.bottomNavigationView);
+            Global.setVisiblePage(Global.visiblePage.values()[Integer.parseInt(Objects.requireNonNull(entry.getName()))]);
+            if (Global.getVisiblePage().ordinal() < Global.visiblePage.OPEN_WALLET.ordinal()) {
+                // If not visible, we will return to the same position, select event will not be triggered, so we need to let "PushToBackStack" ad true;
+                if(bottomNavigationView.getVisibility() == View.VISIBLE) {
+                    PushToBackStack = false;
+                }
+                bottomNavigationView.onMenuItemClick(Global.getVisiblePage().ordinal());
+            } else {
+                bottomNavigationView.setVisibility(View.GONE);
+            }
+        } else {
+            getInstance().finish();
+            System.exit(0);
+        }
+    }
+
     @Override
     public boolean onKeyDown(int key_code, KeyEvent key_event) {
         if (key_code== KeyEvent.KEYCODE_BACK) {
             // Prevent back key to take effect, implemented for further development.
             super.onKeyDown(key_code, key_event);
-            FragmentManager fragmentManager = this.getSupportFragmentManager();
-            if (fragmentManager.getBackStackEntryCount() > 1) {
-                fragmentManager.popBackStack();
-                FragmentManager.BackStackEntry entry =  fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 2);
-                CurvedBottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
-                Global.setVisiblePage(Global.visiblePage.values()[Integer.parseInt(Objects.requireNonNull(entry.getName()))]);
-                if (Global.getVisiblePage().ordinal() < Global.visiblePage.OPEN_WALLET.ordinal()) {
-                    // If not visible, we will return to the same position, select event will not be triggered, so we need to let "PushToBackStack" ad true;
-                    if(bottomNavigationView.getVisibility() == View.VISIBLE) {
-                        PushToBackStack = false;
-                    }
-                    bottomNavigationView.onMenuItemClick(Global.getVisiblePage().ordinal());
-                } else {
-                    bottomNavigationView.setVisibility(View.GONE);
-                }
-            } else {
-                finish();
-                System.exit(0);
-            }
-        }
+            goBack();
+       }
         return false;
     }
     @Override
@@ -438,7 +446,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                                     }
                                     double amount = 0f;
                                     if(!obj.isNull("amount")) {
-                                        amount = obj.getDouble("amount");
+                                        amount = Double.parseDouble(obj.getString("amount"));
                                     }
                                     if(!obj.isNull("ticker")) {
                                         String ticker = obj.getString("ticker");
@@ -480,7 +488,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                                             System.out.println(adapter);
                                         }
                                     }
-                                } catch (JSONException e) {
+                                } catch (JSONException | NumberFormatException e) {
                                     e.printStackTrace();
                                     if (CryptoSignatures.validateAccountId(result.getContents())) {
                                         recipientAddressEditText.setText(result.getContents());

@@ -1,5 +1,13 @@
 package com.lyrawallet;
 
+import static com.lyrawallet.R.mipmap.ic_eth_foreground;
+import static com.lyrawallet.R.mipmap.ic_lyra_foreground;
+import static com.lyrawallet.R.mipmap.ic_unknown_foreground;
+import static com.lyrawallet.R.mipmap.ic_usdc_foreground;
+import static com.lyrawallet.R.mipmap.ic_usdt_foreground;
+
+import android.util.Pair;
+
 public class GlobalLyra {
     public static final int LYRA_CHECKSUM_SIZE_IN_BYTES        = 4;
     public static final char ADDRESSPREFIX                     = 'L';
@@ -8,4 +16,11 @@ public class GlobalLyra {
     public static final String BREAKING_STAKE_CONTRACT_FEE     = "0.8";
     public static final String SYMBOL_FOR_TETHERED_TOKEN       = "$";
 
+    public final static Pair<String, Integer>[] TokenIconList = new Pair[]{
+            new Pair<>("UNKNOWN", ic_unknown_foreground),
+            new Pair<>("LYR", ic_lyra_foreground),
+            new Pair<>("$ETH", ic_eth_foreground),
+            new Pair<>("$USDC", ic_usdc_foreground),
+            new Pair<>("$USDT", ic_usdt_foreground),
+    };
 }

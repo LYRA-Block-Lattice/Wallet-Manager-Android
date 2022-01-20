@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.view.MotionEvent;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -19,6 +21,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.lyrawallet.Crypto.CryptoSignatures;
 import com.lyrawallet.MainActivity;
+import com.lyrawallet.R;
 
 import java.util.Locale;
 
@@ -70,7 +73,7 @@ public class UiHelpers {
         return String.format(Locale.US, "%s...%s", id.substring(0, len), id.substring(id.length() - 1 - len));
     }
 
-    public static Bitmap textToImageEncode(String Value, ImageView qrImageView) throws WriterException {
+    public static Bitmap textToQrEncode(String Value, ImageView qrImageView) throws WriterException {
         BitMatrix bitMatrix;
         try {
             bitMatrix = new MultiFormatWriter().encode(
@@ -99,8 +102,9 @@ public class UiHelpers {
                         y * rectangleSize + rectangleSize, p);
             }
         }
-        qrImageView.setImageBitmap(bitmap);
-        qrImageView.draw(canvas);
+        qrImageView.setImageDrawable(new BitmapDrawable(bitmap));
+        //qrImageView.setImageBitmap(bitmap);
+        //qrImageView.draw(canvas);
         return bitmap;
     }
 }

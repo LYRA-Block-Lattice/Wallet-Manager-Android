@@ -23,7 +23,7 @@
                 android:layout_height="75dp"
                 android:layout_gravity="start|center_vertical"
                 android:background="@drawable/fab_dashboard_header_color"
-                android:text="@string/str_dialog_more"
+                android:text="@string/More"
                 android:gravity="center"
                 android:textAlignment="textStart"
                 android:textColor="@color/page_foreground"
@@ -41,7 +41,7 @@
                 android:minHeight="48dp"
                 android:paddingStart="40dp"
                 android:paddingEnd="40dp"
-                android:popupBackground="@drawable/fab_spinner_account_select_outline"
+                android:popupBackground="@drawable/fab_spinner_send_token_select_outline"
                 android:prompt="@string/str_spinner_account_select_hint"
                 android:spinnerMode="dropdown"
                 tools:ignore="SpeakableTextPresentCheck" />

@@ -7,12 +7,8 @@ import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Pair;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Spinner;
 
-import com.lyrawallet.Api.ApiRpc;
 import com.lyrawallet.Crypto.CryptoSignatures;
 import com.lyrawallet.Global;
 import com.lyrawallet.MainActivity;
@@ -121,13 +117,13 @@ public class Accounts {
                 .setTitle(R.string.str_dialog_title)
                 .setMessage(R.string.str_dialog_message)
                 .setView(passEditText)
-                .setPositiveButton(R.string.str_dialog_accept, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.Accept, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Password = String.valueOf(passEditText.getText());
                     }
                 })
-                .setNegativeButton(R.string.str_dialog_cancel, new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.Cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Password = "";

@@ -27,5 +27,10 @@
         <item>30</item>
         <item>60</item>
     </string-array>
+    <!-- Wallet store password selection -->
+    <string-array name="pref_password_store_selection_values">
+        <item>N</item>
+        <item>Y</item>
+    </string-array>
 
 </resources>

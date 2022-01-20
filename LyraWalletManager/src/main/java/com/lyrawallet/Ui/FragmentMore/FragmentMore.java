@@ -63,7 +63,7 @@ public class FragmentMore extends Fragment {
                 accNameList.add(acc.first);
             }
             if(accNameList.size() != 0) {
-                Global.setSelectedAccountName(accNameList.get(0));
+                Global.setSelectedAccountName(accNameList.get(Global.getSelectedAccountNr()));
             }
         }
         Spinner accountsSpinner = activity.findViewById(R.id.accountSpinner);

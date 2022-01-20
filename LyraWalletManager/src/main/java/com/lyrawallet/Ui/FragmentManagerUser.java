@@ -13,6 +13,7 @@ import com.lyrawallet.Ui.FragmentDex.FragmentDex;
 import com.lyrawallet.Ui.FragmentMore.FragmentMore;
 import com.lyrawallet.Ui.FragmentPreferences.FragmentPreferencesRoot;
 import com.lyrawallet.Ui.FragmentReceive.FragmentReceive;
+import com.lyrawallet.Ui.FragmentReceive.FragmentReceiveDialog;
 import com.lyrawallet.Ui.FragmentSend.FragmentSend;
 import com.lyrawallet.Ui.FragmentStaking.FragmentStaking;
 import com.lyrawallet.Ui.FragmentSwap.FragmentSwap;
@@ -214,6 +215,19 @@ public class FragmentManagerUser extends MainActivity {
                     .setReorderingAllowed(true)
                     .addToBackStack(String.valueOf(Global.visiblePage.SETTINGS.ordinal()))
                     .replace(R.id.nav_host_fragment_content_main, new FragmentPreferencesRoot(), "SETTINGS")
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .commit();
+        }
+    }
+
+    public void goToDialogReceive() {
+        Global.setVisiblePage(Global.visiblePage.DIALOG_RECEIVE);
+        if(getCurrentFragment() != Global.visiblePage.DIALOG_RECEIVE.ordinal()) {
+            getInstance().getSupportFragmentManager()
+                    .beginTransaction()
+                    .setReorderingAllowed(true)
+                    .addToBackStack(String.valueOf(Global.visiblePage.DIALOG_RECEIVE.ordinal()))
+                    .replace(R.id.nav_host_fragment_content_main, new FragmentReceiveDialog(), "DIALOG_RECEIVE")
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .commit();
         }

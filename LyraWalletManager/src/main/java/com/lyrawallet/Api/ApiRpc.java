@@ -11,27 +11,22 @@ import android.content.DialogInterface;
 import android.os.Handler;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Pair;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
 import com.lyrawallet.Api.Network.NetworkRpc;
 import com.lyrawallet.Global;
 import com.lyrawallet.MainActivity;
 import com.lyrawallet.R;
-import com.lyrawallet.Storage.StorageHistory;
 import com.lyrawallet.Ui.FragmentManagerUser;
 import com.lyrawallet.Ui.UiHelpers;
-import com.lyrawallet.Util.Concatenate;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.List;
 import java.util.Locale;
 
 public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
@@ -496,6 +491,10 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
             AccountId = accountId;
             return this;
         }
+        public Action actionReceive(String actionPurpose, String accountId) {
+            ActionPurpose = actionPurpose;
+            return actionReceive(accountId);
+        }
         public Action actionReceive(String accountId) {
             if(Api == null) {
                 Api = "Receive";
@@ -516,6 +515,10 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
             Token0 = token;
             DestinationAccountId = destinationId;
             return this;
+        }
+        public Action actionBalance(String actionPurpose, String accountId) {
+            ActionPurpose = actionPurpose;
+            return actionBalance(accountId);
         }
         public Action actionBalance(String accountId) {
             if(Api == null) {
@@ -768,36 +771,40 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                     .setTitle(R.string.str_dialog_title)
                     .setMessage(R.string.str_dialog_message)
                     .setView(passEditText)
-                    .setPositiveButton(R.string.str_dialog_accept, new DialogInterface.OnClickListener() {
+                    .setPositiveButton(R.string.Accept, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             String password = String.valueOf(passEditText.getText());
                             actWithPwd(action, password);
-                            dialogWindow = new AlertDialog.Builder(ParentInstance)
-                                    .setTitle(R.string.send_sending)
-                                    .setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                        }
-                                    })
-                                    .create();
-                            dialogWindow.show();
+                            if(action.getActionPurpose() == null || !action.getActionPurpose().equals("Receive")) {
+                                dialogWindow = new AlertDialog.Builder(ParentInstance)
+                                        .setTitle(R.string.send_sending)
+                                        .setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                            }
+                                        })
+                                        .create();
+                                dialogWindow.show();
+                            }
                         }
                     })
-                    .setNegativeButton(R.string.str_dialog_cancel, null)
+                    .setNegativeButton(R.string.Cancel, null)
                     .create();
             dialog.show();
         } else {
             actWithPwd(action, Global.getWalletPassword());
-            dialogWindow = new AlertDialog.Builder(ParentInstance)
-                    .setTitle(R.string.send_sending)
-                    .setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    })
-                    .create();
-            dialogWindow.show();
+            if(action.getActionPurpose() == null || !action.getActionPurpose().equals("Receive")) {
+                dialogWindow = new AlertDialog.Builder(ParentInstance)
+                        .setTitle(R.string.send_sending)
+                        .setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            }
+                        })
+                        .create();
+                dialogWindow.show();
+            }
         }
 
         /*Pair<Integer, String> h = Global.getWalletHistory(Concatenate.getHistoryFileName());
@@ -856,9 +863,9 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                                         dialogWindow = new AlertDialog.Builder(ParentInstance)
                                                 .setTitle(R.string.send_successful)
                                                 .setMessage(String.format(Locale.US, "%s: %f %s\n%s: %s-%d (%s)\n%s: %s",
-                                                        activity.getString(R.string.send1), Double.parseDouble(tokenAmountEditText.getText().toString()), tokenToSend,
-                                                        activity.getString(R.string.from), activity.getString(R.string.Wallet), Global.getSelectedAccountNr() + 1, UiHelpers.getShortAccountId(Global.getSelectedAccountId(), 4),
-                                                        activity.getString(R.string.to), UiHelpers.getShortAccountId(recipientAddressEditText.getText().toString(), 7)))
+                                                        activity.getString(R.string.Send1), Double.parseDouble(tokenAmountEditText.getText().toString()), tokenToSend,
+                                                        activity.getString(R.string.From), activity.getString(R.string.Wallet), Global.getSelectedAccountNr() + 1, UiHelpers.getShortAccountId(Global.getSelectedAccountId(), 4),
+                                                        activity.getString(R.string.To), UiHelpers.getShortAccountId(recipientAddressEditText.getText().toString(), 7)))
                                                 .setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
                                                     @Override
                                                     public void onClick(DialogInterface dialog, int which) {
@@ -879,13 +886,28 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
 
                     }
                 } else if(output[0].equals("Receive")) {
-
+                    new Handler().postDelayed(new Runnable() {
+                        public void run() {
+                            getInstance().runOnUiThread(new Runnable() {
+                                public void run() {
+                                    new ApiRpc().act(new ApiRpc.Action().actionHistory(Global.str_api_rpc_purpose_history_disk_storage,
+                                            Global.getCurrentNetworkName(), Global.getSelectedAccountName(), Global.getSelectedAccountId()));
+                                }
+                            });
+                        }
+                    }, 2000);
                 } else if(output[0].equals("Balance")) {
                     try {
                         JSONObject objCmd = new JSONObject(output[2]);
                         if(!objCmd.isNull("unreceived")) {
                             if (objCmd.getBoolean("unreceived")) {
-
+                                if(ac.getActionPurpose() != null) {
+                                    if (ac.getActionPurpose().equals("Receive")) {
+                                        new ApiRpc().act(new ApiRpc.Action().actionReceive("Receive", Global.getSelectedAccountId()));
+                                    }
+                                } else if(Global.getWalletPassword().length() >= Global.MinCharAllowedOnPassword) {
+                                    new ApiRpc().act(new ApiRpc.Action().actionReceive("Receive", Global.getSelectedAccountId()));
+                                }
                             }
                         }
                     } catch (JSONException e) {

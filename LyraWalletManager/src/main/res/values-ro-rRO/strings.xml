@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="str_dialog_accept">Accept</string>
-    <string name="str_dialog_cancel">Refuz</string>
+    <string name="Accept">Accept</string>
+    <string name="Cancel">Refuz</string>
     <string name="prompt_wallet_name">Nume portofel</string>
     <string name="prompt_type_wallet_name">Scrie numele portofelului</string>
     <string name="prompt_type_account_name">Scrie numele contului</string>
@@ -54,28 +54,39 @@
     <string name="str_launcher_about_us_button">Despre Noi</string>
     <string name="str_launcher_new_account_button">CONT NOU</string>
     <string name="str_launcher_backup_wallet_button">SALVEAZĂ PORTOFEL</string>
-    <string name="str_dialog_more">Mai multe</string>
-    <string name="str_dialog_send">Trimite</string>
+    <string name="More">Mai multe</string>
+    <string name="Send">Trimite</string>
     <string name="send_token_select_spinner_description">Selecteaza token</string>
-    <string name="send_token_recipient_address_hint">Adresa destinatarului...</string>
+    <string name="send_token_recipient_address_hint">Adresa destinatarului…</string>
     <string name="send_token_amount_to_send_hint">Cantitate</string>
     <string name="send_token_amount_to_send_max">MAX</string>
     <string name="send_token_send_next">Mai departe…</string>
     <string name="send_token_available">Disponibil</string>
     <string name="main_activity_not_enough_tokens_into_account">Nu sunt destui tokeni in cont</string>
     <string name="main_activity_token_not_found_in_current_account">Tokenul cerut nu exista in acest cont</string>
-    <string name="send1">De trimis</string>
-    <string name="send2">Trimite</string>
-    <string name="from">De la</string>
-    <string name="to">Catre</string>
-    <string name="network_fee">Cost trimitere</string>
-    <string name="total_spent">Total cheltuit</string>
+    <string name="Send1">De trimis</string>
+    <string name="Send2">Trimite</string>
+    <string name="From">De la</string>
+    <string name="To">Catre</string>
+    <string name="NetworkFee">Cost trimitere</string>
+    <string name="TotalSpent">Total cheltuit</string>
     <string name="Wallet">Portofel</string>
     <string name="send_successful">Trimis cu success</string>
     <string name="Ok">Bine</string>
     <string name="send_sending">Trimit</string>
-    <string name="str_dialog_receive">Primeste</string>
+    <string name="Receive">Primeste</string>
     <string name="receive_account_address">Adresa contului</string>
     <string name="receive_scan_or_copy_address">Scaneaza sau copiaza adresa</string>
     <string name="receive_scan_address_copied">Adresa copiata</string>
+    <string name="Request">Cere</string>
+    <string name="Confirm_action">Confirma actiunea</string>
+    <string name="Request_token">Cere token</string>
+    <string name="pref_password_store_selection_title">Selecteaza daca parola va fi salvata pentru a semna viitoarele tranzactii</string>
+    <string name="pref_password_store_selection_summary">Selecteaza daca parola portofelului va fi salvata pentru a fi folosita pentru semnarea viitoarelor tranzactii in mod automat</string>
+    <!-- Wallet password store selection -->
+    <string-array name="pref_password_store_selection_entries">
+        <item>Sunt un paranoid si nici o data nu am sa salvez parola in aplicatie</item>
+        <item>Sunt asa de lenes si nu vreau sa scriu parola de cate ori am nevoie sa trimit o tranzactie</item>
+    </string-array>
+
 </resources>

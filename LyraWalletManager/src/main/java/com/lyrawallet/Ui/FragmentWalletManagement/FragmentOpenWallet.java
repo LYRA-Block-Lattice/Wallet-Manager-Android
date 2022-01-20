@@ -62,6 +62,9 @@ public class FragmentOpenWallet extends Fragment {
                     walletNameEditText.setText("");
                     new FragmentManagerUser().goToNewAccount();
                 } else {
+                    if(Global.getPasswordSaveAllowed()) {
+                        Global.setWalletPassword(passwordEditText.getText().toString());
+                    }
                     passwordEditText.setText("");
                     walletNameEditText.setText("");
                     UiHelpers.closeKeyboard(view);
