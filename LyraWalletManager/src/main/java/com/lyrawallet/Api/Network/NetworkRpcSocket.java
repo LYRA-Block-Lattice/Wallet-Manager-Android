@@ -64,6 +64,7 @@ public class NetworkRpcSocket {
                         callBack.onRpcSocketTaskDone(thisInstance);
                     }
                 }
+                this.close();
             }
             @OnMessage
             public void onMessage(ByteBuffer bytes) {
@@ -76,6 +77,7 @@ public class NetworkRpcSocket {
                         callBack.onRpcSocketTaskDone(thisInstance);
                     }
                 }
+                this.close();
             }
             @OnClose
             public void onClose(int i, String s, boolean b) {
@@ -85,6 +87,7 @@ public class NetworkRpcSocket {
                 }
                 System.out.println("WEB_SOCKET: CONNECTION CLOSED.");
                 connected = false;
+                this.close();
             }
             @OnError
             public void onError(Exception e) {
@@ -93,6 +96,7 @@ public class NetworkRpcSocket {
                     mWebSocketClient = null;
                 }
                 System.out.println("WEB_SOCKET: ERROR: " + e.getMessage());
+                this.close();
             }
         };
         NetworkUnsecuredSSLSocketFactory factory = new NetworkUnsecuredSSLSocketFactory();

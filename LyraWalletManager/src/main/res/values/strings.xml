@@ -109,7 +109,7 @@
 
     <!-- Password store selection -->
     <string name="pref_password_store_selection_title">Select if password will be saved for further transaction signature</string>
-    <string name="pref_password_store_selection_summary">Select if current wallet instance will store the wallet password to automatically use it when a transaction is sent</string>
+    <string name="pref_password_store_selection_summary">Select if current wallet instance will store the wallet password to automatically use it when a transaction is sent, in order for the change to take effect you need to restart the application.</string>
     <string name="pref_password_store_selection_key" translatable="false">pref_password_store_selection_key</string>
     <!-- Wallet password store selection -->
     <string-array name="pref_password_store_selection_entries">

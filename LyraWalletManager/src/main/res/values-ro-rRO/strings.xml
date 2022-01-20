@@ -42,12 +42,12 @@
     <string name="action_import_wallet_hint">Nume portofel</string>
     <string name="action_import_wallet_short">Importă portofel</string>
     <string name="str_wallet_already_exists">Portofelul există deja</string>
-    <string name="str_minimum_characters_in_name_is">Numarul minim de caractere în nume este</string>
+    <string name="str_minimum_characters_in_name_is">Numărul minim de caractere în nume este</string>
     <string name="str_something_went_wrong_when_importing_wallet">Ceva sa întamplat încercând sa import portofelul</string>
     <string name="str_something_went_wrong_when_backup_wallet">Ceva sa întamplat încercând sa salvez portofelul</string>
     <string name="pref_other_title">Altele</string>
     <string name="pref_description_title">Versiune</string>
-    <string name="str_spinner_account_select_hint">Selecteaza cont</string>
+    <string name="str_spinner_account_select_hint">Selectează cont</string>
     <string name="pref_language_selection_current_selection">Limba selectată este</string>
     <string name="pref_network_selection_current_selection">Reteaua selectată este</string>
     <string name="str_launcher_explorer_button">EXPLORER</string>
@@ -56,18 +56,18 @@
     <string name="str_launcher_backup_wallet_button">SALVEAZĂ PORTOFEL</string>
     <string name="More">Mai multe</string>
     <string name="Send">Trimite</string>
-    <string name="send_token_select_spinner_description">Selecteaza token</string>
+    <string name="send_token_select_spinner_description">Selectează token</string>
     <string name="send_token_recipient_address_hint">Adresa destinatarului…</string>
     <string name="send_token_amount_to_send_hint">Cantitate</string>
     <string name="send_token_amount_to_send_max">MAX</string>
     <string name="send_token_send_next">Mai departe…</string>
     <string name="send_token_available">Disponibil</string>
     <string name="main_activity_not_enough_tokens_into_account">Nu sunt destui tokeni in cont</string>
-    <string name="main_activity_token_not_found_in_current_account">Tokenul cerut nu exista in acest cont</string>
+    <string name="main_activity_token_not_found_in_current_account">Tokenul cerut nu există in acest cont</string>
     <string name="Send1">De trimis</string>
     <string name="Send2">Trimite</string>
     <string name="From">De la</string>
-    <string name="To">Catre</string>
+    <string name="To">Către</string>
     <string name="NetworkFee">Cost trimitere</string>
     <string name="TotalSpent">Total cheltuit</string>
     <string name="Wallet">Portofel</string>
@@ -76,16 +76,16 @@
     <string name="send_sending">Trimit</string>
     <string name="Receive">Primeste</string>
     <string name="receive_account_address">Adresa contului</string>
-    <string name="receive_scan_or_copy_address">Scaneaza sau copiaza adresa</string>
+    <string name="receive_scan_or_copy_address">Scanează sau copiază adresa</string>
     <string name="receive_scan_address_copied">Adresa copiata</string>
     <string name="Request">Cere</string>
-    <string name="Confirm_action">Confirma actiunea</string>
+    <string name="Confirm_action">Confirmă actiunea</string>
     <string name="Request_token">Cere token</string>
-    <string name="pref_password_store_selection_title">Selecteaza daca parola va fi salvata pentru a semna viitoarele tranzactii</string>
-    <string name="pref_password_store_selection_summary">Selecteaza daca parola portofelului va fi salvata pentru a fi folosita pentru semnarea viitoarelor tranzactii in mod automat</string>
+    <string name="pref_password_store_selection_title">Selectează dacă parola va fi salvată pentru a semna viitoarele tranzactii.</string>
+    <string name="pref_password_store_selection_summary">Selectează dacă parola portofelului va fi salvată pentru a fi folosită pentru semnarea viitoarelor tranzactii in mod automat, pentru ca schimbarea sa aibă efect trebuie sa restartezi aplicatia.</string>
     <!-- Wallet password store selection -->
     <string-array name="pref_password_store_selection_entries">
-        <item>Sunt un paranoid si nici o data nu am sa salvez parola in aplicatie</item>
+        <item>Sunt un paranoid si nici o dată nu am să salvez parola în aplicatie</item>
         <item>Sunt asa de lenes si nu vreau sa scriu parola de cate ori am nevoie sa trimit o tranzactie</item>
     </string-array>
 
