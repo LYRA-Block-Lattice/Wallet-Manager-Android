@@ -1,42 +1,27 @@
 package com.lyrawallet.Ui.FragmentReceive;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.zxing.WriterException;
 import com.lyrawallet.Api.ApiRpc;
 import com.lyrawallet.Global;
-import com.lyrawallet.GlobalLyra;
 import com.lyrawallet.R;
 import com.lyrawallet.Ui.FragmentManagerUser;
-import com.lyrawallet.Ui.FragmentSend.SendTokensSpinnerAdapter;
 import com.lyrawallet.Ui.UiHelpers;
-import com.lyrawallet.Ui.UtilGetData;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView;
 

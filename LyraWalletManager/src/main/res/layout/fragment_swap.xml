@@ -1,9 +1,569 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:tag="account_swap_tag"
     tools:context="com.lyrawallet.Ui.FragmentSwap.FragmentSwap">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="-61dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/swapHeaderTextView"
+                android:layout_width="match_parent"
+                android:layout_height="75dp"
+                android:layout_gravity="start|center_vertical"
+                android:background="@drawable/fab_dashboard_header_color"
+                android:gravity="start|center_vertical"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:popupBackground="@drawable/fab_spinner_account_select_outline"
+                android:text="@string/Swap"
+                android:textColor="@color/page_foreground"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:ignore="RtlCompat" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="30dp" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp">
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.5" />
+
+                <Button
+                    android:id="@+id/swapModeSwapButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:backgroundTint="@color/button_2"
+                    android:backgroundTintMode="add"
+                    android:enabled="false"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:text="@string/Swap"
+                    app:cornerRadius="@dimen/button_round_corner"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline6"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <Button
+                    android:id="@+id/swapModePoolButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:backgroundTint="@color/button_2"
+                    android:backgroundTintMode="add"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:text="@string/Pool"
+                    app:cornerRadius="@dimen/button_round_corner"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/guideline6"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/fab_token_verify_placeholder_outline">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.constraintlayout.widget.Guideline
+                        android:id="@+id/guideline7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.5" />
+
+                    <FrameLayout
+                        android:id="@+id/frameLayout2"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/fab_token_verify_placeholder_outline"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <androidx.constraintlayout.widget.Guideline
+                                android:id="@+id/guideline8"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                app:layout_constraintGuide_percent="0.5" />
+
+                            <EditText
+                                android:id="@+id/swapFromValueEditText"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="8dp"
+                                android:gravity="start|center"
+                                android:hint="@string/swap_token_amount_to_send_hint"
+                                android:inputType="numberDecimal"
+                                android:minHeight="48dp"
+                                android:padding="8dip"
+                                android:singleLine="true"
+                                android:textColor="@color/page_text"
+                                app:layout_constraintEnd_toStartOf="@+id/guideline8"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <Spinner
+                                android:id="@+id/swapFromValueSpinner"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:contentDescription="TODO"
+                                android:minHeight="48dp"
+                                android:popupBackground="@drawable/fab_spinner_send_token_select_outline"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="@+id/guideline8"
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:ignore="SpeakableTextPresentCheck" />
+
+                            <TextView
+                                android:id="@+id/swapFromBalanceTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="20dp"
+                                android:layout_marginBottom="16dp"
+                                android:text="Balance: 0"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/frameLayout3"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:background="@drawable/fab_token_verify_placeholder_outline"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/frameLayout2">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <androidx.constraintlayout.widget.Guideline
+                                android:id="@+id/guideline9"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                app:layout_constraintGuide_percent="0.5" />
+
+                            <EditText
+                                android:id="@+id/swapToValueEditText"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="8dp"
+                                android:gravity="start|center"
+                                android:hint="@string/swap_token_amount_to_receive_hint"
+                                android:inputType="numberDecimal"
+                                android:minHeight="48dp"
+                                android:padding="8dip"
+                                android:singleLine="true"
+                                android:textColor="@color/page_text"
+                                app:layout_constraintEnd_toStartOf="@+id/guideline9"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <Spinner
+                                android:id="@+id/swapToValueSpinner"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:contentDescription="TODO"
+                                android:minHeight="48dp"
+                                android:popupBackground="@drawable/fab_spinner_send_token_select_outline"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="@+id/guideline9"
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:ignore="SpeakableTextPresentCheck" />
+
+
+                            <TextView
+                                android:id="@+id/swapToBalanceTextView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="20dp"
+                                android:layout_marginBottom="16dp"
+                                android:text="Balance: 0"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </FrameLayout>
+
+                    <Space
+                        android:id="@+id/space2"
+                        android:layout_width="match_parent"
+                        android:layout_height="12dp"
+                        app:layout_constraintTop_toBottomOf="@+id/frameLayout3" />
+
+                    <ImageButton
+                        android:id="@+id/imageButton"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@drawable/fab_token_verify_placeholder_outline"
+                        android:contentDescription="TODO"
+                        android:src="@drawable/ic_outline_south_24"
+                        app:layout_constraintBottom_toTopOf="@+id/frameLayout3"
+                        app:layout_constraintEnd_toStartOf="@+id/guideline7"
+                        app:layout_constraintStart_toStartOf="@+id/guideline7"
+                        app:layout_constraintTop_toBottomOf="@+id/frameLayout2"
+                        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+                    <Button
+                        android:id="@+id/swapSwapActionButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:text="@string/Swap"
+                        app:cornerRadius="@dimen/button_round_corner"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/space2" />
+
+                    <Button
+                        android:id="@+id/swapRemoveShareActionButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:text="@string/swap_pool_remove_all_my_share"
+                        app:cornerRadius="@dimen/button_round_corner"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/swapSwapActionButton" />
+
+                    <Space
+                        android:id="@+id/space3"
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/swapRemoveShareActionButton" />
+
+                    <ProgressBar
+                        android:id="@+id/swapProgressBar"
+                        style="?android:attr/progressBarStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="22dp"
+                        app:layout_constraintBottom_toTopOf="@+id/space2"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/frameLayout4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/fab_token_verify_placeholder_outline"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/frameLayout2">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/swapTokenPairTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="24dp"
+                        android:text="@string/swap_token_pair"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/swapInternalPriceTextView" />
+
+                    <TextView
+                        android:id="@+id/swapTokenPairValueTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="LYR vs $USDT"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/swapInternalPriceValueTextView" />
+
+                    <TextView
+                        android:id="@+id/swapEstimatedRatioTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/swap_estimated_ratio"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/swapTokenPairTextView" />
+
+                    <TextView
+                        android:id="@+id/swapEstimatedRatioValueTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="5166.08978664 LYR per $USDT"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/swapTokenPairValueTextView" />
+
+                    <TextView
+                        android:id="@+id/swapYouWillSellTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/swap_you_will_sell"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/swapEstimatedRatioTextView" />
+
+                    <TextView
+                        android:id="@+id/swapYouWillSellValueTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="1 LYR"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/swapEstimatedRatioValueTextView" />
+
+                    <TextView
+                        android:id="@+id/swapYouWillGetTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/swap_you_will_get"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/swapYouWillSellTextView" />
+
+                    <TextView
+                        android:id="@+id/swapYouWillGetValueTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="0.00000001 $ETH"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/swapYouWillSellValueTextView" />
+
+                    <TextView
+                        android:id="@+id/swapPriceImpactTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/swap_price_impact"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/swapYouWillGetTextView" />
+
+                    <TextView
+                        android:id="@+id/swapPriceImpactValueTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="0.00001700 %"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/swapYouWillGetValueTextView" />
+
+                    <TextView
+                        android:id="@+id/swapPoolFeeTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/swap_pool_fee"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/swapPriceImpactTextView" />
+
+                    <TextView
+                        android:id="@+id/swapPoolFeeValueTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="0.003 LYR"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/swapPriceImpactValueTextView" />
+
+                    <TextView
+                        android:id="@+id/swapNetworkFeeTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/swap_network_fee"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/swapPoolFeeTextView" />
+
+                    <TextView
+                        android:id="@+id/swapNetworkFeeValueTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="0.001 LYR"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/swapPoolFeeValueTextView" />
+
+                    <TextView
+                        android:id="@+id/swapInternalPriceTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/swap_lyr_internal_price"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/swapExternalPriceTextView" />
+
+                    <TextView
+                        android:id="@+id/swapExternalPriceTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/swap_lyr_external_price"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/swapExternalPriceValueTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="$ 0.0001904"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/swapInternalPriceValueTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="$ 0.00023885"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/swapExternalPriceValueTextView" />
+
+                    <TextView
+                        android:id="@+id/swapTotalLiquidityTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="24dp"
+                        android:gravity="start|center_vertical"
+                        android:text="@string/swap_total_liquidity"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/swapNetworkFeeTextView" />
+
+                    <TextView
+                        android:id="@+id/swapYourShareTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/swap_your_share"
+                        android:visibility="gone"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/swapTotalLiquidityTextView" />
+
+                    <TextView
+                        android:id="@+id/swapTotalLiquidityValueTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="32dp"
+                        android:layout_marginTop="24dp"
+                        android:layout_marginEnd="8dp"
+                        android:gravity="end|center_vertical"
+                        android:text="0 LYR\n0 $USDT"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/swapNetworkFeeValueTextView" />
+
+                    <TextView
+                        android:id="@+id/textView30"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="90.9674 %"
+                        android:visibility="gone"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/swapTotalLiquidityValueTextView" />
+
+                    <Space
+                        android:id="@+id/space4"
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"
+                        app:layout_constraintTop_toBottomOf="@+id/swapYourShareTextView" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </FrameLayout>
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="30dp" />
+
+
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -88,5 +88,24 @@
         <item>Sunt un paranoid si nici o dată nu am să salvez parola în aplicatie</item>
         <item>Sunt asa de lenes si nu vreau sa scriu parola de cate ori am nevoie sa trimit o tranzactie</item>
     </string-array>
+    <string name="Swap">Swap</string>
+    <string name="Pool">Pool</string>
+    <string name="swap_token_amount_to_send_hint">Valoare trimisa</string>
+    <string name="swap_token_amount_to_receive_hint">Valoare primita</string>
+    <string name="Balance">Balanța</string>
+    <string name="swap_pool_remove_all_my_share">Eliminați toată partea mea</string>
+    <string name="swap_pool_add_liquidity">Adăugați lichiditate</string>
+    <string name="swap_you_will_sell">Vei vinde</string>
+    <string name="swap_you_will_get">Vei primi</string>
+    <string name="swap_lyr_internal_price">LYR pret intern</string>
+    <string name="swap_lyr_external_price">LYR pret extern</string>
+    <string name="swap_token_pair">Perechea de tokeni</string>
+    <string name="swap_estimated_ratio">Rata estimata</string>
+    <string name="swap_price_impact">Impactul pretului</string>
+    <string name="swap_pool_fee">Pool fee</string>
+    <string name="swap_network_fee">Network fee</string>
+    <string name="swap_total_liquidity">Lichiditate totala</string>
+    <string name="swap_your_share">Partea ta de share</string>
+    <string name="swap_amount_of_token">Numar de tokeni</string>
 
 </resources>

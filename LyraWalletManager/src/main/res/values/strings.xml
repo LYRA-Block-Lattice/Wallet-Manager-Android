@@ -15,8 +15,11 @@
     <string name="Cancel">Cancel</string>
     <string name="More">More</string>
     <string name="Send">Send</string>
+    <string name="Swap">Swap</string>
+    <string name="Pool">Pool</string>
     <string name="Receive">Receive</string>
     <string name="Request">Request</string>
+    <string name="Balance">Balance</string>
     <string name="Confirm_action">Confirm action</string>
     <string name="Request_token">Request token</string>
 
@@ -67,6 +70,24 @@
     <string name="receive_account_address">Account address</string>
     <string name="receive_scan_or_copy_address">Scan or copy address</string>
     <string name="receive_scan_address_copied">Address copied</string>
+
+    <string name="swap_token_amount_to_send_hint">Amount sent</string>
+    <string name="swap_token_amount_to_receive_hint">Amount receive</string>
+    <string name="swap_pool_add_liquidity">Add liquidity</string>
+    <string name="swap_pool_remove_all_my_share">Remove all my share</string>
+    <string name="swap_lyr_internal_price">LYR internal price</string>
+    <string name="swap_lyr_external_price">LYR external price</string>
+    <string name="swap_token_pair">Token pair</string>
+    <string name="swap_estimated_ratio">Estimated ratio</string>
+    <string name="swap_you_will_sell">You will sell</string>
+    <string name="swap_you_will_get">You will get</string>
+    <string name="swap_price_impact">Price impact</string>
+    <string name="swap_pool_fee">Pool fee</string>
+    <string name="swap_network_fee">Network fee</string>
+    <string name="swap_total_liquidity">Total liquidity</string>
+    <string name="swap_your_share">Your share</string>
+
+    <string name="swap_amount_of_token">Amount of token</string>
 
     <string name="prefs_back_title"> </string>
     <string name="prefs_back_key" translatable="false">prefs_back</string>

@@ -9,7 +9,6 @@ import com.lyrawallet.Api.ApiRpc;
 import com.lyrawallet.Global;
 import com.lyrawallet.GlobalLyra;
 import com.lyrawallet.MainActivity;
-import com.lyrawallet.R;
 import com.lyrawallet.Storage.StorageHistory;
 import com.lyrawallet.Ui.FragmentAccount.FragmentAccount;
 import com.lyrawallet.Util.Concatenate;
@@ -246,42 +245,4 @@ public class ApiRpcActionsHistory extends MainActivity {
         }
         return 0;
     }
-
-    // Sample data for RecyclerView
-    private List<FragmentAccount.AccountHistoryEntry> getData() {
-        Pair<Integer, String> historyAndCnt = Global.getWalletHistory(Concatenate.getHistoryFileName());
-        return getData(historyAndCnt);
-    }
-    public static List<FragmentAccount.AccountHistoryEntry> getData(Pair<Integer, String> historyAndCnt) {
-        //List<ApiRpcActionsHistory.HistoryEntry> historyList = ApiRpcActionsHistory.loadHistory(ApiRpcActionsHistory.load(ApiRpcActionsHistory.getHistoryFileName()));
-
-        if(historyAndCnt == null || historyAndCnt.second == null) {
-            return null;
-        }
-        List<ApiRpcActionsHistory.HistoryEntry> historyList = ApiRpcActionsHistory.loadHistory(historyAndCnt.second);
-        if(historyList == null) {
-            return null;
-        }
-        List<FragmentAccount.AccountHistoryEntry> List = new ArrayList<>();
-        for (int i = 0; i < historyList.size(); i++) {
-            int size = historyList.get(i).getChanges().size();
-            Pair<String, Double> tokenAmount;
-            if(size > 1) {
-                tokenAmount = historyList.get(i).getChanges().get(1);
-            } else  {
-                tokenAmount = historyList.get(i).getChanges().get(0);
-            }
-            int icon = GlobalLyra.TokenIconList[0].second;
-            for (Pair<String, Integer> k: GlobalLyra.TokenIconList) {
-                if(k.first.equals(tokenAmount.first)) {
-                    icon = k.second;
-                    break;
-                }
-            }
-            List.add(0, new FragmentAccount.AccountHistoryEntry(historyList.get(i).getHeight(), icon,
-                    tokenAmount.first, tokenAmount.second, 0.00021f));
-        }
-        return List;
-    }
-
 }

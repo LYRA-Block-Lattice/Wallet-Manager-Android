@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -20,9 +21,12 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.lyrawallet.Crypto.CryptoSignatures;
+import com.lyrawallet.GlobalLyra;
 import com.lyrawallet.MainActivity;
 import com.lyrawallet.R;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class UiHelpers {
@@ -107,4 +111,22 @@ public class UiHelpers {
         //qrImageView.draw(canvas);
         return bitmap;
     }
+
+    public static List<Integer> tickerToImage(List<String> tokenNames) {
+        List<Integer > List = new ArrayList<>();
+        if(tokenNames == null)
+            return null;
+        for (int i = 0; i < tokenNames.size(); i++) {
+            int icon = GlobalLyra.TokenIconList[1].second;
+            for (Pair<String, Integer> k: GlobalLyra.TokenIconList) {
+                if(k.first.equals(tokenNames.get(i))) {
+                    icon = k.second;
+                    break;
+                }
+            }
+            List.add(icon);
+        }
+        return List;
+    }
+
 }

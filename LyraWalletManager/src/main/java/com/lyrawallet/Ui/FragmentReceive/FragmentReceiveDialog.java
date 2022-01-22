@@ -2,7 +2,6 @@ package com.lyrawallet.Ui.FragmentReceive;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Pair;
@@ -12,23 +11,17 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.zxing.WriterException;
 import com.lyrawallet.Global;
 import com.lyrawallet.GlobalLyra;
 import com.lyrawallet.MainActivity;
 import com.lyrawallet.R;
-import com.lyrawallet.Ui.FragmentManagerUser;
-import com.lyrawallet.Ui.FragmentSend.SendTokensSpinnerAdapter;
+import com.lyrawallet.Ui.TokensSpinnerAdapter;
 import com.lyrawallet.Ui.UiHelpers;
-import com.lyrawallet.Ui.UtilGetData;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,23 +33,6 @@ public class FragmentReceiveDialog extends DialogFragment {
 
     public FragmentReceiveDialog() {
 
-    }
-
-    public static List<Integer> getData(List<String> tokenNames) {
-        List<Integer > List = new ArrayList<>();
-        if(tokenNames == null)
-            return null;
-        for (int i = 0; i < tokenNames.size(); i++) {
-            int icon = GlobalLyra.TokenIconList[0].second;
-            for (Pair<String, Integer> k: GlobalLyra.TokenIconList) {
-                if(k.first.equals(tokenNames.get(i))) {
-                    icon = k.second;
-                    break;
-                }
-            }
-            List.add(icon);
-        }
-        return List;
     }
 
     @Override
@@ -82,11 +58,12 @@ public class FragmentReceiveDialog extends DialogFragment {
         }
 
         List<String> tickerList = new ArrayList<>();
-        for (int i = 1; i < GlobalLyra.TokenIconList.length; i++) {
+        for (int i = 2; i < GlobalLyra.TokenIconList.length; i++) {
             tickerList.add(GlobalLyra.TokenIconList[i].first);
         }
         Spinner tokenSpinner = (Spinner) v.findViewById(R.id.receiveTokenSelectSpinner);
-        SendTokensSpinnerAdapter adapter = new SendTokensSpinnerAdapter(v.getContext(), R.layout.send_token_select_spinner_entry, tickerList.toArray(new String[0]), getData(tickerList).toArray(new Integer[0]));
+        TokensSpinnerAdapter adapter = new TokensSpinnerAdapter(v.getContext(), R.layout.send_token_select_spinner_entry,
+                tickerList.toArray(new String[0]), UiHelpers.tickerToImage(tickerList).toArray(new Integer[0]));
         adapter.setDropDownViewResource(R.layout.send_token_select_spinner_entry_first);
         tokenSpinner.setAdapter(adapter);
         tokenSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

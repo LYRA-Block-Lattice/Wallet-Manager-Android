@@ -11,17 +11,21 @@ import android.content.DialogInterface;
 import android.os.Handler;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Pair;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.widget.TextView;
 
 import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
 import com.lyrawallet.Api.Network.NetworkRpc;
 import com.lyrawallet.Global;
+import com.lyrawallet.GlobalLyra;
 import com.lyrawallet.MainActivity;
 import com.lyrawallet.R;
 import com.lyrawallet.Ui.FragmentManagerUser;
+import com.lyrawallet.Ui.FragmentSwap.FragmentSwap;
 import com.lyrawallet.Ui.UiHelpers;
 
 import org.json.JSONException;
@@ -602,6 +606,10 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
             AccountId = accountId;
             return this;
         }
+        public Action actionPool(String actionPurpose, String token0, String token1) {
+            ActionPurpose = actionPurpose;
+            return actionPool(token0, token1);
+        }
         public Action actionPool(String token0, String token1) {
             if(Api == null) {
                 Api = "Pool";
@@ -821,6 +829,10 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
         ApiRpc.Action ac = new ApiRpc.Action(output[1]);
         getInstance().runOnUiThread(new Runnable() {
             public void run() {
+                Activity activity = getInstance();
+                if(activity == null) {
+                    return;
+                }
                 if (output[0].equals("History")) {
                     ApiRpcActionsHistory.store(ac, output[2]);
                         /*List<ApiRpcActionsHistory.HistoryEntry> historyList = new ApiRpcActionsHistory().loadHistory(ac);
@@ -829,11 +841,7 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                         }*/
                 } else if (output[0].equals("Send")) {
                     ReceiveResult = output[0] + "^" + output[1] + "^" + output[2];
-                    Activity activity = getInstance();
-                    if(activity == null) {
-                        return;
-                    }
-                    EditText recipientAddressEditText = (EditText) activity.findViewById(R.id.send_token_recipient_address_value);
+                     EditText recipientAddressEditText = (EditText) activity.findViewById(R.id.send_token_recipient_address_value);
                     EditText tokenAmountEditText = (EditText) activity.findViewById(R.id.send_token_amount_value);
                     if(recipientAddressEditText != null && tokenAmountEditText != null) {
                         try {
@@ -882,8 +890,6 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                    } else {
-
                     }
                 } else if(output[0].equals("Receive")) {
                     new Handler().postDelayed(new Runnable() {
@@ -912,6 +918,78 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }
+                } else if(output[0].equals("Pool")) {
+                    if (output[2].equals("error")) {
+                        FragmentSwap.setProgressBarVisibility(activity, View.GONE);
+                        FragmentSwap.setPoolValuesVisibility(activity, View.GONE);
+                        TextView swapTotalLiquidityValueTextView = (TextView) activity.findViewById(R.id.swapTotalLiquidityValueTextView);
+                        if(swapTotalLiquidityValueTextView != null) {
+                            swapTotalLiquidityValueTextView.setText("");
+                        }
+                    } else if(ac.getActionPurpose() != null) {
+                        if(ac.getActionPurpose().equals("PoolCalculate")) {
+                            try {
+                                JSONObject obj = new JSONObject(output[2]);
+                                String poolId = obj.getString("poolId");
+                                String from = obj.getString("token0");
+                                String to = obj.getString("token1");
+                                JSONObject objBalance = obj.getJSONObject("balance");
+                                double fromValue = objBalance.getDouble(from);
+                                double toValue = objBalance.getDouble(to);
+                                EditText swapFromValueEditText = (EditText) activity.findViewById(R.id.swapFromValueEditText);
+                                try {
+                                    new ApiRpc().act(new ApiRpc.Action().actionPoolCalculate(poolId, from, Double.parseDouble(swapFromValueEditText.getText().toString()), 0.01f));
+                                } catch (NumberFormatException e) {
+                                    FragmentSwap.setProgressBarVisibility(activity, View.GONE);
+                                    e.printStackTrace();
+                                }
+                                TextView swapTotalLiquidityValueTextView = (TextView) activity.findViewById(R.id.swapTotalLiquidityValueTextView);
+                                if(swapTotalLiquidityValueTextView != null) {
+                                    swapTotalLiquidityValueTextView.setText(String.format(Locale.US, "%.8f %s\n%.8f %s", fromValue, GlobalLyra.domainToSymbol(from),
+                                            toValue, GlobalLyra.domainToSymbol(to)));
+                                }
+                           } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        } else if(ac.getActionPurpose().equals("LyrPriceInUSD")) {
+                            TextView swapInternalPriceValueTextView = (TextView) activity.findViewById(R.id.swapInternalPriceValueTextView);
+                            if(swapInternalPriceValueTextView != null) {
+                                try {
+                                    JSONObject obj = new JSONObject(output[2]);
+                                    JSONObject objBalance = obj.getJSONObject("balance");
+                                    if(!objBalance.isNull("tether/USDT") && !objBalance.isNull("LYR")) {
+                                        swapInternalPriceValueTextView.setText(String.format(Locale.US, "$ %.8f", objBalance.getDouble("tether/USDT") / objBalance.getDouble("LYR")));
+                                    } else {
+                                        swapInternalPriceValueTextView.setText(String.format(Locale.US, "$ %.8f", 0f));
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                } else if (output[0].equals("PoolCalculate")) {
+                    if(ac.getActionPurpose() == null) {
+                        EditText swapToValueEditText = (EditText) activity.findViewById(R.id.swapToValueEditText);
+                        if(swapToValueEditText == null)
+                            return;
+                        try {
+                            JSONObject obj = new JSONObject(output[2]);
+                            String swapInToken = obj.getString("SwapInToken");
+                            double swapInAmount = obj.getDouble("SwapInAmount");
+                            String swapOutToken = obj.getString("SwapOutToken");
+                            double swapOutAmount = obj.getDouble("SwapOutAmount");
+                            double price = obj.getDouble("Price");
+                            double priceImpact = obj.getDouble("PriceImpact");
+                            double minimumReceived = obj.getDouble("MinimumReceived");
+                            double payToProvider = obj.getDouble("PayToProvider");
+                            double payToAuthorizer = obj.getDouble("PayToAuthorizer");
+                            FragmentSwap.setSwapValues(activity, swapInToken, swapOutToken, price, swapInAmount, swapOutAmount, priceImpact, payToProvider, payToAuthorizer);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
                     }
                 }
                 ReceiveResult = output[0] + "^" + output[1] + "^" + output[2];

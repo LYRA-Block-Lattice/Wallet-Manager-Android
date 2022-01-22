@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -179,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         super.onCreate(savedInstanceState);
         Instance = this;
         // At the moment force device to stay in portrait mode.
-        //this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         requestPermissions(new String[]{Manifest.permission.CAMERA}, 1011);
         // Load user preferences.
         new PreferencesLoad();

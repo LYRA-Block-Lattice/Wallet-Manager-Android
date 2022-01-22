@@ -1,12 +1,12 @@
 package com.lyrawallet;
 
-import static com.lyrawallet.R.mipmap.*;
-
 import android.util.Pair;
 
 import com.lyrawallet.Accounts.Accounts;
 import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
 import com.lyrawallet.Ui.FragmentAccount.FragmentAccount;
+import com.lyrawallet.Ui.UiHelpers;
+import com.lyrawallet.Ui.UtilGetData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -166,7 +166,7 @@ public class Global {
                     int cnt = acc.second.first;
                     WalletHistory.remove(i);
                     WalletHistory.add(new Pair<>(accountName, new Pair<>(cnt, history)));
-                    setFragmentAccountHistory(accountName, ApiRpcActionsHistory.getData(new Pair<>(cnt, history)));
+                    setFragmentAccountHistory(accountName, UtilGetData.historyToAccountAdapter(new Pair<>(cnt, history)));
                     return;
                 }
             }
@@ -174,7 +174,7 @@ public class Global {
             WalletHistory = new ArrayList<>();
         }
         WalletHistory.add(new Pair<>(accountName, new Pair<>(0, history)));
-        setFragmentAccountHistory(accountName, ApiRpcActionsHistory.getData(new Pair<>(0, history)));
+        setFragmentAccountHistory(accountName, UtilGetData.historyToAccountAdapter(new Pair<>(0, history)));
     }
 
     public static Pair<Integer, String> getWalletHistory(String accountName) {

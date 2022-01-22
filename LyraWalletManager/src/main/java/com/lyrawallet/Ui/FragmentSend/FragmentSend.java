@@ -27,6 +27,7 @@ import com.lyrawallet.Crypto.CryptoSignatures;
 import com.lyrawallet.Global;
 import com.lyrawallet.GlobalLyra;
 import com.lyrawallet.R;
+import com.lyrawallet.Ui.TokensSpinnerAdapter;
 import com.lyrawallet.Ui.UiHelpers;
 import com.lyrawallet.Ui.UtilGetData;
 
@@ -62,23 +63,6 @@ public class FragmentSend extends Fragment {
     public static FragmentSend newInstance(String param1, String param2) {
         FragmentSend fragment = new FragmentSend();
         return fragment;
-    }
-
-    public static List<Integer> getData(List<String> tokenNames) {
-        List<Integer > List = new ArrayList<>();
-        if(tokenNames == null)
-            return null;
-        for (int i = 0; i < tokenNames.size(); i++) {
-            int icon = GlobalLyra.TokenIconList[0].second;
-            for (Pair<String, Integer> k: GlobalLyra.TokenIconList) {
-                if(k.first.equals(tokenNames.get(i))) {
-                    icon = k.second;
-                    break;
-                }
-            }
-            List.add(icon);
-        }
-        return List;
     }
 
     private boolean checkSend() {
@@ -138,12 +122,6 @@ public class FragmentSend extends Fragment {
         CurvedBottomNavigationView bottomNavigationView = activity.findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setVisibility(View.GONE);
         //new ApiRpc().act(new ApiRpc.Action().actionPool("LYR", "tether/LTT"));
-        Spinner tokenSpinner = (Spinner) view.findViewById(R.id.sendTokenSelectSpinner);
-        List<String> tickerList = new ArrayList<>();
-        Balances = UtilGetData.getAvailableTokenList();
-        for (int i = 0; i < Balances.size(); i++) {
-            tickerList.add(Balances.get(i).first.replace("tether/", "$"));
-        }
         EditText recipientAddressEditText = (EditText) view.findViewById(R.id.send_token_recipient_address_value);
         if(recipientAddressEditText != null) {
             recipientAddressEditText.addTextChangedListener(new TextWatcher() {
@@ -186,7 +164,14 @@ public class FragmentSend extends Fragment {
                 }
             });
         }
-        SendTokensSpinnerAdapter adapter = new SendTokensSpinnerAdapter(this.getContext(), R.layout.send_token_select_spinner_entry, tickerList.toArray(new String[0]), getData(tickerList).toArray(new Integer[0]));
+        Spinner tokenSpinner = (Spinner) view.findViewById(R.id.sendTokenSelectSpinner);
+        List<String> tickerList = new ArrayList<>();
+        Balances = UtilGetData.getAvailableTokenList();
+        for (int i = 0; i < Balances.size(); i++) {
+            tickerList.add(Balances.get(i).first);
+        }
+        TokensSpinnerAdapter adapter = new TokensSpinnerAdapter(this.getContext(), R.layout.send_token_select_spinner_entry,
+                tickerList.toArray(new String[0]), UiHelpers.tickerToImage(tickerList).toArray(new Integer[0]));
         adapter.setDropDownViewResource(R.layout.send_token_select_spinner_entry_first);
         tokenSpinner.setAdapter(adapter);
         tokenSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -326,7 +311,7 @@ public class FragmentSend extends Fragment {
                                         new ApiRpc().act(new ApiRpc.Action().actionSend(
                                                 Global.getSelectedAccountId(),
                                                 Double.parseDouble(tokenAmountEditText.getText().toString()),
-                                                tokenToSend.replace("$", "tether/"),
+                                                GlobalLyra.symbolToDomain(tokenToSend),
                                                 recipientAddressEditText.getText().toString()));
                                         alertDialog.dismiss();
                                     } catch (NumberFormatException ex) {

@@ -2,6 +2,7 @@ package com.lyrawallet;
 
 import static com.lyrawallet.R.mipmap.ic_eth_foreground;
 import static com.lyrawallet.R.mipmap.ic_lyra_foreground;
+import static com.lyrawallet.R.mipmap.ic_tron_foreground;
 import static com.lyrawallet.R.mipmap.ic_unknown_foreground;
 import static com.lyrawallet.R.mipmap.ic_usdc_foreground;
 import static com.lyrawallet.R.mipmap.ic_usdt_foreground;
@@ -17,10 +18,23 @@ public class GlobalLyra {
     public static final String SYMBOL_FOR_TETHERED_TOKEN       = "$";
 
     public final static Pair<String, Integer>[] TokenIconList = new Pair[]{
+            new Pair<>("", 0),
             new Pair<>("UNKNOWN", ic_unknown_foreground),
             new Pair<>("LYR", ic_lyra_foreground),
+            new Pair<>("$TRX", ic_tron_foreground),
+            new Pair<>("$USDT", ic_usdt_foreground),
             new Pair<>("$ETH", ic_eth_foreground),
             new Pair<>("$USDC", ic_usdc_foreground),
-            new Pair<>("$USDT", ic_usdt_foreground),
     };
+
+    public static String symbolToDomain(String token) {
+        if(token == null)
+            return null;
+        return token.replace("$", "tether/");
+    }
+    public static String domainToSymbol(String domain) {
+        if(domain == null)
+            return null;
+        return domain.replace("tether/", "$");
+    }
 }
