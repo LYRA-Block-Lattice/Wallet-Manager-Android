@@ -286,6 +286,16 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         }, 1000, 30 * 1000);
     }
     @Override
+    protected void onResume() {
+        super.onResume();
+        Toast.makeText(getApplicationContext(), "onResumed called", Toast.LENGTH_LONG).show();
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Toast.makeText(getApplicationContext(), "onPause called", Toast.LENGTH_LONG).show();
+    }
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if(getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

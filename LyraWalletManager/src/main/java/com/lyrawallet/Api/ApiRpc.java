@@ -938,12 +938,20 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                                 double fromValue = objBalance.getDouble(from);
                                 double toValue = objBalance.getDouble(to);
                                 EditText swapFromValueEditText = (EditText) activity.findViewById(R.id.swapFromValueEditText);
-                                try {
-                                    new ApiRpc().act(new ApiRpc.Action().actionPoolCalculate(poolId, from, Double.parseDouble(swapFromValueEditText.getText().toString()), 0.01f));
-                                } catch (NumberFormatException e) {
-                                    FragmentSwap.setProgressBarVisibility(activity, View.GONE);
-                                    e.printStackTrace();
-                                }
+                                new Handler().postDelayed(new Runnable() {
+                                    public void run() {
+                                        getInstance().runOnUiThread(new Runnable() {
+                                            public void run() {
+                                                try {
+                                                    new ApiRpc().act(new ApiRpc.Action().actionPoolCalculate(poolId, from, Double.parseDouble(swapFromValueEditText.getText().toString()), 0.01f));
+                                                } catch (NumberFormatException e) {
+                                                    FragmentSwap.setProgressBarVisibility(activity, View.GONE);
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        });
+                                    }
+                                }, 50);
                                 TextView swapTotalLiquidityValueTextView = (TextView) activity.findViewById(R.id.swapTotalLiquidityValueTextView);
                                 if(swapTotalLiquidityValueTextView != null) {
                                     swapTotalLiquidityValueTextView.setText(String.format(Locale.US, "%.8f %s\n%.8f %s", fromValue, GlobalLyra.domainToSymbol(from),

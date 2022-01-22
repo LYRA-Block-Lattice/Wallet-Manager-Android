@@ -55,7 +55,6 @@ android {
         }
         debug {
             applicationIdSuffix '.app'
-            signingConfig signingConfigs.debug
             versionNameSuffix 'test'
         }
     }

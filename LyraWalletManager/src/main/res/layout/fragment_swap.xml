@@ -145,14 +145,15 @@
                                 android:textColor="@color/page_text"
                                 app:layout_constraintEnd_toStartOf="@+id/guideline8"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                app:layout_constraintTop_toTopOf="parent"
+                                android:autofillHints="" />
 
                             <Spinner
                                 android:id="@+id/swapFromValueSpinner"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
-                                android:contentDescription="TODO"
+                                android:contentDescription="TODO1"
                                 android:minHeight="48dp"
                                 android:popupBackground="@drawable/fab_spinner_send_token_select_outline"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -210,14 +211,15 @@
                                 android:textColor="@color/page_text"
                                 app:layout_constraintEnd_toStartOf="@+id/guideline9"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                app:layout_constraintTop_toTopOf="parent"
+                                android:autofillHints="" />
 
                             <Spinner
                                 android:id="@+id/swapToValueSpinner"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
-                                android:contentDescription="TODO"
+                                android:contentDescription="TODO2"
                                 android:minHeight="48dp"
                                 android:popupBackground="@drawable/fab_spinner_send_token_select_outline"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -249,7 +251,7 @@
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:background="@drawable/fab_token_verify_placeholder_outline"
-                        android:contentDescription="TODO"
+                        android:contentDescription="TODO3"
                         android:src="@drawable/ic_outline_south_24"
                         app:layout_constraintBottom_toTopOf="@+id/frameLayout3"
                         app:layout_constraintEnd_toStartOf="@+id/guideline7"
@@ -299,11 +301,10 @@
                         style="?android:attr/progressBarStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="22dp"
                         app:layout_constraintBottom_toTopOf="@+id/space2"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="@+id/frameLayout2" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -114,8 +114,10 @@ public class FragmentSwap extends Fragment {
         TextView swapPriceImpactValueTextView = (TextView) activity.findViewById(R.id.swapPriceImpactValueTextView);
         TextView swapPoolFeeValueTextView = (TextView) activity.findViewById(R.id.swapPoolFeeValueTextView);
         TextView swapNetworkFeeValueTextView = (TextView) activity.findViewById(R.id.swapNetworkFeeValueTextView);
-        if(swapTokenPairValueTextView == null || swapEstimatedRatioValueTextView == null || swapYouWillSellValueTextView == null || swapYouWillGetValueTextView == null ||
-                swapPriceImpactValueTextView == null || swapPoolFeeValueTextView == null || swapNetworkFeeValueTextView == null)
+        if(swapTokenPairValueTextView == null || swapEstimatedRatioValueTextView == null ||
+                swapYouWillSellValueTextView == null || swapYouWillGetValueTextView == null ||
+                swapPriceImpactValueTextView == null || swapPoolFeeValueTextView == null ||
+                swapNetworkFeeValueTextView == null)
             return;
         swapTokenPairValueTextView.setVisibility(visibility);
         swapEstimatedRatioValueTextView.setVisibility(visibility);
@@ -129,10 +131,20 @@ public class FragmentSwap extends Fragment {
     public static void setSwapValues(Activity activity, String from, String to, double price, double sellValue, double buyValue, double priceImpact, double poolFee, double networkFee) {
         if(activity == null)
             return;
-        if(!fromLastEditTextChanged) {
-            fromLastEditTextChanged = true;
+        Spinner tokenFromSpinner = (Spinner) activity.findViewById(R.id.swapFromValueSpinner);
+        Spinner tokenToSpinner = (Spinner) activity.findViewById(R.id.swapToValueSpinner);
+        if(tokenFromSpinner == null || tokenToSpinner == null) {
             return;
         }
+        if(!tokenFromSpinner.getSelectedItem().toString().equals(GlobalLyra.domainToSymbol(from)) ||
+                !tokenToSpinner.getSelectedItem().toString().equals(GlobalLyra.domainToSymbol(to))) {
+            // if there are two requests for two different token pairs, make sure that the display will not be changed if the response is for different pair.
+            return;
+        }
+        /*if(!fromLastEditTextChanged) {
+            fromLastEditTextChanged = true;
+            return;
+        }*/
         //TextView swapExternalPriceValueTextView = (TextView) swapView.findViewById(R.id.swapExternalPriceValueTextView);
         //TextView swapInternalPriceValueTextView = (TextView) swapView.findViewById(R.id.swapInternalPriceValueTextView);
         EditText swapToValueEditText = (EditText) activity.findViewById(R.id.swapToValueEditText);
@@ -263,7 +275,7 @@ public class FragmentSwap extends Fragment {
                     return;
                 setPoolValuesVisibility(activity, View.GONE);
                 populateSpinners(v, forPool);
-                startHandler(2);
+                startHandler(1);
                 for (int ii = 0; ii < UtilGetData.getAvailableTokenList().size(); ii++) {
                     if (UtilGetData.getAvailableTokenList().get(ii).first.equals(tokenFromSpinner.getSelectedItem().toString())) {
                         TextView fromAmountTextView = (TextView) v.findViewById(R.id.swapFromBalanceTextView);
@@ -306,7 +318,7 @@ public class FragmentSwap extends Fragment {
                 if(activity == null)
                     return;
                 setPoolValuesVisibility(activity, View.GONE);
-                startHandler(2);
+                startHandler(1);
                 int ii = 0;
                 TextView toAmountTextView = (TextView) v.findViewById(R.id.swapToBalanceTextView);
                 for (; ii < UtilGetData.getAvailableTokenList().size(); ii++) {
@@ -399,7 +411,7 @@ public class FragmentSwap extends Fragment {
                 TextView swapInternalPriceValueTextView = (TextView) view.findViewById(R.id.swapInternalPriceValueTextView);
                 swapExternalPriceValueTextView.setVisibility(View.VISIBLE);
                 swapInternalPriceValueTextView.setVisibility(View.VISIBLE);
-                startHandler(2);
+                startHandler(1);
             }
         });
         poolButton.setOnClickListener(new View.OnClickListener() {
@@ -432,7 +444,7 @@ public class FragmentSwap extends Fragment {
                 TextView swapInternalPriceValueTextView = (TextView) view.findViewById(R.id.swapInternalPriceValueTextView);
                 swapExternalPriceValueTextView.setVisibility(View.GONE);
                 swapInternalPriceValueTextView.setVisibility(View.GONE);
-                startHandler(2);
+                startHandler(1);
             }
         });
 
@@ -453,6 +465,7 @@ public class FragmentSwap extends Fragment {
                         try {
                             Double.parseDouble(s.toString());
                             if(fromLastEditTextChanged) {
+                                stopHandler();
                                 startHandler(2);
                             }
                             fromLastEditTextChanged = true;
@@ -479,9 +492,9 @@ public class FragmentSwap extends Fragment {
                     if(s.length() > 0) {
                         try {
                             Double.parseDouble(s.toString());
-                            if(!fromLastEditTextChanged) {
+                            /*if(!fromLastEditTextChanged) {
                                 startHandler(2);
-                            }
+                            }*/
                             fromLastEditTextChanged = false;
                         } catch (NumberFormatException e) {
                             swapToValueEditText.setText(s.subSequence(0, before - 1));
