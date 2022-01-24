@@ -19,15 +19,12 @@ import java.util.List;
 public class UtilGetData {
     public static List<Pair<String, Double>> getAvailableTokenList() {
         List<Pair<String, Double>> balances = new ArrayList<>();
-        Pair<Integer, String> history = Global.getWalletHistory(Concatenate.getHistoryFileName());
+        Pair<Integer, List<ApiRpcActionsHistory.HistoryEntry>> history = Global.getWalletHistory(Concatenate.getHistoryFileName());
         try {
-            JSONArray arrayStored = new JSONArray(history.second);
-            if(arrayStored.length() != 0) {
-                JSONObject o = arrayStored.getJSONObject(arrayStored.length() - 1).getJSONObject("Balances");
-                for (Iterator<String> it = o.keys(); it.hasNext(); ) {
-                    String key = it.next();
-                    balances.add(new Pair<String, Double>(GlobalLyra.domainToSymbol(key), o.getDouble(key)));
-                }
+            if(history == null)
+                return balances;
+            if(history.second.size() != 0) {
+                balances = history.second.get(history.second.size() - 1).getBalances();
                 if(balances.size() > 1) {
                     for (int i = 1; i < balances.size(); i++) {
                         Pair<String, Double> p = balances.get(i);
@@ -39,7 +36,7 @@ public class UtilGetData {
                     }
                 }
             }
-        } catch (JSONException | NullPointerException e) {
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
         return balances;
@@ -72,18 +69,7 @@ public class UtilGetData {
         return false;
     }
 
-    // Sample data for RecyclerView
-    private List<FragmentAccount.AccountHistoryEntry> historyToAccountAdapter() {
-        Pair<Integer, String> historyAndCnt = Global.getWalletHistory(Concatenate.getHistoryFileName());
-        return historyToAccountAdapter(historyAndCnt);
-    }
-    public static List<FragmentAccount.AccountHistoryEntry> historyToAccountAdapter(Pair<Integer, String> historyAndCnt) {
-        //List<ApiRpcActionsHistory.HistoryEntry> historyList = ApiRpcActionsHistory.loadHistory(ApiRpcActionsHistory.load(ApiRpcActionsHistory.getHistoryFileName()));
-
-        if(historyAndCnt == null || historyAndCnt.second == null) {
-            return null;
-        }
-        List<ApiRpcActionsHistory.HistoryEntry> historyList = ApiRpcActionsHistory.loadHistory(historyAndCnt.second);
+    public static List<FragmentAccount.AccountHistoryEntry> historyToAccountAdapter(List<ApiRpcActionsHistory.HistoryEntry> historyList) {
         if(historyList == null) {
             return null;
         }
@@ -104,7 +90,7 @@ public class UtilGetData {
                 }
             }
             List.add(0, new FragmentAccount.AccountHistoryEntry(historyList.get(i).getHeight(), icon,
-                    GlobalLyra.domainToSymbol(tokenAmount.first), tokenAmount.second, 0.00021f));
+                    GlobalLyra.domainToSymbol(tokenAmount.first), tokenAmount.second));
         }
         return List;
     }

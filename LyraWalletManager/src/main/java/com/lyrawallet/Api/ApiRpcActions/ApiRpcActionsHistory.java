@@ -1,6 +1,7 @@
 package com.lyrawallet.Api.ApiRpcActions;
 
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.util.Pair;
 
 import androidx.preference.PreferenceManager;
@@ -161,20 +162,7 @@ public class ApiRpcActionsHistory extends MainActivity {
         if(ac.getActionPurpose() != null) {
             isStore = ac.getActionPurpose().equals(Global.str_api_rpc_purpose_history_disk_storage);
         }
-        if(ac.getApi().equals("Send") || isStore) {
-            Pair<Integer, String> h = Global.getWalletHistory(Concatenate.getHistoryFileName(ac));
-            if(networkData != null) {
-                if (h == null || h.second == null || h.second.length() != networkData.length()) {
-                    // Run set history on another thread.
-                    Timer timer = new Timer();
-                    timer.scheduleAtFixedRate(new TimerTask() {
-                        public void run() {
-                            timer.cancel();
-                            Global.setWalletHistory(Concatenate.getHistoryFileName(ac), networkData);
-                        }
-                    }, 100, 100);
-                }
-            }
+        if(ac.getApi().equals("Send") || ac.getApi().equals("Swap") || isStore) {
             String storedData = StorageHistory.read( Concatenate.getHistoryFileName(ac), Global.getWalletPassword());
             int countArrayStored = 0;
             if(storedData != null) {
@@ -188,6 +176,15 @@ public class ApiRpcActionsHistory extends MainActivity {
             try {
                 if(networkData != null) {
                     JSONArray arrayNetwork = new JSONArray(networkData);
+                    Pair<Integer, List<ApiRpcActionsHistory.HistoryEntry>> h = Global.getWalletHistory(Concatenate.getHistoryFileName(ac));
+                    if (h == null || h.second == null || h.second.size() != arrayNetwork.length()) {
+                        // Run set history on another thread.
+                        new Handler().postDelayed(new Runnable() {
+                            public void run() {
+                                Global.setWalletHistory(Concatenate.getHistoryFileName(ac), networkData);
+                            }
+                        }, 100);
+                    }
                     if(countArrayStored != arrayNetwork.length() || !networkData.equals(storedData)) {
                         StorageHistory.save( Concatenate.getHistoryFileName(ac), networkData, Global.getWalletPassword());
                     }
@@ -232,17 +229,5 @@ public class ApiRpcActionsHistory extends MainActivity {
             return null;
         }
         return historyList;
-    }
-
-    public static int getHistoryCount(String data) {
-        if(data != null) {
-            try {
-                JSONArray arrObj = new JSONArray(data);
-                return arrObj.length();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return 0;
     }
 }

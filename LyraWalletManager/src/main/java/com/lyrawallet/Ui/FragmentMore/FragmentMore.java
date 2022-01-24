@@ -87,7 +87,6 @@ public class FragmentMore extends Fragment {
                         Global.setWalletName(Global.getWalletName());
                         activity.runOnUiThread(new Runnable() {
                             public void run() {
-                                Global.setUnreceivedBalance(Concatenate.getHistoryFileName(),false);
                                 new ApiRpc().act(new ApiRpc.Action().actionBalance(Global.getSelectedAccountId()));
                                 if(Global.getWalletHistory(Concatenate.getHistoryFileName()) == null) {
                                     new ApiRpc().act(new ApiRpc.Action().actionHistory(Global.str_api_rpc_purpose_history_disk_storage,

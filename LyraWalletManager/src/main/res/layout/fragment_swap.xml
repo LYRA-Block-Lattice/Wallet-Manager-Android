@@ -146,14 +146,14 @@
                                 app:layout_constraintEnd_toStartOf="@+id/guideline8"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
-                                android:autofillHints="" />
+                                android:autofillHints="@string/swap_token_amount_to_send_hint" />
 
                             <Spinner
                                 android:id="@+id/swapFromValueSpinner"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
-                                android:contentDescription="TODO1"
+                                android:contentDescription="@string/swap_spinner_from_content_description"
                                 android:minHeight="48dp"
                                 android:popupBackground="@drawable/fab_spinner_send_token_select_outline"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -167,7 +167,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="20dp"
                                 android:layout_marginBottom="16dp"
-                                android:text="Balance: 0"
+                                android:text="@string/swap_balance_0"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -212,14 +212,14 @@
                                 app:layout_constraintEnd_toStartOf="@+id/guideline9"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
-                                android:autofillHints="" />
+                                android:autofillHints="@string/swap_token_amount_to_receive_hint" />
 
                             <Spinner
                                 android:id="@+id/swapToValueSpinner"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
-                                android:contentDescription="TODO2"
+                                android:contentDescription="@string/swap_spinner_to_content_description"
                                 android:minHeight="48dp"
                                 android:popupBackground="@drawable/fab_spinner_send_token_select_outline"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -234,7 +234,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="20dp"
                                 android:layout_marginBottom="16dp"
-                                android:text="Balance: 0"
+                                android:text="@string/swap_balance_0"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -251,7 +251,7 @@
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:background="@drawable/fab_token_verify_placeholder_outline"
-                        android:contentDescription="TODO3"
+                        android:contentDescription="@string/swap_swap_between_content_description"
                         android:src="@drawable/ic_outline_south_24"
                         app:layout_constraintBottom_toTopOf="@+id/frameLayout3"
                         app:layout_constraintEnd_toStartOf="@+id/guideline7"
@@ -342,7 +342,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="24dp"
                         android:layout_marginEnd="8dp"
-                        android:text="LYR vs $USDT"
+                        android:text="@string/swap_lyr_vs_usd"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/swapInternalPriceValueTextView" />
 
@@ -362,7 +362,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
-                        android:text="5166.08978664 LYR per $USDT"
+                        android:text="@string/swap_0_lyr_per_usd"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/swapTokenPairValueTextView" />
 
@@ -382,7 +382,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
-                        android:text="1 LYR"
+                        android:text="@string/swap_1_lyr"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/swapEstimatedRatioValueTextView" />
 
@@ -402,7 +402,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
-                        android:text="0.00000001 $ETH"
+                        android:text="@string/swap_some_eth_dummy"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/swapYouWillSellValueTextView" />
 
@@ -422,7 +422,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
-                        android:text="0.00001700 %"
+                        android:text="@string/swap_some_percentage"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/swapYouWillGetValueTextView" />
 
@@ -442,7 +442,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
-                        android:text="0.003 LYR"
+                        android:text="@string/swap_some_lyr1"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/swapPriceImpactValueTextView" />
 
@@ -462,7 +462,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
-                        android:text="0.001 LYR"
+                        android:text="@string/swap_some_lyr1"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/swapPoolFeeValueTextView" />
 
@@ -492,7 +492,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
-                        android:text="$ 0.0001904"
+                        android:text="@string/swap_some_usd1"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
@@ -502,7 +502,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
-                        android:text="$ 0.00023885"
+                        android:text="@string/swap_some_usd2"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/swapExternalPriceValueTextView" />
 
@@ -535,7 +535,7 @@
                         android:layout_marginTop="24dp"
                         android:layout_marginEnd="8dp"
                         android:gravity="end|center_vertical"
-                        android:text="0 LYR\n0 $USDT"
+                        android:text="@string/swap_0_lyr_and_0_usd"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/swapNetworkFeeValueTextView" />
 
@@ -545,7 +545,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
-                        android:text="90.9674 %"
+                        android:text="@string/swap_some_percentage1"
                         android:visibility="gone"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/swapTotalLiquidityValueTextView" />

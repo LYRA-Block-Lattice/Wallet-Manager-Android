@@ -5,7 +5,6 @@ import android.util.Pair;
 import com.lyrawallet.Accounts.Accounts;
 import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
 import com.lyrawallet.Ui.FragmentAccount.FragmentAccount;
-import com.lyrawallet.Ui.UiHelpers;
 import com.lyrawallet.Ui.UtilGetData;
 
 import java.util.ArrayList;
@@ -46,19 +45,20 @@ public class Global {
     public final static String str_api_rpc_purpose_send_manual = "user_send";
     // Global variables
     private static visiblePage VisiblePage;
+    private static boolean DebugEnabled = false;
+    private static boolean RandomizeIpEnabled = false;
 
     private static String CurrentNetwork = networkName[0];
     private static String CurrentLanguage = languageName[0];
 
     private static String AccountsContainer = null;
     private static List<Pair<String, String>> WalletAccNameAndIdList = null;
-    private static List<Pair<String, Pair<Integer, String>>> WalletHistory = null;
+    private static List<Pair<String, Pair<Integer, List<ApiRpcActionsHistory.HistoryEntry>>>> AccountHistory = null;
     private static List<Pair<String, List<FragmentAccount.AccountHistoryEntry>>> FragmentAccountHistory = null;
     private static String WalletName = null;
     private static String ReceiveWalletPassword = null;
     private static String SelectedAccountName = "";
     private static int SelectedAccountNr = -1;
-    private static List<Pair<String, Boolean>>  UnreceivedBalance = null;
     private static String WalletPath = "";
     private static int InactivityTimeForClose = -1;
     private static boolean PasswordSaveAllowed = false;
@@ -69,15 +69,16 @@ public class Global {
     private static int DeviceOrientation = 0;
 
 
+    static int SelectedNode = 0;
     final static String[] NodeAddressDevNet = new String[]{""};
     final static String[] NodeAddressTestNet = new String[]{
             "wss://173.212.228.110:4504/api/v1/socket",
-            "wss://81.196.64.78:4504/api/v1/socket",
-            "wss://161.97.166.188:4504/api/v1/socket",
-            "wss://seed.testnet.lyra.live:443/api/v1/socket",
-            "wss://seed2.testnet.lyra.live:443/api/v1/socket",
-            "wss://seed3.testnet.lyra.live:443/api/v1/socket",
-            "wss://seed3.testnet.lyra.live:443/api/v1/socket"
+            //"wss://81.196.64.78:4504/api/v1/socket",
+            //"wss://161.97.166.188:4504/api/v1/socket",
+            //"wss://seed.testnet.lyra.live:443/api/v1/socket",
+            //"wss://seed2.testnet.lyra.live:443/api/v1/socket",
+            //"wss://seed3.testnet.lyra.live:443/api/v1/socket",
+            //"wss://seed3.testnet.lyra.live:443/api/v1/socket"
     };
     final static String[] NodeAddressMainNet = new String[]{
             "wss://173.212.228.110:5504/api/v1/socket",
@@ -101,6 +102,20 @@ public class Global {
     }
     public static visiblePage getVisiblePage() {
         return VisiblePage;
+    }
+
+    public static void setDebugEnabled( boolean enabled) {
+        DebugEnabled = enabled;
+    }
+    public static boolean getDebugEnabled() {
+        return DebugEnabled;
+    }
+
+    public static void setRandomizeIpEnabled( boolean enabled) {
+        RandomizeIpEnabled = enabled;
+    }
+    public static boolean getRandomizeIpEnabled() {
+        return RandomizeIpEnabled;
     }
 
     public static void setCurrentNetwork(String net) {
@@ -131,56 +146,28 @@ public class Global {
         return WalletAccNameAndIdList;
     }
 
-    public static void setUnreceivedBalance(String accountName, boolean unreceived) {
-        if(UnreceivedBalance != null) {
-            for (int i = 0; i < UnreceivedBalance.size(); i++) {
-                Pair<String, Boolean> acc = UnreceivedBalance.get(i);
-                if (acc.first.equals(accountName)) {
-                    UnreceivedBalance.remove(i);
-                    UnreceivedBalance.add(new Pair<>(accountName, unreceived));
-                    return;
-                }
-            }
-        } else {
-            UnreceivedBalance = new ArrayList<>();
-        }
-        UnreceivedBalance.add(new Pair<>(accountName, unreceived));
-    }
-    public static boolean getUnreceivedBalance(String accountName) {
-        if(UnreceivedBalance != null) {
-            for (int i = 0; i < UnreceivedBalance.size(); i++) {
-                Pair<String, Boolean> acc = UnreceivedBalance.get(i);
-                if (acc.first.equals(accountName)) {
-                    return acc.second;
-                }
-            }
-        }
-        return false;
-    }
-
     public static void setWalletHistory(String accountName, String history) {
-        if(WalletHistory != null) {
-            for (int i = 0; i < WalletHistory.size(); i++) {
-                Pair<String, Pair<Integer, String>> acc = WalletHistory.get(i);
+        List<ApiRpcActionsHistory.HistoryEntry> h = ApiRpcActionsHistory.loadHistory(history);
+        if(AccountHistory != null) {
+            for (int i = 0; i < AccountHistory.size(); i++) {
+                Pair<String, Pair<Integer, List<ApiRpcActionsHistory.HistoryEntry>>> acc = AccountHistory.get(i);
                 if (acc.first.equals(accountName)) {
                     int cnt = acc.second.first;
-                    WalletHistory.remove(i);
-                    WalletHistory.add(new Pair<>(accountName, new Pair<>(cnt, history)));
-                    setFragmentAccountHistory(accountName, UtilGetData.historyToAccountAdapter(new Pair<>(cnt, history)));
+                    AccountHistory.remove(i);
+                    AccountHistory.add(new Pair<>(accountName, new Pair<>(cnt, h)));
                     return;
                 }
             }
         } else {
-            WalletHistory = new ArrayList<>();
+            AccountHistory = new ArrayList<>();
         }
-        WalletHistory.add(new Pair<>(accountName, new Pair<>(0, history)));
-        setFragmentAccountHistory(accountName, UtilGetData.historyToAccountAdapter(new Pair<>(0, history)));
+        AccountHistory.add(new Pair<>(accountName, new Pair<>(0, ApiRpcActionsHistory.loadHistory(history))));
     }
 
-    public static Pair<Integer, String> getWalletHistory(String accountName) {
-        if(WalletHistory != null) {
-            for (int i = 0; i < WalletHistory.size(); i++) {
-                Pair<String, Pair<Integer, String>> acc = WalletHistory.get(i);
+    public static Pair<Integer, List<ApiRpcActionsHistory.HistoryEntry>> getWalletHistory(String accountName) {
+        if(AccountHistory != null) {
+            for (int i = 0; i < AccountHistory.size(); i++) {
+                Pair<String, Pair<Integer, List<ApiRpcActionsHistory.HistoryEntry>>> acc = AccountHistory.get(i);
                 if (acc.first.equals(accountName)) {
                     return acc.second;
                 }
@@ -280,18 +267,39 @@ public class Global {
         return MaxRpcConnectRetry;
     }
 
+    public static void incrementNodeNumber() {
+        SelectedNode++;
+        if (SelectedNode >= getNodeAddressTable().length) {
+            SelectedNode = 0;
+        }
+    }
+
     public static String getNodeAddress() {
-        int nodeNr = 0;
-        switch (getCurrentNetwork()) {
-            case "DEVNET":
-                nodeNr = (int) (Math.random() * NodeAddressDevNet.length - 1);
-                return NodeAddressDevNet[nodeNr];
-            case "MAINNET":
-                nodeNr = (int) (Math.random() * NodeAddressMainNet.length - 1);
-                return NodeAddressMainNet[nodeNr];
-            default:
-                nodeNr = (int) (Math.random() * NodeAddressTestNet.length - 1);
-                return NodeAddressTestNet[nodeNr];
+        if (getRandomizeIpEnabled()) {
+            int nodeNr = 0;
+            switch (getCurrentNetwork()) {
+                case "DEVNET":
+                    nodeNr = (int) (Math.random() * NodeAddressDevNet.length - 1);
+                    return NodeAddressDevNet[nodeNr];
+                case "MAINNET":
+                    nodeNr = (int) (Math.random() * NodeAddressMainNet.length - 1);
+                    return NodeAddressMainNet[nodeNr];
+                default:
+                    nodeNr = (int) (Math.random() * NodeAddressTestNet.length - 1);
+                    return NodeAddressTestNet[nodeNr];
+            }
+        } else {
+            if (SelectedNode >= getNodeAddressTable().length) {
+                SelectedNode = 0;
+            }
+            switch (getCurrentNetwork()) {
+                case "DEVNET":
+                    return NodeAddressDevNet[SelectedNode];
+                case "MAINNET":
+                    return NodeAddressMainNet[SelectedNode];
+                default:
+                    return NodeAddressTestNet[SelectedNode];
+            }
         }
     }
 

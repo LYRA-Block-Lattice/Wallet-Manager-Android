@@ -64,7 +64,6 @@ public class NetworkRpcSocket {
                         callBack.onRpcSocketTaskDone(thisInstance);
                     }
                 }
-                this.close();
             }
             @OnMessage
             public void onMessage(ByteBuffer bytes) {
@@ -77,7 +76,6 @@ public class NetworkRpcSocket {
                         callBack.onRpcSocketTaskDone(thisInstance);
                     }
                 }
-                this.close();
             }
             @OnClose
             public void onClose(int i, String s, boolean b) {

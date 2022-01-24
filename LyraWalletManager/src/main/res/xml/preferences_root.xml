@@ -44,13 +44,21 @@
             android:title="@string/pref_password_store_selection_title"
             android:icon="@drawable/ic_outline_save_24"/>
 
-        <!-- <SwitchPreference
+        <SwitchPreference
             android:defaultValue="false"
-            android:key="@string/pref_dummy_switch_key"
-            android:summary="@string/pref_dummy_switch_summary"
-            android:title="@string/pref_dummy_switch_title" />
+            android:key="@string/pref_randomize_node_address_enabled_switch_key"
+            android:summary="@string/pref_randomize_node_address_enabled_switch_summary"
+            android:title="@string/pref_randomize_node_address_enabled_switch_title"
+            android:icon="@drawable/ic_baseline_multiple_stop_24" />
 
-        <EditTextPreference android:title="Enter Text"
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/pref_debug_enabled_switch_key"
+            android:summary="@string/pref_debug_enabled_switch_summary"
+            android:title="@string/pref_debug_enabled_switch_title"
+            android:icon="@drawable/ic_baseline_bug_report_24" />
+
+        <!-- <EditTextPreference android:title="Enter Text"
             android:key="text"
             android:persistent="true"
             android:dialogTitle="Title1"
@@ -62,7 +70,7 @@
         <Preference
             android:summary="@string/pref_description_summary"
             android:title="@string/pref_description_title"
-            android:key="@string/pref_dummy_switch_key"/>
+            android:key="@string/pref_debug_enabled_switch_key"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

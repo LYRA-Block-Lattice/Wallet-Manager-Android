@@ -34,11 +34,6 @@
     <string name="str_launcher_receive_button">PRIMESTE</string>
     <string name="str_launcher_settings_button">SETĂRI</string>
     <string name="pref_category_general_title">General</string>
-    <string name="prefs_back_title"> </string>
-    <string name="pref_category_account_title">Cont</string>
-    <string name="prefs_add_new_account_title">Adauga cont</string>
-    <string name="prefs_backup_wallet_title">Salvează portofel</string>
-    <string name="pref_category_wallet_title">Portofel</string>
     <string name="action_import_wallet_hint">Nume portofel</string>
     <string name="action_import_wallet_short">Importă portofel</string>
     <string name="str_wallet_already_exists">Portofelul există deja</string>
@@ -49,7 +44,7 @@
     <string name="pref_description_title">Versiune</string>
     <string name="str_spinner_account_select_hint">Selectează cont</string>
     <string name="pref_language_selection_current_selection">Limba selectată este</string>
-    <string name="pref_network_selection_current_selection">Reteaua selectată este</string>
+    <string name="pref_network_selection_current_selection">Reţeaua selectată este</string>
     <string name="str_launcher_explorer_button">EXPLORER</string>
     <string name="str_launcher_about_us_button">Despre Noi</string>
     <string name="str_launcher_new_account_button">CONT NOU</string>
@@ -59,7 +54,6 @@
     <string name="send_token_select_spinner_description">Selectează token</string>
     <string name="send_token_recipient_address_hint">Adresa destinatarului…</string>
     <string name="send_token_amount_to_send_hint">Cantitate</string>
-    <string name="send_token_amount_to_send_max">MAX</string>
     <string name="send_token_send_next">Mai departe…</string>
     <string name="send_token_available">Disponibil</string>
     <string name="main_activity_not_enough_tokens_into_account">Nu sunt destui tokeni in cont</string>
@@ -72,14 +66,13 @@
     <string name="TotalSpent">Total cheltuit</string>
     <string name="Wallet">Portofel</string>
     <string name="send_successful">Trimis cu success</string>
-    <string name="Ok">Bine</string>
+    <string name="OK">Bine</string>
     <string name="send_sending">Trimit</string>
-    <string name="Receive">Primeste</string>
     <string name="receive_account_address">Adresa contului</string>
     <string name="receive_scan_or_copy_address">Scanează sau copiază adresa</string>
     <string name="receive_scan_address_copied">Adresa copiata</string>
     <string name="Request">Cere</string>
-    <string name="Confirm_action">Confirmă actiunea</string>
+    <string name="Confirm_action">Confirmă acţiunea</string>
     <string name="Request_token">Cere token</string>
     <string name="pref_password_store_selection_title">Selectează dacă parola va fi salvată pentru a semna viitoarele tranzactii.</string>
     <string name="pref_password_store_selection_summary">Selectează dacă parola portofelului va fi salvată pentru a fi folosită pentru semnarea viitoarelor tranzactii in mod automat, pentru ca schimbarea sa aibă efect trebuie sa restartezi aplicatia.</string>
@@ -90,7 +83,7 @@
     </string-array>
     <string name="Swap">Swap</string>
     <string name="Pool">Pool</string>
-    <string name="swap_token_amount_to_send_hint">Valoare trimisa</string>
+    <string name="swap_token_amount_to_send_hint">Valoare trimisă</string>
     <string name="swap_token_amount_to_receive_hint">Valoare primita</string>
     <string name="Balance">Balanța</string>
     <string name="swap_pool_remove_all_my_share">Eliminați toată partea mea</string>
@@ -104,8 +97,21 @@
     <string name="swap_price_impact">Impactul pretului</string>
     <string name="swap_pool_fee">Pool fee</string>
     <string name="swap_network_fee">Network fee</string>
-    <string name="swap_total_liquidity">Lichiditate totala</string>
+    <string name="swap_total_liquidity">Lichiditate totală</string>
     <string name="swap_your_share">Partea ta de share</string>
     <string name="swap_amount_of_token">Numar de tokeni</string>
+    <string name="swap_balance_0">Balanta 0</string>
+    <string name="swap_spinner_from_content_description">Tin token</string>
+    <string name="swap_spinner_to_content_description">In token</string>
+    <string name="swap_swap_between_content_description">Schimba tokenii intre ei</string>
+    <string name="swap_swap_action_begin">Actiunea SWAP începută</string>
+    <string name="pref_debug_enabled_switch_title">Deschide debug mode</string>
+    <string name="pref_debug_enabled_switch_summary">Acest comutator activeaza atentionarile in detaliu al activitatii utilizatorului si al actiunilor declansate de utilizator.</string>
+    <string name="str_an_error_occurred">A apărut o eroare</string>
+    <string name="str_please_contact_lyra_period_inc">Va rugam sa contactaţi lyra.live, t.me/lyra_live</string>
+    <string name="pref_randomize_node_address_enabled_switch_title">Alege nodurile random</string>
+    <string name="pref_randomize_node_address_enabled_switch_summary">Modifica adresa IP al nodurilor in mod random la fiecate operatie, daca este deschisa va avea impact in timpul necesar refreshului istoriei</string>
+    <string name="swap_swap_complete">Swap efectuat</string>
+    <string name="swap_add_liquidity_complete">Adaugare lichiditate completa</string>
 
 </resources>

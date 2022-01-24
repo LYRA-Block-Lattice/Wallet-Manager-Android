@@ -3,6 +3,13 @@
 
     <string name="charset" translatable="false">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
 
+    <string name="str_please_contact_lyra_period_inc">Please contact the team at lyra.live, t.me/lyra_live</string>
+
+
+
+
+
+
     <string name="Send1">Send</string>
     <string name="Send2">Send</string>
     <string name="From">From</string>
@@ -10,14 +17,13 @@
     <string name="NetworkFee">Network Fee</string>
     <string name="TotalSpent">Total Spent</string>
     <string name="Wallet">Wallet</string>
-    <string name="Ok">Ok</string>
+    <string name="OK">OK</string>
     <string name="Accept">Accept</string>
     <string name="Cancel">Cancel</string>
     <string name="More">More</string>
     <string name="Send">Send</string>
     <string name="Swap">Swap</string>
     <string name="Pool">Pool</string>
-    <string name="Receive">Receive</string>
     <string name="Request">Request</string>
     <string name="Balance">Balance</string>
     <string name="Confirm_action">Confirm action</string>
@@ -52,6 +58,7 @@
     <string name="str_minimum_characters_in_name_is">Minimum number of characters in name is</string>
     <string name="str_something_went_wrong_when_importing_wallet">Something went wrong when importing the wallet</string>
     <string name="str_something_went_wrong_when_backup_wallet">Something went wrong when backup the wallet</string>
+    <string name="str_an_error_occurred">An error occurred</string>
 
     <string name="str_spinner_account_select_hint">Select account</string>
 
@@ -61,7 +68,6 @@
     <string name="send_token_select_spinner_description">Select token</string>
     <string name="send_token_recipient_address_hint">Recipient address…</string>
     <string name="send_token_amount_to_send_hint">Amount</string>
-    <string name="send_token_amount_to_send_max">MAX</string>
     <string name="send_token_send_next">Next…</string>
     <string name="send_token_available">Available</string>
     <string name="send_successful">Successfully send</string>
@@ -86,22 +92,29 @@
     <string name="swap_network_fee">Network fee</string>
     <string name="swap_total_liquidity">Total liquidity</string>
     <string name="swap_your_share">Your share</string>
+    <string name="swap_swap_action_begin">Swap action begin</string>
+    <string name="swap_balance_0">Balance 0</string>
+    <string name="swap_lyr_vs_usd" translatable="false">LYR vs $USDT</string>
+    <string name="swap_0_lyr_per_usd" translatable="false">0 LYR per $USDT</string>
+    <string name="swap_1_lyr" translatable="false">1 LYR</string>
+    <string name="swap_some_eth_dummy" translatable="false">0.00000001 $ETH</string>
+    <string name="swap_some_percentage" translatable="false">0.00001700 %</string>
+    <string name="swap_some_lyr1" translatable="false">0.003 LYR</string>
+    <string name="swap_some_usd1" translatable="false">$ 0.0001904</string>
+    <string name="swap_some_usd2" translatable="false">$ 0.00023885</string>
+    <string name="swap_0_lyr_and_0_usd" translatable="false">0 LYR\n0 $USDT</string>
+    <string name="swap_some_percentage1" translatable="false">90.9674 %</string>
+    <string name="swap_spinner_from_content_description">Token from</string>
+    <string name="swap_spinner_to_content_description">Token to</string>
+    <string name="swap_swap_between_content_description">Swap tokens between them</string>
+    <string name="swap_swap_complete">Swap complete</string>
+    <string name="swap_add_liquidity_complete">Add liquidity complete</string>
+
 
     <string name="swap_amount_of_token">Amount of token</string>
 
-    <string name="prefs_back_title"> </string>
-    <string name="prefs_back_key" translatable="false">prefs_back</string>
-
-    <string name="prefs_add_new_account_title">Add new account</string>
-    <string name="prefs_add_new_account_key" translatable="false">prefs_add_new_account_key</string>
-
-    <string name="prefs_backup_wallet_title">Backup wallet</string>
-    <string name="prefs_backup_wallet_key" translatable="false">prefs_backup_wallet</string>
-
     <!-- Preferences menu -->
     <string name="pref_category_general_title">General</string>
-    <string name="pref_category_account_title">Account</string>
-    <string name="pref_category_wallet_title">Wallet</string>
     <string name="pref_other_title">Other</string>
     <!-- Network selection -->
     <string name="pref_network_selection_title">Network</string>
@@ -137,12 +150,21 @@
         <item>I am an paranoid and I never store the wallet password</item>
         <item>I am so lazy that I don\'t want to write the password every time a transaction is sent</item>
     </string-array>
+
+    <!-- Randomize node addresses switch -->
+    <string name="pref_randomize_node_address_enabled_switch_title">Randomize node addresses</string>
+    <string name="pref_randomize_node_address_enabled_switch_summary">Randomize node IP address for each connection, if enabled the history refrash time is impacted</string>
+    <string name="pref_randomize_node_address_enabled_switch_key" translatable="false">pref_randomize_node_address_enabled_key</string>
+
+    <!-- Debug enabled switch -->
+    <string name="pref_debug_enabled_switch_title">Enable debug mode</string>
+    <string name="pref_debug_enabled_switch_summary">This switch will enable the showing in detail of user actions and different internal actions triggered by user.</string>
+    <string name="pref_debug_enabled_switch_key" translatable="false">pref_debug_enabled_key</string>
+
     <!-- Other -->
     <string name="pref_description_title">Version</string>
     <string name="pref_description_summary" translatable="false">LyraWalletManager V0.1.0</string>
 
 
-    <!-- Dummy switch -->
-    <string name="pref_dummy_switch_key" translatable="false">pref_dummy_switch_key</string>
     <!-- ************************************************************************************** -->
 </resources>

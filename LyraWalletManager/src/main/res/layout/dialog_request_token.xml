@@ -79,7 +79,7 @@
                 android:backgroundTintMode="add"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
-                android:text="@string/Ok"
+                android:text="@string/OK"
                 android:textAllCaps="true"
                 app:cornerRadius="@dimen/button_round_corner"
                 app:layout_constraintBottom_toBottomOf="parent"

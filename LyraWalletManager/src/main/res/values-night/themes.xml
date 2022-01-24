@@ -22,11 +22,6 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="mySpinnerItemStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
-        <item name="android:textSize">20sp</item>
-        <item name="android:textColor">@color/grey_light</item>
-    </style>
-
     <style name="Theme.LyraWalletAndroid.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.LyraWalletAndroid.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />

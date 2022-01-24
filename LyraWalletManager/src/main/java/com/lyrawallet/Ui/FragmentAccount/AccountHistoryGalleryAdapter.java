@@ -1,12 +1,14 @@
 package com.lyrawallet.Ui.FragmentAccount;
 
 import android.content.Context;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.lyrawallet.Global;
 import com.lyrawallet.R;
 
 import java.util.Collections;
@@ -73,6 +75,13 @@ public class AccountHistoryGalleryAdapter extends RecyclerView.Adapter<AccountHi
         notifyItemRangeRemoved(itemStart, i);
     }
 
+    public void updateUnitPrice(String ticker) {
+        for (int i = 0; i < this.list.size(); i++) {
+            if(this.list.get(i).TickerName.equals(ticker))
+                notifyItemChanged(i);
+        }
+    }
+
 
 
 
@@ -91,6 +100,10 @@ public class AccountHistoryGalleryAdapter extends RecyclerView.Adapter<AccountHi
     onBindViewHolder(final AccountHistoryViewHolder viewHolder,
                      final int position)
     {
+        double unitValuePerUsd = Global.getTokenPrice(new Pair<>(list.get(position).TickerName, "tether/USDT"));
+        if(unitValuePerUsd == 0) {
+            unitValuePerUsd = Global.getTokenPrice(new Pair<>(list.get(position).TickerName, "USD"));
+        }
         final int index = viewHolder.getAdapterPosition();
         viewHolder.Height
                 .setText(String.format(Locale.US, "TX: %d", list.get(position).Height));
@@ -99,11 +112,11 @@ public class AccountHistoryGalleryAdapter extends RecyclerView.Adapter<AccountHi
         viewHolder.TickerName
                 .setText(list.get(position).TickerName);
         viewHolder.Quantity
-                .setText(String.format(Locale.US, "%.3f", list.get(position).Quantity));
+                .setText(String.format(Locale.US, "%.8f", list.get(position).Quantity));
         viewHolder.QuantityUsd
-                .setText(String.format("%sUSD", String.format(Locale.US, "%.3f", list.get(position).Quantity * list.get(position).ValueUsdPerUnit)));
+                .setText(String.format("%sUSD", String.format(Locale.US, "%.8f", list.get(position).Quantity * unitValuePerUsd)));
         viewHolder.ValueUsdPerUnit
-                .setText(String.format("%sUSD", String.format(Locale.US, "%f", list.get(position).ValueUsdPerUnit)));
+                .setText(String.format("%sUSD", String.format(Locale.US, "%.8f", unitValuePerUsd)));
         viewHolder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)

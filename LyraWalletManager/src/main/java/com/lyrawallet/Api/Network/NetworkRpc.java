@@ -146,6 +146,7 @@ public class NetworkRpc extends AsyncTask<String, Void, String[]> implements Net
         }
         if (retryCnt == Global.getMaxRpcConnectRetry()) {
             sendState(state.CONNECTION_TIMEOUT);
+            Global.incrementNodeNumber();
             return state.CONNECTION_TIMEOUT;
         }
         sendState(state.CONNECTED);
@@ -153,6 +154,7 @@ public class NetworkRpc extends AsyncTask<String, Void, String[]> implements Net
     }
 
     public state send(String api, List<String> args) {
+        System.out.println("Executing: " + api + ";" + args);
         return sendResponse(api, args);
     }
 
@@ -204,7 +206,6 @@ public class NetworkRpc extends AsyncTask<String, Void, String[]> implements Net
         String[] r = new String[]{Api, InstanceName, rsp};
         if(callBack != null) {
             callBack.onRpcTaskDone(r);
-            this.cancel(true);
         } else {
             System.out.println("Rpc.java: RPC task done callback = null");
         }
@@ -217,6 +218,8 @@ public class NetworkRpc extends AsyncTask<String, Void, String[]> implements Net
         if(rsp.length() == 0) {
             sendState(state.EMPTY_RESPONSE);
             InternalState = state.IDLE;
+            Socket.closeConnection();
+            this.cancel(false);
             return;
         }
         try {
@@ -239,16 +242,20 @@ public class NetworkRpc extends AsyncTask<String, Void, String[]> implements Net
                     composeSendResponse(obj.toString());
                 }
                 Password = "";
+                Socket.closeConnection();
+                this.cancel(false);
             } else if (!obj.isNull("method")) {
                 String method = obj.getString("method");
                 if (method.equals("Sign")) {
-                    composeSendResponse("Sign");
+                    //composeSendResponse("Sign");
                     JSONArray array = obj.getJSONArray("params");
                     String hash = array.getString(1);
                     String pK = Accounts.getPrivateKey(Password);
                     if(pK == null) {
                         sendState(state.NOT_SIGNING);
                         InternalState = state.IDLE;
+                        Socket.closeConnection();
+                        this.cancel(true);
                         return;
                     }
                     String sig = CryptoSignatures.getSignature(pK, hash);
@@ -278,11 +285,15 @@ public class NetworkRpc extends AsyncTask<String, Void, String[]> implements Net
                 if(error.equals("BlockSignatureValidationFailed")) {
                     retrySign();
                 }
+                Socket.closeConnection();
+                this.cancel(true);
             }
         } catch (JSONException e) {
             sendState(state.ERROR_RECEIVED_JSON);
             e.printStackTrace();
             InternalState = state.IDLE;
+            Socket.closeConnection();
+            this.cancel(true);
         }
     }
 }

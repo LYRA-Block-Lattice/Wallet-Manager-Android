@@ -89,6 +89,24 @@ public class FragmentPreferencesRoot extends PreferenceFragmentCompat {
                 }
             });
         }
+        Preference pref_debug_enabled_switch_key = findPreference(getString(R.string.pref_debug_enabled_switch_key));
+        if(pref_debug_enabled_switch_key != null) {
+            pref_debug_enabled_switch_key.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                public boolean onPreferenceChange(Preference preference, Object value) {
+                    Global.setDebugEnabled(value.toString().equals("true"));
+                    return true;
+                }
+            });
+        }
+        Preference pref_randomize_node_address_enabled_switch_key = findPreference(getString(R.string.pref_randomize_node_address_enabled_switch_key));
+        if(pref_randomize_node_address_enabled_switch_key != null) {
+            pref_randomize_node_address_enabled_switch_key.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                public boolean onPreferenceChange(Preference preference, Object value) {
+                    Global.setRandomizeIpEnabled(value.toString().equals("true"));
+                    return true;
+                }
+            });
+        }
         View v = super.onCreateView(inflater, container, savedInstanceState);
         return v;//inflater.inflate(R.layout.fragment_settings, container, false);
     }

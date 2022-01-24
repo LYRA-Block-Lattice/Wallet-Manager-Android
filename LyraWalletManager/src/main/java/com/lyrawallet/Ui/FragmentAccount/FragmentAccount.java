@@ -20,11 +20,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
 import com.lyrawallet.Global;
 import com.lyrawallet.R;
+import com.lyrawallet.Ui.UtilGetData;
 import com.lyrawallet.Util.Concatenate;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,28 +33,26 @@ import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView;
 
 public class FragmentAccount extends Fragment {
     static FragmentAccount fInstance = null;
-    Timer timer;
+    Timer timer1;
     List<AccountHistoryEntry> EntryList = new ArrayList<>();
     AccountHistoryGalleryAdapter adapter;
     private NestedScrollView nestedSV;
     private boolean refreshInProgress = false;
     int addCnt = 0;
-    static private Pair<Integer, String> history;
+    static private Pair<Integer, List<ApiRpcActionsHistory.HistoryEntry>> history;
 
     public static class AccountHistoryEntry {
         int Height;
         int TickerImage;
         String TickerName;
         double Quantity;
-        double ValueUsdPerUnit;
 
         public AccountHistoryEntry(int height, int tickerImage, String tickerName,
-                                   double quantity, double valueUsdPerUnit) {
+                                   double quantity) {
             this.Height = height;
             this.TickerImage = tickerImage;
             this.TickerName = tickerName;
             this.Quantity = quantity;
-            this.ValueUsdPerUnit = valueUsdPerUnit;
         }
     }
 
@@ -93,7 +88,7 @@ public class FragmentAccount extends Fragment {
         return false;
     }
 
-    public void populateHistory(View view, @Nullable Bundle savedInstanceState) {
+    public void populateHistory(View view) {
         //View v = new View((MainActivity) getActivity());
         FragmentActivity activity = getActivity();
         if (activity == null || view == null) {
@@ -108,7 +103,12 @@ public class FragmentAccount extends Fragment {
                     refreshInProgress = false;
                     return;
                 }
-                List<AccountHistoryEntry> entryList = Global.getFragmentAccountHistory(Concatenate.getHistoryFileName());
+                Pair<Integer, List<ApiRpcActionsHistory.HistoryEntry>> intHistoryList = Global.getWalletHistory(Concatenate.getHistoryFileName());
+                if (intHistoryList == null) {
+                    refreshInProgress = false;
+                    return;
+                }
+                List<AccountHistoryEntry> entryList = UtilGetData.historyToAccountAdapter(intHistoryList.second);
                 if (entryList == null || EntryList == null) {
                     refreshInProgress = false;
                     return;
@@ -161,24 +161,45 @@ public class FragmentAccount extends Fragment {
         fInstance.getActivity().runOnUiThread(new Runnable() {
             public void run() {
                 try {
-                    JSONArray arr = new JSONArray(history.second);
-                    if (arr.length() == 0) {
+                    if (history.second.size() == 0) {
                         accountValueLyr.setText(String.format(Locale.US, "%d %s", 0, "LYR"));
                         accountValueUsd.setText(String.format(Locale.US, "%d %s", 0, "USD"));
                     } else {
-                        JSONObject obj = arr.getJSONObject(arr.length() - 1);
-                        double valueLyr = Double.parseDouble(obj.getJSONObject("Balances").getString("LYR"));
-                        accountValueLyr.setText(String.format(Locale.US, "%f %s", valueLyr, "LYR"));
-                        accountValueUsd.setText(String.format(Locale.US, "%.2f %s", valueLyr * Global.getTokenPrice(new Pair<>("LYR", "USD")), "USD"));
+                        List<Pair<String, Double>> tokenList = history.second.get(history.second.size() - 1).getBalances();
+                        for (int i = 0; i < tokenList.size(); i++) {
+                            if( tokenList.get(i).first.equals("LYR")) {
+                                accountValueLyr.setText(String.format(Locale.US, "%.8f %s", tokenList.get(i).second, "LYR"));
+                                accountValueUsd.setText(String.format(Locale.US, "%.2f %s", tokenList.get(i).second * Global.getTokenPrice(new Pair<>("LYR", "USD")), "USD"));
+                                break;
+                            }
+                        }
                     }
-                } catch (JSONException | NumberFormatException e) {
+                } catch (NumberFormatException e) {
                     e.printStackTrace();
                 }
             }
         });
     }
 
-        @Override
+    void restoreTimers(View view) {
+        refreshInProgress = false;
+        // Refresh recycler once every 5 seconds, first start after 700mS to avoid UI freezing..
+        timer1 = new Timer();
+        timer1.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                FragmentActivity activity = getActivity();
+                if (activity != null) {
+                    if (!refreshInProgress) {
+                        refreshInProgress = true;
+                        populateHistory(view);
+                        setAccountValue(view);
+                    }
+                }
+            }
+        }, 700, 5000);
+    }
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
@@ -193,9 +214,20 @@ public class FragmentAccount extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         refreshInProgress = false;
-        timer.cancel();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        //Toast.makeText(getActivity(), "onResumed called", Toast.LENGTH_LONG).show();
+        restoreTimers(getView());
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        //Toast.makeText(getActivity(), "onPause called", Toast.LENGTH_LONG).show();
+        timer1.cancel();
+    }
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         FragmentActivity activity = getActivity();
@@ -231,22 +263,6 @@ public class FragmentAccount extends Fragment {
                 .setAction("", null).show();*/
         ApiRpcActionsHistory.load(Concatenate.getHistoryFileName());
         setAccountValue(view);
-        refreshInProgress = false;
-        // Refresh recycler once every 5 seconds, first start after 700mS to avoid UI freezing..
-        timer = new Timer();
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                FragmentActivity activity = getActivity();
-                if (activity != null) {
-                    if (!refreshInProgress) {
-                        refreshInProgress = true;
-                        populateHistory(view, savedInstanceState);
-                        setAccountValue(view);
-                    }
-                }
-            }
-        }, 700, 5000);
 
         new Handler().postDelayed(new Runnable() {
             public void run() {

@@ -65,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
     protected static MainActivity getInstance() {
         return Instance;
     }
+    Timer timerBalance;
+    Timer timerHistory;
     /********************************** Save file dialog & Open file dialog ***********************/
     protected void backUpWallet(int procedure) {
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
@@ -256,22 +258,29 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         new WebHttps(this).execute("https://api.latoken.com/v2/ticker", "MainCallHttps2");*/
 
         // Call get history/het prices every 120 seconds.
-        Timer timerHistory = new Timer();
+    }
+    void restoreTimers() {
+        timerHistory = new Timer();
         timerHistory.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
                 new NetworkWebHttps(getInstance()).execute("https://api.latoken.com/v2/ticker/LYR/USDT", "MainCallHttpsLyrUsdtPair");
-                if( Global.getSelectedAccountName().length() != 0) {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        new ApiRpc().act(new ApiRpc.Action().actionPool("LyrPriceInUSD", "LYR", "tether/USDT"));
+                    }
+                });
+                /*if( Global.getSelectedAccountName().length() != 0) {
                     runOnUiThread(new Runnable() {
                         public void run() {
                             new ApiRpc().act(new ApiRpc.Action().actionHistory(Global.str_api_rpc_purpose_history_disk_storage,
                                     Global.getCurrentNetworkName(), Global.getSelectedAccountName(), Global.getSelectedAccountId()));
                         }
                     });
-                }
+                }*/
             }
         }, 1000, 120 * 1000);
-        Timer timerBalance = new Timer();
+        timerBalance = new Timer();
         timerBalance.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -288,12 +297,15 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
     @Override
     protected void onResume() {
         super.onResume();
-        Toast.makeText(getApplicationContext(), "onResumed called", Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), "onResumed called", Toast.LENGTH_LONG).show();
+        restoreTimers();
     }
     @Override
     protected void onPause() {
         super.onPause();
-        Toast.makeText(getApplicationContext(), "onPause called", Toast.LENGTH_LONG).show();
+        //Toast.makeText(getApplicationContext(), "onPause called", Toast.LENGTH_LONG).show();
+        timerBalance.cancel();
+        timerHistory.cancel();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

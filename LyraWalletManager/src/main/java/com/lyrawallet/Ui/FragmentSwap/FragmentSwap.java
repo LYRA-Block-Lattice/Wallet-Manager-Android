@@ -1,6 +1,7 @@
 package com.lyrawallet.Ui.FragmentSwap;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -9,16 +10,19 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.lyrawallet.Api.ApiRpc;
 import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
@@ -26,8 +30,10 @@ import com.lyrawallet.Global;
 import com.lyrawallet.GlobalLyra;
 import com.lyrawallet.MainActivity;
 import com.lyrawallet.R;
+import com.lyrawallet.Ui.FragmentAccount.AccountHistoryGalleryAdapter;
 import com.lyrawallet.Ui.TokensSpinnerAdapter;
 import com.lyrawallet.Ui.UiHelpers;
+import com.lyrawallet.Ui.UiUpdates;
 import com.lyrawallet.Ui.UtilGetData;
 import com.lyrawallet.Util.Concatenate;
 
@@ -88,44 +94,39 @@ public class FragmentSwap extends Fragment {
         if(poolSelected) {
             return;
         }
+        try {
+            TextView swapTokenPairTextView = (TextView) activity.findViewById(R.id.swapTokenPairTextView);
+            TextView swapEstimatedRatioTextView = (TextView) activity.findViewById(R.id.swapEstimatedRatioTextView);
+            TextView swapYouWillSellTextView = (TextView) activity.findViewById(R.id.swapYouWillSellTextView);
+            TextView swapYouWillGetTextView = (TextView) activity.findViewById(R.id.swapYouWillGetTextView);
+            TextView swapPriceImpactTextView = (TextView) activity.findViewById(R.id.swapPriceImpactTextView);
+            TextView swapPoolFeeTextView = (TextView) activity.findViewById(R.id.swapPoolFeeTextView);
+            TextView swapNetworkFeeTextView = (TextView) activity.findViewById(R.id.swapNetworkFeeTextView);
 
-        TextView swapTokenPairTextView = (TextView) activity.findViewById(R.id.swapTokenPairTextView);
-        TextView swapEstimatedRatioTextView = (TextView) activity.findViewById(R.id.swapEstimatedRatioTextView);
-        TextView swapYouWillSellTextView = (TextView) activity.findViewById(R.id.swapYouWillSellTextView);
-        TextView swapYouWillGetTextView = (TextView) activity.findViewById(R.id.swapYouWillGetTextView);
-        TextView swapPriceImpactTextView = (TextView) activity.findViewById(R.id.swapPriceImpactTextView);
-        TextView swapPoolFeeTextView = (TextView) activity.findViewById(R.id.swapPoolFeeTextView);
-        TextView swapNetworkFeeTextView = (TextView) activity.findViewById(R.id.swapNetworkFeeTextView);
-        if(swapTokenPairTextView == null || swapEstimatedRatioTextView == null || swapYouWillSellTextView == null || swapYouWillGetTextView == null ||
-                swapPriceImpactTextView == null || swapPoolFeeTextView == null || swapNetworkFeeTextView == null)
-            return;
-        swapTokenPairTextView.setVisibility(visibility);
-        swapEstimatedRatioTextView.setVisibility(visibility);
-        swapYouWillSellTextView.setVisibility(visibility);
-        swapYouWillGetTextView.setVisibility(visibility);
-        swapPriceImpactTextView.setVisibility(visibility);
-        swapPoolFeeTextView.setVisibility(visibility);
-        swapNetworkFeeTextView.setVisibility(visibility);
+            swapTokenPairTextView.setVisibility(visibility);
+            swapEstimatedRatioTextView.setVisibility(visibility);
+            swapYouWillSellTextView.setVisibility(visibility);
+            swapYouWillGetTextView.setVisibility(visibility);
+            swapPriceImpactTextView.setVisibility(visibility);
+            swapPoolFeeTextView.setVisibility(visibility);
+            swapNetworkFeeTextView.setVisibility(visibility);
 
-        TextView swapTokenPairValueTextView = (TextView) activity.findViewById(R.id.swapTokenPairValueTextView);
-        TextView swapEstimatedRatioValueTextView = (TextView) activity.findViewById(R.id.swapEstimatedRatioValueTextView);
-        TextView swapYouWillSellValueTextView = (TextView) activity.findViewById(R.id.swapYouWillSellValueTextView);
-        TextView swapYouWillGetValueTextView = (TextView) activity.findViewById(R.id.swapYouWillGetValueTextView);
-        TextView swapPriceImpactValueTextView = (TextView) activity.findViewById(R.id.swapPriceImpactValueTextView);
-        TextView swapPoolFeeValueTextView = (TextView) activity.findViewById(R.id.swapPoolFeeValueTextView);
-        TextView swapNetworkFeeValueTextView = (TextView) activity.findViewById(R.id.swapNetworkFeeValueTextView);
-        if(swapTokenPairValueTextView == null || swapEstimatedRatioValueTextView == null ||
-                swapYouWillSellValueTextView == null || swapYouWillGetValueTextView == null ||
-                swapPriceImpactValueTextView == null || swapPoolFeeValueTextView == null ||
-                swapNetworkFeeValueTextView == null)
-            return;
-        swapTokenPairValueTextView.setVisibility(visibility);
-        swapEstimatedRatioValueTextView.setVisibility(visibility);
-        swapYouWillSellValueTextView.setVisibility(visibility);
-        swapYouWillGetValueTextView.setVisibility(visibility);
-        swapPriceImpactValueTextView.setVisibility(visibility);
-        swapPoolFeeValueTextView.setVisibility(visibility);
-        swapNetworkFeeValueTextView.setVisibility(visibility);
+            TextView swapTokenPairValueTextView = (TextView) activity.findViewById(R.id.swapTokenPairValueTextView);
+            TextView swapEstimatedRatioValueTextView = (TextView) activity.findViewById(R.id.swapEstimatedRatioValueTextView);
+            TextView swapYouWillSellValueTextView = (TextView) activity.findViewById(R.id.swapYouWillSellValueTextView);
+            TextView swapYouWillGetValueTextView = (TextView) activity.findViewById(R.id.swapYouWillGetValueTextView);
+            TextView swapPriceImpactValueTextView = (TextView) activity.findViewById(R.id.swapPriceImpactValueTextView);
+            TextView swapPoolFeeValueTextView = (TextView) activity.findViewById(R.id.swapPoolFeeValueTextView);
+            TextView swapNetworkFeeValueTextView = (TextView) activity.findViewById(R.id.swapNetworkFeeValueTextView);
+
+            swapTokenPairValueTextView.setVisibility(visibility);
+            swapEstimatedRatioValueTextView.setVisibility(visibility);
+            swapYouWillSellValueTextView.setVisibility(visibility);
+            swapYouWillGetValueTextView.setVisibility(visibility);
+            swapPriceImpactValueTextView.setVisibility(visibility);
+            swapPoolFeeValueTextView.setVisibility(visibility);
+            swapNetworkFeeValueTextView.setVisibility(visibility);
+        } catch (NullPointerException ignored) { }
     }
 
     public static void setSwapValues(Activity activity, String from, String to, double price, double sellValue, double buyValue, double priceImpact, double poolFee, double networkFee) {
@@ -133,121 +134,154 @@ public class FragmentSwap extends Fragment {
             return;
         Spinner tokenFromSpinner = (Spinner) activity.findViewById(R.id.swapFromValueSpinner);
         Spinner tokenToSpinner = (Spinner) activity.findViewById(R.id.swapToValueSpinner);
-        if(tokenFromSpinner == null || tokenToSpinner == null) {
+        try {
+            if (!tokenFromSpinner.getSelectedItem().toString().equals(GlobalLyra.domainToSymbol(from)) ||
+                    !tokenToSpinner.getSelectedItem().toString().equals(GlobalLyra.domainToSymbol(to))) {
+                // if there are two requests for two different token pairs, make sure that the display will not be changed if the response is for different pair.
+                return;
+            }
+        } catch (NullPointerException ignored) {
             return;
         }
-        if(!tokenFromSpinner.getSelectedItem().toString().equals(GlobalLyra.domainToSymbol(from)) ||
-                !tokenToSpinner.getSelectedItem().toString().equals(GlobalLyra.domainToSymbol(to))) {
-            // if there are two requests for two different token pairs, make sure that the display will not be changed if the response is for different pair.
-            return;
-        }
-        /*if(!fromLastEditTextChanged) {
-            fromLastEditTextChanged = true;
-            return;
-        }*/
-        //TextView swapExternalPriceValueTextView = (TextView) swapView.findViewById(R.id.swapExternalPriceValueTextView);
-        //TextView swapInternalPriceValueTextView = (TextView) swapView.findViewById(R.id.swapInternalPriceValueTextView);
-        EditText swapToValueEditText = (EditText) activity.findViewById(R.id.swapToValueEditText);
 
-        TextView swapTokenPairValueTextView = (TextView) activity.findViewById(R.id.swapTokenPairValueTextView);
-        TextView swapEstimatedRatioValueTextView = (TextView) activity.findViewById(R.id.swapEstimatedRatioValueTextView);
-        TextView swapYouWillSellValueTextView = (TextView) activity.findViewById(R.id.swapYouWillSellValueTextView);
-        TextView swapYouWillGetValueTextView = (TextView) activity.findViewById(R.id.swapYouWillGetValueTextView);
-        TextView swapPriceImpactValueTextView = (TextView) activity.findViewById(R.id.swapPriceImpactValueTextView);
-        TextView swapPoolFeeValueTextView = (TextView) activity.findViewById(R.id.swapPoolFeeValueTextView);
-        TextView swapNetworkFeeValueTextView = (TextView) activity.findViewById(R.id.swapNetworkFeeValueTextView);
-        if(swapToValueEditText == null || swapTokenPairValueTextView == null || swapEstimatedRatioValueTextView == null || swapYouWillSellValueTextView == null ||
-                swapYouWillGetValueTextView == null || swapPriceImpactValueTextView == null || swapPoolFeeValueTextView == null || swapNetworkFeeValueTextView == null)
-            return;
-        swapToValueEditText.setText(String.format(Locale.US, "%.8f", buyValue));
+        try {
+            EditText swapToValueEditText = (EditText) activity.findViewById(R.id.swapToValueEditText);
 
-        swapTokenPairValueTextView.setText(String.format(Locale.US, "%s vs %s", GlobalLyra.domainToSymbol(from), GlobalLyra.domainToSymbol(to)));
-        swapEstimatedRatioValueTextView.setText(String.format(Locale.US, "%.8f %s per %s", price, GlobalLyra.domainToSymbol(from), GlobalLyra.domainToSymbol(to)));
-        swapYouWillSellValueTextView.setText(String.format(Locale.US, "%.8f %s", sellValue, GlobalLyra.domainToSymbol(from)));
-        swapYouWillGetValueTextView.setText(String.format(Locale.US, "%.8f %s", buyValue, GlobalLyra.domainToSymbol(to)));
-        swapPriceImpactValueTextView.setText(String.format(Locale.US, "%.8f %%", priceImpact * 100));
-        swapPoolFeeValueTextView.setText(String.format(Locale.US, "%.3f LYR", poolFee));
-        swapNetworkFeeValueTextView.setText(String.format(Locale.US, "%.3f %s", networkFee, GlobalLyra.domainToSymbol(from)));
-        ProgressBar progressBar = (ProgressBar) activity.findViewById(R.id.swapProgressBar);
-        progressBar.setVisibility(View.GONE);
-        setPoolValuesVisibility(activity, View.VISIBLE);
+            TextView swapTokenPairValueTextView = (TextView) activity.findViewById(R.id.swapTokenPairValueTextView);
+            TextView swapEstimatedRatioValueTextView = (TextView) activity.findViewById(R.id.swapEstimatedRatioValueTextView);
+            TextView swapYouWillSellValueTextView = (TextView) activity.findViewById(R.id.swapYouWillSellValueTextView);
+            TextView swapYouWillGetValueTextView = (TextView) activity.findViewById(R.id.swapYouWillGetValueTextView);
+            TextView swapPriceImpactValueTextView = (TextView) activity.findViewById(R.id.swapPriceImpactValueTextView);
+            TextView swapPoolFeeValueTextView = (TextView) activity.findViewById(R.id.swapPoolFeeValueTextView);
+            TextView swapNetworkFeeValueTextView = (TextView) activity.findViewById(R.id.swapNetworkFeeValueTextView);
+
+            swapToValueEditText.setText(String.format(Locale.US, "%.8f", buyValue));
+
+            swapTokenPairValueTextView.setText(String.format(Locale.US, "%s vs %s", GlobalLyra.domainToSymbol(from), GlobalLyra.domainToSymbol(to)));
+            swapEstimatedRatioValueTextView.setText(String.format(Locale.US, "%.8f %s per %s", price, GlobalLyra.domainToSymbol(from), GlobalLyra.domainToSymbol(to)));
+            swapYouWillSellValueTextView.setText(String.format(Locale.US, "%.8f %s", sellValue, GlobalLyra.domainToSymbol(from)));
+            swapYouWillGetValueTextView.setText(String.format(Locale.US, "%.8f %s", buyValue, GlobalLyra.domainToSymbol(to)));
+            swapPriceImpactValueTextView.setText(String.format(Locale.US, "%.8f %%", priceImpact * 100));
+            swapPoolFeeValueTextView.setText(String.format(Locale.US, "%.3f LYR", poolFee));
+            swapNetworkFeeValueTextView.setText(String.format(Locale.US, "%.3f %s", networkFee, GlobalLyra.domainToSymbol(from)));
+            ProgressBar progressBar = (ProgressBar) activity.findViewById(R.id.swapProgressBar);
+            progressBar.setVisibility(View.GONE);
+            setPoolValuesVisibility(activity, View.VISIBLE);
+        } catch (NullPointerException ignored) { }
     }
 
     public static void setProgressBarVisibility(Activity activity, int visibility) {
-        if(activity == null)
-            return;
-        ProgressBar progressBar = (ProgressBar) activity.findViewById(R.id.swapProgressBar);
-        if(progressBar != null) {
-            progressBar.setVisibility(visibility);
-        }
+        try {
+            ProgressBar progressBar = (ProgressBar) activity.findViewById(R.id.swapProgressBar);
+            if (progressBar != null) {
+                progressBar.setVisibility(visibility);
+            }
+        } catch (NullPointerException ignored) { }
     }
 
     public void stopHandler() {
         UserInputValueChangedHandler.removeCallbacks(UserInputTimeoutRunnable);
     }
     public void startHandler(int inactivityTime) {
-        UserInputValueChangedHandler.postDelayed(UserInputTimeoutRunnable, (long) inactivityTime * 1000);
+        UserInputValueChangedHandler.postDelayed(UserInputTimeoutRunnable, (long) inactivityTime);
     }
     private final Runnable UserInputTimeoutRunnable = new Runnable() {
         @Override
         public void run() {
-            stopHandler();//stop first and then start
-            Activity activity = getActivity();
-            if(activity == null)
-                return;
-            activity.runOnUiThread(new Runnable() {
-                public void run() {
-                    Activity activity = getActivity();
-                    if(activity == null)
-                        return;
-                    Spinner tokenFromSpinner = (Spinner) activity.findViewById(R.id.swapFromValueSpinner);
-                    Spinner tokenToSpinner = (Spinner) activity.findViewById(R.id.swapToValueSpinner);
-                    EditText toAmountEditText = (EditText) activity.findViewById(R.id.swapToValueEditText);
-                    if(tokenFromSpinner == null || tokenToSpinner == null || toAmountEditText == null) {
-                        setProgressBarVisibility(activity, View.GONE);
-                        setPoolValuesVisibility(activity, View.GONE);
-                        toAmountEditText.setText("");
-                        return;
-                    }
-                    if(tokenFromSpinner.getSelectedItem() == null || tokenToSpinner.getSelectedItem() == null) {
-                        setProgressBarVisibility(activity, View.GONE);
-                        setPoolValuesVisibility(activity, View.GONE);
-                        toAmountEditText.setText("");
-                        TextView swapTotalLiquidityValueTextView = (TextView) activity.findViewById(R.id.swapTotalLiquidityValueTextView);
-                        if(swapTotalLiquidityValueTextView != null) {
-                            swapTotalLiquidityValueTextView.setText("");
-                        }
-                        return;
-                    }
-                    String from = GlobalLyra.symbolToDomain(tokenFromSpinner.getSelectedItem().toString());
-                    String to = GlobalLyra.symbolToDomain(tokenToSpinner.getSelectedItem().toString());
-                    if(from.length() == 0 || to.length() == 0 ||
-                            tokenFromSpinner.getSelectedItem().toString().length() == 0 ||
-                            tokenToSpinner.getSelectedItem().toString().length() == 0) {
-                        setProgressBarVisibility(activity, View.GONE);
-                        setPoolValuesVisibility(activity, View.GONE);
-                        toAmountEditText.setText("");
-                        TextView swapTotalLiquidityValueTextView = (TextView) activity.findViewById(R.id.swapTotalLiquidityValueTextView);
-                        if(swapTotalLiquidityValueTextView != null) {
-                            swapTotalLiquidityValueTextView.setText("");
-                        }
-                        return;
-                    }
-                    new ApiRpc().act(new ApiRpc.Action().actionPool("PoolCalculate", from, to));
-                    ProgressBar progressBar = (ProgressBar) activity.findViewById(R.id.swapProgressBar);
-                    progressBar.setVisibility(View.VISIBLE);
-                    /*new Handler().postDelayed(new Runnable() {
-                        public void run() {
-                            ProgressBar progressBar = (ProgressBar) activity.findViewById(R.id.swapProgressBar);
-                            if(progressBar != null) {
-                                progressBar.setVisibility(View.GONE);
+            stopHandler();
+            try {
+                Activity activity = getActivity();
+                if(activity == null)
+                    return;
+                activity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        try {
+                            Spinner tokenFromSpinner = (Spinner) activity.findViewById(R.id.swapFromValueSpinner);
+                            Spinner tokenToSpinner = (Spinner) activity.findViewById(R.id.swapToValueSpinner);
+                            EditText toAmountEditText = (EditText) activity.findViewById(R.id.swapToValueEditText);
+                            if (tokenFromSpinner == null || tokenToSpinner == null || toAmountEditText == null) {
+                                setProgressBarVisibility(activity, View.GONE);
+                                setPoolValuesVisibility(activity, View.GONE);
+                                if (toAmountEditText != null) {
+                                    toAmountEditText.setText("");
+                                }
+                                return;
                             }
+                            if (tokenFromSpinner.getSelectedItem() == null || tokenToSpinner.getSelectedItem() == null) {
+                                setProgressBarVisibility(activity, View.GONE);
+                                setPoolValuesVisibility(activity, View.GONE);
+                                toAmountEditText.setText("");
+                                TextView swapTotalLiquidityValueTextView = (TextView) activity.findViewById(R.id.swapTotalLiquidityValueTextView);
+                                if (swapTotalLiquidityValueTextView != null) {
+                                    swapTotalLiquidityValueTextView.setText("");
+                                }
+                                return;
+                            }
+                            String from = GlobalLyra.symbolToDomain(tokenFromSpinner.getSelectedItem().toString());
+                            String to = GlobalLyra.symbolToDomain(tokenToSpinner.getSelectedItem().toString());
+                            if (from.length() == 0 || to.length() == 0 ||
+                                    tokenFromSpinner.getSelectedItem().toString().length() == 0 ||
+                                    tokenToSpinner.getSelectedItem().toString().length() == 0) {
+                                setProgressBarVisibility(activity, View.GONE);
+                                setPoolValuesVisibility(activity, View.GONE);
+                                toAmountEditText.setText("");
+                                TextView swapTotalLiquidityValueTextView = (TextView) activity.findViewById(R.id.swapTotalLiquidityValueTextView);
+                                if (swapTotalLiquidityValueTextView != null) {
+                                    swapTotalLiquidityValueTextView.setText("");
+                                }
+                                return;
+                            }
+                            new ApiRpc().act(new ApiRpc.Action().actionPool("PoolCalculate", from, to));
+                            ProgressBar progressBar = (ProgressBar) activity.findViewById(R.id.swapProgressBar);
+                            progressBar.setVisibility(View.VISIBLE);
+                            /*new Handler().postDelayed(new Runnable() {
+                                public void run() {
+                                    ProgressBar progressBar = (ProgressBar) activity.findViewById(R.id.swapProgressBar);
+                                    if(progressBar != null) {
+                                        progressBar.setVisibility(View.GONE);
+                                    }
+                                }
+                            }, 10 * 1000);*/
+                        } catch (NullPointerException ignored) {
+
                         }
-                    }, 10 * 1000);*/
-                }
-            });
+                    }
+                });
+            } catch (NullPointerException ignored) {
+
+            }
         }
     };
+
+    private void refreshAvailableTokens(View view) {
+        Activity activity = getActivity();
+        if(activity == null)
+            return;
+        Spinner tokenFromSpinner = (Spinner) view.findViewById(R.id.swapFromValueSpinner);
+        List<Pair<String, Double>> list = UtilGetData.getAvailableTokenList();
+        for (int ii = 0; ii < list.size(); ii++) {
+            if (GlobalLyra.domainToSymbol(list.get(ii).first).equals(tokenFromSpinner.getSelectedItem().toString())) {
+                TextView fromAmountTextView = (TextView) view.findViewById(R.id.swapFromBalanceTextView);
+                fromAmountTextView.setText(String.format(Locale.US, "%s: %.8f", activity.getString(R.string.Balance), list.get(ii).second));
+                break;
+            }
+        }
+        int ii = 0;
+        Spinner tokenToSpinner = (Spinner) view.findViewById(R.id.swapToValueSpinner);
+        TextView toAmountTextView = (TextView) view.findViewById(R.id.swapToBalanceTextView);
+        try {
+            for (; ii < list.size(); ii++) {
+                if (GlobalLyra.domainToSymbol(list.get(ii).first).equals(tokenToSpinner.getSelectedItem().toString())) {
+                    toAmountTextView.setText(String.format(Locale.US, "%s: %.8f", activity.getString(R.string.Balance), list.get(ii).second));
+                    break;
+                }
+            }
+            if (ii == list.size()) {
+                toAmountTextView.setText(String.format(Locale.US, "%s: %.8f", activity.getString(R.string.Balance), 0f));
+            }
+        } catch (NullPointerException ignored) { }
+    }
+
     private void populateSpinners(View view, boolean forPool) {
         Spinner tokenFromSpinner = (Spinner) view.findViewById(R.id.swapFromValueSpinner);
         if(fromSelect == tokenFromSpinner.getSelectedItemPosition()) {
@@ -260,8 +294,9 @@ public class FragmentSwap extends Fragment {
         }
         View v = view;
         List<String> tickerList = new ArrayList<>();
-        for (int i = 0; i < UtilGetData.getAvailableTokenList().size(); i++) {
-            tickerList.add(UtilGetData.getAvailableTokenList().get(i).first);
+        List<Pair<String, Double>> list = UtilGetData.getAvailableTokenList();
+        for (int i = 0; i < list.size(); i++) {
+            tickerList.add(GlobalLyra.domainToSymbol(list.get(i).first));
         }
         TokensSpinnerAdapter adapter = new TokensSpinnerAdapter(view.getContext(), R.layout.send_token_select_spinner_entry,
                 tickerList.toArray(new String[0]), UiHelpers.tickerToImage(tickerList).toArray(new Integer[0]));
@@ -275,22 +310,17 @@ public class FragmentSwap extends Fragment {
                     return;
                 setPoolValuesVisibility(activity, View.GONE);
                 populateSpinners(v, forPool);
-                startHandler(1);
-                for (int ii = 0; ii < UtilGetData.getAvailableTokenList().size(); ii++) {
-                    if (UtilGetData.getAvailableTokenList().get(ii).first.equals(tokenFromSpinner.getSelectedItem().toString())) {
-                        TextView fromAmountTextView = (TextView) v.findViewById(R.id.swapFromBalanceTextView);
-                        fromAmountTextView.setText(String.format(Locale.US, "%s: %f", activity.getString(R.string.Balance), UtilGetData.getAvailableTokenList().get(ii).second));
-                    }
-                }
+                startHandler(100);
+                refreshAvailableTokens(v);
             }
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
         tickerList.clear();
         if(forPool) {
-            for (int i = 0; i < UtilGetData.getAvailableTokenList().size(); i++) {
-                if (!UtilGetData.getAvailableTokenList().get(i).first.equals(tokenFromSpinner.getSelectedItem().toString())) {
-                    tickerList.add(UtilGetData.getAvailableTokenList().get(i).first);
+            for (int i = 0; i < list.size(); i++) {
+                if (!GlobalLyra.domainToSymbol(list.get(i).first).equals(tokenFromSpinner.getSelectedItem().toString())) {
+                    tickerList.add(GlobalLyra.domainToSymbol(list.get(i).first));
                 }
             }
         } else {
@@ -318,18 +348,9 @@ public class FragmentSwap extends Fragment {
                 if(activity == null)
                     return;
                 setPoolValuesVisibility(activity, View.GONE);
-                startHandler(1);
+                startHandler(100);
                 int ii = 0;
-                TextView toAmountTextView = (TextView) v.findViewById(R.id.swapToBalanceTextView);
-                for (; ii < UtilGetData.getAvailableTokenList().size(); ii++) {
-                    if (UtilGetData.getAvailableTokenList().get(ii).first.equals(tokenToSpinner.getSelectedItem().toString())) {
-                        toAmountTextView.setText(String.format(Locale.US, "%s: %f", activity.getString(R.string.Balance), UtilGetData.getAvailableTokenList().get(ii).second));
-                        break;
-                    }
-                }
-                if(ii == UtilGetData.getAvailableTokenList().size()) {
-                    toAmountTextView.setText(String.format(Locale.US, "%s: %f", activity.getString(R.string.Balance), 0f));
-                }
+                refreshAvailableTokens(v);
             }
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
@@ -341,7 +362,109 @@ public class FragmentSwap extends Fragment {
         }
     }
 
-        @Override
+    void restoreTimers(View view) {
+        Activity activity = getActivity();
+        if(activity == null)
+            return;
+        timer1 = new Timer();
+        timer1.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run () {
+                startHandler(100);
+                TextView swapExternalPriceValueTextView = (TextView) view.findViewById(R.id.swapExternalPriceValueTextView);
+                if (swapExternalPriceValueTextView != null) {
+                    activity.runOnUiThread(new Runnable() {
+                        public void run() {
+                            new ApiRpc().act(new ApiRpc.Action().actionPool("LyrPriceInUSD", "LYR", "tether/USDT"));
+                            swapExternalPriceValueTextView.setText(String.format(Locale.US, "$ %.8f", Global.getTokenPrice(new Pair<>("LYR", "USD"))));
+                        }
+                    });
+                }
+            }
+        },100,60 * 1000);
+        timer2 = new Timer();
+        timer2.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run () {
+                activity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        populateSpinners(view, poolSelected);
+                        double internalLyrPrice = Global.getTokenPrice(new Pair<>("LYR", "tether/USDT"));
+                        if(InternalLyrPrice != internalLyrPrice) {
+                            InternalLyrPrice = internalLyrPrice;
+                            try {
+                                TextView swapInternalPriceValueTextView = (TextView) activity.findViewById(R.id.swapInternalPriceValueTextView);
+                                swapInternalPriceValueTextView.setText(String.format(Locale.US, "$ %.8f", internalLyrPrice));
+                                RecyclerView account_history_recycler = activity.findViewById(R.id.account_history_recicler);
+                                if((AccountHistoryGalleryAdapter)account_history_recycler.getAdapter() != null)
+                                    ((AccountHistoryGalleryAdapter)account_history_recycler.getAdapter()).updateUnitPrice("LYR");
+                            } catch (NullPointerException ignored) { }
+                        }
+
+                        try {
+                            UiUpdates.PoolData poolData = UiUpdates.getPoolData();
+                            boolean changed = true;
+                            if(poolData != null) {
+                                if(PoolData != null) {
+                                    if(poolData.getLastUpdated() == PoolData.getLastUpdated()) {
+                                        changed = false;
+                                    }
+                                }
+                            } else {
+                                setProgressBarVisibility(activity, View.GONE);
+                                setPoolValuesVisibility(activity, View.GONE);
+                                TextView swapTotalLiquidityValueTextView = (TextView) activity.findViewById(R.id.swapTotalLiquidityValueTextView);
+                                swapTotalLiquidityValueTextView.setText("");
+                            }
+                            if(changed) {
+                                PoolData = poolData;
+                                if (PoolData != null) {
+                                    TextView swapTotalLiquidityValueTextView = (TextView) activity.findViewById(R.id.swapTotalLiquidityValueTextView);
+                                    if (swapTotalLiquidityValueTextView != null) {
+                                        swapTotalLiquidityValueTextView.setText(String.format(Locale.US, "%.8f %s\n%.8f %s", PoolData.getToken0Balance(), GlobalLyra.domainToSymbol(PoolData.getToken0()),
+                                                PoolData.getToken1Balance(), GlobalLyra.domainToSymbol(PoolData.getToken1())));
+                                    }
+                                }
+                            }
+                        } catch (NullPointerException ignored) { }
+                        try {
+                            UiUpdates.PoolCalculateData poolCalculateData = UiUpdates.getPoolCalculateData();
+                            boolean changed = true;
+                            if(poolCalculateData != null && PoolCalculateData != null) {
+                                if (poolCalculateData.getLastUpdated() == PoolCalculateData.getLastUpdated()) {
+                                    changed = false;
+                                }
+                            }
+                            if(changed) {
+                                PoolCalculateData = poolCalculateData;
+                                if (PoolCalculateData != null) {
+                                    Spinner tokenFromSpinner = (Spinner) view.findViewById(R.id.swapFromValueSpinner);
+                                    Spinner tokenToSpinner = (Spinner) view.findViewById(R.id.swapToValueSpinner);
+                                    if(GlobalLyra.domainToSymbol(poolCalculateData.getSwapInToken()).equals(tokenFromSpinner.getSelectedItem().toString()) &&
+                                            GlobalLyra.domainToSymbol(poolCalculateData.getSwapOutToken()).equals(tokenToSpinner.getSelectedItem().toString())) {
+                                        FragmentSwap.setSwapValues(activity, PoolCalculateData.getSwapInToken(), PoolCalculateData.getSwapOutToken(),
+                                                PoolCalculateData.getPrice(), PoolCalculateData.getSwapInAmount(), PoolCalculateData.getSwapOutAmount(),
+                                                PoolCalculateData.getPriceImpact(), PoolCalculateData.getPayToProvider(), PoolCalculateData.getPayToAuthorizer());
+                                    }
+                                }
+                            }
+                        } catch (NullPointerException ignored) { }
+                        refreshAvailableTokens(view);
+                    }
+                });
+            }
+        },3000,3000);
+    }
+    public static void clearAccountFromTo(Activity activity) {
+        try {
+            EditText fromAmountEditText = (EditText) activity.findViewById(R.id.swapFromValueEditText);
+            EditText toAmountEditText = (EditText) activity.findViewById(R.id.swapToValueEditText);
+            fromAmountEditText.setText("");
+            toAmountEditText.setText("");
+        } catch (NullPointerException ignore) { }
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
@@ -361,7 +484,24 @@ public class FragmentSwap extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
     }
-
+    UiUpdates.PoolData PoolData = null;
+    UiUpdates.PoolCalculateData PoolCalculateData = null;
+    double InternalLyrPrice = 0f;
+    Timer timer1;
+    Timer timer2;
+    @Override
+    public void onResume() {
+        super.onResume();
+        //Toast.makeText(getActivity(), "onResumed called", Toast.LENGTH_LONG).show();
+        restoreTimers(getView());
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        //Toast.makeText(getActivity(), "onPause called", Toast.LENGTH_LONG).show();
+        timer1.cancel();
+        timer2.cancel();
+    }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         thisView = view;
@@ -380,8 +520,6 @@ public class FragmentSwap extends Fragment {
 
         Button swapButton = (Button) view.findViewById(R.id.swapModeSwapButton);
         Button poolButton = (Button) view.findViewById(R.id.swapModePoolButton);
-        Button swapRemoveShareActionButton = (Button) view.findViewById(R.id.swapRemoveShareActionButton);
-        swapRemoveShareActionButton.setVisibility(View.GONE);
         swapButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 setPoolValuesVisibility(activity, View.GONE);
@@ -411,7 +549,7 @@ public class FragmentSwap extends Fragment {
                 TextView swapInternalPriceValueTextView = (TextView) view.findViewById(R.id.swapInternalPriceValueTextView);
                 swapExternalPriceValueTextView.setVisibility(View.VISIBLE);
                 swapInternalPriceValueTextView.setVisibility(View.VISIBLE);
-                startHandler(1);
+                startHandler(100);
             }
         });
         poolButton.setOnClickListener(new View.OnClickListener() {
@@ -444,7 +582,7 @@ public class FragmentSwap extends Fragment {
                 TextView swapInternalPriceValueTextView = (TextView) view.findViewById(R.id.swapInternalPriceValueTextView);
                 swapExternalPriceValueTextView.setVisibility(View.GONE);
                 swapInternalPriceValueTextView.setVisibility(View.GONE);
-                startHandler(1);
+                startHandler(100);
             }
         });
 
@@ -466,7 +604,7 @@ public class FragmentSwap extends Fragment {
                             Double.parseDouble(s.toString());
                             if(fromLastEditTextChanged) {
                                 stopHandler();
-                                startHandler(2);
+                                startHandler(2000);
                             }
                             fromLastEditTextChanged = true;
                         } catch (NumberFormatException e) {
@@ -493,44 +631,54 @@ public class FragmentSwap extends Fragment {
                         try {
                             Double.parseDouble(s.toString());
                             /*if(!fromLastEditTextChanged) {
-                                startHandler(2);
+                                startHandler(2000);
                             }*/
                             fromLastEditTextChanged = false;
                         } catch (NumberFormatException e) {
+                            EditText swapToValueEditText = (EditText) view.findViewById(R.id.swapToValueEditText);
                             swapToValueEditText.setText(s.subSequence(0, before - 1));
                         }
                     }
                 }
             });
         }
-        Timer timer1 = new Timer();
-        timer1.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run () {
-                startHandler(2);
-                TextView swapExternalPriceValueTextView = (TextView) view.findViewById(R.id.swapExternalPriceValueTextView);
-                if (swapExternalPriceValueTextView != null) {
-                    activity.runOnUiThread(new Runnable() {
-                        public void run() {
-                            new ApiRpc().act(new ApiRpc.Action().actionPool("LyrPriceInUSD", "LYR", "tether/USDT"));
-                            swapExternalPriceValueTextView.setText(String.format(Locale.US, "$ %.8f", Global.getTokenPrice(new Pair<>("LYR", "USD"))));
-                        }
-                    });
-                }
-                TextView swapInternalPriceTextView = (TextView) view.findViewById(R.id.swapInternalPriceTextView);
-            }
-        },100,60 * 1000);
-        Timer timer2 = new Timer();
-        timer2.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run () {
-                activity.runOnUiThread(new Runnable() {
-                    public void run() {
-                        populateSpinners(view, poolSelected);
+        Button swapSwapActionButton = (Button) view.findViewById(R.id.swapSwapActionButton);
+        Button swapRemoveShareActionButton = (Button) view.findViewById(R.id.swapRemoveShareActionButton);
+        swapRemoveShareActionButton.setVisibility(View.GONE);
+        swapSwapActionButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                try {
+                    Spinner tokenFromSpinner = (Spinner) view.findViewById(R.id.swapFromValueSpinner);
+                    Spinner tokenToSpinner = (Spinner) view.findViewById(R.id.swapToValueSpinner);
+                    EditText swapFromValueEditText = (EditText) view.findViewById(R.id.swapFromValueEditText);
+                    EditText swapToValueEditText = (EditText) view.findViewById(R.id.swapToValueEditText);
+                    if(poolSelected) {
+                        new ApiRpc().act(new ApiRpc.Action().actionAddLiquidity(Global.getSelectedAccountId(),
+                                GlobalLyra.symbolToDomain(tokenFromSpinner.getSelectedItem().toString()), Double.parseDouble(swapFromValueEditText.getText().toString()),
+                                GlobalLyra.symbolToDomain(tokenToSpinner.getSelectedItem().toString()), Double.parseDouble(swapToValueEditText.getText().toString())));
+                        Toast.makeText(view.getContext(), getText(R.string.swap_swap_action_begin), Toast.LENGTH_LONG).show();
+                    } else {
+                        new ApiRpc().act(new ApiRpc.Action().actionSwap(Global.getSelectedAccountId(),
+                                GlobalLyra.symbolToDomain(tokenFromSpinner.getSelectedItem().toString()),
+                                GlobalLyra.symbolToDomain(tokenToSpinner.getSelectedItem().toString()),
+                                GlobalLyra.symbolToDomain(tokenFromSpinner.getSelectedItem().toString()),
+                                Double.parseDouble(swapFromValueEditText.getText().toString()),
+                                Double.parseDouble(swapToValueEditText.getText().toString()) / 1.02
+                        ));
+                        Toast.makeText(view.getContext(), getText(R.string.swap_swap_action_begin), Toast.LENGTH_LONG).show();
                     }
-                });
+                } catch (NumberFormatException | NullPointerException e) {
+                    e.printStackTrace();
+                    Toast.makeText(view.getContext(), e.toString(), Toast.LENGTH_LONG).show();
+                }
+           }
+        });
+        swapRemoveShareActionButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
             }
-        },10 * 1000,10 * 1000);
+        });
+        restoreTimers(view);
         setPoolValuesVisibility(activity, View.GONE);
     }
 }

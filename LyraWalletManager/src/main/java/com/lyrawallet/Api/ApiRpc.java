@@ -17,6 +17,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
 import com.lyrawallet.Api.Network.NetworkRpc;
@@ -24,13 +27,17 @@ import com.lyrawallet.Global;
 import com.lyrawallet.GlobalLyra;
 import com.lyrawallet.MainActivity;
 import com.lyrawallet.R;
+import com.lyrawallet.Ui.FragmentAccount.AccountHistoryGalleryAdapter;
 import com.lyrawallet.Ui.FragmentManagerUser;
 import com.lyrawallet.Ui.FragmentSwap.FragmentSwap;
 import com.lyrawallet.Ui.UiHelpers;
+import com.lyrawallet.Ui.UiUpdates;
+import com.lyrawallet.Util.Concatenate;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
 import java.util.Locale;
 
 public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
@@ -745,10 +752,56 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
     private static MainActivity ParentInstance = null;
     AlertDialog dialogWindow;
 
+    void showDialogStatus(int title, int message) {
+        if(dialogWindow != null)
+            dialogWindow.dismiss();
+        dialogWindow = new AlertDialog.Builder(ParentInstance)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .create();
+        dialogWindow.show();
+    }
+
+    void showDialogStatus(int title, String message) {
+        if(dialogWindow != null)
+            dialogWindow.dismiss();
+        dialogWindow = new AlertDialog.Builder(ParentInstance)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .create();
+        dialogWindow.show();
+    }
+
+    void showDialogStatus(int title) {
+        if(dialogWindow != null)
+            dialogWindow.dismiss();
+        dialogWindow = new AlertDialog.Builder(ParentInstance)
+                .setTitle(title)
+                .setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .create();
+        dialogWindow.show();
+    }
+
     public boolean act(Action action) {
+        System.out.println("1-Acting on: " + action.getApi());
         if(action.getApi().split("/").length == 0) {
             return false;
         }
+        System.out.println("2-Acting on: " + action.getApi());
         switch(action.getApi().split("/")[0]) {
             case "History":
                 new NetworkRpc(this).execute(action.toString(), "History", action.getAccountId(),
@@ -785,15 +838,7 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                             String password = String.valueOf(passEditText.getText());
                             actWithPwd(action, password);
                             if(action.getActionPurpose() == null || !action.getActionPurpose().equals("Receive")) {
-                                dialogWindow = new AlertDialog.Builder(ParentInstance)
-                                        .setTitle(R.string.send_sending)
-                                        .setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                            }
-                                        })
-                                        .create();
-                                dialogWindow.show();
+                                showDialogStatus(R.string.send_sending);
                             }
                         }
                     })
@@ -803,15 +848,7 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
         } else {
             actWithPwd(action, Global.getWalletPassword());
             if(action.getActionPurpose() == null || !action.getActionPurpose().equals("Receive")) {
-                dialogWindow = new AlertDialog.Builder(ParentInstance)
-                        .setTitle(R.string.send_sending)
-                        .setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        })
-                        .create();
-                dialogWindow.show();
+                showDialogStatus(R.string.send_sending);
             }
         }
 
@@ -823,6 +860,31 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
         }*/
         return true;
     }
+
+    void getBalanceAfterAction() {
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                getInstance().runOnUiThread(new Runnable() {
+                    public void run() {
+                        new ApiRpc().act(new ApiRpc.Action().actionBalance(Global.getSelectedAccountId()));
+                    }
+                });
+            }
+        }, 2000);
+    }
+
+    /*void signAfterAction() {
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+                getInstance().runOnUiThread(new Runnable() {
+                    public void run() {
+                        new ApiRpc().act(new ApiRpc.Action().actionHistory(Global.str_api_rpc_purpose_history_disk_storage,
+                                Global.getCurrentNetworkName(), Global.getSelectedAccountName(), Global.getSelectedAccountId()));
+                    }
+                });
+            }
+        }, 3000);
+    }*/
 
     @Override
     public void onRpcTaskDone(String[] output) {
@@ -840,47 +902,26 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                             Global.setWalletHistory(ac.getAccName(), historyList);
                         }*/
                 } else if (output[0].equals("Send")) {
-                    ReceiveResult = output[0] + "^" + output[1] + "^" + output[2];
-                     EditText recipientAddressEditText = (EditText) activity.findViewById(R.id.send_token_recipient_address_value);
+                    EditText recipientAddressEditText = (EditText) activity.findViewById(R.id.send_token_recipient_address_value);
                     EditText tokenAmountEditText = (EditText) activity.findViewById(R.id.send_token_amount_value);
                     if(recipientAddressEditText != null && tokenAmountEditText != null) {
                         try {
-                            //JSONObject objCmd = new JSONObject(output[1]);
-                            /*if (!objCmd.isNull("account_id") && !objCmd.isNull("destination_account_id")) */{
+                            JSONObject objCmd = new JSONObject(output[1]);
+                            if (!objCmd.isNull("account_id") && !objCmd.isNull("destination_account_id")) {
                                 // Filter to show the message for the currently selected account and selected destination.
-                                /*if (objCmd.getString("account_id").equals(Global.getSelectedAccountId()) &&
-                                        objCmd.getString("destination_account_id").equals(recipientAddressEditText.getText().toString()))*/ {
+                                if (objCmd.getString("account_id").equals(Global.getSelectedAccountId()) &&
+                                        objCmd.getString("destination_account_id").equals(recipientAddressEditText.getText().toString())) {
                                     JSONObject objRsp = new JSONObject(output[2]);
                                     if (!objRsp.isNull("txHash")) { // If thHash is present, the transaction is successfully send.
                                         Spinner tokenSpinner = (Spinner) activity.findViewById(R.id.sendTokenSelectSpinner);
                                         SpinnerAdapter adapter = tokenSpinner.getAdapter();
                                         String tokenToSend = adapter.getItem(tokenSpinner.getSelectedItemPosition()).toString();
-                                        new Handler().postDelayed(new Runnable() {
-                                            public void run() {
-                                                getInstance().runOnUiThread(new Runnable() {
-                                                    public void run() {
-                                                        new ApiRpc().act(new ApiRpc.Action().actionHistory(Global.str_api_rpc_purpose_history_disk_storage,
-                                                                Global.getCurrentNetworkName(), Global.getSelectedAccountName(), Global.getSelectedAccountId()));
-                                                    }
-                                                });
-                                            }
-                                        }, 2000);
-                                        if(dialogWindow != null) {
-                                            dialogWindow.dismiss();
-                                        }
-                                        dialogWindow = new AlertDialog.Builder(ParentInstance)
-                                                .setTitle(R.string.send_successful)
-                                                .setMessage(String.format(Locale.US, "%s: %f %s\n%s: %s-%d (%s)\n%s: %s",
-                                                        activity.getString(R.string.Send1), Double.parseDouble(tokenAmountEditText.getText().toString()), tokenToSend,
-                                                        activity.getString(R.string.From), activity.getString(R.string.Wallet), Global.getSelectedAccountNr() + 1, UiHelpers.getShortAccountId(Global.getSelectedAccountId(), 4),
-                                                        activity.getString(R.string.To), UiHelpers.getShortAccountId(recipientAddressEditText.getText().toString(), 7)))
-                                                .setPositiveButton(R.string.Ok, new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                    }
-                                                })
-                                                .create();
-                                        dialogWindow.show();
+                                        getBalanceAfterAction();
+                                        showDialogStatus(R.string.send_successful, String.format(Locale.US, "%s: %f %s\n%s: %s-%d (%s)\n%s: %s",
+                                                activity.getString(R.string.Send1), Double.parseDouble(tokenAmountEditText.getText().toString()), tokenToSend,
+                                                activity.getString(R.string.From), activity.getString(R.string.Wallet), Global.getSelectedAccountNr() + 1, UiHelpers.getShortAccountId(Global.getSelectedAccountId(), 4),
+                                                activity.getString(R.string.To), UiHelpers.getShortAccountId(recipientAddressEditText.getText().toString(), 7))
+                                        );
                                         recipientAddressEditText.setText("");
                                         tokenAmountEditText.setText("");
                                         new FragmentManagerUser().goToAccount();
@@ -889,19 +930,11 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            Toast.makeText(activity, e.toString(), Toast.LENGTH_LONG).show();
                         }
                     }
                 } else if(output[0].equals("Receive")) {
-                    new Handler().postDelayed(new Runnable() {
-                        public void run() {
-                            getInstance().runOnUiThread(new Runnable() {
-                                public void run() {
-                                    new ApiRpc().act(new ApiRpc.Action().actionHistory(Global.str_api_rpc_purpose_history_disk_storage,
-                                            Global.getCurrentNetworkName(), Global.getSelectedAccountName(), Global.getSelectedAccountId()));
-                                }
-                            });
-                        }
-                    }, 2000);
+                    getBalanceAfterAction();
                 } else if(output[0].equals("Balance")) {
                     try {
                         JSONObject objCmd = new JSONObject(output[2]);
@@ -914,94 +947,92 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                                 } else if(Global.getWalletPassword().length() >= Global.MinCharAllowedOnPassword) {
                                     new ApiRpc().act(new ApiRpc.Action().actionReceive("Receive", Global.getSelectedAccountId()));
                                 }
+                            } else {
+                                Pair<Integer, List<ApiRpcActionsHistory.HistoryEntry>> h = Global.getWalletHistory(Concatenate.getHistoryFileName());
+                                if(h != null) {
+                                    if(objCmd.getLong("height") != h.second.get(h.second.size() - 1).getHeight()) {
+                                        new ApiRpc().act(new ApiRpc.Action().actionHistory(Global.str_api_rpc_purpose_history_disk_storage,
+                                                Global.getCurrentNetworkName(), Global.getSelectedAccountName(), Global.getSelectedAccountId()));
+                                    }
+                                } else {
+                                    new ApiRpc().act(new ApiRpc.Action().actionHistory(Global.str_api_rpc_purpose_history_disk_storage,
+                                            Global.getCurrentNetworkName(), Global.getSelectedAccountName(), Global.getSelectedAccountId()));
+                                }
                             }
                         }
-                    } catch (JSONException e) {
+                    } catch (JSONException | NullPointerException | ArrayIndexOutOfBoundsException e) {
+                        //Toast.makeText(activity, e.toString(), Toast.LENGTH_LONG).show();
                         e.printStackTrace();
                     }
                 } else if(output[0].equals("Pool")) {
                     if (output[2].equals("error")) {
-                        FragmentSwap.setProgressBarVisibility(activity, View.GONE);
-                        FragmentSwap.setPoolValuesVisibility(activity, View.GONE);
-                        TextView swapTotalLiquidityValueTextView = (TextView) activity.findViewById(R.id.swapTotalLiquidityValueTextView);
-                        if(swapTotalLiquidityValueTextView != null) {
-                            swapTotalLiquidityValueTextView.setText("");
-                        }
-                    } else if(ac.getActionPurpose() != null) {
+                        UiUpdates.setPoolData(null);
+                     } else if(ac.getActionPurpose() != null) {
                         if(ac.getActionPurpose().equals("PoolCalculate")) {
                             try {
-                                JSONObject obj = new JSONObject(output[2]);
-                                String poolId = obj.getString("poolId");
-                                String from = obj.getString("token0");
-                                String to = obj.getString("token1");
-                                JSONObject objBalance = obj.getJSONObject("balance");
-                                double fromValue = objBalance.getDouble(from);
-                                double toValue = objBalance.getDouble(to);
-                                EditText swapFromValueEditText = (EditText) activity.findViewById(R.id.swapFromValueEditText);
-                                new Handler().postDelayed(new Runnable() {
-                                    public void run() {
-                                        getInstance().runOnUiThread(new Runnable() {
-                                            public void run() {
-                                                try {
-                                                    new ApiRpc().act(new ApiRpc.Action().actionPoolCalculate(poolId, from, Double.parseDouble(swapFromValueEditText.getText().toString()), 0.01f));
-                                                } catch (NumberFormatException e) {
-                                                    FragmentSwap.setProgressBarVisibility(activity, View.GONE);
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                        });
-                                    }
-                                }, 50);
-                                TextView swapTotalLiquidityValueTextView = (TextView) activity.findViewById(R.id.swapTotalLiquidityValueTextView);
-                                if(swapTotalLiquidityValueTextView != null) {
-                                    swapTotalLiquidityValueTextView.setText(String.format(Locale.US, "%.8f %s\n%.8f %s", fromValue, GlobalLyra.domainToSymbol(from),
-                                            toValue, GlobalLyra.domainToSymbol(to)));
+                                UiUpdates.setPoolData(new UiUpdates.PoolData(output[2]));
+                                try {
+                                    try {
+                                        EditText swapFromValueEditText = (EditText) activity.findViewById(R.id.swapFromValueEditText);
+                                        Spinner tokenFromSpinner = (Spinner) activity.findViewById(R.id.swapFromValueSpinner);
+                                        String from = GlobalLyra.symbolToDomain(tokenFromSpinner.getSelectedItem().toString());
+                                        new ApiRpc().act(new ApiRpc.Action().actionPoolCalculate(UiUpdates.getPoolData().getPoolId(), GlobalLyra.symbolToDomain(from),
+                                                Double.parseDouble(swapFromValueEditText.getText().toString()), 0.01f));
+                                    } catch (NullPointerException ignored) { }
+                                } catch (NumberFormatException e) {
+                                    FragmentSwap.setProgressBarVisibility(activity, View.GONE);
+                                    e.printStackTrace();
                                 }
-                           } catch (JSONException e) {
+                                if(Global.getDebugEnabled())
+                                    Toast.makeText(activity, "\"Pool\" fetch done", Toast.LENGTH_SHORT).show();
+                            } catch (JSONException e) {
+                                Toast.makeText(activity, e.toString(), Toast.LENGTH_LONG).show();
                                 e.printStackTrace();
                             }
                         } else if(ac.getActionPurpose().equals("LyrPriceInUSD")) {
-                            TextView swapInternalPriceValueTextView = (TextView) activity.findViewById(R.id.swapInternalPriceValueTextView);
-                            if(swapInternalPriceValueTextView != null) {
-                                try {
-                                    JSONObject obj = new JSONObject(output[2]);
-                                    JSONObject objBalance = obj.getJSONObject("balance");
-                                    if(!objBalance.isNull("tether/USDT") && !objBalance.isNull("LYR")) {
-                                        swapInternalPriceValueTextView.setText(String.format(Locale.US, "$ %.8f", objBalance.getDouble("tether/USDT") / objBalance.getDouble("LYR")));
-                                    } else {
-                                        swapInternalPriceValueTextView.setText(String.format(Locale.US, "$ %.8f", 0f));
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+                            try {
+                                UiUpdates.setPoolData(new UiUpdates.PoolData(output[2]));
+                                JSONObject obj = new JSONObject(output[2]);
+                                JSONObject objBalance = obj.getJSONObject("balance");
+                                if( UiUpdates.getPoolData().token0Is("tether/USDT") && UiUpdates.getPoolData().token0Is("LYR")) {
+                                    Global.setTokenPrice(new Pair<>("LYR", "tether/USDT"), objBalance.getDouble("tether/USDT") / objBalance.getDouble("LYR"));
                                 }
+                            } catch (JSONException | NullPointerException e) {
+                                e.printStackTrace();
+                                Toast.makeText(activity, e.toString(), Toast.LENGTH_LONG).show();
                             }
                         }
                     }
                 } else if (output[0].equals("PoolCalculate")) {
-                    if(ac.getActionPurpose() == null) {
-                        EditText swapToValueEditText = (EditText) activity.findViewById(R.id.swapToValueEditText);
-                        if(swapToValueEditText == null)
-                            return;
-                        try {
-                            JSONObject obj = new JSONObject(output[2]);
-                            String swapInToken = obj.getString("SwapInToken");
-                            double swapInAmount = obj.getDouble("SwapInAmount");
-                            String swapOutToken = obj.getString("SwapOutToken");
-                            double swapOutAmount = obj.getDouble("SwapOutAmount");
-                            double price = obj.getDouble("Price");
-                            double priceImpact = obj.getDouble("PriceImpact");
-                            double minimumReceived = obj.getDouble("MinimumReceived");
-                            double payToProvider = obj.getDouble("PayToProvider");
-                            double payToAuthorizer = obj.getDouble("PayToAuthorizer");
-                            FragmentSwap.setSwapValues(activity, swapInToken, swapOutToken, price, swapInAmount, swapOutAmount, priceImpact, payToProvider, payToAuthorizer);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
+                    try {
+                        UiUpdates.setPoolCalculateData(new UiUpdates.PoolCalculateData(output[2]));
+                        if (Global.getDebugEnabled())
+                            Toast.makeText(activity, "\"PoolCalculate\" fetch done", Toast.LENGTH_SHORT).show();
+                    } catch (JSONException | NullPointerException e) {
+                        Toast.makeText(activity, e.toString(), Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
                     }
+                } else if (output[0].equals("Swap")) {
+                    if(output[2].equals("error"))
+                        showDialogStatus(R.string.str_an_error_occurred, R.string.str_please_contact_lyra_period_inc);
+                    else {
+                        FragmentSwap.clearAccountFromTo(activity);
+                        showDialogStatus(R.string.swap_swap_complete);
+                    }
+                    getBalanceAfterAction();
+                } else if (output[0].equals("AddLiquidity")) {
+                    if(output[2].equals("error"))
+                        showDialogStatus(R.string.str_an_error_occurred);
+                    else {
+                        showDialogStatus(R.string.swap_add_liquidity_complete);
+                    }
+                    Toast.makeText(activity, "Liquidity added", Toast.LENGTH_SHORT).show();
+                    getBalanceAfterAction();
+                    if(dialogWindow != null)
+                        dialogWindow.dismiss();
                 }
                 ReceiveResult = output[0] + "^" + output[1] + "^" + output[2];
-                System.out.println(ReceiveResult);
+                System.out.println("Transaction end, result is:" + ReceiveResult);
             }
         });
     }
