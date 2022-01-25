@@ -26,7 +26,8 @@ public class Global {
         RECEIVE,
         SEND,
         SETTINGS,
-        DIALOG_RECEIVE
+        DIALOG_RECEIVE,
+        DIALOG_TRANSACTION_DETAIL
     }
 
     // Global constants

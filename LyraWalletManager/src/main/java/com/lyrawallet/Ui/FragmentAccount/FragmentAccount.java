@@ -20,6 +20,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
 import com.lyrawallet.Global;
 import com.lyrawallet.R;
+import com.lyrawallet.Ui.FragmentManagerUser;
 import com.lyrawallet.Ui.UtilGetData;
 import com.lyrawallet.Util.Concatenate;
 
@@ -71,7 +72,7 @@ public class FragmentAccount extends Fragment {
         return new FragmentAccount();
     }
 
-    private boolean addMoreEntrys() {
+    /*private boolean addMoreEntrys() {
         return addMoreEntrys(50);
     }
     private boolean addMoreEntrys(int entryNr) {
@@ -86,7 +87,7 @@ public class FragmentAccount extends Fragment {
             return true;
         }
         return false;
-    }
+    }*/
 
     public void populateHistory(View view) {
         //View v = new View((MainActivity) getActivity());
@@ -114,7 +115,7 @@ public class FragmentAccount extends Fragment {
                     return;
                 }
                 ProgressBar progress = activity.findViewById(R.id.fragment_account_progressBar);
-                if(entryList == EntryList) {
+                if(entryList.size() == EntryList.size()) {
                     refreshInProgress = false;
                     if(progress != null) {
                         progress.setVisibility(View.GONE);
@@ -122,12 +123,13 @@ public class FragmentAccount extends Fragment {
                     return;
                 }
                 EntryList = entryList;
-                List<AccountHistoryEntry> entryWrList = new ArrayList<>();
+                List<AccountHistoryEntry> entryWrList = EntryList;//new ArrayList<>();
                 ClickListener listener = new ClickListener() {
                     @Override
                     public void click(int index) {
-                        Snackbar.make(view, "clicked item index is " + index, Snackbar.LENGTH_LONG)
-                                .setAction("", null).show();
+                        /*Snackbar.make(view, "clicked item index is " + index, Snackbar.LENGTH_LONG)
+                                .setAction("", null).show();*/
+                        new FragmentManagerUser().goToDialogTransactionDetail(new String[]{String.valueOf(entryWrList.get(index).Height)});
                     }
                 };
                 adapter = new AccountHistoryGalleryAdapter(
@@ -139,7 +141,8 @@ public class FragmentAccount extends Fragment {
                             new LinearLayoutManager(activity));
                 }
                 addCnt = 0;
-                addMoreEntrys();
+                //addMoreEntrys();
+                //adapter.setDataSet(EntryList);
                 refreshInProgress = false;
                 if(progress != null) {
                     progress.setVisibility(View.GONE);
@@ -240,7 +243,7 @@ public class FragmentAccount extends Fragment {
             }
 
             nestedSV = view.findViewById(R.id.nestedScrollViewAccount);
-            nestedSV.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            /*nestedSV.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
                 @Override
                 public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                     // on scroll change we are checking when users scroll as bottom.
@@ -256,7 +259,7 @@ public class FragmentAccount extends Fragment {
                         }
                     }
                 }
-            });
+            });*/
         }
         EntryList = new ArrayList<>();
         /*Snackbar.make(view, "account created", Snackbar.LENGTH_LONG)

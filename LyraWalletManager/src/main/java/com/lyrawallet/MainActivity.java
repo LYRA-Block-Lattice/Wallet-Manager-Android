@@ -85,6 +85,9 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
     }
     /******************* Navigation, separate them from button events, for re-usage ***************/
     protected void setVisiblePage(Global.visiblePage p) {
+        setVisiblePage(p, null);
+    }
+    protected void setVisiblePage(Global.visiblePage p, String[] params) {
         Global.setVisiblePage(p);
         PushToBackStack = true;
         switch(p) {
@@ -126,6 +129,9 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                 break;
             case DIALOG_RECEIVE:
                 new FragmentManagerUser().goToDialogReceive();
+                break;
+            case DIALOG_TRANSACTION_DETAIL:
+                new FragmentManagerUser().goToDialogTransactionDetail(params);
                 break;
             default:
                 new FragmentManagerUser().goToOpenWallet();

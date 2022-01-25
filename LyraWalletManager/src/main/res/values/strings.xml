@@ -3,15 +3,17 @@
 
     <string name="charset" translatable="false">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
 
-    <string name="str_please_contact_lyra_period_inc">Please contact the team at lyra.live, t.me/lyra_live</string>
+    <string name="str_please_contact_lyra_period_inc">If the SWAP is not completed but tokens has been sent,\nPlease contact the team at lyra.live, t.me/lyra_live</string>
 
 
 
 
 
 
+    <string name="Send">Send</string>
     <string name="Send1">Send</string>
     <string name="Send2">Send</string>
+    <string name="Send3">Sent</string>
     <string name="From">From</string>
     <string name="To">To</string>
     <string name="NetworkFee">Network Fee</string>
@@ -21,13 +23,25 @@
     <string name="Accept">Accept</string>
     <string name="Cancel">Cancel</string>
     <string name="More">More</string>
-    <string name="Send">Send</string>
     <string name="Swap">Swap</string>
     <string name="Pool">Pool</string>
     <string name="Request">Request</string>
+    <string name="Receive">Receive</string>
     <string name="Balance">Balance</string>
     <string name="Confirm_action">Confirm action</string>
+    <string name="Transaction_detail">Transaction detail</string>
     <string name="Request_token">Request token</string>
+    <string name="Invalid_request">Invalid request</string>
+    <string name="Not_received_yet">Not received yet</string>
+    <string name="Height">Height</string>
+    <string name="Direction">Direction</string>
+    <string name="Time_stamp">Time stamp</string>
+    <string name="Send_account_id">Send account ID</string>
+    <string name="Send_hash">Send hash</string>
+    <string name="Receive_account_id">Receive account ID</string>
+    <string name="Receive_hash">Receive hash</string>
+    <string name="Amount_transferred">Amount transferred</string>
+    <string name="Amounts_in_accounts">Amounts in account</string>
 
     <string name="str_dialog_title" translatable="false">Unlock wallet</string>
     <string name="str_dialog_message" translatable="false">Enter wallet password</string>
@@ -65,6 +79,10 @@
     <string name="main_activity_not_enough_tokens_into_account">Not enough tokens into account</string>
     <string name="main_activity_token_not_found_in_current_account">Token not found in current account</string>
 
+    <string name="account_transaction_time_stamp_copied">Time stamp copied</string>
+    <string name="account_transaction_amount_transferred_copied">Amount transferred copied</string>
+    <string name="account_transaction_amounts_in_account_copied">Amounts in account copied</string>
+
     <string name="send_token_select_spinner_description">Select token</string>
     <string name="send_token_recipient_address_hint">Recipient address…</string>
     <string name="send_token_amount_to_send_hint">Amount</string>
@@ -93,6 +111,7 @@
     <string name="swap_total_liquidity">Total liquidity</string>
     <string name="swap_your_share">Your share</string>
     <string name="swap_swap_action_begin">Swap action begin</string>
+    <string name="swap_add_liquidity_action_begin">Add liquidity action begin</string>
     <string name="swap_balance_0">Balance 0</string>
     <string name="swap_lyr_vs_usd" translatable="false">LYR vs $USDT</string>
     <string name="swap_0_lyr_per_usd" translatable="false">0 LYR per $USDT</string>

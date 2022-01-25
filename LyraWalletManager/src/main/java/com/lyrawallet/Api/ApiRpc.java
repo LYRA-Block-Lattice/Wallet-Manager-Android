@@ -30,6 +30,7 @@ import com.lyrawallet.R;
 import com.lyrawallet.Ui.FragmentAccount.AccountHistoryGalleryAdapter;
 import com.lyrawallet.Ui.FragmentManagerUser;
 import com.lyrawallet.Ui.FragmentSwap.FragmentSwap;
+import com.lyrawallet.Ui.UiDialog;
 import com.lyrawallet.Ui.UiHelpers;
 import com.lyrawallet.Ui.UiUpdates;
 import com.lyrawallet.Util.Concatenate;
@@ -750,51 +751,6 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
         return true;
     }
     private static MainActivity ParentInstance = null;
-    AlertDialog dialogWindow;
-
-    void showDialogStatus(int title, int message) {
-        if(dialogWindow != null)
-            dialogWindow.dismiss();
-        dialogWindow = new AlertDialog.Builder(ParentInstance)
-                .setTitle(title)
-                .setMessage(message)
-                .setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                })
-                .create();
-        dialogWindow.show();
-    }
-
-    void showDialogStatus(int title, String message) {
-        if(dialogWindow != null)
-            dialogWindow.dismiss();
-        dialogWindow = new AlertDialog.Builder(ParentInstance)
-                .setTitle(title)
-                .setMessage(message)
-                .setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                })
-                .create();
-        dialogWindow.show();
-    }
-
-    void showDialogStatus(int title) {
-        if(dialogWindow != null)
-            dialogWindow.dismiss();
-        dialogWindow = new AlertDialog.Builder(ParentInstance)
-                .setTitle(title)
-                .setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                })
-                .create();
-        dialogWindow.show();
-    }
 
     public boolean act(Action action) {
         System.out.println("1-Acting on: " + action.getApi());
@@ -838,7 +794,7 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                             String password = String.valueOf(passEditText.getText());
                             actWithPwd(action, password);
                             if(action.getActionPurpose() == null || !action.getActionPurpose().equals("Receive")) {
-                                showDialogStatus(R.string.send_sending);
+                                UiDialog.showDialogStatus(R.string.send_sending);
                             }
                         }
                     })
@@ -848,7 +804,7 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
         } else {
             actWithPwd(action, Global.getWalletPassword());
             if(action.getActionPurpose() == null || !action.getActionPurpose().equals("Receive")) {
-                showDialogStatus(R.string.send_sending);
+                UiDialog.showDialogStatus(R.string.send_sending);
             }
         }
 
@@ -886,6 +842,11 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
         }, 3000);
     }*/
 
+    public static void runActionHistory() {
+        new ApiRpc().act(new ApiRpc.Action().actionHistory(Global.str_api_rpc_purpose_history_disk_storage,
+                Global.getCurrentNetworkName(), Global.getSelectedAccountName(), Global.getSelectedAccountId()));
+    }
+
     @Override
     public void onRpcTaskDone(String[] output) {
         ApiRpc.Action ac = new ApiRpc.Action(output[1]);
@@ -897,10 +858,6 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                 }
                 if (output[0].equals("History")) {
                     ApiRpcActionsHistory.store(ac, output[2]);
-                        /*List<ApiRpcActionsHistory.HistoryEntry> historyList = new ApiRpcActionsHistory().loadHistory(ac);
-                        if (historyList != null) {
-                            Global.setWalletHistory(ac.getAccName(), historyList);
-                        }*/
                 } else if (output[0].equals("Send")) {
                     EditText recipientAddressEditText = (EditText) activity.findViewById(R.id.send_token_recipient_address_value);
                     EditText tokenAmountEditText = (EditText) activity.findViewById(R.id.send_token_amount_value);
@@ -917,11 +874,16 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                                         SpinnerAdapter adapter = tokenSpinner.getAdapter();
                                         String tokenToSend = adapter.getItem(tokenSpinner.getSelectedItemPosition()).toString();
                                         getBalanceAfterAction();
-                                        showDialogStatus(R.string.send_successful, String.format(Locale.US, "%s: %f %s\n%s: %s-%d (%s)\n%s: %s",
-                                                activity.getString(R.string.Send1), Double.parseDouble(tokenAmountEditText.getText().toString()), tokenToSend,
-                                                activity.getString(R.string.From), activity.getString(R.string.Wallet), Global.getSelectedAccountNr() + 1, UiHelpers.getShortAccountId(Global.getSelectedAccountId(), 4),
-                                                activity.getString(R.string.To), UiHelpers.getShortAccountId(recipientAddressEditText.getText().toString(), 7))
-                                        );
+                                        try {
+                                            UiDialog.showDialogStatus(R.string.send_successful, String.format(Locale.US, "%s: %f %s\n%s: %s-%d (%s)\n%s: %s",
+                                                    activity.getString(R.string.Send1), Double.parseDouble(tokenAmountEditText.getText().toString()), tokenToSend,
+                                                    activity.getString(R.string.From), activity.getString(R.string.Wallet), Global.getSelectedAccountNr() + 1, UiHelpers.getShortAccountId(Global.getSelectedAccountId(), 4),
+                                                    activity.getString(R.string.To), UiHelpers.getShortAccountId(recipientAddressEditText.getText().toString(), 7)),
+                                                    ApiRpc.class.getDeclaredMethod("runActionHistory")
+                                            );
+                                        } catch (NoSuchMethodException e) {
+                                            e.printStackTrace();
+                                        }
                                         recipientAddressEditText.setText("");
                                         tokenAmountEditText.setText("");
                                         new FragmentManagerUser().goToAccount();
@@ -1014,22 +976,29 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                     }
                 } else if (output[0].equals("Swap")) {
                     if(output[2].equals("error"))
-                        showDialogStatus(R.string.str_an_error_occurred, R.string.str_please_contact_lyra_period_inc);
+                        UiDialog.showDialogStatus(R.string.str_an_error_occurred, R.string.str_please_contact_lyra_period_inc);
                     else {
                         FragmentSwap.clearAccountFromTo(activity);
-                        showDialogStatus(R.string.swap_swap_complete);
+                        try {
+                            UiDialog.showDialogStatus(R.string.swap_swap_complete,
+                                    ApiRpc.class.getDeclaredMethod("runActionHistory"));
+                        } catch (NoSuchMethodException e) {
+                            e.printStackTrace();
+                        }
                     }
-                    getBalanceAfterAction();
+                    //getBalanceAfterAction();
                 } else if (output[0].equals("AddLiquidity")) {
                     if(output[2].equals("error"))
-                        showDialogStatus(R.string.str_an_error_occurred);
+                        UiDialog.showDialogStatus(R.string.str_an_error_occurred);
                     else {
-                        showDialogStatus(R.string.swap_add_liquidity_complete);
+                        FragmentSwap.clearAccountFromTo(activity);
+                        try {
+                            UiDialog.showDialogStatus(R.string.swap_add_liquidity_complete,
+                                    ApiRpc.class.getDeclaredMethod("runActionHistory"));
+                        } catch (NoSuchMethodException e) {
+                            e.printStackTrace();
+                        }
                     }
-                    Toast.makeText(activity, "Liquidity added", Toast.LENGTH_SHORT).show();
-                    getBalanceAfterAction();
-                    if(dialogWindow != null)
-                        dialogWindow.dismiss();
                 }
                 ReceiveResult = output[0] + "^" + output[1] + "^" + output[2];
                 System.out.println("Transaction end, result is:" + ReceiveResult);

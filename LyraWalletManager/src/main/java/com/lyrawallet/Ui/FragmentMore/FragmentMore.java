@@ -152,7 +152,7 @@ public class FragmentMore extends Fragment {
         if (explorerButton != null) {
             explorerButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    String url = "http://www.google.com";
+                    String url;
                     switch (Global.getCurrentNetworkName()) {
                         case "MAINNET":
                             url = "https://nebula.lyra.live/";

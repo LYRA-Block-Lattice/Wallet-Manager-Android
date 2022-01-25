@@ -656,16 +656,21 @@ public class FragmentSwap extends Fragment {
                         new ApiRpc().act(new ApiRpc.Action().actionAddLiquidity(Global.getSelectedAccountId(),
                                 GlobalLyra.symbolToDomain(tokenFromSpinner.getSelectedItem().toString()), Double.parseDouble(swapFromValueEditText.getText().toString()),
                                 GlobalLyra.symbolToDomain(tokenToSpinner.getSelectedItem().toString()), Double.parseDouble(swapToValueEditText.getText().toString())));
-                        Toast.makeText(view.getContext(), getText(R.string.swap_swap_action_begin), Toast.LENGTH_LONG).show();
+                        Toast.makeText(view.getContext(), getText(R.string.swap_add_liquidity_action_begin), Toast.LENGTH_LONG).show();
                     } else {
-                        new ApiRpc().act(new ApiRpc.Action().actionSwap(Global.getSelectedAccountId(),
-                                GlobalLyra.symbolToDomain(tokenFromSpinner.getSelectedItem().toString()),
-                                GlobalLyra.symbolToDomain(tokenToSpinner.getSelectedItem().toString()),
-                                GlobalLyra.symbolToDomain(tokenFromSpinner.getSelectedItem().toString()),
-                                Double.parseDouble(swapFromValueEditText.getText().toString()),
-                                Double.parseDouble(swapToValueEditText.getText().toString()) / 1.02
-                        ));
-                        Toast.makeText(view.getContext(), getText(R.string.swap_swap_action_begin), Toast.LENGTH_LONG).show();
+                        UiUpdates.PoolCalculateData poolCalculateData = UiUpdates.getPoolCalculateData();
+                        if(poolCalculateData != null) {
+                            new ApiRpc().act(new ApiRpc.Action().actionSwap(Global.getSelectedAccountId(),
+                                    GlobalLyra.symbolToDomain(tokenFromSpinner.getSelectedItem().toString()),
+                                    GlobalLyra.symbolToDomain(tokenToSpinner.getSelectedItem().toString()),
+                                    GlobalLyra.symbolToDomain(tokenFromSpinner.getSelectedItem().toString()),
+                                    Double.parseDouble(swapFromValueEditText.getText().toString()),
+                                    poolCalculateData.getMinimumReceived()
+                            ));
+                            Toast.makeText(view.getContext(), getText(R.string.swap_swap_action_begin), Toast.LENGTH_LONG).show();
+                        } else {
+
+                        }
                     }
                 } catch (NumberFormatException | NullPointerException e) {
                     e.printStackTrace();

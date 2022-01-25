@@ -108,10 +108,28 @@
     <string name="pref_debug_enabled_switch_title">Deschide debug mode</string>
     <string name="pref_debug_enabled_switch_summary">Acest comutator activeaza atentionarile in detaliu al activitatii utilizatorului si al actiunilor declansate de utilizator.</string>
     <string name="str_an_error_occurred">A apărut o eroare</string>
-    <string name="str_please_contact_lyra_period_inc">Va rugam sa contactaţi lyra.live, t.me/lyra_live</string>
+    <string name="str_please_contact_lyra_period_inc">Daca SWAP-ul nu sa completat dar tokenii au fost trimisi,\nVa rugam sa contactaţi lyra.live, t.me/lyra_live</string>
     <string name="pref_randomize_node_address_enabled_switch_title">Alege nodurile random</string>
     <string name="pref_randomize_node_address_enabled_switch_summary">Modifica adresa IP al nodurilor in mod random la fiecate operatie, daca este deschisa va avea impact in timpul necesar refreshului istoriei</string>
     <string name="swap_swap_complete">Swap efectuat</string>
     <string name="swap_add_liquidity_complete">Adaugare lichiditate completa</string>
+    <string name="swap_add_liquidity_action_begin">Actiunea de adaugare a lichiditatii inceputa</string>
+    <string name="Transaction_detail">Detaliile tranzacției</string>
+    <string name="Invalid_request">Cerere invalida</string>
+    <string name="account_transaction_time_stamp_copied">Time stamp copiat</string>
+    <string name="account_transaction_amount_transferred_copied">Cantitate transferata copiata</string>
+    <string name="account_transaction_amounts_in_account_copied">Cantitatea de tokeni in cont copiata</string>
+    <string name="Receive">Primit</string>
+    <string name="Send3">Trimis</string>
+    <string name="Not_received_yet">Ne recepționat încă</string>
+    <string name="Height">Block</string>
+    <string name="Direction">Direcția</string>
+    <string name="Time_stamp">Data si ora tranzactiei</string>
+    <string name="Send_account_id">ID-ul contului sursa</string>
+    <string name="Send_hash">Hashul trimiterii</string>
+    <string name="Receive_account_id">ID-ul contului destinatie</string>
+    <string name="Receive_hash">Hashul recepționarii</string>
+    <string name="Amount_transferred">Cantitatea transferata</string>
+    <string name="Amounts_in_accounts">Cantitati in cont</string>
 
 </resources>

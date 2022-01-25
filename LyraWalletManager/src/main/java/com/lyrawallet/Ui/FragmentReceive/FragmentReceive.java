@@ -91,7 +91,7 @@ public class FragmentReceive extends Fragment {
                 ClipData clip = ClipData.newPlainText(activity.getString(R.string.receive_scan_address_copied), Global.getSelectedAccountId());
                 clipboard.setPrimaryClip(clip);
 
-                Snackbar.make(activity.findViewById(R.id.nav_host_fragment_content_main), activity.getString(R.string.receive_scan_address_copied), Snackbar.LENGTH_LONG)
+                Snackbar.make(activity.findViewById(R.id.nav_host_fragment_content_main), activity.getString(R.string.receive_scan_address_copied), Snackbar.LENGTH_SHORT)
                         .setAction("", null).show();            }
         });
 

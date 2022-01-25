@@ -72,8 +72,6 @@ public class UiHelpers {
     }
 
     public static String getShortAccountId(String id, int len) {
-        if(!CryptoSignatures.validateAccountId(id))
-            return "";
         return String.format(Locale.US, "%s...%s", id.substring(0, len), id.substring(id.length() - 1 - len));
     }
 
@@ -113,7 +111,7 @@ public class UiHelpers {
     }
 
     public static List<Integer> tickerToImage(List<String> tokenNames) {
-        List<Integer > List = new ArrayList<>();
+        List<Integer> List = new ArrayList<>();
         if(tokenNames == null)
             return null;
         for (int i = 0; i < tokenNames.size(); i++) {
@@ -127,6 +125,18 @@ public class UiHelpers {
             List.add(icon);
         }
         return List;
+    }
+
+    public static Integer tickerToImage(String tokenName) {
+        if (tokenName == null)
+            return null;
+        int icon = GlobalLyra.TokenIconList[1].second;
+        for (Pair<String, Integer> k : GlobalLyra.TokenIconList) {
+            if (k.first.equals(tokenName)) {
+                return k.second;
+            }
+        }
+        return GlobalLyra.TokenIconList[1].second;
     }
 
 }
