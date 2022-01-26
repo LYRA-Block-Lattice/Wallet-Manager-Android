@@ -8,10 +8,8 @@ import androidx.preference.PreferenceManager;
 
 import com.lyrawallet.Api.ApiRpc;
 import com.lyrawallet.Global;
-import com.lyrawallet.GlobalLyra;
 import com.lyrawallet.MainActivity;
 import com.lyrawallet.Storage.StorageHistory;
-import com.lyrawallet.Ui.FragmentAccount.FragmentAccount;
 import com.lyrawallet.Util.Concatenate;
 
 import org.json.JSONArray;
@@ -22,8 +20,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class ApiRpcActionsHistory extends MainActivity {
     public static class HistoryEntry {

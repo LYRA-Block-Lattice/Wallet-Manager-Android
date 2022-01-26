@@ -4,8 +4,6 @@ import android.util.Pair;
 
 import com.lyrawallet.Accounts.Accounts;
 import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
-import com.lyrawallet.Ui.FragmentAccount.FragmentAccount;
-import com.lyrawallet.Ui.UtilGetData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +24,7 @@ public class Global {
         RECEIVE,
         SEND,
         SETTINGS,
+        ACCOUNT_HISTORY,
         DIALOG_RECEIVE,
         DIALOG_TRANSACTION_DETAIL
     }
@@ -55,7 +54,7 @@ public class Global {
     private static String AccountsContainer = null;
     private static List<Pair<String, String>> WalletAccNameAndIdList = null;
     private static List<Pair<String, Pair<Integer, List<ApiRpcActionsHistory.HistoryEntry>>>> AccountHistory = null;
-    private static List<Pair<String, List<FragmentAccount.AccountHistoryEntry>>> FragmentAccountHistory = null;
+    private static List<Pair<String, List<com.lyrawallet.Ui.FragmentAccountHistory.FragmentAccountHistory.AccountHistoryEntry>>> FragmentAccountHistory = null;
     private static String WalletName = null;
     private static String ReceiveWalletPassword = null;
     private static String SelectedAccountName = "";
@@ -73,13 +72,13 @@ public class Global {
     static int SelectedNode = 0;
     final static String[] NodeAddressDevNet = new String[]{""};
     final static String[] NodeAddressTestNet = new String[]{
+            "wss://161.97.166.188:4504/api/v1/socket",
             "wss://173.212.228.110:4504/api/v1/socket",
-            //"wss://81.196.64.78:4504/api/v1/socket",
-            //"wss://161.97.166.188:4504/api/v1/socket",
-            //"wss://seed.testnet.lyra.live:443/api/v1/socket",
-            //"wss://seed2.testnet.lyra.live:443/api/v1/socket",
-            //"wss://seed3.testnet.lyra.live:443/api/v1/socket",
-            //"wss://seed3.testnet.lyra.live:443/api/v1/socket"
+            "wss://81.196.64.78:4504/api/v1/socket",
+            "wss://seed.testnet.lyra.live:443/api/v1/socket",
+            "wss://seed2.testnet.lyra.live:443/api/v1/socket",
+            "wss://seed3.testnet.lyra.live:443/api/v1/socket",
+            "wss://seed3.testnet.lyra.live:443/api/v1/socket"
     };
     final static String[] NodeAddressMainNet = new String[]{
             "wss://173.212.228.110:5504/api/v1/socket",
@@ -177,10 +176,10 @@ public class Global {
         return null;
     }
 
-    public static void setFragmentAccountHistory(String accountName, List<FragmentAccount.AccountHistoryEntry> history) {
+    public static void setFragmentAccountHistory(String accountName, List<com.lyrawallet.Ui.FragmentAccountHistory.FragmentAccountHistory.AccountHistoryEntry> history) {
         if(FragmentAccountHistory != null) {
             for (int i = 0; i < FragmentAccountHistory.size(); i++) {
-                Pair<String, List<FragmentAccount.AccountHistoryEntry>> acc = FragmentAccountHistory.get(i);
+                Pair<String, List<com.lyrawallet.Ui.FragmentAccountHistory.FragmentAccountHistory.AccountHistoryEntry>> acc = FragmentAccountHistory.get(i);
                 if (acc.first.equals(accountName)) {
                     FragmentAccountHistory.remove(i);
                     FragmentAccountHistory.add(new Pair<>(accountName, history));
@@ -193,10 +192,10 @@ public class Global {
         FragmentAccountHistory.add(new Pair<>(accountName, history));
     }
 
-    public static List<FragmentAccount.AccountHistoryEntry> getFragmentAccountHistory(String accountName) {
+    public static List<com.lyrawallet.Ui.FragmentAccountHistory.FragmentAccountHistory.AccountHistoryEntry> getFragmentAccountHistory(String accountName) {
         if(FragmentAccountHistory != null) {
             for (int i = 0; i < FragmentAccountHistory.size(); i++) {
-                Pair<String, List<FragmentAccount.AccountHistoryEntry>> acc = FragmentAccountHistory.get(i);
+                Pair<String, List<com.lyrawallet.Ui.FragmentAccountHistory.FragmentAccountHistory.AccountHistoryEntry>> acc = FragmentAccountHistory.get(i);
                 if (acc.first.equals(accountName)) {
                     return acc.second;
                 }
@@ -273,6 +272,7 @@ public class Global {
         if (SelectedNode >= getNodeAddressTable().length) {
             SelectedNode = 0;
         }
+        System.out.println("Push to next node IP: " + getNodeAddress());
     }
 
     public static String getNodeAddress() {

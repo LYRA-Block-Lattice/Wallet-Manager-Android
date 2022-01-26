@@ -1,4 +1,4 @@
-package com.lyrawallet.Ui.FragmentAccount;
+package com.lyrawallet.Ui.FragmentAccountHistory;
 
 import android.view.View;
 import android.widget.ImageView;

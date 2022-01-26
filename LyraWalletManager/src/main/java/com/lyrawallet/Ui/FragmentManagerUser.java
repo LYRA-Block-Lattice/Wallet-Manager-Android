@@ -9,7 +9,8 @@ import com.lyrawallet.Global;
 import com.lyrawallet.MainActivity;
 import com.lyrawallet.R;
 import com.lyrawallet.Ui.FragmentAccount.FragmentAccount;
-import com.lyrawallet.Ui.FragmentAccount.FragmentTransactionDetailsDialog;
+import com.lyrawallet.Ui.FragmentAccountHistory.FragmentAccountHistory;
+import com.lyrawallet.Ui.FragmentAccountHistory.FragmentTransactionDetailsDialog;
 import com.lyrawallet.Ui.FragmentDex.FragmentDex;
 import com.lyrawallet.Ui.FragmentMore.FragmentMore;
 import com.lyrawallet.Ui.FragmentPreferences.FragmentPreferencesRoot;
@@ -24,8 +25,6 @@ import com.lyrawallet.Ui.FragmentWalletManagement.FragmentNewWallet;
 import com.lyrawallet.Ui.FragmentWalletManagement.FragmentOpenWallet;
 import com.lyrawallet.Ui.FragmentWalletManagement.FragmentRecoverAccount;
 
-import java.util.Objects;
-
 import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView;
 
 public class FragmentManagerUser extends MainActivity {
@@ -37,6 +36,14 @@ public class FragmentManagerUser extends MainActivity {
         }
         return -1;
     }
+
+    public void clearBackStack() {
+        FragmentManager fragmentManager = getInstance().getSupportFragmentManager();
+        for (int i = 0; i < fragmentManager.getBackStackEntryCount(); i++) {
+            fragmentManager.popBackStack();
+        }
+    }
+
     public void goToOpenWallet() {
         Global.setVisiblePage(Global.visiblePage.OPEN_WALLET);
         if(getCurrentFragment() != Global.visiblePage.OPEN_WALLET.ordinal()) {
@@ -103,6 +110,7 @@ public class FragmentManagerUser extends MainActivity {
     }
 
     public void goToStaking() {
+        clearBackStack();
         Global.setVisiblePage(Global.visiblePage.STAKING);
         if(getCurrentFragment() != Global.visiblePage.STAKING.ordinal()) {
             getInstance().getSupportFragmentManager()
@@ -119,6 +127,7 @@ public class FragmentManagerUser extends MainActivity {
     }
 
     public void goToSwap() {
+        clearBackStack();
         Global.setVisiblePage(Global.visiblePage.SWAP);
         if(getCurrentFragment() != Global.visiblePage.SWAP.ordinal()) {
             getInstance().getSupportFragmentManager()
@@ -135,7 +144,8 @@ public class FragmentManagerUser extends MainActivity {
     }
 
     public void goToAccount() {
-        Global.setVisiblePage(Global.visiblePage.ACCOUNT);
+        clearBackStack();
+            Global.setVisiblePage(Global.visiblePage.ACCOUNT);
         if(getCurrentFragment() != Global.visiblePage.ACCOUNT.ordinal()) {
             getInstance().getSupportFragmentManager()
                     .beginTransaction()
@@ -151,6 +161,7 @@ public class FragmentManagerUser extends MainActivity {
     }
 
     public void goToDex() {
+        clearBackStack();
         Global.setVisiblePage(Global.visiblePage.DEX);
         if(getCurrentFragment() != Global.visiblePage.DEX.ordinal()) {
             getInstance().getSupportFragmentManager()
@@ -167,6 +178,7 @@ public class FragmentManagerUser extends MainActivity {
     }
 
     public void goToMore() {
+        clearBackStack();
         Global.setVisiblePage(Global.visiblePage.MORE);
         if(getCurrentFragment() != Global.visiblePage.MORE.ordinal()) {
             getInstance().getSupportFragmentManager()
@@ -219,6 +231,22 @@ public class FragmentManagerUser extends MainActivity {
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .commit();
         }
+    }
+
+    public void goToAccountHistory() {
+        Global.setVisiblePage(Global.visiblePage.ACCOUNT_HISTORY);
+        if(getCurrentFragment() != Global.visiblePage.ACCOUNT_HISTORY.ordinal()) {
+            getInstance().getSupportFragmentManager()
+                    .beginTransaction()
+                    .setReorderingAllowed(true)
+                    .addToBackStack(String.valueOf(Global.visiblePage.ACCOUNT_HISTORY.ordinal()))
+                    .replace(R.id.nav_host_fragment_content_main, new FragmentAccountHistory(), "ACCOUNT_HISTORY")
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .commit();
+        }
+        CurvedBottomNavigationView bottomNavigationView = getInstance().findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setVisibility(View.VISIBLE);
+        bottomNavigationView.onMenuItemClick(Global.visiblePage.ACCOUNT.ordinal());
     }
 
     public void goToDialogReceive() {

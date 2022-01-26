@@ -1,7 +1,6 @@
 package com.lyrawallet.Ui.FragmentSwap;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -10,7 +9,6 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,7 +28,7 @@ import com.lyrawallet.Global;
 import com.lyrawallet.GlobalLyra;
 import com.lyrawallet.MainActivity;
 import com.lyrawallet.R;
-import com.lyrawallet.Ui.FragmentAccount.AccountHistoryGalleryAdapter;
+import com.lyrawallet.Ui.FragmentAccountHistory.AccountHistoryGalleryAdapter;
 import com.lyrawallet.Ui.TokensSpinnerAdapter;
 import com.lyrawallet.Ui.UiHelpers;
 import com.lyrawallet.Ui.UiUpdates;
@@ -395,7 +393,7 @@ public class FragmentSwap extends Fragment {
                             try {
                                 TextView swapInternalPriceValueTextView = (TextView) activity.findViewById(R.id.swapInternalPriceValueTextView);
                                 swapInternalPriceValueTextView.setText(String.format(Locale.US, "$ %.8f", internalLyrPrice));
-                                RecyclerView account_history_recycler = activity.findViewById(R.id.account_history_recicler);
+                                RecyclerView account_history_recycler = activity.findViewById(R.id.account_history_recycler);
                                 if((AccountHistoryGalleryAdapter)account_history_recycler.getAdapter() != null)
                                     ((AccountHistoryGalleryAdapter)account_history_recycler.getAdapter()).updateUnitPrice("LYR");
                             } catch (NullPointerException ignored) { }

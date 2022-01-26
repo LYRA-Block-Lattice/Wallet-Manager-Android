@@ -16,10 +16,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
 import com.lyrawallet.Api.Network.NetworkRpc;
@@ -27,7 +24,6 @@ import com.lyrawallet.Global;
 import com.lyrawallet.GlobalLyra;
 import com.lyrawallet.MainActivity;
 import com.lyrawallet.R;
-import com.lyrawallet.Ui.FragmentAccount.AccountHistoryGalleryAdapter;
 import com.lyrawallet.Ui.FragmentManagerUser;
 import com.lyrawallet.Ui.FragmentSwap.FragmentSwap;
 import com.lyrawallet.Ui.UiDialog;
@@ -911,7 +907,7 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                                 }
                             } else {
                                 Pair<Integer, List<ApiRpcActionsHistory.HistoryEntry>> h = Global.getWalletHistory(Concatenate.getHistoryFileName());
-                                if(h != null) {
+                                if(h != null && h.second != null) {
                                     if(objCmd.getLong("height") != h.second.get(h.second.size() - 1).getHeight()) {
                                         new ApiRpc().act(new ApiRpc.Action().actionHistory(Global.str_api_rpc_purpose_history_disk_storage,
                                                 Global.getCurrentNetworkName(), Global.getSelectedAccountName(), Global.getSelectedAccountId()));

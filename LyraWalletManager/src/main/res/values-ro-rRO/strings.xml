@@ -131,5 +131,6 @@
     <string name="Receive_hash">Hashul recepționarii</string>
     <string name="Amount_transferred">Cantitatea transferata</string>
     <string name="Amounts_in_accounts">Cantitati in cont</string>
+    <string name="account_history">Istoria contului</string>
 
 </resources>

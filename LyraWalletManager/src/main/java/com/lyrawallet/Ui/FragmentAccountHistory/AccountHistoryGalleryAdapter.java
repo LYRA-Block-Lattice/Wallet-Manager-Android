@@ -1,4 +1,4 @@
-package com.lyrawallet.Ui.FragmentAccount;
+package com.lyrawallet.Ui.FragmentAccountHistory;
 
 import android.content.Context;
 import android.util.Pair;
@@ -16,43 +16,43 @@ import java.util.List;
 import java.util.Locale;
 
 public class AccountHistoryGalleryAdapter extends RecyclerView.Adapter<AccountHistoryViewHolder> {
-    List<FragmentAccount.AccountHistoryEntry> list = Collections.emptyList();
+    List<FragmentAccountHistory.AccountHistoryEntry> list = Collections.emptyList();
     Context context;
-    FragmentAccount.ClickListener listener;
+    FragmentAccountHistory.ClickListener listener;
 
-    public AccountHistoryGalleryAdapter(List<FragmentAccount.AccountHistoryEntry> list,
-                                        Context context, FragmentAccount.ClickListener listener)
+    public AccountHistoryGalleryAdapter(List<FragmentAccountHistory.AccountHistoryEntry> list,
+                                        Context context, FragmentAccountHistory.ClickListener listener)
     {
         this.list = list;
         this.context = context;
         this.listener = listener;
     }
 
-    public List<FragmentAccount.AccountHistoryEntry> getDataSet(){
+    public List<FragmentAccountHistory.AccountHistoryEntry> getDataSet(){
         return list;
     }
 
-    public void setDataSet(List<FragmentAccount.AccountHistoryEntry> newDataSet){
+    public void setDataSet(List<FragmentAccountHistory.AccountHistoryEntry> newDataSet){
         this.list = newDataSet;
         notifyDataSetChanged();
     }
 
-    public void addDataSet(List<FragmentAccount.AccountHistoryEntry> newDataSet){
+    public void addDataSet(List<FragmentAccountHistory.AccountHistoryEntry> newDataSet){
         this.list.addAll(newDataSet);
         notifyItemRangeInserted(list.size() - newDataSet.size(), list.size() - 1);
     }
 
-    public void addData(FragmentAccount.AccountHistoryEntry newData){
+    public void addData(FragmentAccountHistory.AccountHistoryEntry newData){
         this.list.add(newData);
         notifyItemInserted(this.list.size() - 1);
     }
 
-    public void insertData(int index, FragmentAccount.AccountHistoryEntry newData){
+    public void insertData(int index, FragmentAccountHistory.AccountHistoryEntry newData){
         this.list.add(index, newData);
         notifyItemInserted(index);
     }
 
-    public void insertData( FragmentAccount.AccountHistoryEntry newData){
+    public void insertData( FragmentAccountHistory.AccountHistoryEntry newData){
         this.list.add(0, newData);
         notifyItemInserted(0);
     }
@@ -106,7 +106,7 @@ public class AccountHistoryGalleryAdapter extends RecyclerView.Adapter<AccountHi
         }
         final int index = viewHolder.getAdapterPosition();
         viewHolder.Height
-                .setText(String.format(Locale.US, "TX: %d", list.get(position).Height));
+                .setText(list.get(position).Height == - 1 ? "" : String.format(Locale.US, "TX: %d", list.get(position).Height));
         viewHolder.TickerImage
                 .setImageResource(list.get(position).TickerImage);
         viewHolder.TickerName

@@ -8,6 +8,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Pair;
@@ -100,6 +101,9 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
             case ACCOUNT:
                 new FragmentManagerUser().goToAccount();
                 break;
+            case ACCOUNT_HISTORY:
+                new FragmentManagerUser().goToAccountHistory();
+                break;
             case DEX:
                 new FragmentManagerUser().goToDex();
                 break;
@@ -146,6 +150,9 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
     public void receive(View view) {
         new FragmentManagerUser().goToReceive();
     }
+    public void history(View view) {
+        new FragmentManagerUser().goToAccountHistory();
+    }
     public void closeWallet(View view) {
         finish();
         System.exit(0);
@@ -189,7 +196,9 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         Instance = this;
         // At the moment force device to stay in portrait mode.
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        requestPermissions(new String[]{Manifest.permission.CAMERA}, 1011);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, 1011);
+        }
         // Load user preferences.
         new PreferencesLoad();
         // Get the path of the working directory, we cann not get it in a static function in Global class.
@@ -218,27 +227,27 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         CurvedBottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         CbnMenuItem[] menuItems = new CbnMenuItem[]{
                 new CbnMenuItem(
-                        R.drawable.ic_outline_payments_24, // the icon
+                        R.drawable.ic_outline_payments_24_, // the icon
                         R.drawable.ic_outline_payments_24, // the AVD that will be shown in FAB
                         Global.visiblePage.STAKING.ordinal() // optional if you use Jetpack Navigation
                 ),
                 new CbnMenuItem(
-                        R.drawable.ic_round_swap_horiz_24,
+                        R.drawable.ic_outline_swap_horiz_24_,
                         R.drawable.ic_round_swap_horiz_24,
                         Global.visiblePage.SWAP.ordinal()
                 ),
                 new CbnMenuItem(
-                        R.drawable.ic_outline_account_balance_wallet_24,
+                        R.drawable.ic_outline_account_balance_wallet_24_,
                         R.drawable.ic_outline_account_balance_wallet_24,
                         Global.visiblePage.ACCOUNT.ordinal()
                 ),
                 new CbnMenuItem(
-                        R.drawable.ic_outline_grid_view_24,
+                        R.drawable.ic_outline_grid_view_24_,
                         R.drawable.ic_outline_grid_view_24,
                         Global.visiblePage.DEX.ordinal()
                 ),
                 new CbnMenuItem(
-                        R.drawable.ic_baseline_more_horiz_24,
+                        R.drawable.ic_outline_more_horiz_24_,
                         R.drawable.ic_baseline_more_horiz_24,
                         Global.visiblePage.MORE.ordinal()
                 )
@@ -355,7 +364,6 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         }
         return null;
     }
-
     public static void goBack() {
         FragmentManager fragmentManager = getInstance().getSupportFragmentManager();
         if (fragmentManager.getBackStackEntryCount() > 1) {
@@ -373,11 +381,10 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                 bottomNavigationView.setVisibility(View.GONE);
             }
         } else {
-            getInstance().finish();
-            System.exit(0);
+            //getInstance().finish();
+            //System.exit(0);
         }
     }
-
     @Override
     public boolean onKeyDown(int key_code, KeyEvent key_event) {
         if (key_code== KeyEvent.KEYCODE_BACK) {

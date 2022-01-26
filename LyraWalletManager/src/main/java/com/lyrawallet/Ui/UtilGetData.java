@@ -5,33 +5,33 @@ import android.util.Pair;
 import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
 import com.lyrawallet.Global;
 import com.lyrawallet.GlobalLyra;
-import com.lyrawallet.Ui.FragmentAccount.FragmentAccount;
+import com.lyrawallet.Ui.FragmentAccountHistory.FragmentAccountHistory;
 import com.lyrawallet.Util.Concatenate;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class UtilGetData {
     public static List<Pair<String, Double>> getAvailableTokenList() {
-        List<Pair<String, Double>> balances = new ArrayList<>();
+        List<Pair<String, Double>> balances;
+        List<Pair<String, Double>> balancesRet = new ArrayList<>();;
         Pair<Integer, List<ApiRpcActionsHistory.HistoryEntry>> history = Global.getWalletHistory(Concatenate.getHistoryFileName());
         try {
             if(history == null)
-                return balances;
+                return balancesRet;
             if(history.second.size() != 0) {
                 balances = history.second.get(history.second.size() - 1).getBalances();
-                if(balances.size() > 1) {
-                    for (int i = 1; i < balances.size(); i++) {
-                        Pair<String, Double> p = balances.get(i);
+                for (int i = 0; i < balances.size(); i++) {
+                    Pair<String, Double> p = new Pair<>(GlobalLyra.domainToSymbol(balances.get(i).first), balances.get(i).second);
+                    balancesRet.add(p);
+                }
+                if(balancesRet.size() > 1) {
+                    for (int i = 1; i < balancesRet.size(); i++) {
+                        Pair<String, Double> p = new Pair<>(GlobalLyra.domainToSymbol(balances.get(i).first), balances.get(i).second);
                         if(p.first.equals("LYR")) {
                             // Make sure LYR is on position 0
-                            balances.remove(p);
-                            balances.add(0, p);
+                            balancesRet.remove(p);
+                            balancesRet.add(0, p);
                         }
                     }
                 }
@@ -39,7 +39,7 @@ public class UtilGetData {
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
-        return balances;
+        return balancesRet;
     }
 
     public static boolean checkTokenExist(String token) {
@@ -69,11 +69,11 @@ public class UtilGetData {
         return false;
     }
 
-    public static List<FragmentAccount.AccountHistoryEntry> historyToAccountAdapter(List<ApiRpcActionsHistory.HistoryEntry> historyList) {
+    public static List<FragmentAccountHistory.AccountHistoryEntry> historyToAccountAdapter(List<ApiRpcActionsHistory.HistoryEntry> historyList) {
         if(historyList == null) {
             return null;
         }
-        List<FragmentAccount.AccountHistoryEntry> List = new ArrayList<>();
+        List<FragmentAccountHistory.AccountHistoryEntry> List = new ArrayList<>();
         for (int i = 0; i < historyList.size(); i++) {
             int size = historyList.get(i).getChanges().size();
             Pair<String, Double> tokenAmount;
@@ -89,9 +89,13 @@ public class UtilGetData {
                     break;
                 }
             }
-            List.add(0, new FragmentAccount.AccountHistoryEntry(historyList.get(i).getHeight(), icon,
+            List.add(0, new FragmentAccountHistory.AccountHistoryEntry(historyList.get(i).getHeight(), icon,
                     GlobalLyra.domainToSymbol(tokenAmount.first), tokenAmount.second));
         }
         return List;
+    }
+
+    public static void sortKnownFirst(List<FragmentAccountHistory.AccountHistoryEntry> list) {
+
     }
 }

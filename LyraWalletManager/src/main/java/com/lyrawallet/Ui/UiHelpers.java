@@ -132,7 +132,7 @@ public class UiHelpers {
             return null;
         int icon = GlobalLyra.TokenIconList[1].second;
         for (Pair<String, Integer> k : GlobalLyra.TokenIconList) {
-            if (k.first.equals(tokenName)) {
+            if (k.first.equals(GlobalLyra.domainToSymbol(tokenName))) {
                 return k.second;
             }
         }

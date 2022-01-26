@@ -79,6 +79,8 @@
     <string name="main_activity_not_enough_tokens_into_account">Not enough tokens into account</string>
     <string name="main_activity_token_not_found_in_current_account">Token not found in current account</string>
 
+    <string name="account_history">Account history</string>
+
     <string name="account_transaction_time_stamp_copied">Time stamp copied</string>
     <string name="account_transaction_amount_transferred_copied">Amount transferred copied</string>
     <string name="account_transaction_amounts_in_account_copied">Amounts in account copied</string>
