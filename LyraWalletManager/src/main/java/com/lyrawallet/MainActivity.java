@@ -160,11 +160,11 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         }
         CurvedBottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         CbnMenuItem[] menuItems = new CbnMenuItem[]{
-                new CbnMenuItem(
+                /*new CbnMenuItem(
                         R.drawable.ic_outline_payments_24_, // the icon
                         R.drawable.ic_outline_payments_24, // the AVD that will be shown in FAB
                         Global.visiblePage.STAKING.ordinal() // optional if you use Jetpack Navigation
-                ),
+                ),*/
                 new CbnMenuItem(
                         R.drawable.ic_outline_swap_horiz_24_,
                         R.drawable.ic_round_swap_horiz_24,
@@ -175,21 +175,25 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                         R.drawable.ic_outline_account_balance_wallet_24,
                         Global.visiblePage.ACCOUNT.ordinal()
                 ),
-                new CbnMenuItem(
+                /*new CbnMenuItem(
                         R.drawable.ic_outline_grid_view_24_,
                         R.drawable.ic_outline_grid_view_24,
                         Global.visiblePage.DEX.ordinal()
-                ),
+                ),*/
                 new CbnMenuItem(
                         R.drawable.ic_outline_more_horiz_24_,
                         R.drawable.ic_baseline_more_horiz_24,
                         Global.visiblePage.MORE.ordinal()
                 )
         };
+        new Handler().postDelayed(new Runnable() {
+            public void run() {
+            }
+        }, 100);
         if (Global.getVisiblePage().ordinal() < Global.visiblePage.OPEN_WALLET.ordinal()) {
             bottomNavigationView.setMenuItems(menuItems, Global.getVisiblePage().ordinal());
         } else {
-            bottomNavigationView.setMenuItems(menuItems, 2);
+            bottomNavigationView.setMenuItems(menuItems, Global.visiblePage.ACCOUNT.ordinal());
             bottomNavigationView.setVisibility(View.GONE);
         }
         bottomNavigationView.setOnMenuItemClickListener((CbnMenuItem cbnMenuItem, Integer index) -> {

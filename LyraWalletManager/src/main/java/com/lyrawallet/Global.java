@@ -11,10 +11,10 @@ import java.util.List;
 public class Global {
     // Global enumerations
     public enum visiblePage {
-        STAKING,
+        //STAKING,
         SWAP,
         ACCOUNT,
-        DEX,
+        //DEX,
         MORE,
         OPEN_WALLET,
         IMPORT_WALLET,

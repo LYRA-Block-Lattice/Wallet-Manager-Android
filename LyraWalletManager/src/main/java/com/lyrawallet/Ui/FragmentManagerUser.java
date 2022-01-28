@@ -36,9 +36,9 @@ public class FragmentManagerUser extends MainActivity {
         Global.setVisiblePage(p);
         PushToBackStack = true;
         switch(p) {
-            case STAKING:
+            /*case STAKING:
                 new FragmentManagerUser().goToStaking();
-                break;
+                break;*/
             case SWAP:
                 new FragmentManagerUser().goToSwap();
                 break;
@@ -48,9 +48,9 @@ public class FragmentManagerUser extends MainActivity {
             case ACCOUNT_HISTORY:
                 new FragmentManagerUser().goToAccountHistory();
                 break;
-            case DEX:
+            /*case DEX:
                 new FragmentManagerUser().goToDex();
-                break;
+                break;*/
             case MORE:
                 new FragmentManagerUser().goToMore();
                 break;
@@ -169,7 +169,7 @@ public class FragmentManagerUser extends MainActivity {
     }
 
     public void goToStaking() {
-        clearBackStack();
+        /*clearBackStack();
         Global.setVisiblePage(Global.visiblePage.STAKING);
         if(getCurrentFragment() != Global.visiblePage.STAKING.ordinal()) {
             getInstance().getSupportFragmentManager()
@@ -182,7 +182,7 @@ public class FragmentManagerUser extends MainActivity {
         }
         CurvedBottomNavigationView bottomNavigationView = getInstance().findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setVisibility(View.VISIBLE);
-        bottomNavigationView.onMenuItemClick(Global.visiblePage.STAKING.ordinal());
+        bottomNavigationView.onMenuItemClick(Global.visiblePage.STAKING.ordinal());*/
     }
 
     public void goToSwap() {
@@ -220,7 +220,7 @@ public class FragmentManagerUser extends MainActivity {
     }
 
     public void goToDex() {
-        clearBackStack();
+        /*clearBackStack();
         Global.setVisiblePage(Global.visiblePage.DEX);
         if(getCurrentFragment() != Global.visiblePage.DEX.ordinal()) {
             getInstance().getSupportFragmentManager()
@@ -233,7 +233,7 @@ public class FragmentManagerUser extends MainActivity {
         }
         CurvedBottomNavigationView bottomNavigationView = getInstance().findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setVisibility(View.VISIBLE);
-        bottomNavigationView.onMenuItemClick(Global.visiblePage.DEX.ordinal());
+        bottomNavigationView.onMenuItemClick(Global.visiblePage.DEX.ordinal());*/
     }
 
     public void goToMore() {

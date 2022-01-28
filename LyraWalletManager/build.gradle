@@ -51,11 +51,11 @@ android {
             renderscriptDebuggable false
             zipAlignEnabled true
             applicationIdSuffix '.app'
-            versionNameSuffix 'test'
+            versionNameSuffix '.alpha'
         }
         debug {
             applicationIdSuffix '.app'
-            versionNameSuffix 'test'
+            versionNameSuffix '.alpha'
         }
     }
     compileOptions {
