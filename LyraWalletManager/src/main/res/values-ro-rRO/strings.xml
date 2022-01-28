@@ -132,5 +132,8 @@
     <string name="Amount_transferred">Cantitatea transferata</string>
     <string name="Amounts_in_accounts">Cantitati in cont</string>
     <string name="account_history">Istoria contului</string>
+    <string name="History">Istoria</string>
+    <string name="Total_balance_usd_zero">Balanta totala: $0</string>
+    <string name="Total_balance_usd">"Balanta totala: "</string>
 
 </resources>

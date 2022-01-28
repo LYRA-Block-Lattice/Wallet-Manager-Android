@@ -166,6 +166,7 @@
                 android:insetBottom="0dp"
                 android:text="@string/send_token_send_next"
                 android:textAllCaps="true"
+                android:enabled="false"
                 app:cornerRadius="@dimen/button_round_corner"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -1,6 +1,8 @@
 package com.lyrawallet.Api.Network;
 
+import android.Manifest;
 import android.os.AsyncTask;
+import android.os.Build;
 
 import androidx.annotation.Nullable;
 
@@ -22,14 +24,15 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 public class NetworkWebHttps extends AsyncTask<String, Void, NetworkWebHttps> {
+    final WeakReference<WebHttpsTaskInformer> mCallBack;
+    private WebHttpsTaskListener listenerCallBack = null;
+
     public interface WebHttpsTaskInformer {
         void onWebHttpsTaskDone(NetworkWebHttps output);
     }
     public interface WebHttpsTaskListener {
         void onWebHttpsTaskFinished(NetworkWebHttps value);
     }
-    final WeakReference<WebHttpsTaskInformer> mCallBack;
-    private WebHttpsTaskListener listenerCallBack = null;
 
     public NetworkWebHttps(@Nullable WebHttpsTaskInformer callback) {
         this.mCallBack = new WeakReference<>(callback);
@@ -78,7 +81,7 @@ public class NetworkWebHttps extends AsyncTask<String, Void, NetworkWebHttps> {
 
     @Override
     //params[0] Is the uri
-    //params[1] Not mandatory, Instance name to be able to indentify the request in callback function.
+    //params[1] Not mandatory, Instance name to be able to identify the request in callback function.
     protected NetworkWebHttps doInBackground(String... params) {
         ResponseCode = -1;
         ResponseMessage = "";
@@ -120,6 +123,9 @@ public class NetworkWebHttps extends AsyncTask<String, Void, NetworkWebHttps> {
         Done = false;
         Content = "";
         try {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
+                System.setProperty("java.net.preferIPv4Stack" , "true");
+            }
             URL myUrl = new URL(uri);
             //trustAllHosts(); // If not, most of the time will give exception KeyStoreException: BKS not found
             HttpsURLConnection conn = (HttpsURLConnection) myUrl.openConnection();

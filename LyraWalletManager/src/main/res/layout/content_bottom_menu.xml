@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         app:cbn_selectedColor="@color/page_foreground"
         app:cbn_unSelectedColor="@color/grey_light"
-        app:cbn_animDuration="300"
+        app:cbn_animDuration="600"
         app:cbn_fabElevation="4dp"
         app:cbn_elevation="6dp"
         app:cbn_fabBg="@color/page_header_2"

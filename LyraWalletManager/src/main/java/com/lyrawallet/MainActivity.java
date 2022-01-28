@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
     private static MainActivity Instance = null;
     private static String ImportWalletName = null;
     private Handler UserInputTimeoutHandler;
-    private static Boolean PushToBackStack = true;
+    protected static Boolean PushToBackStack = true;
     protected static MainActivity getInstance() {
         return Instance;
     }
@@ -84,75 +84,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         intent.setType("*/*");
         Instance.startActivityForResult(intent, procedure);
     }
-    /******************* Navigation, separate them from button events, for re-usage ***************/
-    protected void setVisiblePage(Global.visiblePage p) {
-        setVisiblePage(p, null);
-    }
-    protected void setVisiblePage(Global.visiblePage p, String[] params) {
-        Global.setVisiblePage(p);
-        PushToBackStack = true;
-        switch(p) {
-            case STAKING:
-                new FragmentManagerUser().goToStaking();
-                break;
-            case SWAP:
-                new FragmentManagerUser().goToSwap();
-                break;
-            case ACCOUNT:
-                new FragmentManagerUser().goToAccount();
-                break;
-            case ACCOUNT_HISTORY:
-                new FragmentManagerUser().goToAccountHistory();
-                break;
-            case DEX:
-                new FragmentManagerUser().goToDex();
-                break;
-            case MORE:
-                new FragmentManagerUser().goToMore();
-                break;
-            case IMPORT_WALLET:
-                new FragmentManagerUser().goToImportWallet();
-                break;
-            case NEW_WALLET:
-                new FragmentManagerUser().goToNewWallet();
-                break;
-            case NEW_ACCOUNT:
-                new FragmentManagerUser().goToNewAccount();
-                break;
-            case RECOVER_ACCOUNT:
-                new FragmentManagerUser().goToRecoverAccount();
-                break;
-            case RECEIVE:
-                new FragmentManagerUser().goToReceive();
-                break;
-            case SEND:
-                new FragmentManagerUser().goToSend();
-                break;
-            case SETTINGS:
-                new FragmentManagerUser().goToPreferences();
-                break;
-            case DIALOG_RECEIVE:
-                new FragmentManagerUser().goToDialogReceive();
-                break;
-            case DIALOG_TRANSACTION_DETAIL:
-                new FragmentManagerUser().goToDialogTransactionDetail(params);
-                break;
-            default:
-                new FragmentManagerUser().goToOpenWallet();
-                break;
-        }
-    }
     /********************************** Go to other windows ***************************************/
-    // Buttons events, for UI navigation.
-    public void send(View view) {
-        new FragmentManagerUser().goToSend();
-    }
-    public void receive(View view) {
-        new FragmentManagerUser().goToReceive();
-    }
-    public void history(View view) {
-        new FragmentManagerUser().goToAccountHistory();
-    }
     public void closeWallet(View view) {
         finish();
         System.exit(0);
@@ -179,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         Global.visiblePage p = Global.visiblePage.values()[savedInstanceState.getInt("SHOWN_WINDOW")];
         // Show the same page as when the view was destroyed.
         //Accounts.restoreAccountSelectSpinner(this);
-        setVisiblePage(p);
+        FragmentManagerUser.setVisiblePage(p);
         new Handler().postDelayed(new Runnable() {
             public void run() {
                 if (Global.getVisiblePage().ordinal() < Global.visiblePage.OPEN_WALLET.ordinal()) {
@@ -189,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
             }
         }, 50);
     }
-    @SuppressLint("SourceLockedOrientationActivity")
+    @SuppressLint({"SourceLockedOrientationActivity", "ObsoleteSdkInt"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -198,6 +130,8 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(new String[]{Manifest.permission.CAMERA}, 1011);
+        } else {
+            System.setProperty("java.net.preferIPv4Stack" , "true");
         }
         // Load user preferences.
         new PreferencesLoad();
@@ -217,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         // On first launch.
         if (Global.getVisiblePage() == null) {
             // Show the Open Wallet page.
-            setVisiblePage(Global.visiblePage.OPEN_WALLET);
+            FragmentManagerUser.setVisiblePage(Global.visiblePage.OPEN_WALLET);
         }
         UserInputTimeoutHandler = new Handler();
         int inactivity = Global.getInactivityTimeForClose();
@@ -263,12 +197,12 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
             FragmentManager.BackStackEntry entry =  fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1);
             //if(index != Integer.parseInt(entry.getName())) {
             if(PushToBackStack) { // If the back button is press, we need to ignore this event, the page is pop from tha backstack.
-                setVisiblePage(Global.visiblePage.values()[index]);
+                FragmentManagerUser.setVisiblePage(Global.visiblePage.values()[index]);
             }
             PushToBackStack = true;
             return null;
         });
-        setVisiblePage(Global.getVisiblePage());
+        FragmentManagerUser.setVisiblePage(Global.getVisiblePage());
         /*new WebHttps(this).execute("https://api.latoken.com/v2/ticker", "MainCallHttps1");
         new WebHttps(this).execute("https://api.latoken.com/v2/ticker", "MainCallHttps2");*/
 

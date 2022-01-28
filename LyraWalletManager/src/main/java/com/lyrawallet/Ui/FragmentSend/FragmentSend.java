@@ -201,7 +201,7 @@ public class FragmentSend extends Fragment {
                 if(activity == null)
                     return;
                 IntentIntegrator integrator = new IntentIntegrator(activity);
-                integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
+                integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
                 integrator.setPrompt("Scan");
                 integrator.setCameraId(0);
                 integrator.setBeepEnabled(false);

@@ -28,6 +28,7 @@
     <string name="Request">Request</string>
     <string name="Receive">Receive</string>
     <string name="Balance">Balance</string>
+    <string name="History">History</string>
     <string name="Confirm_action">Confirm action</string>
     <string name="Transaction_detail">Transaction detail</string>
     <string name="Request_token">Request token</string>
@@ -38,10 +39,14 @@
     <string name="Time_stamp">Time stamp</string>
     <string name="Send_account_id">Send account ID</string>
     <string name="Send_hash">Send hash</string>
+    <string name="zero_lyr" translatable="false">0 LYR</string>
+    <string name="zero_usd" translatable="false">0 USD</string>
     <string name="Receive_account_id">Receive account ID</string>
     <string name="Receive_hash">Receive hash</string>
     <string name="Amount_transferred">Amount transferred</string>
     <string name="Amounts_in_accounts">Amounts in account</string>
+    <string name="Total_balance_usd">Total Balance: </string>
+    <string name="Total_balance_usd_zero">Total Balance: $0</string>
 
     <string name="str_dialog_title" translatable="false">Unlock wallet</string>
     <string name="str_dialog_message" translatable="false">Enter wallet password</string>

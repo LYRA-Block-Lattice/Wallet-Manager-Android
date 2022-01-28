@@ -1,14 +1,17 @@
 package com.lyrawallet.Ui.FragmentAccount;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
@@ -16,6 +19,8 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
+import com.lyrawallet.Api.ApiRpc;
 import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
 import com.lyrawallet.Global;
 import com.lyrawallet.GlobalLyra;
@@ -65,6 +70,7 @@ public class FragmentAccount extends Fragment {
                      return;
                 }
                 List<FragmentAccountHistory.AccountHistoryEntry> entryList = new ArrayList<>();
+                double valueInUsd = 0f;
                 try {
                     int blockCount = intHistoryList.second.size();
                     if (blockCount > 0) {
@@ -73,6 +79,14 @@ public class FragmentAccount extends Fragment {
                             List<Pair<String, Double>> balances = intHistoryList.second.get(intHistoryList.second.size() - 1).getBalances();
                             entryList.add(new FragmentAccountHistory.AccountHistoryEntry(-1, UiHelpers.tickerToImage(balances.get(i).first),
                                     GlobalLyra.domainToSymbol(balances.get(i).first), balances.get(i).second));
+                            double unitValuePerUsd = Global.getTokenPrice(new Pair<>(balances.get(i).first, "tether/USDT"));
+                            if(unitValuePerUsd == 0) {
+                                unitValuePerUsd = Global.getTokenPrice(new Pair<>(balances.get(i).first, "USDC"));
+                            }
+                            if(unitValuePerUsd == 0) {
+                                unitValuePerUsd = Global.getTokenPrice(new Pair<>(balances.get(i).first, "USD"));
+                            }
+                            valueInUsd += unitValuePerUsd * balances.get(i).second;
                         }
                     }
                     if(intHistoryList.second.size() == historyLen) {
@@ -80,6 +94,9 @@ public class FragmentAccount extends Fragment {
                     }
                     historyLen = intHistoryList.second.size();
                 } catch (NullPointerException ignored) { }
+                TextView accountValueLyr = (TextView) view.findViewById(R.id.totalBalanceUsd_textView);
+                accountValueLyr.setText(String.format(Locale.US, "%s $ %f", getString(R.string.Total_balance_usd), valueInUsd));
+                setAccountValue(view);
                 FragmentAccountHistory.ClickListener listener = new FragmentAccountHistory.ClickListener() {
                     @Override
                     public void click(int index) {
@@ -140,7 +157,6 @@ public class FragmentAccount extends Fragment {
                 FragmentActivity activity = getActivity();
                 if (activity != null) {
                     populateHistory(view);
-                    setAccountValue(view);
                 }
             }
         }, 700, 5000);
@@ -172,7 +188,7 @@ public class FragmentAccount extends Fragment {
         timer1.cancel();
     }
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         FragmentActivity activity = getActivity();
         if (activity != null) {
             CurvedBottomNavigationView bottomNavigationView = activity.findViewById(R.id.bottomNavigationView);
@@ -183,6 +199,24 @@ public class FragmentAccount extends Fragment {
         setAccountValue(view);
         populateHistory(view);
 
+        Button accountSendButton = (Button) view.findViewById(R.id.accountSendButton);
+        accountSendButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                new FragmentManagerUser().goToSend();
+            }
+        });
+        Button accountReceiveButton = (Button) view.findViewById(R.id.accountReceiveButton);
+        accountReceiveButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                new FragmentManagerUser().goToReceive();
+            }
+        });
+        Button openAccountHistoryButton = (Button) view.findViewById(R.id.openAccountHistoryButton);
+        openAccountHistoryButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                new FragmentManagerUser().goToAccountHistory();
+            }
+        });
         new Handler().postDelayed(new Runnable() {
             public void run() {
                 ApiRpcActionsHistory.load(Concatenate.getHistoryFileName());

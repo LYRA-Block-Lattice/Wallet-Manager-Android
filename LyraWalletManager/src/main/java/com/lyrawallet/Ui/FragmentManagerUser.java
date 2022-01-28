@@ -28,6 +28,65 @@ import com.lyrawallet.Ui.FragmentWalletManagement.FragmentRecoverAccount;
 import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView;
 
 public class FragmentManagerUser extends MainActivity {
+    /******************* Navigation, separate them from button events, for re-usage ***************/
+    public static void setVisiblePage(Global.visiblePage p) {
+        setVisiblePage(p, null);
+    }
+    public static void setVisiblePage(Global.visiblePage p, String[] params) {
+        Global.setVisiblePage(p);
+        PushToBackStack = true;
+        switch(p) {
+            case STAKING:
+                new FragmentManagerUser().goToStaking();
+                break;
+            case SWAP:
+                new FragmentManagerUser().goToSwap();
+                break;
+            case ACCOUNT:
+                new FragmentManagerUser().goToAccount();
+                break;
+            case ACCOUNT_HISTORY:
+                new FragmentManagerUser().goToAccountHistory();
+                break;
+            case DEX:
+                new FragmentManagerUser().goToDex();
+                break;
+            case MORE:
+                new FragmentManagerUser().goToMore();
+                break;
+            case IMPORT_WALLET:
+                new FragmentManagerUser().goToImportWallet();
+                break;
+            case NEW_WALLET:
+                new FragmentManagerUser().goToNewWallet();
+                break;
+            case NEW_ACCOUNT:
+                new FragmentManagerUser().goToNewAccount();
+                break;
+            case RECOVER_ACCOUNT:
+                new FragmentManagerUser().goToRecoverAccount();
+                break;
+            case RECEIVE:
+                new FragmentManagerUser().goToReceive();
+                break;
+            case SEND:
+                new FragmentManagerUser().goToSend();
+                break;
+            case SETTINGS:
+                new FragmentManagerUser().goToPreferences();
+                break;
+            case DIALOG_RECEIVE:
+                new FragmentManagerUser().goToDialogReceive();
+                break;
+            case DIALOG_TRANSACTION_DETAIL:
+                new FragmentManagerUser().goToDialogTransactionDetail(params);
+                break;
+            default:
+                new FragmentManagerUser().goToOpenWallet();
+                break;
+        }
+    }
+
     public int getCurrentFragment() {
         FragmentManager fragmentManager = getInstance().getSupportFragmentManager();
         if(fragmentManager.getBackStackEntryCount() != 0) {

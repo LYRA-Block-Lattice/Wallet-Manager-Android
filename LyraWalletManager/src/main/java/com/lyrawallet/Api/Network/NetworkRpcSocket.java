@@ -18,16 +18,17 @@ import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 
 public class NetworkRpcSocket {
-    public interface RpcSocketTaskInformer {
-        void onRpcSocketTaskDone(NetworkRpcSocket output);
-    }
     final WeakReference<NetworkRpcSocket.RpcSocketTaskInformer> mCallBack;
     private boolean connected = false;
     private String response = "";
     private WebSocketClient mWebSocketClient;
-    private NetworkRpcSocket thisInstance = this;
+    private final NetworkRpcSocket thisInstance = this;
     private String instanceName = "";
     private String serverAddress = "";
+
+    public interface RpcSocketTaskInformer {
+        void onRpcSocketTaskDone(NetworkRpcSocket output);
+    }
 
     public boolean getConnected() {
         return connected;

@@ -69,10 +69,11 @@ android {
         includeInApk true
         includeInBundle true
     }
+    ndkVersion '21.4.7075529'
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.aar', '*.jar'], exclude: [])
 
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'
@@ -90,9 +91,9 @@ dependencies {
     implementation "javax.websocket:javax.websocket-api:1.1"
     implementation 'com.google.code.gson:gson:2.8.9'
     implementation 'org.java-websocket:Java-WebSocket:1.5.2'
-    implementation 'np.com.susanthapa:curved_bottom_navigation:0.6.5'
-    implementation 'com.google.zxing:core:3.2.1'
-    implementation 'com.journeyapps:zxing-android-embedded:3.2.0@aar'
+    //implementation 'np.com.susanthapa:curved_bottom_navigation:0.6.5'
+    //implementation 'com.google.zxing:core:3.2.1'
+    //implementation 'com.journeyapps:zxing-android-embedded:4.3.0@aar'
     //implementation 'com.github.AnyChart:AnyChart-Android:1.1.2'
     //implementation files('libs/MPAndroidChart-v3.0.3.jar')
     //implementation 'com.jjoe64:graphview:4.2.2'
