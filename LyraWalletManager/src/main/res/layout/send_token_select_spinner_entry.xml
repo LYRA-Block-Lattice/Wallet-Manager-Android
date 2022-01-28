@@ -11,7 +11,7 @@
             android:layout_height="match_parent">
 
             <ImageView
-                android:id="@+id/send_token_select_spinner_entry_image"
+                android:id="@+id/sendTokenSelectSpinnerEntryImage"
                 android:layout_width="32dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="8dp"
@@ -23,7 +23,7 @@
                 app:srcCompat="@mipmap/ic_unknown_foreground" />
 
             <TextView
-                android:id="@+id/send_token_select_spinner_entry_text"
+                android:id="@+id/sendTokenSelectSpinnerEntryText"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="8dp"
@@ -34,7 +34,7 @@
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/send_token_select_spinner_entry_image"
+                app:layout_constraintStart_toEndOf="@+id/sendTokenSelectSpinnerEntryImage"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0" />
 

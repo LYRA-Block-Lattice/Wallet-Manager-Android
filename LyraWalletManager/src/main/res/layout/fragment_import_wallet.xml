@@ -12,7 +12,7 @@
     tools:context="com.lyrawallet.Ui.FragmentWalletManagement.FragmentImportWallet">
 
     <EditText
-        android:id="@+id/wallet_name"
+        android:id="@+id/walletName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -24,7 +24,7 @@
         android:importantForAutofill="no"
         android:inputType="textVisiblePassword"
         android:minHeight="48dp"
-        android:nextFocusDown="@id/import_wallet"
+        android:nextFocusDown="@id/importWallet"
         android:selectAllOnFocus="true"
         android:singleLine="true"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,7 +33,7 @@
         tools:ignore="TextContrastCheck" />
 
     <Button
-        android:id="@+id/import_wallet"
+        android:id="@+id/importWallet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
@@ -44,7 +44,7 @@
         app:backgroundTintMode="add"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/wallet_name" />
+        app:layout_constraintTop_toBottomOf="@+id/walletName" />
 
     <TextView
         android:id="@+id/textView"

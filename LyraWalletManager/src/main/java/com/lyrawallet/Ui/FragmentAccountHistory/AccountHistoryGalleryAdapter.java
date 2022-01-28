@@ -82,9 +82,6 @@ public class AccountHistoryGalleryAdapter extends RecyclerView.Adapter<AccountHi
         }
     }
 
-
-
-
     @Override
     public AccountHistoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();

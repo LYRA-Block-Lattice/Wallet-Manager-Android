@@ -12,7 +12,7 @@
     tools:context="com.lyrawallet.Ui.FragmentWalletManagement.FragmentOpenWallet">
 
     <EditText
-        android:id="@+id/wallet_name"
+        android:id="@+id/walletName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -46,13 +46,13 @@
         android:minHeight="48dp"
         android:selectAllOnFocus="true"
         android:textAllCaps="false"
-        app:layout_constraintEnd_toStartOf="@+id/show_password"
+        app:layout_constraintEnd_toStartOf="@+id/showPassword"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/wallet_name"
+        app:layout_constraintTop_toBottomOf="@+id/walletName"
         tools:ignore="TextContrastCheck" />
 
     <Button
-        android:id="@+id/show_password"
+        android:id="@+id/showPassword"
         android:layout_width="55dp"
         android:layout_height="48dp"
         android:layout_gravity="end"
@@ -62,11 +62,11 @@
         app:backgroundTintMode="add"
         app:icon="@drawable/ic_visibility_off_password"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/wallet_name"
+        app:layout_constraintTop_toBottomOf="@id/walletName"
         tools:ignore="SpeakableTextPresentCheck" />
 
     <Button
-        android:id="@+id/open_wallet"
+        android:id="@+id/openWallet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
@@ -81,7 +81,7 @@
         app:layout_constraintTop_toBottomOf="@+id/password" />
 
     <Button
-        android:id="@+id/new_wallet"
+        android:id="@+id/newWallet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
@@ -92,11 +92,11 @@
         app:backgroundTintMode="add"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/open_wallet"
+        app:layout_constraintTop_toBottomOf="@+id/openWallet"
         tools:ignore="TextContrastCheck" />
 
     <Button
-        android:id="@+id/recover_wallet"
+        android:id="@+id/recoverWallet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
@@ -107,7 +107,7 @@
         app:backgroundTintMode="add"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/new_wallet"
+        app:layout_constraintTop_toBottomOf="@+id/newWallet"
         tools:ignore="TextContrastCheck" />
 
     <ProgressBar

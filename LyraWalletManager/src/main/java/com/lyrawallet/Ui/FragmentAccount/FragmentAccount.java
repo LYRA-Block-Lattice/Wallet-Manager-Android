@@ -1,6 +1,5 @@
 package com.lyrawallet.Ui.FragmentAccount;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Pair;
@@ -8,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,8 +17,6 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
-import com.lyrawallet.Api.ApiRpc;
 import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
 import com.lyrawallet.Global;
 import com.lyrawallet.GlobalLyra;
@@ -29,7 +25,6 @@ import com.lyrawallet.Ui.FragmentAccountHistory.AccountHistoryGalleryAdapter;
 import com.lyrawallet.Ui.FragmentAccountHistory.FragmentAccountHistory;
 import com.lyrawallet.Ui.FragmentManagerUser;
 import com.lyrawallet.Ui.UiHelpers;
-import com.lyrawallet.Ui.UtilGetData;
 import com.lyrawallet.Util.Concatenate;
 
 import java.util.ArrayList;
@@ -94,7 +89,7 @@ public class FragmentAccount extends Fragment {
                     }
                     historyLen = intHistoryList.second.size();
                 } catch (NullPointerException ignored) { }
-                TextView accountValueLyr = (TextView) view.findViewById(R.id.totalBalanceUsd_textView);
+                TextView accountValueLyr = (TextView) view.findViewById(R.id.totalBalanceUsdTextView);
                 accountValueLyr.setText(String.format(Locale.US, "%s $ %f", getString(R.string.Total_balance_usd), valueInUsd));
                 setAccountValue(view);
                 FragmentAccountHistory.ClickListener listener = new FragmentAccountHistory.ClickListener() {
@@ -105,7 +100,7 @@ public class FragmentAccount extends Fragment {
                 };
                 adapter = new AccountHistoryGalleryAdapter(
                         entryList, activity, listener);
-                RecyclerView account_history_recycler = activity.findViewById(R.id.account_tokens_recycler);
+                RecyclerView account_history_recycler = activity.findViewById(R.id.accountTokensRecycler);
                 if(account_history_recycler != null) {
                     account_history_recycler.setAdapter(adapter);
                     account_history_recycler.setLayoutManager(
@@ -116,8 +111,8 @@ public class FragmentAccount extends Fragment {
     }
 
     public static void setAccountValue(View view) {
-        TextView accountValueLyr = (TextView) view.findViewById(R.id.accountValueLyr_textView);
-        TextView accountValueUsd = (TextView) view.findViewById(R.id.accountValueUsd_textView);
+        TextView accountValueLyr = (TextView) view.findViewById(R.id.accountValueLyrTextView);
+        TextView accountValueUsd = (TextView) view.findViewById(R.id.accountValueUsdTextView);
         history = Global.getWalletHistory(Concatenate.getHistoryFileName());
         if(history == null || fInstance == null)
             return;

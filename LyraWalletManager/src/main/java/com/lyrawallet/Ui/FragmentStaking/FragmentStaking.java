@@ -1,17 +1,29 @@
 package com.lyrawallet.Ui.FragmentStaking;
 
-import android.app.AlertDialog;
+import static com.lyrawallet.Ui.UtilGetData.brokerAccountsToStakingAdapter;
+
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Spinner;
+import android.widget.Button;
+import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.lyrawallet.Api.ApiRpc;
+import com.lyrawallet.Global;
 import com.lyrawallet.MainActivity;
 import com.lyrawallet.R;
+
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView;
 
@@ -23,9 +35,41 @@ public class FragmentStaking extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    int historyLen = 0;
+    StakingGalleryAdapter adapter;
+    private boolean refreshInProgress = false;
+    Timer timer1;
+    Timer timer2;
+
     public FragmentStaking() {
         // Required empty public constructor
     }
+
+    public static class StakingEntry {
+        String AccountName;
+        String StakingAccountId;
+        String ProfitingAccountId;
+        long ExpiryDate;
+        int Days;
+        double Amount;
+
+        public StakingEntry(String accountName, String stakingAccountId, String profitingAccountId,
+                                   long expiryDate, int days, double amount) {
+            this.AccountName = accountName;
+            this.StakingAccountId = stakingAccountId;
+            this.ProfitingAccountId = profitingAccountId;
+            this.ExpiryDate = expiryDate;
+            this.Days = days;
+            this.Amount = amount;
+        }
+    }
+
+    public static class ClickListener {
+        public void click(int index) {
+
+        }
+    }
+
 
     public static FragmentStaking newInstance(String param1, String param2) {
         FragmentStaking fragment = new FragmentStaking();
@@ -35,7 +79,101 @@ public class FragmentStaking extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-        @Override
+
+    void restoreTimers(View view) {
+        // Refresh recycler once every 5 seconds, first start after 700mS to avoid UI freezing..
+        timer1 = new Timer();
+        timer1.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                FragmentActivity activity = getActivity();
+                if (activity != null) {
+                    populateHistory(view);
+                }
+            }
+        }, 100, 1000);
+        timer2 = new Timer();
+        timer2.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                FragmentActivity activity = getActivity();
+                if (activity != null) {
+                    activity.runOnUiThread(new Runnable() {
+                        public void run() {
+                            new ApiRpc().act(new ApiRpc.Action().actionGetBrokerAccounts(Global.getSelectedAccountId()));
+                        }
+                    });
+                }
+            }
+        }, 100, 60 * 1000);
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        //Toast.makeText(getActivity(), "onResumed called", Toast.LENGTH_LONG).show();
+        restoreTimers(getView());
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        //Toast.makeText(getActivity(), "onPause called", Toast.LENGTH_LONG).show();
+        timer1.cancel();
+        timer2.cancel();
+    }
+
+    public void populateHistory(View view) {
+        FragmentActivity activity = getActivity();
+        if (activity == null || view == null) {
+            refreshInProgress = false;
+            return;
+        }
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                FragmentActivity activity = getActivity();
+                if (activity == null) {
+                    refreshInProgress = false;
+                    return;
+                }
+                List<FragmentStaking.StakingEntry> entryList = brokerAccountsToStakingAdapter();
+                if (entryList == null) {
+                    refreshInProgress = false;
+                    return;
+                }
+                ProgressBar progress = activity.findViewById(R.id.stakingAccountProgressBar);
+                try {
+                    if (entryList.size() == historyLen) {
+                        refreshInProgress = false;
+                        if (progress != null) {
+                            progress.setVisibility(View.GONE);
+                        }
+                        return;
+                    }
+                    historyLen = entryList.size();
+                } catch (NullPointerException ignored) { }
+                FragmentStaking.ClickListener listener = new FragmentStaking.ClickListener() {
+                    @Override
+                    public void click(int index) {
+                        //new FragmentManagerUser().goToDialogStakingDetail(new String[]{entryList.get(index).AccountName});
+                    }
+                };
+                adapter = new StakingGalleryAdapter(
+                        entryList, activity, listener);
+                RecyclerView account_history_recycler = activity.findViewById(R.id.stakingAccountsRecycler);
+                if(account_history_recycler != null) {
+                    account_history_recycler.setAdapter(adapter);
+                    account_history_recycler.setLayoutManager(
+                            new LinearLayoutManager(activity));
+                }
+                refreshInProgress = false;
+                if(progress != null) {
+                    progress.setVisibility(View.GONE);
+                }
+            }
+        });
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
@@ -57,15 +195,27 @@ public class FragmentStaking extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        CurvedBottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.setVisibility(View.VISIBLE);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        FragmentActivity activity = getActivity();
+        if (activity != null) {
+            CurvedBottomNavigationView bottomNavigationView = activity.findViewById(R.id.bottomNavigationView);
+            bottomNavigationView.setVisibility(View.VISIBLE);
+            ProgressBar progress = activity.findViewById(R.id.stakingAccountProgressBar);
+            if (progress != null) {
+                progress.setVisibility(View.VISIBLE);
+            }
+            ///LayoutInflater inflater = requireActivity().getLayoutInflater();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        // Get the layout inflater
-        LayoutInflater inflater = requireActivity().getLayoutInflater();
+            View v = new View((MainActivity) getActivity());
+            //new Accounts((MainActivity) getActivity()).promptForPassword(getContext(), v.getRootView());
+            historyLen = 0;
 
-        View v = new View((MainActivity) getActivity());
-        //new Accounts((MainActivity) getActivity()).promptForPassword(getContext(), v.getRootView());
+            Button stakingAccountAddNewButton = (Button) view.findViewById(R.id.stakingAccountAddNewButton);
+            stakingAccountAddNewButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+
+                }
+            });
+        }
     }
 }

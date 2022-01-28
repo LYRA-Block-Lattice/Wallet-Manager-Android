@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.core.widget.NestedScrollView;
@@ -23,9 +22,7 @@ import com.lyrawallet.Ui.FragmentManagerUser;
 import com.lyrawallet.Ui.UtilGetData;
 import com.lyrawallet.Util.Concatenate;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -59,7 +56,7 @@ public class FragmentAccountHistory extends Fragment {
         }
     }
 
-    public static class ClickListener{
+    public static class ClickListener {
         public void click(int index) {
 
         }
@@ -116,7 +113,7 @@ public class FragmentAccountHistory extends Fragment {
                     refreshInProgress = false;
                     return;
                 }
-                ProgressBar progress = activity.findViewById(R.id.fragment_account_progressBar);
+                ProgressBar progress = activity.findViewById(R.id.fragmentAccountProgressBar);
                 try {
                     if (intHistoryList.second.size() == historyLen) {
                         refreshInProgress = false;
@@ -138,7 +135,7 @@ public class FragmentAccountHistory extends Fragment {
                 };
                 adapter = new AccountHistoryGalleryAdapter(
                         entryList, activity, listener);
-                RecyclerView account_history_recycler = activity.findViewById(R.id.account_history_recycler);
+                RecyclerView account_history_recycler = activity.findViewById(R.id.accountHistoryRecycler);
                 if(account_history_recycler != null) {
                     account_history_recycler.setAdapter(adapter);
                     account_history_recycler.setLayoutManager(
@@ -207,7 +204,7 @@ public class FragmentAccountHistory extends Fragment {
         if (activity != null) {
             CurvedBottomNavigationView bottomNavigationView = activity.findViewById(R.id.bottomNavigationView);
             bottomNavigationView.setVisibility(View.GONE);
-            ProgressBar progress = activity.findViewById(R.id.fragment_account_progressBar);
+            ProgressBar progress = activity.findViewById(R.id.fragmentAccountProgressBar);
             if(progress != null) {
                 progress.setVisibility(View.VISIBLE);
             }

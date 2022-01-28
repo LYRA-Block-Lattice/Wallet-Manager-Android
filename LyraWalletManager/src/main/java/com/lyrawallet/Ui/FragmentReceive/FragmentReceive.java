@@ -67,8 +67,8 @@ public class FragmentReceive extends Fragment {
         CurvedBottomNavigationView bottomNavigationView = activity.findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setVisibility(View.GONE);
 
-        TextView addressTextView = getActivity().findViewById(R.id.receive_qr_code_copy_address);
-        ImageView qrImageView = getActivity().findViewById(R.id.receive_qr_code_image_view);
+        TextView addressTextView = getActivity().findViewById(R.id.receiveQrCodeCopyAddress);
+        ImageView qrImageView = getActivity().findViewById(R.id.receiveQrCodeImageView);
 
 
         try {
@@ -95,7 +95,7 @@ public class FragmentReceive extends Fragment {
                         .setAction("", null).show();            }
         });
 
-        Button bookAccountButton = (Button) view.findViewById(R.id.receive_qr_request_button);
+        Button bookAccountButton = (Button) view.findViewById(R.id.receiveQrRequestButton);
         bookAccountButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 /*DialogFragment newFragment = new FragmentReceiveDialog();

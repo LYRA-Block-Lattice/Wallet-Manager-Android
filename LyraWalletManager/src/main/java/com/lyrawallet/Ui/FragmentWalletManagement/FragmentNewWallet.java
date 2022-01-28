@@ -57,11 +57,11 @@ public class FragmentNewWallet extends Fragment {
         CurvedBottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setVisibility(View.GONE);
 
-        EditText newWalletNameEditText = view.findViewById(R.id.new_wallet_name);
-        EditText password1EditText = view.findViewById(R.id.new_wallet_password1);
-        EditText password2EditText = view.findViewById(R.id.new_wallet_password2);
-        Button showPasswordButton = view.findViewById(R.id.new_wallet_show_password);
-        Button createWalletButton = view.findViewById(R.id.create_wallet);
+        EditText newWalletNameEditText = view.findViewById(R.id.newWalletName);
+        EditText password1EditText = view.findViewById(R.id.newWalletPassword1);
+        EditText password2EditText = view.findViewById(R.id.newWalletPassword2);
+        Button showPasswordButton = view.findViewById(R.id.newWalletShowPassword);
+        Button createWalletButton = view.findViewById(R.id.createWallet);
 
         UiHelpers.showKeyboard(view, newWalletNameEditText);
         newWalletNameEditText.setFilters(new InputFilter[]{UtilTextFilters.getCharactersDigitsAndSpaceFilter()});

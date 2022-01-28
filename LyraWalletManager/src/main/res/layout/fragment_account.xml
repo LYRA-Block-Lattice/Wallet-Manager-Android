@@ -41,7 +41,7 @@
                     app:srcCompat="@color/page_header_2" />
 
                 <TextView
-                    android:id="@+id/accountValueLyr_textView"
+                    android:id="@+id/accountValueLyrTextView"
                     android:layout_width="0dp"
                     android:layout_height="28dp"
                     android:layout_marginTop="4dp"
@@ -51,10 +51,10 @@
                     android:textSize="24sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/dialog_history_ticker_imageView" />
+                    app:layout_constraintTop_toBottomOf="@+id/dialogHistoryTickerImageView" />
 
                 <TextView
-                    android:id="@+id/accountValueUsd_textView"
+                    android:id="@+id/accountValueUsdTextView"
                     android:layout_width="0dp"
                     android:layout_height="20dp"
                     android:layout_marginTop="4dp"
@@ -64,11 +64,11 @@
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/imageView2"
-                    app:layout_constraintTop_toBottomOf="@+id/accountValueLyr_textView"
+                    app:layout_constraintTop_toBottomOf="@+id/accountValueLyrTextView"
                     tools:ignore="TextContrastCheck" />
 
                 <TextView
-                    android:id="@+id/totalBalanceUsd_textView"
+                    android:id="@+id/totalBalanceUsdTextView"
                     android:layout_width="0dp"
                     android:layout_height="20dp"
                     android:layout_marginTop="4dp"
@@ -78,7 +78,7 @@
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/accountValueUsd_textView" />
+                    app:layout_constraintTop_toBottomOf="@+id/accountValueUsdTextView" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/openAccountHistoryButton"
@@ -93,7 +93,7 @@
                     app:iconTint="@color/page_foreground"
                     app:layout_constraintEnd_toStartOf="@+id/guideline2"
                     app:layout_constraintStart_toStartOf="@+id/guideline2"
-                    app:layout_constraintTop_toBottomOf="@+id/totalBalanceUsd_textView"
+                    app:layout_constraintTop_toBottomOf="@+id/totalBalanceUsdTextView"
                     tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
                 <com.google.android.material.button.MaterialButton
@@ -117,7 +117,7 @@
                     tools:ignore="TextContrastCheck,SpeakableTextPresentCheck" />
 
                 <ImageView
-                    android:id="@+id/dialog_history_ticker_imageView"
+                    android:id="@+id/dialogHistoryTickerImageView"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_marginTop="8dp"
@@ -178,7 +178,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/account_tokens_recycler"
+                android:id="@+id/accountTokensRecycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

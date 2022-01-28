@@ -18,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
+import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsBrokerAccounts;
 import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
 import com.lyrawallet.Api.Network.NetworkRpc;
 import com.lyrawallet.Global;
@@ -497,6 +498,8 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                 Api = Api + "/" + "History";
             }
             AccountId = accountId;
+            AccountName = Global.getSelectedAccountName();
+            Network = Global.getCurrentNetwork();
             return this;
         }
         public Action actionReceive(String actionPurpose, String accountId) {
@@ -510,6 +513,8 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                 Api = Api + "/" + "Receive";
             }
             AccountId = accountId;
+            AccountName = Global.getSelectedAccountName();
+            Network = Global.getCurrentNetwork();
             return this;
         }
         public Action actionSend(String accountId, double amount, String token, String destinationId) {
@@ -519,6 +524,8 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                 Api = Api + "/" + "Send";
             }
             AccountId = accountId;
+            AccountName = Global.getSelectedAccountName();
+            Network = Global.getCurrentNetwork();
             Amount = String.format(Locale.US,"%.8f", amount);
             Token0 = token;
             DestinationAccountId = destinationId;
@@ -535,6 +542,8 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                 Api = Api + "/" + "Balance";
             }
             AccountId = accountId;
+            AccountName = Global.getSelectedAccountName();
+            Network = Global.getCurrentNetwork();
             return this;
         }
         public Action actionToken(String accountId, String name, String domain, double supply) {
@@ -544,18 +553,22 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                 Api = Api + "/" + "Token";
             }
             AccountId = accountId;
+            AccountName = Global.getSelectedAccountName();
+            Network = Global.getCurrentNetwork();
             Name = name;
             Domain = domain;
             Supply = String.format(Locale.US,"%.8f", supply);
             return this;
         }
-        public Action actionCteateProfitingAccount(String accountId, String name, ProfitingType pType, double shareRatio, int maxVoter) {
+        public Action actionCreateProfitingAccount(String accountId, String name, ProfitingType pType, double shareRatio, int maxVoter) {
             if(Api == null) {
                 Api = "CreateProfitingAccount";
             } else {
                 Api = Api + "/" + "CreateProfitingAccount";
             }
             AccountId = accountId;
+            AccountName = Global.getSelectedAccountName();
+            Network = Global.getCurrentNetwork();
             Name = name;
             switch(pType) {
                 case ORACLE: PType = "Oracle"; break;
@@ -574,6 +587,8 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                 Api = Api + "/" + "CreateStakingAccount";
             }
             AccountId = accountId;
+            AccountName = Global.getSelectedAccountName();
+            Network = Global.getCurrentNetwork();
             Name = name;
             VoteFor = voteFor;
             DaysToStake = String.format(Locale.US,"%d", daysToStake);
@@ -587,6 +602,8 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                 Api = Api + "/" + "AddStaking";
             }
             AccountId = accountId;
+            AccountName = Global.getSelectedAccountName();
+            Network = Global.getCurrentNetwork();
             StakingAccountId = stakingAccountId;
             Amount = String.format(Locale.US,"%.8f", amount);
             return this;
@@ -598,6 +615,8 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                 Api = Api + "/" + "CreateDividends";
             }
             AccountId = accountId;
+            AccountName = Global.getSelectedAccountName();
+            Network = Global.getCurrentNetwork();
             ProfitingAccountId = profitingAccountId;
             return this;
         }
@@ -608,6 +627,8 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                 Api = Api + "/" + "GetBrokerAccounts";
             }
             AccountId = accountId;
+            AccountName = Global.getSelectedAccountName();
+            Network = Global.getCurrentNetwork();
             return this;
         }
         public Action actionPool(String actionPurpose, String token0, String token1) {
@@ -620,6 +641,8 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
             } else {
                 Api = Api + "/" + "Pool";
             }
+            AccountName = Global.getSelectedAccountName();
+            Network = Global.getCurrentNetwork();
             Token0 = token0;
             Token1 = token1;
             return this;
@@ -631,6 +654,8 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                 Api = Api + "/" + "CreatePool";
             }
             AccountId = accountId;
+            AccountName = Global.getSelectedAccountName();
+            Network = Global.getCurrentNetwork();
             Token0 = token0;
             Token1 = token1;
             return this;
@@ -642,6 +667,8 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                 Api = Api + "/" + "AddLiquidity";
             }
             AccountId = accountId;
+            AccountName = Global.getSelectedAccountName();
+            Network = Global.getCurrentNetwork();
             Token0 = token0;
             Token0Amount = String.format(Locale.US,"%.8f", token0Amount);
             Token1 = token1;
@@ -654,6 +681,8 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
             } else {
                 Api = Api + "/" + "PoolCalculate";
             }
+            AccountName = Global.getSelectedAccountName();
+            Network = Global.getCurrentNetwork();
             PoolId = poolId;
             SwapFrom = swapFrom;
             Amount = String.format(Locale.US,"%.8f", amount);
@@ -667,6 +696,8 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                 Api = Api + "/" + "Swap";
             }
             AccountId = accountId;
+            AccountName = Global.getSelectedAccountName();
+            Network = Global.getCurrentNetwork();
             Token0 = token0;
             Token1 = token1;
             TokenToSwap = tokenToSwap;
@@ -681,6 +712,8 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                 Api = Api + "/" + "RemoveLiquidity";
             }
             AccountId = accountId;
+            AccountName = Global.getSelectedAccountName();
+            Network = Global.getCurrentNetwork();
             Token0 = token0;
             Token1 = token1;
             return this;
@@ -770,6 +803,9 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                 new NetworkRpc(this).execute(action.toString(), "PoolCalculate", action.getAccountId(),
                         action.getPoolId(), action.getSwapFrom(), action.getAmount(), action.getSlippage());
                 return true;
+            case "GetBrokerAccounts":
+                new NetworkRpc(this).execute(action.toString(), "GetBrokerAccounts", action.getAccountId());
+                return true;
             default:
                 break;
         }
@@ -781,8 +817,8 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
             View v = new View(ParentInstance);
             UiHelpers.showKeyboard(v.getRootView(), passEditText);
             AlertDialog dialog = new AlertDialog.Builder(ParentInstance)
-                    .setTitle(R.string.str_dialog_title)
-                    .setMessage(R.string.str_dialog_message)
+                    .setTitle(R.string.Unlock_wallet)
+                    .setMessage(R.string.Enter_wallet_password)
                     .setView(passEditText)
                     .setPositiveButton(R.string.Accept, new DialogInterface.OnClickListener() {
                         @Override
@@ -855,8 +891,8 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                 if (output[0].equals("History")) {
                     ApiRpcActionsHistory.store(ac, output[2]);
                 } else if (output[0].equals("Send")) {
-                    EditText recipientAddressEditText = (EditText) activity.findViewById(R.id.send_token_recipient_address_value);
-                    EditText tokenAmountEditText = (EditText) activity.findViewById(R.id.send_token_amount_value);
+                    EditText recipientAddressEditText = (EditText) activity.findViewById(R.id.sendTokenRecipientAddressValue);
+                    EditText tokenAmountEditText = (EditText) activity.findViewById(R.id.sendTokenAmountValue);
                     if(recipientAddressEditText != null && tokenAmountEditText != null) {
                         try {
                             JSONObject objCmd = new JSONObject(output[1]);
@@ -995,6 +1031,8 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                             e.printStackTrace();
                         }
                     }
+                } else if (output[0].equals("GetBrokerAccounts")) {
+                    Global.setBrokerAccounts(Concatenate.getHistoryFileName(ac), new ApiRpcActionsBrokerAccounts().fromJson(output[2]));
                 }
                 ReceiveResult = output[0] + "^" + output[1] + "^" + output[2];
                 System.out.println("Transaction end, result is:" + ReceiveResult);

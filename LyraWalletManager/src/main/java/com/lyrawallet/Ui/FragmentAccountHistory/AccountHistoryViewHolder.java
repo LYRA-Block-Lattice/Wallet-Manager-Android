@@ -21,22 +21,22 @@ public class AccountHistoryViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         Height
                 = (TextView) itemView
-                .findViewById(R.id.wallet_tr_entry_card_height);
+                .findViewById(R.id.walletTrEntryCardHeight);
         TickerImage
                 = (ImageView) itemView
                 .findViewById(R.id.tickerImageView);
         TickerName
                 = (TextView) itemView
-                .findViewById(R.id.wallet_tr_entry_card_ticker);
+                .findViewById(R.id.walletTrEntryCardTicker);
         Quantity
                 = (TextView) itemView
-                .findViewById(R.id.wallet_tr_entry_card_value_usd);
+                .findViewById(R.id.walletTrEntryCardValueUsd);
         QuantityUsd
                 = (TextView) itemView
-                .findViewById(R.id.wallet_tr_entry_card_total_value);
+                .findViewById(R.id.walletTrEntryCardTotalValue);
         ValueUsdPerUnit
                 = (TextView) itemView
-                .findViewById(R.id.wallet_tr_entry_card_total_value_usd);
+                .findViewById(R.id.walletTrEntryCardTotalValueUsd);
         view = itemView;
     }
 }

@@ -42,7 +42,7 @@ public class FragmentOpenWallet extends Fragment {
     }
 
     private void act(View view) {
-        EditText walletNameEditText = getActivity().findViewById(R.id.wallet_name);
+        EditText walletNameEditText = getActivity().findViewById(R.id.walletName);
         EditText passwordEditText = getActivity().findViewById(R.id.password);
         // Check if minimum characters count in password is satisfied.
         if(walletNameEditText.length() < Global.getMinCharAllowedOnWalletName()) {
@@ -113,12 +113,12 @@ public class FragmentOpenWallet extends Fragment {
         CurvedBottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setVisibility(View.GONE);
 
-        EditText walletNameEditText = view.findViewById(R.id.wallet_name);
+        EditText walletNameEditText = view.findViewById(R.id.walletName);
         EditText passwordEditText = view.findViewById(R.id.password);
-        Button openWalletButton = view.findViewById(R.id.open_wallet);
-        Button newWalletButton = view.findViewById(R.id.new_wallet);
-        Button recoverWalletButton = view.findViewById(R.id.recover_wallet);
-        Button showPasswordButton = view.findViewById(R.id.show_password);
+        Button openWalletButton = view.findViewById(R.id.openWallet);
+        Button newWalletButton = view.findViewById(R.id.newWallet);
+        Button recoverWalletButton = view.findViewById(R.id.recoverWallet);
+        Button showPasswordButton = view.findViewById(R.id.showPassword);
 
         UiHelpers.showKeyboard(view, walletNameEditText);
         walletNameEditText.setFilters(new InputFilter[]{UtilTextFilters.getCharactersDigitsAndSpaceFilter()});

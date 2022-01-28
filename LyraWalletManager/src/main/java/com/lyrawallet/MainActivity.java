@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -121,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
             }
         }, 50);
     }
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @SuppressLint({"SourceLockedOrientationActivity", "ObsoleteSdkInt"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,11 +162,11 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         }
         CurvedBottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         CbnMenuItem[] menuItems = new CbnMenuItem[]{
-                /*new CbnMenuItem(
+                new CbnMenuItem(
                         R.drawable.ic_outline_payments_24_, // the icon
                         R.drawable.ic_outline_payments_24, // the AVD that will be shown in FAB
                         Global.visiblePage.STAKING.ordinal() // optional if you use Jetpack Navigation
-                ),*/
+                ),
                 new CbnMenuItem(
                         R.drawable.ic_outline_swap_horiz_24_,
                         R.drawable.ic_round_swap_horiz_24,
@@ -175,11 +177,11 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                         R.drawable.ic_outline_account_balance_wallet_24,
                         Global.visiblePage.ACCOUNT.ordinal()
                 ),
-                /*new CbnMenuItem(
+                new CbnMenuItem(
                         R.drawable.ic_outline_grid_view_24_,
                         R.drawable.ic_outline_grid_view_24,
                         Global.visiblePage.DEX.ordinal()
-                ),*/
+                ),
                 new CbnMenuItem(
                         R.drawable.ic_outline_more_horiz_24_,
                         R.drawable.ic_baseline_more_horiz_24,
@@ -209,8 +211,6 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         FragmentManagerUser.setVisiblePage(Global.getVisiblePage());
         /*new WebHttps(this).execute("https://api.latoken.com/v2/ticker", "MainCallHttps1");
         new WebHttps(this).execute("https://api.latoken.com/v2/ticker", "MainCallHttps2");*/
-
-        // Call get history/het prices every 120 seconds.
     }
     void restoreTimers() {
         timerHistory = new Timer();
@@ -410,7 +410,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                     IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, resultData);
                     if(result != null) {
                         if(result.getContents() != null){
-                            EditText recipientAddressEditText = (EditText) findViewById(R.id.send_token_recipient_address_value);
+                            EditText recipientAddressEditText = (EditText) findViewById(R.id.sendTokenRecipientAddressValue);
                             if(recipientAddressEditText != null) {
                                 try {
                                     JSONObject obj = new JSONObject(result.getContents());
@@ -435,7 +435,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                                                         max -= GlobalLyra.LYRA_TX_FEE;
                                                     }
                                                     if(amount > max) {
-                                                        EditText tokenAmountEditText = (EditText) findViewById(R.id.send_token_amount_value);
+                                                        EditText tokenAmountEditText = (EditText) findViewById(R.id.sendTokenAmountValue);
                                                         if(tokenAmountEditText != null) {
                                                             tokenAmountEditText.setError(getString(R.string.main_activity_not_enough_tokens_into_account));
                                                         }
@@ -450,7 +450,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                                                     break;
                                                 }
                                             }
-                                            EditText tokenAmountEditText = (EditText) findViewById(R.id.send_token_amount_value);
+                                            EditText tokenAmountEditText = (EditText) findViewById(R.id.sendTokenAmountValue);
                                             if(tokenAmountEditText != null) {
                                                 if(i != adapter.getCount()) {
                                                     tokenAmountEditText.setText(String.format(Locale.US, "%f", amount));

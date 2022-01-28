@@ -393,7 +393,7 @@ public class FragmentSwap extends Fragment {
                             try {
                                 TextView swapInternalPriceValueTextView = (TextView) activity.findViewById(R.id.swapInternalPriceValueTextView);
                                 swapInternalPriceValueTextView.setText(String.format(Locale.US, "$ %.8f", internalLyrPrice));
-                                RecyclerView account_history_recycler = activity.findViewById(R.id.account_history_recycler);
+                                RecyclerView account_history_recycler = activity.findViewById(R.id.accountHistoryRecycler);
                                 if((AccountHistoryGalleryAdapter)account_history_recycler.getAdapter() != null)
                                     ((AccountHistoryGalleryAdapter)account_history_recycler.getAdapter()).updateUnitPrice("LYR");
                             } catch (NullPointerException ignored) { }
@@ -528,7 +528,7 @@ public class FragmentSwap extends Fragment {
                 EditText fromAmountEditText = (EditText) view.findViewById(R.id.swapFromValueEditText);
                 EditText toAmountEditText = (EditText) view.findViewById(R.id.swapToValueEditText);
                 fromAmountEditText.setText("");
-                fromAmountEditText.setHint(activity.getString(R.string.send_token_amount_to_send_hint));
+                fromAmountEditText.setHint(activity.getString(R.string.Amount));
                 toAmountEditText.setText("");
                 toAmountEditText.setHint(activity.getString(R.string.swap_token_amount_to_receive_hint));
                 populateSpinners(view, false);

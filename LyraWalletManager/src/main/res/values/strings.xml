@@ -10,11 +10,17 @@
 
 
 
+    <string name="Amount">Amount</string>
     <string name="Send">Send</string>
+    <string name="One1">One</string>
+    <string name="One_Day">One Day</string>
+    <string name="Day">Day</string>
+    <string name="Days">Days</string>
     <string name="Send1">Send</string>
     <string name="Send2">Send</string>
     <string name="Send3">Sent</string>
     <string name="From">From</string>
+    <string name="Expired">Expired</string>
     <string name="To">To</string>
     <string name="NetworkFee">Network Fee</string>
     <string name="TotalSpent">Total Spent</string>
@@ -24,6 +30,8 @@
     <string name="Cancel">Cancel</string>
     <string name="More">More</string>
     <string name="Swap">Swap</string>
+    <string name="Staking">Staking</string>
+    <string name="Status">Status</string>
     <string name="Pool">Pool</string>
     <string name="Request">Request</string>
     <string name="Receive">Receive</string>
@@ -39,17 +47,30 @@
     <string name="Time_stamp">Time stamp</string>
     <string name="Send_account_id">Send account ID</string>
     <string name="Send_hash">Send hash</string>
-    <string name="zero_lyr" translatable="false">0 LYR</string>
-    <string name="zero_usd" translatable="false">0 USD</string>
     <string name="Receive_account_id">Receive account ID</string>
     <string name="Receive_hash">Receive hash</string>
     <string name="Amount_transferred">Amount transferred</string>
     <string name="Amounts_in_accounts">Amounts in account</string>
     <string name="Total_balance_usd">Total Balance: </string>
     <string name="Total_balance_usd_zero">Total Balance: $0</string>
+    <string name="Account_name">Account name</string>
+    <string name="Staking_account_ID">Staking account ID</string>
+    <string name="Profiting_account_ID">Profiting account ID</string>
+    <string name="Expiry_date">Expiry date</string>
+    <string name="Unlock_wallet">Unlock wallet</string>
+    <string name="Enter_wallet_password">Enter wallet password</string>
+    <string name="Valid">Valid</string>
+    <string name="Add_a_new_staking_account">Add a new staking account</string>
+    <string name="Account_validity">Account validity</string>
 
-    <string name="str_dialog_title" translatable="false">Unlock wallet</string>
-    <string name="str_dialog_message" translatable="false">Enter wallet password</string>
+    <string name="zero_lyr" translatable="false">0 LYR</string>
+    <string name="zero_usd" translatable="false">0 USD</string>
+    <string name="Account_1" translatable="false">Account 1</string>
+    <string name="Some_date1" translatable="false">2022/01/27 20:57:23</string>
+    <string name="Some_account_validity1" translatable="false">30 Days</string>
+    <string name="Some_amount_lyr1" translatable="false">1000 LYR</string>
+    <string name="BurningAccountID" translatable="false">L111111…111111</string>
+
 
 
     <string name="str_launcher_receive_button">RECEIVE</string>
@@ -92,7 +113,6 @@
 
     <string name="send_token_select_spinner_description">Select token</string>
     <string name="send_token_recipient_address_hint">Recipient address…</string>
-    <string name="send_token_amount_to_send_hint">Amount</string>
     <string name="send_token_send_next">Next…</string>
     <string name="send_token_available">Available</string>
     <string name="send_successful">Successfully send</string>

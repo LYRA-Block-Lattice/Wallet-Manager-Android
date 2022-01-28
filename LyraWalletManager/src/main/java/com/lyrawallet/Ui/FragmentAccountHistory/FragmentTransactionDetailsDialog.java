@@ -79,7 +79,7 @@ public class FragmentTransactionDetailsDialog extends DialogFragment {
                     .setAction("", null).show();
             return view;
         }
-        ImageView dialog_history_ticker_imageView = (ImageView) view.findViewById(R.id.dialog_history_ticker_imageView);
+        ImageView dialog_history_ticker_imageView = (ImageView) view.findViewById(R.id.dialogHistoryTickerImageView);
         TextView historyDetailHeightTextView = (TextView) view.findViewById(R.id.historyDetailHeightTextView);
         TextView historyDetailDirectionTextView = (TextView) view.findViewById(R.id.historyDetailDirectionTextView);
         TextView historyDetailTimestampTextView = (TextView) view.findViewById(R.id.historyDetailTimestampTextView);

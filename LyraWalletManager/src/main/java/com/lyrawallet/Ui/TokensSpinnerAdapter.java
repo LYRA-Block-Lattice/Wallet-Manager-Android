@@ -18,7 +18,7 @@ public class TokensSpinnerAdapter extends ArrayAdapter<String> {
 
     public TokensSpinnerAdapter(Context context, int resource, String[] objects,
                                 Integer[] imageArray) {
-        super(context,  R.layout.send_token_select_spinner_entry, R.id.send_token_select_spinner_entry_text, objects);
+        super(context,  R.layout.send_token_select_spinner_entry, R.id.sendTokenSelectSpinnerEntryText, objects);
         this.ctx = context;
         this.contentArray = objects;
         this.imageArray = imageArray;
@@ -26,7 +26,7 @@ public class TokensSpinnerAdapter extends ArrayAdapter<String> {
 
     public TokensSpinnerAdapter(Context context, int resource, String[] objects,
                                 Integer[] imageArray, int disabledItem) {
-        super(context,  R.layout.send_token_select_spinner_entry, R.id.send_token_select_spinner_entry_text, objects);
+        super(context,  R.layout.send_token_select_spinner_entry, R.id.sendTokenSelectSpinnerEntryText, objects);
         this.ctx = context;
         this.contentArray = objects;
         this.imageArray = imageArray;
@@ -49,8 +49,8 @@ public class TokensSpinnerAdapter extends ArrayAdapter<String> {
             convertView = inflater.inflate(R.layout.send_token_select_spinner_entry, parent, false);
         }
 
-        TextView textView = (TextView) convertView.findViewById(R.id.send_token_select_spinner_entry_text);
-        ImageView imageView = (ImageView)convertView.findViewById(R.id.send_token_select_spinner_entry_image);
+        TextView textView = (TextView) convertView.findViewById(R.id.sendTokenSelectSpinnerEntryText);
+        ImageView imageView = (ImageView)convertView.findViewById(R.id.sendTokenSelectSpinnerEntryImage);
         textView.setText(contentArray[position]);
         imageView.setImageResource(imageArray[position]);
         if(position == this.DisabledItem) {

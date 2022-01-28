@@ -53,7 +53,7 @@
     <string name="Send">Trimite</string>
     <string name="send_token_select_spinner_description">Selectează token</string>
     <string name="send_token_recipient_address_hint">Adresa destinatarului…</string>
-    <string name="send_token_amount_to_send_hint">Cantitate</string>
+    <string name="Amount">Cantitate</string>
     <string name="send_token_send_next">Mai departe…</string>
     <string name="send_token_available">Disponibil</string>
     <string name="main_activity_not_enough_tokens_into_account">Nu sunt destui tokeni in cont</string>
@@ -135,5 +135,21 @@
     <string name="History">Istoria</string>
     <string name="Total_balance_usd_zero">Balanta totala: $0</string>
     <string name="Total_balance_usd">"Balanta totala: "</string>
+    <string name="Staking">Staking</string>
+    <string name="Account_name">Numele contului</string>
+    <string name="Staking_account_ID">ID-ul contului de staking</string>
+    <string name="Profiting_account_ID">ID-ul contului de profit</string>
+    <string name="Expiry_date">Data de expirare</string>
+    <string name="Status">Status</string>
+    <string name="Expired">Expirat</string>
+    <string name="Unlock_wallet">Deblocheaza portofelul</string>
+    <string name="Enter_wallet_password">Introdu parola portofelului</string>
+    <string name="Valid">Valabil</string>
+    <string name="Add_a_new_staking_account">Adauga un nou cont de staking</string>
+    <string name="Account_validity">Valabilitatea contului</string>
+    <string name="Day">Zi</string>
+    <string name="Days">Zile</string>
+    <string name="One1">O</string>
+    <string name="One_Day">O Zi</string>
 
 </resources>

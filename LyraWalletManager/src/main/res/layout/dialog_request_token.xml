@@ -48,11 +48,11 @@
             android:background="@drawable/fab_spinner_send_token_select_outline">
 
         <EditText
-            android:id="@+id/receive_token_amount_value"
+            android:id="@+id/receiveTokenAmountValue"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:gravity="start|center"
-            android:hint="@string/send_token_amount_to_send_hint"
+            android:hint="@string/Amount"
             android:padding="8dip"
             android:singleLine="true"
             android:textColor="@color/page_text"
@@ -72,7 +72,7 @@
             android:layout_height="48dp" >
 
             <Button
-                android:id="@+id/dialog_receive_ok_button"
+                android:id="@+id/dialogReceiveOkButton"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:backgroundTint="@color/button_2"

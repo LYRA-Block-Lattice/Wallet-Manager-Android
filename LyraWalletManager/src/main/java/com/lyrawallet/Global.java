@@ -3,18 +3,19 @@ package com.lyrawallet;
 import android.util.Pair;
 
 import com.lyrawallet.Accounts.Accounts;
+import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsBrokerAccounts;
 import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
-
+import com.lyrawallet.Ui.FragmentAccountHistory.FragmentAccountHistory;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Global {
     // Global enumerations
     public enum visiblePage {
-        //STAKING,
+        STAKING,
         SWAP,
         ACCOUNT,
-        //DEX,
+        DEX,
         MORE,
         OPEN_WALLET,
         IMPORT_WALLET,
@@ -26,7 +27,10 @@ public class Global {
         SETTINGS,
         ACCOUNT_HISTORY,
         DIALOG_RECEIVE,
-        DIALOG_TRANSACTION_DETAIL
+        DIALOG_TRANSACTION_DETAIL,
+        DIALOG_STAKING_DETAIL,
+        DIALOG_CREATE_STAKING,
+        DIALOG_ADD_STAKING
     }
 
     // Global constants
@@ -54,7 +58,7 @@ public class Global {
     private static String AccountsContainer = null;
     private static List<Pair<String, String>> WalletAccNameAndIdList = null;
     private static List<Pair<String, Pair<Integer, List<ApiRpcActionsHistory.HistoryEntry>>>> AccountHistory = null;
-    private static List<Pair<String, List<com.lyrawallet.Ui.FragmentAccountHistory.FragmentAccountHistory.AccountHistoryEntry>>> FragmentAccountHistory = null;
+    private static List<Pair<String, List<FragmentAccountHistory.AccountHistoryEntry>>> FragmentAccountHistory = null;
     private static String WalletName = null;
     private static String ReceiveWalletPassword = null;
     private static String SelectedAccountName = "";
@@ -65,6 +69,7 @@ public class Global {
     private static String WalletPassword = "";
 
     private static List<Pair<Double, Pair<String, String>>> TokenPrice = null;
+    private static List<Pair<String, ApiRpcActionsBrokerAccounts>> BrokerAccounts = null;
 
     private static int DeviceOrientation = 0;
 
@@ -176,10 +181,10 @@ public class Global {
         return null;
     }
 
-    public static void setFragmentAccountHistory(String accountName, List<com.lyrawallet.Ui.FragmentAccountHistory.FragmentAccountHistory.AccountHistoryEntry> history) {
+    public static void setFragmentAccountHistory(String accountName, List<FragmentAccountHistory.AccountHistoryEntry> history) {
         if(FragmentAccountHistory != null) {
             for (int i = 0; i < FragmentAccountHistory.size(); i++) {
-                Pair<String, List<com.lyrawallet.Ui.FragmentAccountHistory.FragmentAccountHistory.AccountHistoryEntry>> acc = FragmentAccountHistory.get(i);
+                Pair<String, List<FragmentAccountHistory.AccountHistoryEntry>> acc = FragmentAccountHistory.get(i);
                 if (acc.first.equals(accountName)) {
                     FragmentAccountHistory.remove(i);
                     FragmentAccountHistory.add(new Pair<>(accountName, history));
@@ -192,10 +197,10 @@ public class Global {
         FragmentAccountHistory.add(new Pair<>(accountName, history));
     }
 
-    public static List<com.lyrawallet.Ui.FragmentAccountHistory.FragmentAccountHistory.AccountHistoryEntry> getFragmentAccountHistory(String accountName) {
+    public static List<FragmentAccountHistory.AccountHistoryEntry> getFragmentAccountHistory(String accountName) {
         if(FragmentAccountHistory != null) {
             for (int i = 0; i < FragmentAccountHistory.size(); i++) {
-                Pair<String, List<com.lyrawallet.Ui.FragmentAccountHistory.FragmentAccountHistory.AccountHistoryEntry>> acc = FragmentAccountHistory.get(i);
+                Pair<String, List<FragmentAccountHistory.AccountHistoryEntry>> acc = FragmentAccountHistory.get(i);
                 if (acc.first.equals(accountName)) {
                     return acc.second;
                 }
@@ -370,5 +375,33 @@ public class Global {
             }
         }
         return 0f;
+    }
+
+    public static void setBrokerAccounts(String accountName, ApiRpcActionsBrokerAccounts brokerAccounts) {
+        if(BrokerAccounts != null) {
+            for (int i = 0; i < BrokerAccounts.size(); i++) {
+                Pair<String, ApiRpcActionsBrokerAccounts> acc = BrokerAccounts.get(i);
+                if (acc.first.equals(accountName)) {
+                    BrokerAccounts.remove(i);
+                    BrokerAccounts.add(new Pair<>(accountName, brokerAccounts));
+                    return;
+                }
+            }
+        } else {
+            BrokerAccounts = new ArrayList<>();
+        }
+        BrokerAccounts.add(new Pair<>(accountName, brokerAccounts));
+    }
+
+    public static ApiRpcActionsBrokerAccounts getBrokerAccounts(String accountName) {
+        if(BrokerAccounts != null) {
+            for (int i = 0; i < BrokerAccounts.size(); i++) {
+                Pair<String, ApiRpcActionsBrokerAccounts> acc = BrokerAccounts.get(i);
+                if (acc.first.equals(accountName)) {
+                    return acc.second;
+                }
+            }
+        }
+        return null;
     }
 }

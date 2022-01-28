@@ -60,11 +60,11 @@ public class FragmentRecoverAccount extends Fragment {
         CurvedBottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setVisibility(View.GONE);
 
-        EditText newWalletNameEditText = view.findViewById(R.id.recover_account_name);
-        EditText passwordEditText = view.findViewById(R.id.recover_account_password);
-        EditText privateKeyEditText = view.findViewById(R.id.recover_account_key);
-        Button showPasswordButton = view.findViewById(R.id.recover_account_show_password);
-        Button recoverAccountButton = view.findViewById(R.id.recover_account);
+        EditText newWalletNameEditText = view.findViewById(R.id.recoverAccountName);
+        EditText passwordEditText = view.findViewById(R.id.recoverAccountPassword);
+        EditText privateKeyEditText = view.findViewById(R.id.recoverAccountKey);
+        Button showPasswordButton = view.findViewById(R.id.recoverAccountShowPassword);
+        Button recoverAccountButton = view.findViewById(R.id.recoverAccount);
 
         UiHelpers.showKeyboard(view, newWalletNameEditText);
         newWalletNameEditText.setFilters(new InputFilter[]{UtilTextFilters.getCharactersDigitsAndSpaceFilter()});

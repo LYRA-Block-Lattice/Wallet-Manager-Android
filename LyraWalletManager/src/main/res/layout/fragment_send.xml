@@ -58,24 +58,24 @@
             android:background="@drawable/fab_spinner_send_token_select_outline">
 
             <EditText
-                android:id="@+id/send_token_recipient_address_value"
+                android:id="@+id/sendTokenRecipientAddressValue"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:gravity="start|center"
                 android:hint="@string/send_token_recipient_address_hint"
-                android:nextFocusDown="@id/send_token_amount_value"
+                android:nextFocusDown="@id/sendTokenAmountValue"
                 android:padding="8dip"
                 android:singleLine="true"
                 android:textColor="@color/page_text"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/send_token_select_spinner_entry_button_qr"
+                app:layout_constraintEnd_toStartOf="@+id/sendTokenSelectSpinnerEntryQrButton"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0" />
 
             <ImageButton
-                android:id="@+id/send_token_select_spinner_entry_button_qr"
+                android:id="@+id/sendTokenSelectSpinnerEntryQrButton"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -83,14 +83,14 @@
                 android:backgroundTintMode="multiply"
                 app:cornerRadius="@dimen/button_round_corner"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/send_token_select_spinner_entry_button_book"
+                app:layout_constraintEnd_toStartOf="@+id/sendTokenSelectSpinnerEntryBookButton"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_outline_qr_code_scanner_24"
                 app:tint="@color/page_text"
                 tools:ignore="SpeakableTextPresentCheck" />
 
             <ImageButton
-                android:id="@+id/send_token_select_spinner_entry_button_book"
+                android:id="@+id/sendTokenSelectSpinnerEntryBookButton"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -116,22 +116,22 @@
             android:background="@drawable/fab_spinner_send_token_select_outline">
 
             <EditText
-                android:id="@+id/send_token_amount_value"
+                android:id="@+id/sendTokenAmountValue"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:gravity="start|center"
-                android:hint="@string/send_token_amount_to_send_hint"
+                android:hint="@string/Amount"
                 android:padding="8dip"
                 android:singleLine="true"
                 android:textColor="@color/page_text"
                 android:inputType="numberDecimal"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/send_token_amount_max_button"
+                app:layout_constraintEnd_toStartOf="@+id/sendTokenAmountMaxButton"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
-                android:id="@+id/send_token_amount_max_button"
+                android:id="@+id/sendTokenAmountMaxButton"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -157,7 +157,7 @@
             android:layout_height="48dp">
 
             <Button
-                android:id="@+id/send_token_next_button"
+                android:id="@+id/sendTokenNextButton"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:backgroundTint="@color/button_2"

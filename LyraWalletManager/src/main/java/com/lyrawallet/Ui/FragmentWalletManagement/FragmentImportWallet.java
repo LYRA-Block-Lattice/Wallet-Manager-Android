@@ -51,8 +51,8 @@ public class FragmentImportWallet extends Fragment {
         CurvedBottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setVisibility(View.GONE);
 
-        EditText walletNameEditText = view.findViewById(R.id.wallet_name);
-        Button importWalletButton = view.findViewById(R.id.import_wallet);
+        EditText walletNameEditText = view.findViewById(R.id.walletName);
+        Button importWalletButton = view.findViewById(R.id.importWallet);
 
         UiHelpers.showKeyboard(view, walletNameEditText);
         

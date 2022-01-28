@@ -114,8 +114,8 @@ public class Accounts {
         passEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
         UiHelpers.showKeyboard(view, passEditText);
         AlertDialog dialog = new AlertDialog.Builder(c)
-                .setTitle(R.string.str_dialog_title)
-                .setMessage(R.string.str_dialog_message)
+                .setTitle(R.string.Unlock_wallet)
+                .setMessage(R.string.Enter_wallet_password)
                 .setView(passEditText)
                 .setPositiveButton(R.string.Accept, new DialogInterface.OnClickListener() {
                     @Override

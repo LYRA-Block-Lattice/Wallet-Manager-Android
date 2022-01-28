@@ -19,7 +19,7 @@
         app:layout_constraintGuide_percent="0.5" />
 
     <EditText
-        android:id="@+id/new_account_name"
+        android:id="@+id/newAccountName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -31,7 +31,7 @@
         android:importantForAutofill="no"
         android:inputType="textVisiblePassword"
         android:minHeight="48dp"
-        android:nextFocusDown="@id/new_account_password"
+        android:nextFocusDown="@id/newAccountPassword"
         android:selectAllOnFocus="true"
         android:singleLine="true"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,7 +40,7 @@
         tools:ignore="TextContrastCheck" />
 
     <EditText
-        android:id="@+id/new_account_password"
+        android:id="@+id/newAccountPassword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -53,13 +53,13 @@
         android:minHeight="48dp"
         android:selectAllOnFocus="true"
         android:textAllCaps="false"
-        app:layout_constraintEnd_toStartOf="@+id/new_account_show_password"
+        app:layout_constraintEnd_toStartOf="@+id/newAccountShowPassword"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/new_account_name"
+        app:layout_constraintTop_toBottomOf="@id/newAccountName"
         tools:ignore="TextContrastCheck" />
 
     <Button
-        android:id="@+id/new_account_show_password"
+        android:id="@+id/newAccountShowPassword"
         android:layout_width="55dp"
         android:layout_height="48dp"
         android:layout_marginEnd="40dp"
@@ -68,11 +68,11 @@
         app:backgroundTintMode="add"
         app:icon="@drawable/ic_visibility_off_password"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/new_account_name"
+        app:layout_constraintTop_toBottomOf="@id/newAccountName"
         tools:ignore="SpeakableTextPresentCheck" />
 
     <Button
-        android:id="@+id/create_account"
+        android:id="@+id/createAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
@@ -86,11 +86,11 @@
         app:backgroundTintMode="add"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/new_account_password"
+        app:layout_constraintTop_toBottomOf="@id/newAccountPassword"
         tools:ignore="TextContrastCheck" />
 
     <Button
-        android:id="@+id/recover_account"
+        android:id="@+id/recoverAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
@@ -104,7 +104,7 @@
         app:backgroundTintMode="add"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/create_account"
+        app:layout_constraintTop_toBottomOf="@+id/createAccount"
         tools:ignore="TextContrastCheck" />
 
     <TextView

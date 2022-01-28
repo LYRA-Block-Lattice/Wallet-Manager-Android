@@ -36,9 +36,9 @@ public class FragmentManagerUser extends MainActivity {
         Global.setVisiblePage(p);
         PushToBackStack = true;
         switch(p) {
-            /*case STAKING:
+            case STAKING:
                 new FragmentManagerUser().goToStaking();
-                break;*/
+                break;
             case SWAP:
                 new FragmentManagerUser().goToSwap();
                 break;
@@ -48,9 +48,9 @@ public class FragmentManagerUser extends MainActivity {
             case ACCOUNT_HISTORY:
                 new FragmentManagerUser().goToAccountHistory();
                 break;
-            /*case DEX:
+            case DEX:
                 new FragmentManagerUser().goToDex();
-                break;*/
+                break;
             case MORE:
                 new FragmentManagerUser().goToMore();
                 break;
@@ -80,6 +80,15 @@ public class FragmentManagerUser extends MainActivity {
                 break;
             case DIALOG_TRANSACTION_DETAIL:
                 new FragmentManagerUser().goToDialogTransactionDetail(params);
+                break;
+            case DIALOG_STAKING_DETAIL:
+                new FragmentManagerUser().goToDialogStakingDetail(params);
+                break;
+            case DIALOG_CREATE_STAKING:
+                new FragmentManagerUser().goToDialogAddStaking(params);
+                break;
+            case DIALOG_ADD_STAKING:
+                new FragmentManagerUser().goToDialogCreateStaking(params);
                 break;
             default:
                 new FragmentManagerUser().goToOpenWallet();
@@ -169,7 +178,7 @@ public class FragmentManagerUser extends MainActivity {
     }
 
     public void goToStaking() {
-        /*clearBackStack();
+        clearBackStack();
         Global.setVisiblePage(Global.visiblePage.STAKING);
         if(getCurrentFragment() != Global.visiblePage.STAKING.ordinal()) {
             getInstance().getSupportFragmentManager()
@@ -182,7 +191,7 @@ public class FragmentManagerUser extends MainActivity {
         }
         CurvedBottomNavigationView bottomNavigationView = getInstance().findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setVisibility(View.VISIBLE);
-        bottomNavigationView.onMenuItemClick(Global.visiblePage.STAKING.ordinal());*/
+        bottomNavigationView.onMenuItemClick(Global.visiblePage.STAKING.ordinal());
     }
 
     public void goToSwap() {
@@ -220,7 +229,7 @@ public class FragmentManagerUser extends MainActivity {
     }
 
     public void goToDex() {
-        /*clearBackStack();
+        clearBackStack();
         Global.setVisiblePage(Global.visiblePage.DEX);
         if(getCurrentFragment() != Global.visiblePage.DEX.ordinal()) {
             getInstance().getSupportFragmentManager()
@@ -233,7 +242,7 @@ public class FragmentManagerUser extends MainActivity {
         }
         CurvedBottomNavigationView bottomNavigationView = getInstance().findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setVisibility(View.VISIBLE);
-        bottomNavigationView.onMenuItemClick(Global.visiblePage.DEX.ordinal());*/
+        bottomNavigationView.onMenuItemClick(Global.visiblePage.DEX.ordinal());
     }
 
     public void goToMore() {
@@ -329,6 +338,45 @@ public class FragmentManagerUser extends MainActivity {
                     .setReorderingAllowed(true)
                     .addToBackStack(String.valueOf(Global.visiblePage.DIALOG_TRANSACTION_DETAIL.ordinal()))
                     .replace(R.id.nav_host_fragment_content_main, new FragmentTransactionDetailsDialog(params), "DIALOG_TRANSACTION_DETAIL")
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .commit();
+        }
+    }
+
+    public void goToDialogStakingDetail(String[] params) {
+        Global.setVisiblePage(Global.visiblePage.DIALOG_STAKING_DETAIL);
+        if(getCurrentFragment() != Global.visiblePage.DIALOG_STAKING_DETAIL.ordinal()) {
+            getInstance().getSupportFragmentManager()
+                    .beginTransaction()
+                    .setReorderingAllowed(true)
+                    .addToBackStack(String.valueOf(Global.visiblePage.DIALOG_STAKING_DETAIL.ordinal()))
+                    .replace(R.id.nav_host_fragment_content_main, new FragmentTransactionDetailsDialog(params), "DIALOG_STAKING_DETAIL")
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .commit();
+        }
+    }
+
+    public void goToDialogAddStaking(String[] params) {
+        Global.setVisiblePage(Global.visiblePage.DIALOG_CREATE_STAKING);
+        if(getCurrentFragment() != Global.visiblePage.DIALOG_CREATE_STAKING.ordinal()) {
+            getInstance().getSupportFragmentManager()
+                    .beginTransaction()
+                    .setReorderingAllowed(true)
+                    .addToBackStack(String.valueOf(Global.visiblePage.DIALOG_CREATE_STAKING.ordinal()))
+                    //.replace(R.id.nav_host_fragment_content_main, new FragmentTransactionDetailsDialog(params), "DIALOG_CREATE_STAKING")
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .commit();
+        }
+    }
+
+    public void goToDialogCreateStaking(String[] params) {
+        Global.setVisiblePage(Global.visiblePage.DIALOG_ADD_STAKING);
+        if(getCurrentFragment() != Global.visiblePage.DIALOG_ADD_STAKING.ordinal()) {
+            getInstance().getSupportFragmentManager()
+                    .beginTransaction()
+                    .setReorderingAllowed(true)
+                    .addToBackStack(String.valueOf(Global.visiblePage.DIALOG_ADD_STAKING.ordinal()))
+                    //.replace(R.id.nav_host_fragment_content_main, new FragmentTransactionDetailsDialog(params), "DIALOG_ADD_STAKING")
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .commit();
         }

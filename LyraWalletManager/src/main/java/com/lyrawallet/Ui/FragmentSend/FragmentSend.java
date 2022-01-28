@@ -69,15 +69,15 @@ public class FragmentSend extends Fragment {
         Activity activity = getActivity();
         if(activity == null)
             return false;
-        Button nextButton = (Button) activity.findViewById(R.id.send_token_next_button);
+        Button nextButton = (Button) activity.findViewById(R.id.sendTokenNextButton);
         if(nextButton == null)
             return false;
         nextButton.setEnabled(false);
         Spinner tokenSpinner = (Spinner) activity.findViewById(R.id.sendTokenSelectSpinner);
-        EditText recipientAddressEditText = (EditText) activity.findViewById(R.id.send_token_recipient_address_value);
+        EditText recipientAddressEditText = (EditText) activity.findViewById(R.id.sendTokenRecipientAddressValue);
         if(!CryptoSignatures.validateAccountId(recipientAddressEditText.getText().toString()))
             return false;
-        EditText tokenAmountEditText = (EditText) activity.findViewById(R.id.send_token_amount_value);
+        EditText tokenAmountEditText = (EditText) activity.findViewById(R.id.sendTokenAmountValue);
         if (tokenSpinner == null)
             return false;
         SpinnerAdapter adapter = tokenSpinner.getAdapter();
@@ -122,7 +122,7 @@ public class FragmentSend extends Fragment {
         CurvedBottomNavigationView bottomNavigationView = activity.findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setVisibility(View.GONE);
         //new ApiRpc().act(new ApiRpc.Action().actionPool("LYR", "tether/LTT"));
-        EditText recipientAddressEditText = (EditText) view.findViewById(R.id.send_token_recipient_address_value);
+        EditText recipientAddressEditText = (EditText) view.findViewById(R.id.sendTokenRecipientAddressValue);
         if(recipientAddressEditText != null) {
             recipientAddressEditText.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -140,7 +140,7 @@ public class FragmentSend extends Fragment {
             });
         }
 
-        EditText tokenAmountEditText = (EditText) view.findViewById(R.id.send_token_amount_value);
+        EditText tokenAmountEditText = (EditText) view.findViewById(R.id.sendTokenAmountValue);
         if(tokenAmountEditText != null) {
             tokenAmountEditText.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -177,7 +177,7 @@ public class FragmentSend extends Fragment {
         tokenSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if(view != null) {
-                    EditText tokenAmountEditText = (EditText) view.findViewById(R.id.send_token_amount_value);
+                    EditText tokenAmountEditText = (EditText) view.findViewById(R.id.sendTokenAmountValue);
                     if(tokenAmountEditText != null) {
                         double max = Balances.get(i).second;
                         if(max > 0) {
@@ -194,7 +194,7 @@ public class FragmentSend extends Fragment {
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
-        ImageButton qrButton = (ImageButton) view.findViewById(R.id.send_token_select_spinner_entry_button_qr);
+        ImageButton qrButton = (ImageButton) view.findViewById(R.id.sendTokenSelectSpinnerEntryQrButton);
         qrButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Activity activity = getActivity();
@@ -209,13 +209,13 @@ public class FragmentSend extends Fragment {
                 integrator.initiateScan();
             }
         });
-        ImageButton bookAccountButton = (ImageButton) view.findViewById(R.id.send_token_select_spinner_entry_button_book);
+        ImageButton bookAccountButton = (ImageButton) view.findViewById(R.id.sendTokenSelectSpinnerEntryBookButton);
         bookAccountButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
             }
         });
-        ImageButton maxButton = (ImageButton) view.findViewById(R.id.send_token_amount_max_button);
+        ImageButton maxButton = (ImageButton) view.findViewById(R.id.sendTokenAmountMaxButton);
         maxButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Spinner tokenSpinner = (Spinner) view.findViewById(R.id.sendTokenSelectSpinner);
@@ -227,7 +227,7 @@ public class FragmentSend extends Fragment {
                             if(max >= GlobalLyra.LYRA_TX_FEE) {
                                 if (Balances.get(i).first.equals("LYR"))
                                     max -= GlobalLyra.LYRA_TX_FEE;
-                                EditText tokenAmountEditText = (EditText) view.findViewById(R.id.send_token_amount_value);
+                                EditText tokenAmountEditText = (EditText) view.findViewById(R.id.sendTokenAmountValue);
                                 tokenAmountEditText.setText(String.format(Locale.US, "%f", max));
                             }
                             return;
@@ -236,7 +236,7 @@ public class FragmentSend extends Fragment {
                 }
             }
         });
-        Button nextButton = (Button) view.findViewById(R.id.send_token_next_button);
+        Button nextButton = (Button) view.findViewById(R.id.sendTokenNextButton);
         nextButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (checkSend()) {
@@ -253,18 +253,18 @@ public class FragmentSend extends Fragment {
                     final AlertDialog alertDialog = alert.create();
                     alertDialog.setCanceledOnTouchOutside(false);
 
-                    ImageButton closeButton = (ImageButton) mView.findViewById(R.id.dialog_send_close);
+                    ImageButton closeButton = (ImageButton) mView.findViewById(R.id.dialogSendClose);
                     closeButton.setOnClickListener(new View.OnClickListener() {
                         public void onClick(View v) {
                             alertDialog.dismiss();
                         }
                     });
-                    EditText recipientAddressEditText = (EditText) activity.findViewById(R.id.send_token_recipient_address_value);
-                    TextView sendValueTextView = (TextView) mView.findViewById(R.id.dialog_send_value);
-                    TextView sendFromTextView = (TextView) mView.findViewById(R.id.dialog_send_from_value);
-                    TextView sendToTextView = (TextView) mView.findViewById(R.id.dialog_send_to_value);
-                    TextView networkFeeTextView = (TextView) mView.findViewById(R.id.dialog_send_network_fee_value);
-                    TextView totalSpendTextView = (TextView) mView.findViewById(R.id.dialog_send_total_spend_value);
+                    EditText recipientAddressEditText = (EditText) activity.findViewById(R.id.sendTokenRecipientAddressValue);
+                    TextView sendValueTextView = (TextView) mView.findViewById(R.id.dialogSendValue);
+                    TextView sendFromTextView = (TextView) mView.findViewById(R.id.dialogSendFromValue);
+                    TextView sendToTextView = (TextView) mView.findViewById(R.id.dialogSendToValue);
+                    TextView networkFeeTextView = (TextView) mView.findViewById(R.id.dialogSendNetworkFeeValue);
+                    TextView totalSpendTextView = (TextView) mView.findViewById(R.id.dialogSendTotalSpendValue);
 
                     if(sendValueTextView == null || sendFromTextView == null || sendToTextView == null || networkFeeTextView == null || totalSpendTextView == null) {
                         Snackbar.make(view, "Dialog not inflated.", Snackbar.LENGTH_LONG)
@@ -273,7 +273,7 @@ public class FragmentSend extends Fragment {
                     }
                     Spinner tokenSpinner = (Spinner) activity.findViewById(R.id.sendTokenSelectSpinner);
                     SpinnerAdapter adapter = tokenSpinner.getAdapter();
-                    EditText tokenAmountEditText = (EditText) view.findViewById(R.id.send_token_amount_value);
+                    EditText tokenAmountEditText = (EditText) view.findViewById(R.id.sendTokenAmountValue);
                     if (tokenAmountEditText == null) {
                         Snackbar.make(view, "Inalid token amount pointer.", Snackbar.LENGTH_LONG)
                                 .setAction("", null).show();

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,7 +74,7 @@ public class FragmentReceiveDialog extends DialogFragment {
             }
         });
 
-        EditText amountEditText = v.findViewById(R.id.receive_token_amount_value);
+        EditText amountEditText = v.findViewById(R.id.receiveTokenAmountValue);
         amountEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
@@ -97,7 +96,7 @@ public class FragmentReceiveDialog extends DialogFragment {
             }
         });
 
-        Button bookAccountButton = (Button) v.findViewById(R.id.dialog_receive_ok_button);
+        Button bookAccountButton = (Button) v.findViewById(R.id.dialogReceiveOkButton);
         bookAccountButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if(getActivity() == null) {
