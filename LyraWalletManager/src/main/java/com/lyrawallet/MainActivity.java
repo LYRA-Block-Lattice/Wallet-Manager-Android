@@ -33,6 +33,7 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.lyrawallet.Accounts.Accounts;
 import com.lyrawallet.Api.ApiRpc;
+import com.lyrawallet.Api.Network.NetworkProbe;
 import com.lyrawallet.Api.Network.NetworkWebHttps;
 import com.lyrawallet.Crypto.CryptoSignatures;
 import com.lyrawallet.PreferencesLoad.PreferencesLoad;

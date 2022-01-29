@@ -123,6 +123,8 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
         String MaxVoter = null;
         String DaysToStake = null;
         String CompoundMode = null;
+        String Begin = null;
+        String End = null;
 
         public String getApi() {
             return Api;
@@ -209,6 +211,12 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
         public String getCompoundMode() {
             return CompoundMode;
         }
+        public String getBegin() {
+            return Begin;
+        }
+        public String getEnd() {
+            return End;
+        }
 
         ProfitingType convertPType() {
             switch(PType) {
@@ -287,6 +295,18 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                 return false;
             }
             return Boolean.getBoolean(CompoundMode);
+        }
+        long valueBegin() {
+            if(Begin == null){
+                return 0;
+            }
+            return Long.valueOf(Begin, 10);
+        }
+        long valueEnd() {
+            if(End == null){
+                return 0;
+            }
+            return Long.valueOf(End, 10);
         }
 
         public Action() {
@@ -718,6 +738,18 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
             Token1 = token1;
             return this;
         }
+        public Action actionFindAllProfitingAccounts(long begin, long end) {
+            if(Api == null) {
+                Api = "FindAllProfitingAccounts";
+            } else {
+                Api = Api + "/" + "FindAllProfitingAccounts";
+            }
+            AccountName = Global.getSelectedAccountName();
+            Network = Global.getCurrentNetwork();
+            Begin = String.valueOf(begin);
+            End = String.valueOf(end);
+            return this;
+        }
     }
 
     public String ReceiveResult = null;
@@ -730,47 +762,47 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
     private boolean actWithPwd(Action action, String password) {
         switch(action.Api) {
             case "Receive":
-                new NetworkRpc(this, password).execute(action.toString(), action.getApi(), action.getAccountId());
+                new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL, this, password).execute(action.toString(), action.getApi(), action.getAccountId());
                 break;
             case "Send":
-                new NetworkRpc(this, password).execute(action.toString(), action.getApi(), action.getAccountId(),
+                new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL, this, password).execute(action.toString(), action.getApi(), action.getAccountId(),
                         action.getAmount(), action.getDestinationAccountId(), action.getToken0());
                 break;
             case "Token":
-                new NetworkRpc(this, password).execute(action.toString(), action.getApi(), action.getAccountId(),
+                new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL, this, password).execute(action.toString(), action.getApi(), action.getAccountId(),
                         action.getName(), action.getDomain(), action.getSupply());
                 break;
             case "CreateProfitingAccount":
 
-                new NetworkRpc(this, password).execute(action.toString(), action.getApi(), action.getAccountId(),
+                new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL, this, password).execute(action.toString(), action.getApi(), action.getAccountId(),
                         action.getName(), action.getPType(), action.getShareRatio(),
                         action.getMaxVoter());
                 break;
             case "CreateStakingAccount":
-                new NetworkRpc(this, password).execute(action.toString(), action.getApi(), action.getAccountId(),
+                new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL, this, password).execute(action.toString(), action.getApi(), action.getAccountId(),
                         action.getName(), action.getVoteFor(),
                         action.getDaysToStake(), action.getCompoundMode());
                 break;
             case "AddStaking":
-                new NetworkRpc(this, password).execute(action.toString(), action.getApi(), action.getAccountId(),
+                new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL, this, password).execute(action.toString(), action.getApi(), action.getAccountId(),
                         action.getStakingAccountId(), action.getAmount());
                 break;
             case "CreateDividends":
-                new NetworkRpc(this, password).execute(action.toString(), action.getApi(), action.getAccountId(),
+                new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL, this, password).execute(action.toString(), action.getApi(), action.getAccountId(),
                         action.getProfitingAccountId());
                 break;
             case "CreatePool":
             case "RemoveLiquidity":
-                new NetworkRpc(this, password).execute(action.toString(), action.getApi(), action.getAccountId(),
+                new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL, this, password).execute(action.toString(), action.getApi(), action.getAccountId(),
                         action.getToken0(), action.getToken1());
                 break;
             case "AddLiquidity":
-                new NetworkRpc(this, password).execute(action.toString(), action.getApi(), action.getAccountId(),
+                new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL, this, password).execute(action.toString(), action.getApi(), action.getAccountId(),
                         action.getToken0(), action.getToken0Amount(),
                         action.getToken1(), action.getToken1Amount());
                 break;
             case "Swap":
-                new NetworkRpc(this, password).execute(action.toString(), action.getApi(), action.getAccountId(),
+                new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL, this, password).execute(action.toString(), action.getApi(), action.getAccountId(),
                         action.getToken0(), action.getToken1(), action.getTokenToSwap(),
                         action.getAmountToSwap(), action.getAmountToGet());
                 break;
@@ -789,22 +821,26 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
         System.out.println("2-Acting on: " + action.getApi());
         switch(action.getApi().split("/")[0]) {
             case "History":
-                new NetworkRpc(this).execute(action.toString(), "History", action.getAccountId(),
+                new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL, this).execute(action.toString(), "History", action.getAccountId(),
                 "0", String.valueOf(System.currentTimeMillis()), "0");
                 return true;
             case "Balance":
-                new NetworkRpc(this).execute(action.toString(), "Balance", action.getAccountId());
+                new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL, this).execute(action.toString(), "Balance", action.getAccountId());
                 return true;
             case "Pool":
-                new NetworkRpc(this).execute(action.toString(), "Pool", action.getAccountId(),
+                new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL, this).execute(action.toString(), "Pool", action.getAccountId(),
                         action.getToken0(), action.getToken1());
                 return true;
             case "PoolCalculate":
-                new NetworkRpc(this).execute(action.toString(), "PoolCalculate", action.getAccountId(),
+                new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL, this).execute(action.toString(), "PoolCalculate", action.getAccountId(),
                         action.getPoolId(), action.getSwapFrom(), action.getAmount(), action.getSlippage());
                 return true;
             case "GetBrokerAccounts":
-                new NetworkRpc(this).execute(action.toString(), "GetBrokerAccounts", action.getAccountId());
+                new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL, this).execute(action.toString(), "GetBrokerAccounts", action.getAccountId());
+                return true;
+            case "FindAllProfitingAccounts": // Not implemented
+                new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL, this).execute(action.toString(), action.getApi(), action.getAccountId(),
+                        action.Begin, action.End);
                 return true;
             default:
                 break;
@@ -1033,6 +1069,8 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                     }
                 } else if (output[0].equals("GetBrokerAccounts")) {
                     Global.setBrokerAccounts(Concatenate.getHistoryFileName(ac), new ApiRpcActionsBrokerAccounts().fromJson(output[2]));
+                } else if(output[0].equals("FindAllProfitingAccounts")) {
+                    System.out.println(output[2]);
                 }
                 ReceiveResult = output[0] + "^" + output[1] + "^" + output[2];
                 System.out.println("Transaction end, result is:" + ReceiveResult);

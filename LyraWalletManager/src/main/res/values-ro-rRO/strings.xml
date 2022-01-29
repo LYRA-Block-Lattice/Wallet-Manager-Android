@@ -151,5 +151,6 @@
     <string name="Days">Zile</string>
     <string name="One1">O</string>
     <string name="One_Day">O Zi</string>
+    <string name="Add_new_staking_account">Adauga un nou cont de staking</string>
 
 </resources>

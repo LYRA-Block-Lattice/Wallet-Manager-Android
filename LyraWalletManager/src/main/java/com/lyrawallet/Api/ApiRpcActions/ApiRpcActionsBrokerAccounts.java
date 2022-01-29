@@ -88,13 +88,10 @@ public class ApiRpcActionsBrokerAccounts {
                     entry.Days = profitsObject.getInt("days");
                     entry.Amount = profitsObject.getDouble("amount");
                     String start = profitsObject.getString("start");
-                    Instant utcDateTimeForCurrentDateTime = null;
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                        utcDateTimeForCurrentDateTime = Instant.from(Instant.parse(start));
-                        entry.Start = utcDateTimeForCurrentDateTime.toEpochMilli();
-                    } else {
-
-                    }
+                    //Instant utcDateTimeForCurrentDateTime = Instant.from(Instant.parse(start));
+                    //entry.Start = utcDateTimeForCurrentDateTime.toEpochMilli();
+                    java.sql.Timestamp ts = java.sql.Timestamp.valueOf(start.replace("T", " ").split("\\.")[0]);
+                    entry.Start = ts.getTime();
                     StakingAccount.add(entry);
                 }
             }

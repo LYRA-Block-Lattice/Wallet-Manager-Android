@@ -24,7 +24,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 public class NetworkWebHttps extends AsyncTask<String, Void, NetworkWebHttps> {
-    final WeakReference<WebHttpsTaskInformer> mCallBack;
+    WeakReference<WebHttpsTaskInformer> mCallBack = null;
     private WebHttpsTaskListener listenerCallBack = null;
 
     public interface WebHttpsTaskInformer {
@@ -36,6 +36,9 @@ public class NetworkWebHttps extends AsyncTask<String, Void, NetworkWebHttps> {
 
     public NetworkWebHttps(@Nullable WebHttpsTaskInformer callback) {
         this.mCallBack = new WeakReference<>(callback);
+    }
+
+    public NetworkWebHttps() {
     }
 
     private int ResponseCode = -1;

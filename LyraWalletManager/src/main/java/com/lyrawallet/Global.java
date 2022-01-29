@@ -42,6 +42,7 @@ public class Global {
     public final static int MinCharAllowedOnPassword = 8;
     public final static int MinCharAllowedOnWalletName = 2;
     public final static int MaxRpcConnectRetry = 5;
+    public final static int MaxRpcConnectToNodeRetry = 2;
     // Preference key names
     public final static String keyCustomLyraPriceInUsd = "lyra_price_in_usd";
 
@@ -77,22 +78,22 @@ public class Global {
     static int SelectedNode = 0;
     final static String[] NodeAddressDevNet = new String[]{""};
     final static String[] NodeAddressTestNet = new String[]{
-            "wss://161.97.166.188:4504/api/v1/socket",
-            "wss://173.212.228.110:4504/api/v1/socket",
-            "wss://81.196.64.78:4504/api/v1/socket",
-            "wss://seed.testnet.lyra.live:443/api/v1/socket",
-            "wss://seed2.testnet.lyra.live:443/api/v1/socket",
-            "wss://seed3.testnet.lyra.live:443/api/v1/socket",
-            "wss://seed3.testnet.lyra.live:443/api/v1/socket"
+            "wss://161.97.166.188:4504",
+            "wss://173.212.228.110:4504",
+            "wss://81.196.64.78:4504",
+            "wss://seed.testnet.lyra.live:443",
+            "wss://seed2.testnet.lyra.live:443",
+            "wss://seed3.testnet.lyra.live:443",
+            "wss://seed3.testnet.lyra.live:443"
     };
     final static String[] NodeAddressMainNet = new String[]{
-            "wss://173.212.228.110:5504/api/v1/socket",
-            "wss://81.196.64.78:5504/api/v1/socket",
-            "wss://161.97.166.188:5504/api/v1/socket",
-            "wss://seed1.mainnet.lyra.live:443/api/v1/socket",
-            "wss://seed2.mainnet.lyra.live:443/api/v1/socket",
-            "wss://seed3.mainnet.lyra.live:443/api/v1/socket",
-            "wss://seed3.mainnet.lyra.live:443/api/v1/socket"
+            "wss://173.212.228.110:5504",
+            "wss://81.196.64.78:5504",
+            "wss://161.97.166.188:5504",
+            "wss://seed1.mainnet.lyra.live:443",
+            "wss://seed2.mainnet.lyra.live:443",
+            "wss://seed3.mainnet.lyra.live:443",
+            "wss://seed3.mainnet.lyra.live:443"
     };
 
     public static int getDeviceOrientation() {
@@ -268,6 +269,10 @@ public class Global {
         return MinCharAllowedOnWalletName;
     }
 
+    public static int getMaxRpcConnectToNodeRetry() {
+        return MaxRpcConnectToNodeRetry;
+    }
+
     public static int getMaxRpcConnectRetry() {
         return MaxRpcConnectRetry;
     }
@@ -277,10 +282,10 @@ public class Global {
         if (SelectedNode >= getNodeAddressTable().length) {
             SelectedNode = 0;
         }
-        System.out.println("Push to next node IP: " + getNodeAddress());
+        System.out.println("Push to next node IP: " + getNodeRpcAddress());
     }
 
-    public static String getNodeAddress() {
+    public static String getNodeRpcAddress() {
         if (getRandomizeIpEnabled()) {
             int nodeNr = 0;
             switch (getCurrentNetwork()) {

@@ -16,6 +16,10 @@ public class GlobalLyra {
     public static final double LYRA_TX_FEE                     = 1.0;
     public static final String BREAKING_STAKE_CONTRACT_FEE     = "0.8";
     public static final String SYMBOL_FOR_TETHERED_TOKEN       = "$";
+    public static final String LYRA_RPC_API_URL                =  "/api/v1/socket";
+    public static final String LYRA_NODE_API_URL                = "/api/Node";
+
+
 
     public final static Pair<String, Integer>[] TokenIconList = new Pair[]{
             new Pair<>("", 0),

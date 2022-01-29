@@ -18,6 +18,12 @@ import java.util.Arrays;
 import java.util.List;
 
 public class NetworkRpc extends AsyncTask<String, Void, String[]> implements NetworkRpcSocket.RpcSocketTaskInformer {
+    private RpcTaskListener listenerCallBack = null;
+
+    public interface RpcTaskListener {
+        void onRpcTaskFinished(String[] output);
+    }
+
     public interface RpcTaskInformer {
         void onRpcTaskDone(String[] output);
         void onRpcNewEvent(String[] output);
@@ -39,7 +45,7 @@ public class NetworkRpc extends AsyncTask<String, Void, String[]> implements Net
         NOT_SIGNING
     }
 
-    final WeakReference<RpcTaskInformer> mCallBack;
+    RpcTaskInformer mCallBack = null;
     private NetworkRpcSocket Socket = null;
     private state InternalState = state.IDLE;
     private int Id = 1;
@@ -48,13 +54,20 @@ public class NetworkRpc extends AsyncTask<String, Void, String[]> implements Net
     private String InstanceName = "";
     private List<String> LastParameters = null;
     private String Password = null;
+    private String UrlDst = "";
 
-    public NetworkRpc(@Nullable RpcTaskInformer callback) {
-        this.mCallBack = new WeakReference<>(callback);
+    public NetworkRpc(String urlDst, @Nullable RpcTaskInformer callback) {
+        UrlDst = urlDst;
+        this.mCallBack = callback;
     }
 
-    public NetworkRpc(@Nullable RpcTaskInformer callback, String password) {
-        this.mCallBack = new WeakReference<>(callback);
+    public NetworkRpc(String urlDst) {
+        UrlDst = urlDst;
+    }
+
+    public NetworkRpc(String urlDst, @Nullable RpcTaskInformer callback, String password) {
+        UrlDst = urlDst;
+        this.mCallBack = callback;
         this.Password = password;
     }
 
@@ -86,10 +99,14 @@ public class NetworkRpc extends AsyncTask<String, Void, String[]> implements Net
     @Override
     protected void onPostExecute(String[] st) {
         super.onPostExecute(st);
-        final NetworkRpc.RpcTaskInformer callBack = mCallBack.get();
-        if(callBack != null) {
+        if(mCallBack != null) {
+            NetworkRpc.RpcTaskInformer callBack = mCallBack;
             callBack.onRpcNewEvent(st);
         }
+    }
+
+    public void setListener(RpcTaskListener listener) {
+        this.listenerCallBack = listener;
     }
 
     private String[] getState(state st) {
@@ -112,37 +129,43 @@ public class NetworkRpc extends AsyncTask<String, Void, String[]> implements Net
     }
 
     private void sendState(state st) {
-        final NetworkRpc.RpcTaskInformer callBack = mCallBack.get();
-        if(callBack != null) {
-            callBack.onRpcNewEvent(getState(st));
+        if(mCallBack != null) {
+            mCallBack.onRpcNewEvent(getState(st));
         } else {
             System.out.println("Rpc.java: RPC new event callback = null");
         }
     }
 
     public state connect() {
-        final NetworkRpc.RpcTaskInformer callBack = mCallBack.get();
         int retryCnt = 0;
         for (; retryCnt < Global.getMaxRpcConnectRetry(); retryCnt++) {
-            String node = Global.getNodeAddress();
-            System.out.println("Retry: " + retryCnt + "; on node: " + node);
-            Socket = new NetworkRpcSocket(node, this);
-            TimeoutCount = Global.getRpcConnectionTimeout();
-            while (!Socket.getConnected() && TimeoutCount != 0) {
-                try {
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    sendState(state.CONNECTION_INTERRUPTED);
-                    return state.CONNECTION_INTERRUPTED;
+            for (int retryCntToNode = 0; retryCntToNode < Global.getMaxRpcConnectToNodeRetry(); retryCntToNode++) {
+                String node = Global.getNodeRpcAddress() + UrlDst;
+                System.out.println("Retry: " + retryCntToNode + "; on node: " + node);
+                Socket = new NetworkRpcSocket(node, this);
+                TimeoutCount = Global.getRpcConnectionTimeout();
+                while (!Socket.getConnected() && TimeoutCount != 0) {
+                    try {
+                        Thread.sleep(10);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                        sendState(state.CONNECTION_INTERRUPTED);
+                        return state.CONNECTION_INTERRUPTED;
+                    }
+                    TimeoutCount--;
                 }
-                TimeoutCount--;
+                if (Socket.getConnected()) {
+                    break;
+                } else {
+                    Socket.closeConnection();
+                }
             }
             if (Socket.getConnected()) {
                 break;
             } else {
                 Socket.closeConnection();
             }
+            Global.incrementNodeNumber();
         }
         if (retryCnt == Global.getMaxRpcConnectRetry()) {
             sendState(state.CONNECTION_TIMEOUT);
@@ -159,7 +182,6 @@ public class NetworkRpc extends AsyncTask<String, Void, String[]> implements Net
     }
 
     private state sendResponse(String api, List<String> args) {
-        final NetworkRpc.RpcTaskInformer callBack = mCallBack.get();
         if(InternalState != state.IDLE) {
             sendState(state.RUNNING);
             return state.RUNNING;
@@ -202,18 +224,19 @@ public class NetworkRpc extends AsyncTask<String, Void, String[]> implements Net
     }
 
     private void composeSendResponse(String rsp) {
-        final NetworkRpc.RpcTaskInformer callBack = mCallBack.get();
         String[] r = new String[]{Api, InstanceName, rsp};
-        if(callBack != null) {
-            callBack.onRpcTaskDone(r);
+        if(mCallBack != null) {
+            mCallBack.onRpcTaskDone(r);
         } else {
             System.out.println("Rpc.java: RPC task done callback = null");
+        }
+        if (listenerCallBack != null) {
+            listenerCallBack.onRpcTaskFinished(r);
         }
     }
 
     @Override
     public void onRpcSocketTaskDone(NetworkRpcSocket output) {
-        final NetworkRpc.RpcTaskInformer callBack = mCallBack.get();
         String rsp = output.getResponse();
         if(rsp.length() == 0) {
             sendState(state.EMPTY_RESPONSE);

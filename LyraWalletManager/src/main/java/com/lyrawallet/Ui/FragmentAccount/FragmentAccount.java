@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
+import com.lyrawallet.Api.Network.NetworkProbe;
 import com.lyrawallet.Global;
 import com.lyrawallet.GlobalLyra;
 import com.lyrawallet.R;

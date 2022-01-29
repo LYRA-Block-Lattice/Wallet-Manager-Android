@@ -38,6 +38,7 @@
     <string name="Balance">Balance</string>
     <string name="History">History</string>
     <string name="Confirm_action">Confirm action</string>
+    <string name="Add_new_staking_account">Add new staking account</string>
     <string name="Transaction_detail">Transaction detail</string>
     <string name="Request_token">Request token</string>
     <string name="Invalid_request">Invalid request</string>
