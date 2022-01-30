@@ -170,7 +170,7 @@ public class FragmentSend extends Fragment {
         for (int i = 0; i < Balances.size(); i++) {
             tickerList.add(GlobalLyra.domainToSymbol(Balances.get(i).first));
         }
-        TokensSpinnerAdapter adapter = new TokensSpinnerAdapter(this.getContext(), R.layout.send_token_select_spinner_entry,
+        SendTokensSpinnerAdapter adapter = new SendTokensSpinnerAdapter(this.getContext(), R.layout.send_token_select_spinner_entry,
                 tickerList.toArray(new String[0]), UiHelpers.tickerToImage(tickerList).toArray(new Integer[0]));
         adapter.setDropDownViewResource(R.layout.send_token_select_spinner_entry_first);
         tokenSpinner.setAdapter(adapter);

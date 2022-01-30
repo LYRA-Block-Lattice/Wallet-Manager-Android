@@ -12,7 +12,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -140,8 +139,8 @@ public class NetworkRpc extends AsyncTask<String, Void, String[]> implements Net
         int retryCnt = 0;
         for (; retryCnt < Global.getMaxRpcConnectRetry(); retryCnt++) {
             for (int retryCntToNode = 0; retryCntToNode < Global.getMaxRpcConnectToNodeRetry(); retryCntToNode++) {
-                String node = Global.getNodeRpcAddress() + UrlDst;
-                System.out.println("Retry: " + retryCntToNode + "; on node: " + node);
+                String node = "wss://" + Global.getNodeAddress() + UrlDst;
+                System.out.println("Retry: " + retryCntToNode + "; on node: " + "wss://" + node);
                 Socket = new NetworkRpcSocket(node, this);
                 TimeoutCount = Global.getRpcConnectionTimeout();
                 while (!Socket.getConnected() && TimeoutCount != 0) {

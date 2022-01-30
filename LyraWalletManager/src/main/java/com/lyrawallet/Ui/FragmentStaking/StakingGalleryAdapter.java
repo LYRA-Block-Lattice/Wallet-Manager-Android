@@ -125,9 +125,9 @@ public class StakingGalleryAdapter extends RecyclerView.Adapter<StakingViewHolde
         viewHolder.AccountName
                 .setText(list.get(position).AccountName);
         viewHolder.StakingAccountId
-                .setText(UiHelpers.getShortAccountId(list.get(position).StakingAccountId, 12));
+                .setText(UiHelpers.getShortAccountId(list.get(position).StakingAccountId, 7));
         viewHolder.ProfitingAccountId
-                .setText(UiHelpers.getShortAccountId(list.get(position).ProfitingAccountId, 12));
+                .setText(UiHelpers.getShortAccountId(list.get(position).ProfitingAccountId, 7));
         viewHolder.ExpiryDate
                 .setText(getExpirationTime(list.get(position).ExpiryDate, list.get(position).Days));
         viewHolder.Validity

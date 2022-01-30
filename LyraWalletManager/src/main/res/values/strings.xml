@@ -19,10 +19,13 @@
     <string name="Send1">Send</string>
     <string name="Send2">Send</string>
     <string name="Send3">Sent</string>
+    <string name="Seats">Seats</string>
+    <string name="Stake">Stake</string>
     <string name="From">From</string>
     <string name="Expired">Expired</string>
     <string name="To">To</string>
     <string name="NetworkFee">Network Fee</string>
+    <string name="None">None</string>
     <string name="TotalSpent">Total Spent</string>
     <string name="Wallet">Wallet</string>
     <string name="OK">OK</string>
@@ -37,8 +40,12 @@
     <string name="Receive">Receive</string>
     <string name="Balance">Balance</string>
     <string name="History">History</string>
-    <string name="Confirm_action">Confirm action</string>
+    <string name="Account_type">Account type</string>
+    <string name="Account_name">Account name</string>
     <string name="Add_new_staking_account">Add new staking account</string>
+    <string name="Confirm_action">Confirm action</string>
+    <string name="Days_to_stake">Days to stake</string>
+    <string name="Days_to_stake_min_max">Days to stake from 3 to 36500 days</string>
     <string name="Transaction_detail">Transaction detail</string>
     <string name="Request_token">Request token</string>
     <string name="Invalid_request">Invalid request</string>
@@ -54,7 +61,10 @@
     <string name="Amounts_in_accounts">Amounts in account</string>
     <string name="Total_balance_usd">Total Balance: </string>
     <string name="Total_balance_usd_zero">Total Balance: $0</string>
-    <string name="Account_name">Account name</string>
+    <string name="Total_profit">Total profit</string>
+    <string name="Total_staked">Total staked</string>
+    <string name="Your_share">Your share</string>
+    <string name="Your_share_will_be">Your share will be</string>
     <string name="Staking_account_ID">Staking account ID</string>
     <string name="Profiting_account_ID">Profiting account ID</string>
     <string name="Expiry_date">Expiry date</string>
@@ -63,6 +73,9 @@
     <string name="Valid">Valid</string>
     <string name="Add_a_new_staking_account">Add a new staking account</string>
     <string name="Account_validity">Account validity</string>
+    <string name="Share_ratio">Share ratio</string>
+    <string name="Select_to_stake_for">Select to stake for</string>
+    <string name="No_tokens_available">No tokens available</string>
 
     <string name="zero_lyr" translatable="false">0 LYR</string>
     <string name="zero_usd" translatable="false">0 USD</string>
@@ -71,6 +84,12 @@
     <string name="Some_account_validity1" translatable="false">30 Days</string>
     <string name="Some_amount_lyr1" translatable="false">1000 LYR</string>
     <string name="BurningAccountID" translatable="false">L111111…111111</string>
+    <string name="Share_ratio_08" translatable="false">80%</string>
+    <string name="Share_ratio_04" translatable="false">40%</string>
+    <string name="Seats_100" translatable="false">100</string>
+    <string name="Some_name" translatable="false">Account1</string>
+    <string name="Some_profit" translatable="false">32.10242048</string>
+    <string name="Some_staked" translatable="false">1024.20484096</string>
 
 
 

@@ -12,19 +12,32 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.ref.WeakReference;
 import java.net.URL;
+import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 public class NetworkWebHttps extends AsyncTask<String, Void, NetworkWebHttps> {
-    WeakReference<WebHttpsTaskInformer> mCallBack = null;
+
+    public static class NullHostNameVerifier implements HostnameVerifier {
+
+        @Override
+        public boolean verify(String hostname, SSLSession session) {
+            //Log.i("RestUtilImpl", "Approving certificate for " + hostname);
+            return true;
+        }
+
+    }
+    WebHttpsTaskInformer mCallBack = null;
     private WebHttpsTaskListener listenerCallBack = null;
 
     public interface WebHttpsTaskInformer {
@@ -35,7 +48,7 @@ public class NetworkWebHttps extends AsyncTask<String, Void, NetworkWebHttps> {
     }
 
     public NetworkWebHttps(@Nullable WebHttpsTaskInformer callback) {
-        this.mCallBack = new WeakReference<>(callback);
+        this.mCallBack = callback;
     }
 
     public NetworkWebHttps() {
@@ -109,10 +122,9 @@ public class NetworkWebHttps extends AsyncTask<String, Void, NetworkWebHttps> {
     @Override
     protected void onPostExecute(NetworkWebHttps s) {
         super.onPostExecute(s);
-        final WebHttpsTaskInformer callBack = mCallBack.get();
 
-        if(callBack != null) {
-            callBack.onWebHttpsTaskDone(s);
+        if(mCallBack != null) {
+            mCallBack.onWebHttpsTaskDone(s);
         }
         if (listenerCallBack != null) {
             listenerCallBack.onWebHttpsTaskFinished(s);
@@ -130,9 +142,10 @@ public class NetworkWebHttps extends AsyncTask<String, Void, NetworkWebHttps> {
                 System.setProperty("java.net.preferIPv4Stack" , "true");
             }
             URL myUrl = new URL(uri);
-            //trustAllHosts(); // If not, most of the time will give exception KeyStoreException: BKS not found
+            trustAllHosts(); // If not, most of the time will give exception KeyStoreException: BKS not found
             HttpsURLConnection conn = (HttpsURLConnection) myUrl.openConnection();
-            conn.setSSLSocketFactory(new NetworkUnsecuredSSLSocketFactory()); // If not, most of the time will give exception KeyStoreException: BKS not found
+            //conn.setSSLSocketFactory(new NetworkUnsecuredSSLSocketFactory()); // If not, most of the time will give exception KeyStoreException: BKS not found
+            //conn.setSSLSocketFactory(getFactorySimple()); // If not, most of the time will give exception KeyStoreException: BKS not found
             InputStream is = conn.getInputStream();
             InputStreamReader isr = new InputStreamReader(is);
             BufferedReader br = new BufferedReader(isr);
@@ -152,6 +165,7 @@ public class NetworkWebHttps extends AsyncTask<String, Void, NetworkWebHttps> {
     }
 
     private static SSLSocketFactory getFactorySimple() throws Exception {
+        HttpsURLConnection.setDefaultHostnameVerifier(new NullHostNameVerifier());
         SSLContext context = SSLContext.getInstance("TLS");
         context.init(null, null, null);
         return context.getSocketFactory();
@@ -176,6 +190,7 @@ public class NetworkWebHttps extends AsyncTask<String, Void, NetworkWebHttps> {
         TrustManager[] trustAllCerts = new TrustManager[] {easyTrustManager};
         // Install the all-trusting trust manager
         try {
+            HttpsURLConnection.setDefaultHostnameVerifier(new NullHostNameVerifier());
             SSLContext sc = SSLContext.getInstance("TLS");
             sc.init(null, trustAllCerts, new java.security.SecureRandom());
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());

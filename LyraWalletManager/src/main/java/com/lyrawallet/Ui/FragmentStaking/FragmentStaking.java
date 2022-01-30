@@ -20,6 +20,7 @@ import com.lyrawallet.Api.ApiRpc;
 import com.lyrawallet.Global;
 import com.lyrawallet.MainActivity;
 import com.lyrawallet.R;
+import com.lyrawallet.Ui.FragmentManagerUser;
 
 import java.util.List;
 import java.util.Timer;
@@ -88,7 +89,7 @@ public class FragmentStaking extends Fragment {
             public void run() {
                 FragmentActivity activity = getActivity();
                 if (activity != null) {
-                    populateHistory(view);
+                    populateStaking(view);
                 }
             }
         }, 100, 1000);
@@ -121,7 +122,7 @@ public class FragmentStaking extends Fragment {
         timer2.cancel();
     }
 
-    public void populateHistory(View view) {
+    public void populateStaking(View view) {
         FragmentActivity activity = getActivity();
         if (activity == null || view == null) {
             refreshInProgress = false;
@@ -213,7 +214,7 @@ public class FragmentStaking extends Fragment {
             Button stakingAccountAddNewButton = (Button) view.findViewById(R.id.stakingAccountAddNewButton);
             stakingAccountAddNewButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-
+                    new FragmentManagerUser().goToDialogCreateStaking();
                 }
             });
         }

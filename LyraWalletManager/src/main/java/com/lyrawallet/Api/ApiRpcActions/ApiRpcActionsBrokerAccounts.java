@@ -101,7 +101,7 @@ public class ApiRpcActionsBrokerAccounts {
         return this;
     }
 
-    public List<ProfitingEntry> getProfitingAccount() {
+    public List<ProfitingEntry> getProfitingAccountList() {
         return ProfitingAccount;
     }
 

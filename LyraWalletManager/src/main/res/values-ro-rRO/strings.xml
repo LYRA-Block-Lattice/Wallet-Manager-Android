@@ -152,5 +152,18 @@
     <string name="One1">O</string>
     <string name="One_Day">O Zi</string>
     <string name="Add_new_staking_account">Adauga un nou cont de staking</string>
+    <string name="Account_type">Tipul contului</string>
+    <string name="None">Niciunul</string>
+    <string name="Share_ratio">Rata de share</string>
+    <string name="Seats">Locuri</string>
+    <string name="Total_profit">Profitul total</string>
+    <string name="Total_staked">Stake total</string>
+    <string name="Your_share">Partea ta</string>
+    <string name="Your_share_will_be">Partea ta va fi</string>
+    <string name="Days_to_stake">Zile de staking</string>
+    <string name="Stake">Stake</string>
+    <string name="Select_to_stake_for">Selecteaza sa pui stake pentru</string>
+    <string name="No_tokens_available">Nu sunt tokeni disponibili</string>
+    <string name="Days_to_stake_min_max">Zile de stake de la 3 la 36500 zile</string>
 
 </resources>

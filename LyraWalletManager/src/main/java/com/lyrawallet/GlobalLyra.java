@@ -41,4 +41,26 @@ public class GlobalLyra {
             return null;
         return domain.replace("tether/", "$");
     }
+
+    public final static String[] ProfitingAccountTypes = new String[] {
+            "NODE", "ORACLE", "MERCHANT", "YIELD"
+    };
+
+    public static String getProfitingAccountTypes(int type) {
+        return ProfitingAccountTypes[type];
+    }
+    public static int getProfitingAccountTypes(String type) {
+        switch (type) {
+            case "NODE":
+                return 0;
+            case "ORACLE":
+                return 1;
+            case "MERCHANT":
+                return 2;
+            case "YIELD":
+                return 3;
+            default:
+                return -1;
+        }
+    }
 }

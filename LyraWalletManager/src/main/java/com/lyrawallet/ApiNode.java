@@ -11,108 +11,169 @@ import java.util.Iterator;
 import java.util.List;
 
 public class ApiNode {
-    static class AllProfitingAccounts {
-        static class Gens {
-            static int AccountType = 0;
-            static int PType = 0;
-            static double ShareRatio = 0f;
-            static int Seats = 0;
-            static String ProfitHash = null;
-            static String Name = null;
-            static String OwnerAccountId = null;
-            static String RelatedTx = null;
-            static String SourceHash = null;
-            static String AccountId = null;
-            static List<Pair<String, Double>> Balances = new ArrayList<>();
-            static double Fee = 0;
-            static String FeeCode = null;
-            static int FeeType = 0;
-            static String NonFungibleToken = null;
-            static String VoteFor = null;
-            static long Height = 0;
-            static long TimeStamp = 0;
-            static int Version = 0;
-            static int BlockType = 0;
-            static String PreviousHash = null;
-            static String ServiceHash = null;
-            static List<Pair<String, String>> Tags = new ArrayList<>();
-            static String Hash = null;
-            static String Signature = null;
+    public static class AllProfitingAccounts {
+        public static class AllProfitingAccountsEntry {
+            int AccountType = 0;
+            String PType = null;
+            double ShareRatio = 0f;
+            int Seats = 0;
+            String ProfitHash = null;
+            String Name = null;
+            String OwnerAccountId = null;
+            String RelatedTx = null;
+            String SourceHash = null;
+            String AccountId = null;
+            List<Pair<String, Double>> Balances = new ArrayList<>();
+            double Fee = 0;
+            String FeeCode = null;
+            int FeeType = 0;
+            String NonFungibleToken = null;
+            String VoteFor = null;
+            long Height = 0;
+            long TimeStamp = 0;
+            int Version = 0;
+            int BlockType = 0;
+            String PreviousHash = null;
+            String ServiceHash = null;
+            List<Pair<String, String>> Tags = new ArrayList<>();
+            String Hash = null;
+            String Signature = null;
 
-            public int getAccountType() { return AccountType; }
-            public int getPType() { return PType; }
-            public double getShareRatio() { return ShareRatio; }
-            public int getSeats() { return Seats; }
-            public String getProfitHash() { return ProfitHash; }
-            public String getName() { return Name; }
-            public String getOwnerAccountId() { return OwnerAccountId; }
-            public String getRelatedTx() { return RelatedTx; }
-            public String getSourceHash() { return SourceHash; }
-            public String getAccountId() { return AccountId; }
-            public List<Pair<String, Double>> getBalances() { return Balances; }
-            public double getFee() { return Fee; }
-            public String getFeeCode() { return FeeCode; }
-            public int getFeeType() { return FeeType; }
-            public String getNonFungibleToken() { return NonFungibleToken; }
-            public String getVoteFor() { return VoteFor; }
-            public long getHeight() { return Height; }
-            public long getTimeStamp() { return TimeStamp; }
-            public int getVersion() { return Version; }
-            public int getBlockType() { return BlockType; }
-            public String getPreviousHash() { return PreviousHash; }
-            public String getServiceHash() { return ServiceHash; }
-            public List<Pair<String, String>> getTags() { return Tags; }
-            public String getHash() { return Hash; }
-            public String getSignature() { return Signature; }
+            public int getAccountType() {
+                return AccountType;
+            }
+            public String getPType() {
+                return PType;
+            }
+            public double getShareRatio() {
+                return ShareRatio;
+            }
+            public int getSeats() {
+                return Seats;
+            }
+            public String getProfitHash() {
+                return ProfitHash;
+            }
+            public String getName() {
+                return Name;
+            }
+            public String getOwnerAccountId() {
+                return OwnerAccountId;
+            }
+            public String getRelatedTx() {
+                return RelatedTx;
+            }
+            public String getSourceHash() {
+                return SourceHash;
+            }
+            public String getAccountId() {
+                return AccountId;
+            }
+            public List<Pair<String, Double>> getBalances() {
+                return Balances;
+            }
+            public double getFee() {
+                return Fee;
+            }
+            public String getFeeCode() {
+                return FeeCode;
+            }
+            public int getFeeType() {
+                return FeeType;
+            }
+            public String getNonFungibleToken() {
+                return NonFungibleToken;
+            }
+            public String getVoteFor() {
+                return VoteFor;
+            }
+            public long getHeight() {
+                return Height;
+            }
+            public long getTimeStamp() {
+                return TimeStamp;
+            }
+            public int getVersion() {
+                return Version;
+            }
+            public int getBlockType() {
+                return BlockType;
+            }
+            public String getPreviousHash() {
+                return PreviousHash;
+            }
+            public String getServiceHash() {
+                return ServiceHash;
+            }
+            public List<Pair<String, String>> getTags() {
+                return Tags;
+            }
+            public String getHash() {
+                return Hash;
+            }
+            public String getSignature() {
+                return Signature;
+            }
+
+            double TotalProfit = 0f;
+
+            public double getTotalProfit() {
+                return TotalProfit;
+            }
         }
-        double TotalProfit = 0f;
-        public double getTotalProfit() { return TotalProfit; }
 
-        AllProfitingAccounts fromJson(String data) {
+        List<AllProfitingAccountsEntry> AccountList = new ArrayList<>();
+
+        public List<AllProfitingAccountsEntry> getAccountList() { return AccountList; }
+
+        public AllProfitingAccounts fromJson(String data) {
             try {
                 JSONArray arrObject = new JSONArray(data);
                 for (int i = 0; i < arrObject.length(); i++) {
-                    JSONObject gensObj = arrObject.getJSONObject(i);
-                    Gens.AccountType = gensObj.getInt("accountType");
-                    Gens.PType = gensObj.getInt("pType");
-                    Gens.ShareRatio = gensObj.getDouble("shareRito");
-                    Gens.Seats = gensObj.getInt("seats");
-                    Gens.ProfitHash = gensObj.getString("profitHash");
-                    Gens.Name = gensObj.getString("name");
-                    Gens.OwnerAccountId = gensObj.getString("ownerAccountId");
-                    Gens.RelatedTx = gensObj.getString("relatedTx");
-                    Gens.SourceHash = gensObj.getString("sourceHash");
-                    Gens.AccountId = gensObj.getString("accountID");
-                    JSONObject balances = gensObj.getJSONObject("balances");
-                    if (!balances.isNull("balances")) {
+                    JSONObject accObj = arrObject.getJSONObject(i);
+                    JSONObject gensObj = accObj.getJSONObject("gens");
+                    AllProfitingAccountsEntry entry = new AllProfitingAccountsEntry();
+                    entry.AccountType = gensObj.getInt("accountType");
+                    entry.PType = GlobalLyra.getProfitingAccountTypes(gensObj.getInt("pType"));
+                    entry.ShareRatio = gensObj.getDouble("shareRito");
+                    entry.Seats = gensObj.getInt("seats");
+                    entry.ProfitHash = gensObj.getString("profitHash");
+                    entry.Name = gensObj.getString("name");
+                    entry.OwnerAccountId = gensObj.getString("ownerAccountId");
+                    entry.RelatedTx = gensObj.getString("relatedTx");
+                    entry.SourceHash = gensObj.getString("sourceHash");
+                    entry.AccountId = gensObj.getString("accountID");
+                    if (!gensObj.isNull("balances")) {
+                        JSONObject balances = gensObj.getJSONObject("balances");
                         for (Iterator<String> it = balances.keys(); it.hasNext(); ) {
                             String key = it.next();
-                            Gens.Balances.add(new Pair<>(key, balances.getDouble(key)));
+                            entry.Balances.add(new Pair<>(key, balances.getDouble(key)));
                         }
                     }
-                    Gens.Fee = gensObj.getDouble("fee");
-                    Gens.FeeCode = gensObj.getString("feeCode");
-                    Gens.FeeType = gensObj.getInt("feeType");
-                    Gens.NonFungibleToken = gensObj.getString("nonFungibleToken");
-                    Gens.VoteFor = gensObj.getString("voteFor");
-                    Gens.Height = gensObj.getLong("height");
+                    entry.Fee = gensObj.getDouble("fee");
+                    entry.FeeCode = gensObj.getString("feeCode");
+                    entry.FeeType = gensObj.getInt("feeType");
+                    entry.NonFungibleToken = gensObj.getString("nonFungibleToken");
+                    entry.VoteFor = gensObj.getString("voteFor");
+                    entry.Height = gensObj.getLong("height");
                     java.sql.Timestamp ts = java.sql.Timestamp.valueOf(
                             gensObj.getString("timeStamp").replace("T", " ").split("\\.")[0]);
-                    Gens.TimeStamp = ts.getTime();
-                    Gens.Version = gensObj.getInt("version");
-                    Gens.BlockType = gensObj.getInt("blockType");
-                    Gens.PreviousHash = gensObj.getString("previousHash");
-                    Gens.ServiceHash = gensObj.getString("serviceHash");
-                    JSONObject tags = gensObj.getJSONObject("tags");
-                    if (!tags.isNull("tags")) {
+                    entry.TimeStamp = ts.getTime();
+                    entry.Version = gensObj.getInt("version");
+                    entry.BlockType = gensObj.getInt("blockType");
+                    entry.PreviousHash = gensObj.getString("previousHash");
+                    entry.ServiceHash = gensObj.getString("serviceHash");
+                    if (!gensObj.isNull("tags")) {
+                        JSONObject tags = gensObj.getJSONObject("tags");
                         for (Iterator<String> it = tags.keys(); it.hasNext(); ) {
                             String key = it.next();
-                            Gens.Tags.add(new Pair<>(key, tags.getString(key)));
+                            entry.Tags.add(new Pair<>(key, tags.getString(key)));
                         }
                     }
-                    Gens.Hash = gensObj.getString("hash");
-                    Gens.Signature = gensObj.getString("signature");
-                    TotalProfit = arrObject.getJSONObject(i).getDouble("totalprofit");
+                    entry.Hash = gensObj.getString("hash");
+                    entry.Signature = gensObj.getString("signature");
+                    entry.TotalProfit = accObj.getDouble("totalprofit");
+                    AccountList.add(entry);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

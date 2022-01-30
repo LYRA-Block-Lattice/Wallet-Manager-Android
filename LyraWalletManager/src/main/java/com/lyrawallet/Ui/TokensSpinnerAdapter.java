@@ -11,24 +11,27 @@ import android.widget.TextView;
 import com.lyrawallet.R;
 
 public class TokensSpinnerAdapter extends ArrayAdapter<String> {
-    private Context ctx;
-    private String[] contentArray;
-    private Integer[] imageArray;
+    private int Resource = 0;
+    private final Context ctx;
+    private final String[] TickerName;
+    private final Integer[] imageArray;
     private int DisabledItem = -1;
 
-    public TokensSpinnerAdapter(Context context, int resource, String[] objects,
+    public TokensSpinnerAdapter(Context context, int resource, String[] tickerName,
                                 Integer[] imageArray) {
-        super(context,  R.layout.send_token_select_spinner_entry, R.id.sendTokenSelectSpinnerEntryText, objects);
+        super(context, resource, R.id.sendTokenSelectSpinnerEntryText, tickerName);
+        Resource = resource;
         this.ctx = context;
-        this.contentArray = objects;
+        this.TickerName = tickerName;
         this.imageArray = imageArray;
     }
 
-    public TokensSpinnerAdapter(Context context, int resource, String[] objects,
+    public TokensSpinnerAdapter(Context context, int resource, String[] tickerName,
                                 Integer[] imageArray, int disabledItem) {
-        super(context,  R.layout.send_token_select_spinner_entry, R.id.sendTokenSelectSpinnerEntryText, objects);
+        super(context, resource, R.id.sendTokenSelectSpinnerEntryText, tickerName);
+        Resource = resource;
         this.ctx = context;
-        this.contentArray = objects;
+        this.TickerName = tickerName;
         this.imageArray = imageArray;
         this.DisabledItem = disabledItem;
     }
@@ -46,12 +49,12 @@ public class TokensSpinnerAdapter extends ArrayAdapter<String> {
     public View getCustomView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater)ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         if(convertView == null) {
-            convertView = inflater.inflate(R.layout.send_token_select_spinner_entry, parent, false);
+            convertView = inflater.inflate(Resource, parent, false);
         }
 
         TextView textView = (TextView) convertView.findViewById(R.id.sendTokenSelectSpinnerEntryText);
         ImageView imageView = (ImageView)convertView.findViewById(R.id.sendTokenSelectSpinnerEntryImage);
-        textView.setText(contentArray[position]);
+        textView.setText(TickerName[position]);
         imageView.setImageResource(imageArray[position]);
         if(position == this.DisabledItem) {
             convertView.setEnabled(false);

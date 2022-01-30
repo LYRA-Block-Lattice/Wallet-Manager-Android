@@ -6,6 +6,8 @@ import com.lyrawallet.Accounts.Accounts;
 import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsBrokerAccounts;
 import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
 import com.lyrawallet.Ui.FragmentAccountHistory.FragmentAccountHistory;
+import com.lyrawallet.Util.Concatenate;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -78,22 +80,22 @@ public class Global {
     static int SelectedNode = 0;
     final static String[] NodeAddressDevNet = new String[]{""};
     final static String[] NodeAddressTestNet = new String[]{
-            "wss://161.97.166.188:4504",
-            "wss://173.212.228.110:4504",
-            "wss://81.196.64.78:4504",
-            "wss://seed.testnet.lyra.live:443",
-            "wss://seed2.testnet.lyra.live:443",
-            "wss://seed3.testnet.lyra.live:443",
-            "wss://seed3.testnet.lyra.live:443"
+            "161.97.166.188:4504",
+            "173.212.228.110:4504",
+            "81.196.64.78:4504",
+            "seed.testnet.lyra.live:443",
+            "seed2.testnet.lyra.live:443",
+            "seed3.testnet.lyra.live:443",
+            "seed3.testnet.lyra.live:443"
     };
     final static String[] NodeAddressMainNet = new String[]{
-            "wss://173.212.228.110:5504",
-            "wss://81.196.64.78:5504",
-            "wss://161.97.166.188:5504",
-            "wss://seed1.mainnet.lyra.live:443",
-            "wss://seed2.mainnet.lyra.live:443",
-            "wss://seed3.mainnet.lyra.live:443",
-            "wss://seed3.mainnet.lyra.live:443"
+            "173.212.228.110:5504",
+            "81.196.64.78:5504",
+            "161.97.166.188:5504",
+            "seed1.mainnet.lyra.live:443",
+            "seed2.mainnet.lyra.live:443",
+            "seed3.mainnet.lyra.live:443",
+            "seed3.mainnet.lyra.live:443"
     };
 
     public static int getDeviceOrientation() {
@@ -198,6 +200,28 @@ public class Global {
         FragmentAccountHistory.add(new Pair<>(accountName, history));
     }
 
+    public static double getAvailableToken(String ticker) {
+        if(AccountHistory != null) {
+            for (int i = 0; i < AccountHistory.size(); i++) {
+                Pair<String, Pair<Integer, List<ApiRpcActionsHistory.HistoryEntry>>> acc = AccountHistory.get(i);
+                if (acc.first.equals(Concatenate.getHistoryFileName())) {
+                    List<ApiRpcActionsHistory.HistoryEntry> account = acc.second.second;
+                    if(account.size() > 0) {
+                        ApiRpcActionsHistory.HistoryEntry entry = account.get(account.size() - 1);
+                        List<Pair<String, Double>> balances = entry.getBalances();
+                        for (Pair<String, Double> b: balances) {
+                            if(b.first.equals(ticker)) {
+                                return b.second;
+                            }
+                        }
+                    } else
+                        return 0;
+                }
+            }
+        }
+        return 0;
+    }
+
     public static List<FragmentAccountHistory.AccountHistoryEntry> getFragmentAccountHistory(String accountName) {
         if(FragmentAccountHistory != null) {
             for (int i = 0; i < FragmentAccountHistory.size(); i++) {
@@ -282,10 +306,10 @@ public class Global {
         if (SelectedNode >= getNodeAddressTable().length) {
             SelectedNode = 0;
         }
-        System.out.println("Push to next node IP: " + getNodeRpcAddress());
+        System.out.println("Push to next node IP: " + getNodeAddress());
     }
 
-    public static String getNodeRpcAddress() {
+    public static String getNodeAddress() {
         if (getRandomizeIpEnabled()) {
             int nodeNr = 0;
             switch (getCurrentNetwork()) {

@@ -87,8 +87,11 @@
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/layout/fragment_send.xml" value="0.5376984126984127" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/layout/fragment_settings.xml" value="0.7688492063492064" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/layout/fragment_staking.xml" value="0.5376984126984127" />
+        <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/layout/fragment_staking_add_account.xml" value="0.7738095238095238" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/layout/fragment_swap.xml" value="0.3740079365079365" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/layout/fragment_wallet.xml" value="0.5376984126984127" />
+        <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/layout/profiting_account_info_entry.xml" value="0.8079625292740047" />
+        <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/layout/profiting_account_info_entry_card.xml" value="0.6051587301587301" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/layout/send_token_select_spiner_entry.xml" value="0.9" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/layout/send_token_select_spinner_entry.xml" value="0.8313492063492064" />
         <entry key="..\:/GitHubLyra/LyraWalletMobile/Android/Wallet-Manager-Android/LyraWalletManager/src/main/res/layout/send_token_select_spinner_entry_first.xml" value="0.8313492063492064" />
