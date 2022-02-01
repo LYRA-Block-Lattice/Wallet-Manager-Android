@@ -165,5 +165,7 @@
     <string name="Select_to_stake_for">Selecteaza sa pui stake pentru</string>
     <string name="No_tokens_available">Nu sunt tokeni disponibili</string>
     <string name="Days_to_stake_min_max">Zile de stake de la 3 la 36500 zile</string>
+    <string name="Fetch">Cerut</string>
+    <string name="Not_fetch">Ne cerut</string>
 
 </resources>

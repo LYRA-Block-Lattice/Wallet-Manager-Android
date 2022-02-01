@@ -1,6 +1,8 @@
-package com.lyrawallet;
+package com.lyrawallet.Api.ApiWebActions;
 
 import android.util.Pair;
+
+import com.lyrawallet.GlobalLyra;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -123,7 +125,6 @@ public class ApiNode {
         }
 
         List<AllProfitingAccountsEntry> AccountList = new ArrayList<>();
-
         public List<AllProfitingAccountsEntry> getAccountList() { return AccountList; }
 
         public AllProfitingAccounts fromJson(String data) {
@@ -173,6 +174,48 @@ public class ApiNode {
                     entry.Hash = gensObj.getString("hash");
                     entry.Signature = gensObj.getString("signature");
                     entry.TotalProfit = accObj.getDouble("totalprofit");
+                    AccountList.add(entry);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return this;
+        }
+    }
+
+    public static class FindAllStakings {
+        public static class FindAllStakingsEntry {
+            String StkAccount = null;
+            String OwnerAccount = null;
+            long Time = 0;
+            int Days = 0;
+            double Amount = 0f;
+            boolean CompoundMode = false;
+
+            public String getStkAccount() { return StkAccount; }
+            public String getOwnerAccount() { return OwnerAccount; }
+            public long getTime() { return Time; }
+            public int getDays() { return Days; }
+            public double getAmount() { return Amount; }
+            public boolean getCompoundMode() { return CompoundMode; }
+        }
+        List<FindAllStakingsEntry> AccountList = new ArrayList<>();
+        public List<FindAllStakingsEntry> getAccountList() { return AccountList; }
+
+        public FindAllStakings fromJson(String data) {
+            try {
+                JSONArray arrObject = new JSONArray(data);
+                for (int i = 0; i < arrObject.length(); i++) {
+                    JSONObject accObj = arrObject.getJSONObject(i);
+                    FindAllStakingsEntry entry = new FindAllStakingsEntry();
+                    entry.StkAccount = accObj.getString("stkAccount");
+                    entry.OwnerAccount = accObj.getString("ownerAccount");
+                    java.sql.Timestamp ts = java.sql.Timestamp.valueOf(
+                            accObj.getString("time").replace("T", " ").split("\\.")[0]);
+                    entry.Time = ts.getTime();
+                    entry.Days = accObj.getInt("days");
+                    entry.Amount = accObj.getDouble("amount");
+                    entry.CompoundMode = accObj.getBoolean("compoundMode");
                     AccountList.add(entry);
                 }
             } catch (JSONException e) {

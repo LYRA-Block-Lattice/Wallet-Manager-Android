@@ -37,7 +37,7 @@
             android:background="@drawable/fab_spinner_send_token_select_outline">
 
             <EditText
-                android:id="@+id/sendTokenAmountValue"
+                android:id="@+id/stakingTokenAmountValue"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="8dp"
@@ -92,7 +92,7 @@
             android:layout_marginEnd="16dp"
             android:background="@drawable/fab_spinner_send_token_select_outline"
             android:contentDescription="@string/send_token_select_spinner_description"
-            android:minHeight="48dp"
+            android:minHeight="96dp"
             android:popupBackground="@drawable/fab_spinner_send_token_select_outline"
             android:paddingBottom="0dp"
             app:layout_constraintEnd_toEndOf="parent"

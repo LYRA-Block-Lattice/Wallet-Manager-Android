@@ -11,15 +11,20 @@ import androidx.annotation.NonNull;
 
 import com.lyrawallet.R;
 
+import java.sql.Array;
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
 public class ProfitingListInfoSpinnerAdapter extends ArrayAdapter<String> {
     private int Resource = 0;
-    private final Context ctx;
+    private Context ctx;
+    double AmountToStake = 0;
+
     String[] AccountName;
+    String[] AccountId;
     String[] AccountType;
     Double[] ShareRatio;
     Integer[] Seats;
@@ -27,15 +32,17 @@ public class ProfitingListInfoSpinnerAdapter extends ArrayAdapter<String> {
     Double[] TotalProfit;
     Double[] TotalStaked;
     Double[] YourShareWillBe;
+    boolean[] fetch;
 
     public ProfitingListInfoSpinnerAdapter(Context context, int resource,
-                                           String[] accountName, String[] accountType, Double[] shareRatio,
+                                           String[] accountName, String[] accountId, String[] accountType, Double[] shareRatio,
                                            Integer[] seats, Long[] timeStamp, Double[] totalProfit,
                                            Double[] totalStaked, Double[] yourShareWillBe) {
         super(context,  R.layout.profiting_account_info_entry, R.id.profitingAccountInfoAccountName, accountName);
         Resource = resource;
         this.ctx = context;
         this.AccountName = accountName;
+        this.AccountId = accountId;
         this.AccountType = accountType;
         this.ShareRatio = shareRatio;
         this.Seats = seats;
@@ -43,6 +50,34 @@ public class ProfitingListInfoSpinnerAdapter extends ArrayAdapter<String> {
         this.TotalProfit = totalProfit;
         this.TotalStaked = totalStaked;
         this.YourShareWillBe = yourShareWillBe;
+        fetch = new boolean[yourShareWillBe.length];
+    }
+
+    public void setAmountToStake(double amount) {
+        AmountToStake = amount;
+        notifyDataSetChanged();
+    }
+    public double getAmountToStake() { return AmountToStake; }
+
+    public void setTotalStaked(int selectedAccount, double totalAmountStaked) {
+        TotalStaked[selectedAccount] = totalAmountStaked;
+        notifyDataSetChanged();
+    }
+
+    public void setYourShareWillBe(int selectedAccount, double yourShareWillBe) {
+        YourShareWillBe[selectedAccount] = yourShareWillBe;
+        notifyDataSetChanged();
+    }
+
+    public void setFetch(int selectedAccount) {
+        fetch[selectedAccount] = true;
+        notifyDataSetChanged();
+    }
+
+    public void clearFetch() {
+        Arrays.fill(fetch, false);
+        Arrays.fill(YourShareWillBe, 0d);
+        notifyDataSetChanged();
     }
 
     public String getTime(long time){
@@ -89,6 +124,9 @@ public class ProfitingListInfoSpinnerAdapter extends ArrayAdapter<String> {
         TextView yourShareWillBe
                 = (TextView) row
                 .findViewById(R.id.profitingAccountInfoYourShare);
+        TextView fetchStatus
+                = (TextView) row
+                .findViewById(R.id.profitingAccountFetchStatusTextView);
 
         accountName.setText(AccountName[position]);
         accountType.setText(AccountType[position]);
@@ -97,7 +135,9 @@ public class ProfitingListInfoSpinnerAdapter extends ArrayAdapter<String> {
         timeStamp.setText(getTime(TimeStamp[position]));
         totalProfit.setText(String.format(Locale.US, "%.8f", TotalProfit[position]));
         totalStaked.setText(String.format(Locale.US, "%.8f", TotalStaked[position]));
-        yourShareWillBe.setText(String.format(Locale.US, "%.3f", YourShareWillBe[position] * 100));
+        yourShareWillBe.setText(String.format(Locale.US, "%.3f%%", YourShareWillBe[position] * 100));
+        String f = (String) (fetch[position] ? getContext().getText(R.string.Fetch) : getContext().getText(R.string.Not_fetch));
+        fetchStatus.setText(f);
 
         return row;
     }

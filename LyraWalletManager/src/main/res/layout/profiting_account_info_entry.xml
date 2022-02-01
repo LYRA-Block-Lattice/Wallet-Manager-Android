@@ -188,12 +188,23 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/profitingAccountInfoTotalStaked" />
 
+
+            <TextView
+                android:id="@+id/profitingAccountFetchStatusTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/Not_fetch"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView37" />
+
             <Space
                 android:layout_width="match_parent"
                 android:layout_height="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView37" />
+                app:layout_constraintTop_toBottomOf="@+id/profitingAccountFetchStatusTextView" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>

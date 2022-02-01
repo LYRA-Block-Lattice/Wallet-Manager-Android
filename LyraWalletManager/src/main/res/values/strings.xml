@@ -22,6 +22,8 @@
     <string name="Seats">Seats</string>
     <string name="Stake">Stake</string>
     <string name="From">From</string>
+    <string name="Fetch">Fetch</string>
+    <string name="Not_fetch">Not fetch</string>
     <string name="Expired">Expired</string>
     <string name="To">To</string>
     <string name="NetworkFee">Network Fee</string>
