@@ -35,7 +35,7 @@
             android:icon="@drawable/ic_baseline_exit_to_app_24"/>
 
         <ListPreference
-            android:defaultValue="N"
+            android:defaultValue="Y"
             android:dialogTitle="@string/pref_password_store_selection_title"
             android:entries="@array/pref_password_store_selection_entries"
             android:entryValues="@array/pref_password_store_selection_values"

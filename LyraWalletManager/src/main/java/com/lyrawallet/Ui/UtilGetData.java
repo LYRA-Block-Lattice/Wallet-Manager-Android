@@ -82,8 +82,12 @@ public class UtilGetData {
             Pair<String, Double> tokenAmount;
             if (size > 1) {
                 tokenAmount = historyList.get(i).getChanges().get(1);
+            } if (size == 0) {
+                tokenAmount = new Pair<String, Double>("LYR", 0d);
             } else {
-                tokenAmount = historyList.get(i).getChanges().get(0);
+                //try {
+                    tokenAmount = historyList.get(i).getChanges().get(0);
+                //} catch (IndexOutOfBoundsException ignored) { }
             }
             int icon = GlobalLyra.TokenIconList[1].second;
             for (Pair<String, Integer> k : GlobalLyra.TokenIconList) {

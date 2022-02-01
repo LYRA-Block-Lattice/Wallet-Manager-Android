@@ -72,6 +72,10 @@ public class UiHelpers {
     }
 
     public static String getShortAccountId(String id, int len) {
+        if(id == null)
+            return "";
+        if(id.length() < len * 2)
+            return id;
         return String.format(Locale.US, "%s...%s", id.substring(0, len), id.substring(id.length() - 1 - len));
     }
 

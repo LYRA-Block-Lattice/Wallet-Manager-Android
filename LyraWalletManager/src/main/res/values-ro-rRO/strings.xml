@@ -167,5 +167,6 @@
     <string name="Days_to_stake_min_max">Zile de stake de la 3 la 36500 zile</string>
     <string name="Fetch">Cerut</string>
     <string name="Not_fetch">Ne cerut</string>
+    <string name="Minted_block">Minted block</string>
 
 </resources>

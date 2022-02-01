@@ -78,8 +78,10 @@ public class ApiRpcActionsHistory extends MainActivity {
                 Height = obj.getInt("Height");
                 IsReceive = obj.getBoolean("IsReceive");
                 TimeStamp = obj.getLong("TimeStamp");
-                SendAccountId = obj.getString("SendAccountId");
-                SendHash = obj.getString("SendHash");
+                if(!obj.isNull("SendAccountId"))
+                    SendAccountId = obj.getString("SendAccountId");
+                if(!obj.isNull("SendHash"))
+                    SendHash = obj.getString("SendHash");
                 RecvAccountId = obj.getString("RecvAccountId");
                 if(!obj.isNull("RecvHash"))
                     RecvHash = obj.getString("RecvHash");
@@ -113,6 +115,11 @@ public class ApiRpcActionsHistory extends MainActivity {
                             Balances.add(0, p);
                         }
                     }
+                }
+                if(SendAccountId == null) { // Is a mint block, we need to display the new minted amount.
+                    Pair<String, Double> p = Changes.get(0);
+                    Changes.remove(0);
+                    Changes.add(p);
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

@@ -90,14 +90,22 @@ public class FragmentTransactionDetailsDialog extends DialogFragment {
         TextView historyDetailAmountTransferredTextView = (TextView) view.findViewById(R.id.historyDetailAmountTransferredTextView);
         TextView historyDetailAmountInAccountTextView = (TextView) view.findViewById(R.id.historyDetailAmountInAccountTextView);
 
+        boolean mintBlock = false;
+        if (!transaction.getChanges().get(0).first.equals("LYR"))
+            mintBlock = true;
 
         historyDetailHeightTextView.setText(String.valueOf(transaction.getHeight()));
-        if(transaction.getIsReceive()) {
-            historyDetailDirectionTextView.setText(R.string.Receive);
-            historyDetailDirectionTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_outline_south_west_24, 0);
+        if(mintBlock) {
+            historyDetailDirectionTextView.setText(R.string.Minted_block);
+            historyDetailDirectionTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_outline_diamond_24, 0);
         } else {
-            historyDetailDirectionTextView.setText(R.string.Send3);
-            historyDetailDirectionTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_outline_north_east_24, 0);
+            if (transaction.getIsReceive()) {
+                historyDetailDirectionTextView.setText(R.string.Receive);
+                historyDetailDirectionTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_outline_south_west_24, 0);
+            } else {
+                historyDetailDirectionTextView.setText(R.string.Send3);
+                historyDetailDirectionTextView.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_outline_north_east_24, 0);
+            }
         }
         Date date = new Date(transaction.getTimeStamp());
         Format format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss", Locale.US);
@@ -108,7 +116,7 @@ public class FragmentTransactionDetailsDialog extends DialogFragment {
         StringBuilder amountTransferred = new StringBuilder();
         for (int i = 0; i < transaction.getChanges().size(); i++) {
             amountTransferred.append(String.format(Locale.US, "%f %s",
-                    transaction.getChanges().get(i).second < 0 ? 0 - transaction.getChanges().get(i).second : transaction.getChanges().get(i).second,
+                    transaction.getChanges().get(i).second < 0 && !mintBlock ? 0 - transaction.getChanges().get(i).second : transaction.getChanges().get(i).second,
                     GlobalLyra.domainToSymbol(transaction.getChanges().get(i).first)));
             if(i < transaction.getChanges().size() - 1)
                 amountTransferred.append("\n");
@@ -123,8 +131,10 @@ public class FragmentTransactionDetailsDialog extends DialogFragment {
         }
         historyDetailAmountInAccountTextView.setText(amountInAccount.toString());
 
-        dialog_history_ticker_imageView.setImageResource(UiHelpers.tickerToImage(GlobalLyra.domainToSymbol(
-                transaction.getChanges().size() == 1 ? transaction.getChanges().get(0).first : transaction.getChanges().get(1).first)));
+        if(transaction.getChanges().size() > 0) {
+            dialog_history_ticker_imageView.setImageResource(UiHelpers.tickerToImage(GlobalLyra.domainToSymbol(
+                    transaction.getChanges().size() == 1 ? transaction.getChanges().get(0).first : transaction.getChanges().get(1).first)));
+        }
 
         historyDetailTimestampTextView.setOnClickListener(new View.OnClickListener() {
             @Override

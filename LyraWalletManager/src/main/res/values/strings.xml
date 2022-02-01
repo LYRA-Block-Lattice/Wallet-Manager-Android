@@ -23,7 +23,6 @@
     <string name="Stake">Stake</string>
     <string name="From">From</string>
     <string name="Fetch">Fetch</string>
-    <string name="Not_fetch">Not fetch</string>
     <string name="Expired">Expired</string>
     <string name="To">To</string>
     <string name="NetworkFee">Network Fee</string>
@@ -42,6 +41,9 @@
     <string name="Receive">Receive</string>
     <string name="Balance">Balance</string>
     <string name="History">History</string>
+    <string name="Height">Height</string>
+    <string name="Direction">Direction</string>
+    <string name="Minted_block">Minted block</string>
     <string name="Account_type">Account type</string>
     <string name="Account_name">Account name</string>
     <string name="Add_new_staking_account">Add new staking account</string>
@@ -52,8 +54,7 @@
     <string name="Request_token">Request token</string>
     <string name="Invalid_request">Invalid request</string>
     <string name="Not_received_yet">Not received yet</string>
-    <string name="Height">Height</string>
-    <string name="Direction">Direction</string>
+    <string name="Not_fetch">Not fetch</string>
     <string name="Time_stamp">Time stamp</string>
     <string name="Send_account_id">Send account ID</string>
     <string name="Send_hash">Send hash</string>
