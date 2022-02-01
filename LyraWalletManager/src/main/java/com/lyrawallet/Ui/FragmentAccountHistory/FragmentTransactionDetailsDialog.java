@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 
 import androidx.fragment.app.DialogFragment;
@@ -90,9 +92,21 @@ public class FragmentTransactionDetailsDialog extends DialogFragment {
         TextView historyDetailAmountTransferredTextView = (TextView) view.findViewById(R.id.historyDetailAmountTransferredTextView);
         TextView historyDetailAmountInAccountTextView = (TextView) view.findViewById(R.id.historyDetailAmountInAccountTextView);
 
+        TextView historyDetailSendIdTTextView = (TextView) view.findViewById(R.id.historyDetailSendIdTTextView);
+        TableRow historyDetailSendIdTTTextView = (TableRow) view.findViewById(R.id.historyDetailSendIdTTTextView);
+        TextView historyDetailSendHashTTextView = (TextView) view.findViewById(R.id.historyDetailSendHashTTextView);
+        TableRow historyDetailSendHashTTTextView = (TableRow) view.findViewById(R.id.historyDetailSendHashTTTextView);
+
         boolean mintBlock = false;
-        if (!transaction.getChanges().get(0).first.equals("LYR"))
+        if (!transaction.getChanges().get(0).first.equals("LYR")) {
             mintBlock = true;
+            historyDetailSendIdTTextView.setVisibility(View.GONE);
+            historyDetailSendIdTextView.setVisibility(View.GONE);
+            historyDetailSendIdTTTextView.setVisibility(View.GONE);
+            historyDetailSendHashTTextView.setVisibility(View.GONE);
+            historyDetailSendHashTextView.setVisibility(View.GONE);
+            historyDetailSendHashTTTextView.setVisibility(View.GONE);
+        }
 
         historyDetailHeightTextView.setText(String.valueOf(transaction.getHeight()));
         if(mintBlock) {

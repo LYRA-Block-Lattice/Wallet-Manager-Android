@@ -6,6 +6,7 @@ import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsBrokerAccounts;
 import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
 import com.lyrawallet.Global;
 import com.lyrawallet.GlobalLyra;
+import com.lyrawallet.R;
 import com.lyrawallet.Ui.FragmentAccountHistory.FragmentAccountHistory;
 import com.lyrawallet.Ui.FragmentStaking.FragmentStaking;
 import com.lyrawallet.Util.Concatenate;
@@ -81,19 +82,20 @@ public class UtilGetData {
             int size = historyList.get(i).getChanges().size();
             Pair<String, Double> tokenAmount;
             if (size > 1) {
-                tokenAmount = historyList.get(i).getChanges().get(1);
-            } if (size == 0) {
-                tokenAmount = new Pair<String, Double>("LYR", 0d);
+                tokenAmount = historyList.get(i).getChanges().get(historyList.get(i).getSendAccountId() == null ? 0 : 1);
             } else {
-                //try {
-                    tokenAmount = historyList.get(i).getChanges().get(0);
-                //} catch (IndexOutOfBoundsException ignored) { }
+                tokenAmount = historyList.get(i).getChanges().get(0);
             }
             int icon = GlobalLyra.TokenIconList[1].second;
-            for (Pair<String, Integer> k : GlobalLyra.TokenIconList) {
-                if (k.first.equals(GlobalLyra.domainToSymbol(tokenAmount.first))) {
-                    icon = k.second;
-                    break;
+            if(historyList.get(i).getSendAccountId() == null) {
+                icon = R.drawable.ic_outline_diamond_24;
+            } else {
+                icon = GlobalLyra.TokenIconList[1].second;
+                for (Pair<String, Integer> k : GlobalLyra.TokenIconList) {
+                    if (k.first.equals(GlobalLyra.domainToSymbol(tokenAmount.first))) {
+                        icon = k.second;
+                        break;
+                    }
                 }
             }
             List.add(0, new FragmentAccountHistory.AccountHistoryEntry(historyList.get(i).getHeight(), icon,

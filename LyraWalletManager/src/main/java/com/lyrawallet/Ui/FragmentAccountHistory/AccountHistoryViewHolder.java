@@ -12,8 +12,8 @@ public class AccountHistoryViewHolder extends RecyclerView.ViewHolder {
     TextView Height;
     ImageView TickerImage;
     TextView TickerName;
-    TextView Quantity;
-    TextView QuantityUsd;
+    TextView Amount;
+    TextView AmountUsd;
     TextView ValueUsdPerUnit;
     View view;
 
@@ -28,10 +28,10 @@ public class AccountHistoryViewHolder extends RecyclerView.ViewHolder {
         TickerName
                 = (TextView) itemView
                 .findViewById(R.id.walletTrEntryCardTicker);
-        Quantity
+        Amount
                 = (TextView) itemView
                 .findViewById(R.id.walletTrEntryCardValueUsd);
-        QuantityUsd
+        AmountUsd
                 = (TextView) itemView
                 .findViewById(R.id.walletTrEntryCardTotalValue);
         ValueUsdPerUnit

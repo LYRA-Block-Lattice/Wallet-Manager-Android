@@ -87,7 +87,7 @@
                 android:theme="@style/CardView" />
 
             <TableRow
-                android:id="@+id/hr4"
+                android:id="@+id/historyDetailSendIdTTTextView"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#AAA"
@@ -107,7 +107,7 @@
                 android:theme="@style/CardView" />
 
             <TableRow
-                android:id="@+id/hr5"
+                android:id="@+id/historyDetailSendHashTTTextView"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#AAA"

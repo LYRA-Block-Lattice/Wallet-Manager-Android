@@ -42,14 +42,14 @@ public class FragmentAccountHistory extends Fragment {
         int Height;
         int TickerImage;
         String TickerName;
-        double Quantity;
+        double Amount;
 
         public AccountHistoryEntry(int height, int tickerImage, String tickerName,
-                                   double quantity) {
+                                   double amount) {
             this.Height = height;
             this.TickerImage = tickerImage;
             this.TickerName = tickerName;
-            this.Quantity = quantity;
+            this.Amount = amount;
         }
         public int getHeight() {
             return Height;

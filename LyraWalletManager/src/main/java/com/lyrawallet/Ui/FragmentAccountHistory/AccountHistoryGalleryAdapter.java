@@ -108,10 +108,10 @@ public class AccountHistoryGalleryAdapter extends RecyclerView.Adapter<AccountHi
                 .setImageResource(list.get(position).TickerImage);
         viewHolder.TickerName
                 .setText(list.get(position).TickerName);
-        viewHolder.Quantity
-                .setText(String.format(Locale.US, "%.8f", list.get(position).Quantity));
-        viewHolder.QuantityUsd
-                .setText(String.format("%sUSD", String.format(Locale.US, "%.8f", list.get(position).Quantity * unitValuePerUsd)));
+        viewHolder.Amount
+                .setText(String.format(Locale.US, "%.8f", list.get(position).Amount));
+        viewHolder.AmountUsd
+                .setText(String.format("%sUSD", String.format(Locale.US, "%.8f", list.get(position).Amount * unitValuePerUsd)));
         viewHolder.ValueUsdPerUnit
                 .setText(String.format("%sUSD", String.format(Locale.US, "%.8f", unitValuePerUsd)));
         viewHolder.view.setOnClickListener(new View.OnClickListener() {

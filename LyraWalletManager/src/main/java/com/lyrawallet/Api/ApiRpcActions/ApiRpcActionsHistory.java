@@ -106,13 +106,15 @@ public class ApiRpcActionsHistory extends MainActivity {
                     String key = it.next();
                     Balances.add(new Pair<String, Double>(key, o.getDouble(key)));
                 }
-                if(Balances.size() > 1) {
-                    for (int i = 1; i < Balances.size(); i++) {
-                        Pair<String, Double> p = Balances.get(i);
-                        if(p.first.equals("LYR")) {
-                            // Make sure LYR is on position 0
-                            Balances.remove(p);
-                            Balances.add(0, p);
+                if(SendAccountId != null) {
+                    if (Balances.size() > 1) {
+                        for (int i = 1; i < Balances.size(); i++) {
+                            Pair<String, Double> p = Balances.get(i);
+                            if (p.first.equals("LYR")) {
+                                // Make sure LYR is on position 0
+                                Balances.remove(p);
+                                Balances.add(0, p);
+                            }
                         }
                     }
                 }
