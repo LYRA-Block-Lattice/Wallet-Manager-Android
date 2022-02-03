@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -201,6 +202,10 @@ public class FragmentStaking extends Fragment {
         if (activity != null) {
             CurvedBottomNavigationView bottomNavigationView = activity.findViewById(R.id.bottomNavigationView);
             bottomNavigationView.setVisibility(View.VISIBLE);
+
+            TextView stakingAccountNameTextView = view.findViewById(R.id.stakingAccountNameTextView);
+            stakingAccountNameTextView.setText(String.format("%s/%s", Global.getSelectedAccountName(), Global.getCurrentNetworkName()));
+
             ProgressBar progress = activity.findViewById(R.id.stakingAccountProgressBar);
             if (progress != null) {
                 progress.setVisibility(View.VISIBLE);

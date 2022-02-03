@@ -15,9 +15,8 @@ public class NetworkProbe {
     }
 
     public static void rpcStatic2() {
-        ApiRpc.Action action = new ApiRpc.Action();
         NetworkRpc rpc = (NetworkRpc) new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL)
-                .execute(action.toString(), "History", "LE3qSdNcumBeuk3MCf5WtZTHDFyRu8QswCkuyQgvvyLc82fMM8dLC67ukTV9aiRZtJPZHHUNgsrYGVEGpbWAxqEKRwfocH",
+                .execute("", "History", "LE3qSdNcumBeuk3MCf5WtZTHDFyRu8QswCkuyQgvvyLc82fMM8dLC67ukTV9aiRZtJPZHHUNgsrYGVEGpbWAxqEKRwfocH",
                 "0", String.valueOf(System.currentTimeMillis()), "0");
         rpc.setListener(new NetworkRpc.RpcTaskListener() {
             @Override

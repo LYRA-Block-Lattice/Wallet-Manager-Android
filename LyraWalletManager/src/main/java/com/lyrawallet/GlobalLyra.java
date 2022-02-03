@@ -17,7 +17,9 @@ public class GlobalLyra {
     public static final String BREAKING_STAKE_CONTRACT_FEE     = "0.8";
     public static final String SYMBOL_FOR_TETHERED_TOKEN       = "$";
     public static final String LYRA_RPC_API_URL                =  "/api/v1/socket";
-    public static final String LYRA_NODE_API_URL                = "/api/Node";
+    public static final String LYRA_NODE_API_URL               = "/api/Node";
+    public static final int LYRA_STAKE_MIN_DAYS                = 3;
+    public static final int LYRA_STAKE_MAX_DAYS                = 36500;
 
 
 

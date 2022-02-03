@@ -15,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -22,6 +23,7 @@ import androidx.fragment.app.Fragment;
 import com.lyrawallet.Api.ApiRpc;
 import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
 import com.lyrawallet.Global;
+import com.lyrawallet.MainActivity;
 import com.lyrawallet.R;
 import com.lyrawallet.Storage.StorageBackUpWallet;
 import com.lyrawallet.Ui.FragmentManagerUser;
@@ -85,6 +87,8 @@ public class FragmentMore extends Fragment {
                         Global.setSelectedAccountName(adapterView.getSelectedItem().toString());
                         Global.setSelectedAccountNr(i);
                         Global.setWalletName(Global.getWalletName());
+                        TextView stakingAccountNameTextView = activity.findViewById(R.id.moreAccountNameTextView);
+                        stakingAccountNameTextView.setText(String.format("%s/%s", Global.getSelectedAccountName(), Global.getCurrentNetworkName()));
                         activity.runOnUiThread(new Runnable() {
                             public void run() {
                                 new ApiRpc().act(new ApiRpc.Action().actionBalance(Global.getSelectedAccountId()));
@@ -141,13 +145,16 @@ public class FragmentMore extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        CurvedBottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.setVisibility(View.VISIBLE);
-
         Activity activity = getActivity();
         if (activity == null) {
             return;
         }
+        CurvedBottomNavigationView bottomNavigationView = activity.findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setVisibility(View.VISIBLE);
+
+        TextView moreAccountNameTextView = view.findViewById(R.id.moreAccountNameTextView);
+        moreAccountNameTextView.setText(String.format("%s/%s", Global.getSelectedAccountName(), Global.getCurrentNetworkName()));
+
         Button explorerButton = (Button) activity.findViewById(R.id.explorerButton);
         if (explorerButton != null) {
             explorerButton.setOnClickListener(new View.OnClickListener() {

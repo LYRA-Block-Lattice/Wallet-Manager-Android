@@ -84,6 +84,8 @@ public class StakingGalleryAdapter extends RecyclerView.Adapter<StakingViewHolde
     }
 
     public String getExpirationTime(long time, int days){
+        if(time >= 95617627200000L)
+            return "?";
         Date endDate = new Date(time);
         Calendar c = Calendar.getInstance();
         c.setTime(endDate);
@@ -94,6 +96,8 @@ public class StakingGalleryAdapter extends RecyclerView.Adapter<StakingViewHolde
     }
 
     public boolean isExpired(long time, int days){
+        if(time >= 95617627200000L)
+            return true;
         Date endDate = new Date(time);
         Calendar c = Calendar.getInstance();
         c.setTime(endDate);

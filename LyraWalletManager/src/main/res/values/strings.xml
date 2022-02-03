@@ -16,6 +16,7 @@
     <string name="One_Day">One Day</string>
     <string name="Day">Day</string>
     <string name="Days">Days</string>
+    <string name="Dex">Dex</string>
     <string name="Send1">Send</string>
     <string name="Send2">Send</string>
     <string name="Send3">Sent</string>
@@ -37,6 +38,7 @@
     <string name="Staking">Staking</string>
     <string name="Status">Status</string>
     <string name="Pool">Pool</string>
+    <string name="Preview">Preview</string>
     <string name="Request">Request</string>
     <string name="Receive">Receive</string>
     <string name="Balance">Balance</string>
@@ -47,6 +49,7 @@
     <string name="Account_type">Account type</string>
     <string name="Account_name">Account name</string>
     <string name="Add_new_staking_account">Add new staking account</string>
+    <string name="Preview_add_new_staking_account">Preview add new staking account</string>
     <string name="Confirm_action">Confirm action</string>
     <string name="Days_to_stake">Days to stake</string>
     <string name="Days_to_stake_min_max">Days to stake from 3 to 36500 days</string>
@@ -78,6 +81,7 @@
     <string name="Account_validity">Account validity</string>
     <string name="Share_ratio">Share ratio</string>
     <string name="Select_to_stake_for">Select to stake for</string>
+    <string name="You_will_stake_for">You will stake for</string>
     <string name="No_tokens_available">No tokens available</string>
 
     <string name="zero_lyr" translatable="false">0 LYR</string>

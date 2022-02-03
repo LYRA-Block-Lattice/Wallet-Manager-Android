@@ -68,7 +68,7 @@ public class Global {
     private static int SelectedAccountNr = -1;
     private static String WalletPath = "";
     private static int InactivityTimeForClose = -1;
-    private static boolean PasswordSaveAllowed = false;
+    private static boolean PasswordSaveAllowed = true;
     private static String WalletPassword = "";
 
     private static List<Pair<Double, Pair<String, String>>> TokenPrice = null;
@@ -365,7 +365,7 @@ public class Global {
     }
 
     public static void setPasswordSaveAllowed(boolean allowed) {
-        PasswordSaveAllowed = allowed;
+        //PasswordSaveAllowed = allowed;
     }
     public static boolean getPasswordSaveAllowed() {
         return PasswordSaveAllowed;
@@ -381,7 +381,6 @@ public class Global {
     public static void setTokenPrice(Pair<String, String> pair, double price) {
         if(TokenPrice == null) {
             TokenPrice = new ArrayList<>();
-            TokenPrice.add(new Pair<Double, Pair<String, String>>(price, pair));
         } else {
             for (int i = 0; i < TokenPrice.size(); i++) {
                 Pair<Double, Pair<String, String>> p = TokenPrice.get(i);
@@ -393,6 +392,7 @@ public class Global {
                 }
             }
         }
+        TokenPrice.add(new Pair<Double, Pair<String, String>>(price, pair));
     }
     public static double getTokenPrice(Pair<String, String> pair) {
         for (int i = 0; i < TokenPrice.size(); i++) {

@@ -168,5 +168,9 @@
     <string name="Fetch">Cerut</string>
     <string name="Not_fetch">Ne cerut</string>
     <string name="Minted_block">Minted block</string>
+    <string name="Dex">Dex</string>
+    <string name="You_will_stake_for">Vei pune stake pentru</string>
+    <string name="Preview">Previzualizare</string>
+    <string name="Preview_add_new_staking_account">Previzualizare adaugare un nou cont de staking</string>
 
 </resources>

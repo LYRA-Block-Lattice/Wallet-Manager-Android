@@ -33,7 +33,10 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import com.lyrawallet.Accounts.Accounts;
 import com.lyrawallet.Api.ApiRpc;
+import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsBalance;
+import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
 import com.lyrawallet.Api.Network.NetworkProbe;
+import com.lyrawallet.Api.Network.NetworkRpc;
 import com.lyrawallet.Api.Network.NetworkWebHttps;
 import com.lyrawallet.Crypto.CryptoSignatures;
 import com.lyrawallet.PreferencesLoad.PreferencesLoad;
@@ -41,6 +44,7 @@ import com.lyrawallet.Storage.StorageCommon;
 import com.lyrawallet.Ui.FragmentManagerUser;
 import com.lyrawallet.Ui.UiHelpers;
 import com.lyrawallet.Ui.UtilGetData;
+import com.lyrawallet.Util.Concatenate;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,6 +55,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -64,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
     private static MainActivity Instance = null;
     private static String ImportWalletName = null;
     private Handler UserInputTimeoutHandler;
+    private final Handler GetBalanceHandler = new Handler();
     protected static Boolean PushToBackStack = true;
     protected static MainActivity getInstance() {
         return Instance;
@@ -203,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
             FragmentManager fragmentManager = this.getSupportFragmentManager();
             FragmentManager.BackStackEntry entry =  fragmentManager.getBackStackEntryAt(fragmentManager.getBackStackEntryCount() - 1);
             //if(index != Integer.parseInt(entry.getName())) {
-            if(PushToBackStack) { // If the back button is press, we need to ignore this event, the page is pop from tha backstack.
+            if(PushToBackStack) { // If the back button is press, we need to ignore this event, the page is pop from the backstack.
                 FragmentManagerUser.setVisiblePage(Global.visiblePage.values()[index]);
             }
             PushToBackStack = true;
@@ -214,40 +220,19 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         new WebHttps(this).execute("https://api.latoken.com/v2/ticker", "MainCallHttps2");*/
     }
     void restoreTimers() {
-        timerHistory = new Timer();
-        timerHistory.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                new NetworkWebHttps(getInstance()).execute("https://api.latoken.com/v2/ticker/LYR/USDT", "MainCallHttpsLyrUsdtPair");
-                runOnUiThread(new Runnable() {
-                    public void run() {
-                        new ApiRpc().act(new ApiRpc.Action().actionPool("LyrPriceInUSD", "LYR", "tether/USDT"));
-                    }
-                });
-                /*if( Global.getSelectedAccountName().length() != 0) {
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            new ApiRpc().act(new ApiRpc.Action().actionHistory(Global.str_api_rpc_purpose_history_disk_storage,
-                                    Global.getCurrentNetworkName(), Global.getSelectedAccountName(), Global.getSelectedAccountId()));
-                        }
-                    });
-                }*/
-            }
-        }, 1000, 120 * 1000);
         timerBalance = new Timer();
         timerBalance.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                if( Global.getSelectedAccountName().length() != 0) {
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-                            new ApiRpc().act(new ApiRpc.Action().actionBalance(Global.getSelectedAccountId()));
-                        }
-                    });
-                }
+                getInstance().runOnUiThread(new Runnable() {
+                    public void run() {
+                        new ApiRpcActionsBalance();
+                    }
+                });
             }
         }, 1000, 30 * 1000);
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -259,7 +244,6 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         super.onPause();
         //Toast.makeText(getApplicationContext(), "onPause called", Toast.LENGTH_LONG).show();
         timerBalance.cancel();
-        timerHistory.cancel();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

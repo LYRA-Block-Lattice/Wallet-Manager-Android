@@ -70,6 +70,11 @@ public class NetworkRpc extends AsyncTask<String, Void, String[]> implements Net
         this.Password = password;
     }
 
+    public NetworkRpc(String urlDst, String password) {
+        UrlDst = urlDst;
+        this.Password = password;
+    }
+
     protected void onPreExecute() {
     }
     @Override

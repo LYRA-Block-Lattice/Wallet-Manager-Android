@@ -885,7 +885,7 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
         return true;
     }
 
-    void getBalanceAfterAction() {
+    public static void getBalanceAfterAction() {
         new Handler().postDelayed(new Runnable() {
             public void run() {
                 getInstance().runOnUiThread(new Runnable() {
@@ -995,78 +995,9 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                         e.printStackTrace();
                     }
                 } else if(output[0].equals("Pool")) {
-                    if (output[2].equals("error")) {
-                        UiUpdates.setPoolData(null);
-                     } else if(ac.getActionPurpose() != null) {
-                        if(ac.getActionPurpose().equals("PoolCalculate")) {
-                            try {
-                                UiUpdates.setPoolData(new UiUpdates.PoolData(output[2]));
-                                try {
-                                    try {
-                                        EditText swapFromValueEditText = (EditText) activity.findViewById(R.id.swapFromValueEditText);
-                                        Spinner tokenFromSpinner = (Spinner) activity.findViewById(R.id.swapFromValueSpinner);
-                                        String from = GlobalLyra.symbolToDomain(tokenFromSpinner.getSelectedItem().toString());
-                                        new ApiRpc().act(new ApiRpc.Action().actionPoolCalculate(UiUpdates.getPoolData().getPoolId(), GlobalLyra.symbolToDomain(from),
-                                                Double.parseDouble(swapFromValueEditText.getText().toString()), 0.01f));
-                                    } catch (NullPointerException ignored) { }
-                                } catch (NumberFormatException e) {
-                                    FragmentSwap.setProgressBarVisibility(activity, View.GONE);
-                                    e.printStackTrace();
-                                }
-                                if(Global.getDebugEnabled())
-                                    Toast.makeText(activity, "\"Pool\" fetch done", Toast.LENGTH_SHORT).show();
-                            } catch (JSONException e) {
-                                Toast.makeText(activity, e.toString(), Toast.LENGTH_LONG).show();
-                                e.printStackTrace();
-                            }
-                        } else if(ac.getActionPurpose().equals("LyrPriceInUSD")) {
-                            try {
-                                UiUpdates.setPoolData(new UiUpdates.PoolData(output[2]));
-                                JSONObject obj = new JSONObject(output[2]);
-                                JSONObject objBalance = obj.getJSONObject("balance");
-                                if( UiUpdates.getPoolData().token0Is("tether/USDT") && UiUpdates.getPoolData().token0Is("LYR")) {
-                                    Global.setTokenPrice(new Pair<>("LYR", "tether/USDT"), objBalance.getDouble("tether/USDT") / objBalance.getDouble("LYR"));
-                                }
-                            } catch (JSONException | NullPointerException e) {
-                                e.printStackTrace();
-                                Toast.makeText(activity, e.toString(), Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    }
                 } else if (output[0].equals("PoolCalculate")) {
-                    try {
-                        UiUpdates.setPoolCalculateData(new UiUpdates.PoolCalculateData(output[2]));
-                        if (Global.getDebugEnabled())
-                            Toast.makeText(activity, "\"PoolCalculate\" fetch done", Toast.LENGTH_SHORT).show();
-                    } catch (JSONException | NullPointerException e) {
-                        Toast.makeText(activity, e.toString(), Toast.LENGTH_LONG).show();
-                        e.printStackTrace();
-                    }
                 } else if (output[0].equals("Swap")) {
-                    if(output[2].equals("error"))
-                        UiDialog.showDialogStatus(R.string.str_an_error_occurred, R.string.str_please_contact_lyra_period_inc);
-                    else {
-                        FragmentSwap.clearAccountFromTo(activity);
-                        try {
-                            UiDialog.showDialogStatus(R.string.swap_swap_complete,
-                                    ApiRpc.class.getDeclaredMethod("runActionHistory"));
-                        } catch (NoSuchMethodException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    //getBalanceAfterAction();
                 } else if (output[0].equals("AddLiquidity")) {
-                    if(output[2].equals("error"))
-                        UiDialog.showDialogStatus(R.string.str_an_error_occurred);
-                    else {
-                        FragmentSwap.clearAccountFromTo(activity);
-                        try {
-                            UiDialog.showDialogStatus(R.string.swap_add_liquidity_complete,
-                                    ApiRpc.class.getDeclaredMethod("runActionHistory"));
-                        } catch (NoSuchMethodException e) {
-                            e.printStackTrace();
-                        }
-                    }
                 } else if (output[0].equals("GetBrokerAccounts")) {
                     Global.setBrokerAccounts(Concatenate.getHistoryFileName(ac), new ApiRpcActionsBrokerAccounts().fromJson(output[2]));
                 } else if(output[0].equals("FindAllProfitingAccounts")) {

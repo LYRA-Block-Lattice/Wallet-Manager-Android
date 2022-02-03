@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
 import com.lyrawallet.Api.Network.NetworkProbe;
+import com.lyrawallet.Api.Network.NetworkWebHttps;
 import com.lyrawallet.Global;
 import com.lyrawallet.GlobalLyra;
 import com.lyrawallet.R;
@@ -28,7 +29,11 @@ import com.lyrawallet.Ui.FragmentManagerUser;
 import com.lyrawallet.Ui.UiHelpers;
 import com.lyrawallet.Util.Concatenate;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
@@ -39,10 +44,12 @@ import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView;
 public class FragmentAccount extends Fragment {
     static FragmentAccount fInstance = null;
     Timer timer1;
+    Timer timerPrice;
     AccountHistoryGalleryAdapter adapter;
     private NestedScrollView nestedSV;
     int historyLen = 0;
     static private Pair<Integer, List<ApiRpcActionsHistory.HistoryEntry>> history;
+    boolean priceRefreshed = false;
 
     public FragmentAccount() {
         fInstance = this;
@@ -62,8 +69,11 @@ public class FragmentAccount extends Fragment {
                     return;
                 }
                 Pair<Integer, List<ApiRpcActionsHistory.HistoryEntry>> intHistoryList = Global.getWalletHistory(Concatenate.getHistoryFileName());
-                if (intHistoryList == null) {
+                if (intHistoryList == null || intHistoryList.second == null) {
                      return;
+                }
+                if(intHistoryList.second.size() == historyLen && !priceRefreshed) {
+                    return;
                 }
                 List<FragmentAccountHistory.AccountHistoryEntry> entryList = new ArrayList<>();
                 double valueInUsd = 0f;
@@ -85,11 +95,9 @@ public class FragmentAccount extends Fragment {
                             valueInUsd += unitValuePerUsd * balances.get(i).second;
                         }
                     }
-                    if(intHistoryList.second.size() == historyLen) {
-                        return;
-                    }
-                    historyLen = intHistoryList.second.size();
                 } catch (NullPointerException ignored) { }
+                priceRefreshed = false;
+                historyLen = intHistoryList.second.size();
                 TextView accountValueLyr = (TextView) view.findViewById(R.id.totalBalanceUsdTextView);
                 accountValueLyr.setText(String.format(Locale.US, "%s $ %f", getString(R.string.Total_balance_usd), valueInUsd));
                 setAccountValue(view);
@@ -156,6 +164,39 @@ public class FragmentAccount extends Fragment {
                 }
             }
         }, 700, 5000);
+        timerPrice = new Timer();
+        timerPrice.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                NetworkWebHttps webHttpsTask = new NetworkWebHttps();
+                webHttpsTask.setListener(new NetworkWebHttps.WebHttpsTaskListener() {
+                    @Override
+                    public void onWebHttpsTaskFinished(NetworkWebHttps instance) {
+                        System.out.println("TOKEN PAIR PRICE IN USD: " + instance.getContent());
+                        try {
+                            JSONObject obj0 = new JSONObject(instance.getContent());
+                            for (Iterator<String> it0 = obj0.keys(); it0.hasNext(); ) {
+                                String token0 = it0.next();
+                                JSONObject obj1 = obj0.getJSONObject(token0);
+                                for (Iterator<String> it1 = obj1.keys(); it1.hasNext(); ) {
+                                    String token1 = it1.next();
+                                    token0 = token0.toUpperCase(Locale.ROOT);
+                                    token0 = token0.replace("LYRA", "LYR");
+                                    token0 = token0.replace("TRON", "$TRX");
+                                    token0 = token0.replace("BITCOIN", "$BTC");
+                                    token0 = token0.replace("ETHEREUM", "$ETH");
+                                    Global.setTokenPrice(new Pair<String, String>(token0.toUpperCase(Locale.ROOT), token1.toUpperCase(Locale.ROOT)), obj1.getDouble(token1));
+                                }
+                            }
+                            priceRefreshed = true;
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                webHttpsTask.execute("https://api.coingecko.com/api/v3/simple/price?ids=lyra,tron,ethereum,bitcoin&vs_currencies=usd&include_market_cap=false&include_24hr_vol=false&include_24hr_change=false&include_last_updated_at=false");
+            }
+        }, 10, 120 * 1000);
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -182,6 +223,7 @@ public class FragmentAccount extends Fragment {
         super.onPause();
         //Toast.makeText(getActivity(), "onPause called", Toast.LENGTH_LONG).show();
         timer1.cancel();
+        timerPrice.cancel();
     }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -190,6 +232,9 @@ public class FragmentAccount extends Fragment {
             CurvedBottomNavigationView bottomNavigationView = activity.findViewById(R.id.bottomNavigationView);
             bottomNavigationView.setVisibility(View.VISIBLE);
         }
+        TextView accountNameTextView = view.findViewById(R.id.accountNameTextView);
+        accountNameTextView.setText(String.format("%s/%s", Global.getSelectedAccountName(), Global.getCurrentNetworkName()));
+
         historyLen = 0;
         ApiRpcActionsHistory.load(Concatenate.getHistoryFileName());
         setAccountValue(view);

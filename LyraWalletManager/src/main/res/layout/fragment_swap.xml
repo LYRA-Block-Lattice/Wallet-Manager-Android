@@ -20,21 +20,41 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/swapHeaderTextView"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="75dp"
-                android:layout_gravity="start|center_vertical"
-                android:background="@drawable/fab_dashboard_header_color"
-                android:gravity="start|center_vertical"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
-                android:popupBackground="@drawable/fab_spinner_account_select_outline"
-                android:text="@string/Swap"
-                android:textColor="@color/page_foreground"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                tools:ignore="RtlCompat" />
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/swapHeaderTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="75dp"
+                    android:layout_gravity="start|center_vertical"
+                    android:background="@drawable/fab_dashboard_header_color"
+                    android:gravity="start|center_vertical"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:popupBackground="@drawable/fab_spinner_account_select_outline"
+                    android:text="@string/Swap"
+                    android:textColor="@color/page_foreground"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="RtlCompat" />
+
+                <TextView
+                    android:id="@+id/swapAccountNameTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="@string/Account_name"
+                    android:textColor="@color/page_foreground"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <Space
                 android:layout_width="match_parent"

@@ -24,16 +24,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.lyrawallet.Api.ApiRpc;
 import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
+import com.lyrawallet.Api.Network.NetworkRpc;
 import com.lyrawallet.Global;
 import com.lyrawallet.GlobalLyra;
 import com.lyrawallet.MainActivity;
 import com.lyrawallet.R;
 import com.lyrawallet.Ui.FragmentAccountHistory.AccountHistoryGalleryAdapter;
 import com.lyrawallet.Ui.TokensSpinnerAdapter;
+import com.lyrawallet.Ui.UiDialog;
 import com.lyrawallet.Ui.UiHelpers;
 import com.lyrawallet.Ui.UiUpdates;
 import com.lyrawallet.Ui.UtilGetData;
 import com.lyrawallet.Util.Concatenate;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +60,7 @@ public class FragmentSwap extends Fragment {
     String toSelect = "";
     static boolean poolSelected = false;
     static boolean fromLastEditTextChanged = true;
-    private Handler UserInputValueChangedHandler;
+    private final Handler UserInputValueChangedHandler = new Handler();
     View thisView = null;
 
     public FragmentSwap() {
@@ -229,25 +234,84 @@ public class FragmentSwap extends Fragment {
                                 }
                                 return;
                             }
-                            new ApiRpc().act(new ApiRpc.Action().actionPool("PoolCalculate", from, to));
                             ProgressBar progressBar = (ProgressBar) activity.findViewById(R.id.swapProgressBar);
                             progressBar.setVisibility(View.VISIBLE);
-                            /*new Handler().postDelayed(new Runnable() {
-                                public void run() {
-                                    ProgressBar progressBar = (ProgressBar) activity.findViewById(R.id.swapProgressBar);
-                                    if(progressBar != null) {
-                                        progressBar.setVisibility(View.GONE);
-                                    }
+                            /********************** Send request for Pool ************************/
+                            NetworkRpc rpc = (NetworkRpc) new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL)
+                                    .execute("", "Pool", GlobalLyra.symbolToDomain(from), GlobalLyra.symbolToDomain(to));
+                            rpc.setListener(new NetworkRpc.RpcTaskListener() {
+                                @Override
+                                public void onRpcTaskFinished(String[] output) {
+                                    activity.runOnUiThread(new Runnable() {
+                                        public void run() {
+                                            System.out.println("RPC POOL: " + output[0] + output[1] + output[2]);
+                                            if (output[2].equals("error")) {
+                                                UiUpdates.setPoolData(null);
+                                                updatePoolLiquidity(getView());
+                                                ProgressBar progressBar = (ProgressBar) activity.findViewById(R.id.swapProgressBar);
+                                                progressBar.setVisibility(View.GONE);
+                                            } else {
+                                                try {
+                                                    UiUpdates.setPoolData(new UiUpdates.PoolData(output[2]));
+                                                    updatePoolLiquidity(getView());
+                                                    try {
+                                                        try {
+                                                            EditText swapFromValueEditText = (EditText) activity.findViewById(R.id.swapFromValueEditText);
+                                                            if (swapFromValueEditText.getText().toString().length() == 0) {
+                                                                ProgressBar progressBar = (ProgressBar) activity.findViewById(R.id.swapProgressBar);
+                                                                progressBar.setVisibility(View.GONE);
+                                                            } else {
+                                                                Spinner tokenFromSpinner = (Spinner) activity.findViewById(R.id.swapFromValueSpinner);
+                                                                String from = GlobalLyra.symbolToDomain(tokenFromSpinner.getSelectedItem().toString());
+                                                                /********************* Send request for PoolCalculate ***********************/
+                                                                NetworkRpc rpc = (NetworkRpc) new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL)
+                                                                        .execute("", "PoolCalculate",
+                                                                                UiUpdates.getPoolData().getPoolId(), GlobalLyra.symbolToDomain(from), swapFromValueEditText.getText().toString(), String.valueOf(0.01f));
+                                                                rpc.setListener(new NetworkRpc.RpcTaskListener() {
+                                                                    @Override
+                                                                    public void onRpcTaskFinished(String[] output) {
+                                                                        activity.runOnUiThread(new Runnable() {
+                                                                            public void run() {
+                                                                                System.out.println("RPC POOL CALCULATE: " + output[0] + output[1] + output[2]);
+                                                                                if (output[2].equals("error")) {
+                                                                                    UiUpdates.setPoolCalculateData(null);
+                                                                                    ProgressBar progressBar = (ProgressBar) activity.findViewById(R.id.swapProgressBar);
+                                                                                    progressBar.setVisibility(View.GONE);
+                                                                                } else {
+                                                                                    try {
+                                                                                        UiUpdates.setPoolCalculateData(new UiUpdates.PoolCalculateData(output[2]));
+                                                                                        if (Global.getDebugEnabled())
+                                                                                            Toast.makeText(activity, "\"PoolCalculate\" fetch done", Toast.LENGTH_SHORT).show();
+                                                                                    } catch (JSONException | NullPointerException e) {
+                                                                                        Toast.makeText(activity, e.toString(), Toast.LENGTH_LONG).show();
+                                                                                        e.printStackTrace();
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                });
+                                                            }
+                                                        } catch (NullPointerException ignored) { }
+                                                    } catch (NumberFormatException e) {
+                                                        FragmentSwap.setProgressBarVisibility(activity, View.GONE);
+                                                        e.printStackTrace();
+                                                    }
+                                                    if (Global.getDebugEnabled())
+                                                        Toast.makeText(activity, "\"Pool\" fetch done", Toast.LENGTH_SHORT).show();
+                                                } catch (JSONException e) {
+                                                    Toast.makeText(activity, e.toString(), Toast.LENGTH_LONG).show();
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }
+                                    });
                                 }
-                            }, 10 * 1000);*/
-                        } catch (NullPointerException ignored) {
-
-                        }
+                            });
+                        } catch (NullPointerException ignored) { }
                     }
                 });
-            } catch (NullPointerException ignored) {
-
-            }
+            } catch (NullPointerException ignored) { }
         }
     };
 
@@ -360,6 +424,38 @@ public class FragmentSwap extends Fragment {
         }
     }
 
+    void updatePoolLiquidity(View view) {
+        Activity activity = getActivity();
+        if(activity == null)
+            return;
+        try {
+            UiUpdates.PoolData poolData = UiUpdates.getPoolData();
+            boolean changed = true;
+            if(poolData != null) {
+                if(PoolData != null) {
+                    if(poolData.getLastUpdated() == PoolData.getLastUpdated()) {
+                        changed = false;
+                    }
+                }
+            } else {
+                setProgressBarVisibility(activity, View.GONE);
+                setPoolValuesVisibility(activity, View.GONE);
+                TextView swapTotalLiquidityValueTextView = (TextView) activity.findViewById(R.id.swapTotalLiquidityValueTextView);
+                swapTotalLiquidityValueTextView.setText("");
+            }
+            if(changed) {
+                PoolData = poolData;
+                if (PoolData != null) {
+                    TextView swapTotalLiquidityValueTextView = (TextView) activity.findViewById(R.id.swapTotalLiquidityValueTextView);
+                    if (swapTotalLiquidityValueTextView != null) {
+                        swapTotalLiquidityValueTextView.setText(String.format(Locale.US, "%.8f %s\n%.8f %s", PoolData.getToken0Balance(), GlobalLyra.domainToSymbol(PoolData.getToken0()),
+                                PoolData.getToken1Balance(), GlobalLyra.domainToSymbol(PoolData.getToken1())));
+                    }
+                }
+            }
+        } catch (NullPointerException ignored) { }
+    }
+
     void restoreTimers(View view) {
         Activity activity = getActivity();
         if(activity == null)
@@ -369,15 +465,36 @@ public class FragmentSwap extends Fragment {
             @Override
             public void run () {
                 startHandler(100);
-                TextView swapExternalPriceValueTextView = (TextView) view.findViewById(R.id.swapExternalPriceValueTextView);
-                if (swapExternalPriceValueTextView != null) {
-                    activity.runOnUiThread(new Runnable() {
-                        public void run() {
-                            new ApiRpc().act(new ApiRpc.Action().actionPool("LyrPriceInUSD", "LYR", "tether/USDT"));
-                            swapExternalPriceValueTextView.setText(String.format(Locale.US, "$ %.8f", Global.getTokenPrice(new Pair<>("LYR", "USD"))));
-                        }
-                    });
-                }
+                activity.runOnUiThread(new Runnable() {
+                    public void run() {
+                        //new ApiRpc().act(new ApiRpc.Action().actionPool("LyrPriceInUSD", "LYR", "tether/USDT"));
+                        ApiRpc.Action action = new ApiRpc.Action();
+                        NetworkRpc rpc = (NetworkRpc) new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL)
+                                .execute("", "Pool", "LYR", "tether/USDT");
+                        rpc.setListener(new NetworkRpc.RpcTaskListener() {
+                            @Override
+                            public void onRpcTaskFinished(String[] output) {
+                                System.out.println("RPC POOL LYR/USDT: " + output[0] + output[1] + output[2]);
+                                try {
+                                    UiUpdates.setPoolData(new UiUpdates.PoolData(output[2]));
+                                    JSONObject obj = new JSONObject(output[2]);
+                                    JSONObject objBalance = obj.getJSONObject("balance");
+                                    if( UiUpdates.getPoolData().token0Is("tether/USDT") && UiUpdates.getPoolData().token0Is("LYR")) {
+                                        Global.setTokenPrice(new Pair<>("LYR", "tether/USDT"), objBalance.getDouble("tether/USDT") / objBalance.getDouble("LYR"));
+                                        TextView swapExternalPriceValueTextView = (TextView) view.findViewById(R.id.swapExternalPriceValueTextView);
+                                        if (swapExternalPriceValueTextView != null) {
+                                            swapExternalPriceValueTextView.setText(String.format(Locale.US, "$ %.8f", Global.getTokenPrice(new Pair<>("LYR", "USD"))));
+                                        }
+                                    }
+                                } catch (JSONException | NullPointerException e) {
+                                    e.printStackTrace();
+                                    Toast.makeText(activity, e.toString(), Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+
+                    }
+                });
             }
         },100,60 * 1000);
         timer2 = new Timer();
@@ -398,33 +515,7 @@ public class FragmentSwap extends Fragment {
                                     ((AccountHistoryGalleryAdapter)account_history_recycler.getAdapter()).updateUnitPrice("LYR");
                             } catch (NullPointerException ignored) { }
                         }
-
-                        try {
-                            UiUpdates.PoolData poolData = UiUpdates.getPoolData();
-                            boolean changed = true;
-                            if(poolData != null) {
-                                if(PoolData != null) {
-                                    if(poolData.getLastUpdated() == PoolData.getLastUpdated()) {
-                                        changed = false;
-                                    }
-                                }
-                            } else {
-                                setProgressBarVisibility(activity, View.GONE);
-                                setPoolValuesVisibility(activity, View.GONE);
-                                TextView swapTotalLiquidityValueTextView = (TextView) activity.findViewById(R.id.swapTotalLiquidityValueTextView);
-                                swapTotalLiquidityValueTextView.setText("");
-                            }
-                            if(changed) {
-                                PoolData = poolData;
-                                if (PoolData != null) {
-                                    TextView swapTotalLiquidityValueTextView = (TextView) activity.findViewById(R.id.swapTotalLiquidityValueTextView);
-                                    if (swapTotalLiquidityValueTextView != null) {
-                                        swapTotalLiquidityValueTextView.setText(String.format(Locale.US, "%.8f %s\n%.8f %s", PoolData.getToken0Balance(), GlobalLyra.domainToSymbol(PoolData.getToken0()),
-                                                PoolData.getToken1Balance(), GlobalLyra.domainToSymbol(PoolData.getToken1())));
-                                    }
-                                }
-                            }
-                        } catch (NullPointerException ignored) { }
+                        updatePoolLiquidity(view);
                         try {
                             UiUpdates.PoolCalculateData poolCalculateData = UiUpdates.getPoolCalculateData();
                             boolean changed = true;
@@ -440,7 +531,7 @@ public class FragmentSwap extends Fragment {
                                     Spinner tokenToSpinner = (Spinner) view.findViewById(R.id.swapToValueSpinner);
                                     if(GlobalLyra.domainToSymbol(poolCalculateData.getSwapInToken()).equals(tokenFromSpinner.getSelectedItem().toString()) &&
                                             GlobalLyra.domainToSymbol(poolCalculateData.getSwapOutToken()).equals(tokenToSpinner.getSelectedItem().toString())) {
-                                        FragmentSwap.setSwapValues(activity, PoolCalculateData.getSwapInToken(), PoolCalculateData.getSwapOutToken(),
+                                        setSwapValues(activity, PoolCalculateData.getSwapInToken(), PoolCalculateData.getSwapOutToken(),
                                                 PoolCalculateData.getPrice(), PoolCalculateData.getSwapInAmount(), PoolCalculateData.getSwapOutAmount(),
                                                 PoolCalculateData.getPriceImpact(), PoolCalculateData.getPayToProvider(), PoolCalculateData.getPayToAuthorizer());
                                     }
@@ -453,6 +544,7 @@ public class FragmentSwap extends Fragment {
             }
         },3000,3000);
     }
+
     public static void clearAccountFromTo(Activity activity) {
         try {
             EditText fromAmountEditText = (EditText) activity.findViewById(R.id.swapFromValueEditText);
@@ -510,7 +602,9 @@ public class FragmentSwap extends Fragment {
         CurvedBottomNavigationView bottomNavigationView = activity.findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setVisibility(View.VISIBLE);
 
-        UserInputValueChangedHandler = new Handler();
+        TextView swapAccountNameTextView = view.findViewById(R.id.swapAccountNameTextView);
+        swapAccountNameTextView.setText(String.format("%s/%s", Global.getSelectedAccountName(), Global.getCurrentNetworkName()));
+
 
         ApiRpcActionsHistory.load(Concatenate.getHistoryFileName());
         View v = new View((MainActivity) activity);
@@ -604,6 +698,7 @@ public class FragmentSwap extends Fragment {
                                 stopHandler();
                                 startHandler(2000);
                             }
+                            setPoolValuesVisibility(activity, View.GONE);
                             fromLastEditTextChanged = true;
                         } catch (NumberFormatException e) {
                             swapFromValueEditText.setText(s.subSequence(0, before - 1));
@@ -646,25 +741,82 @@ public class FragmentSwap extends Fragment {
         swapSwapActionButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 try {
+                    UiDialog.showDialogStatus(R.string.send_sending);
                     Spinner tokenFromSpinner = (Spinner) view.findViewById(R.id.swapFromValueSpinner);
                     Spinner tokenToSpinner = (Spinner) view.findViewById(R.id.swapToValueSpinner);
                     EditText swapFromValueEditText = (EditText) view.findViewById(R.id.swapFromValueEditText);
                     EditText swapToValueEditText = (EditText) view.findViewById(R.id.swapToValueEditText);
                     if(poolSelected) {
-                        new ApiRpc().act(new ApiRpc.Action().actionAddLiquidity(Global.getSelectedAccountId(),
+                        NetworkRpc rpc = (NetworkRpc) new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL, Global.getWalletPassword())
+                                .execute("", "AddLiquidity", Global.getSelectedAccountId(),
+                                        GlobalLyra.symbolToDomain(tokenFromSpinner.getSelectedItem().toString()), swapFromValueEditText.getText().toString(),
+                                        GlobalLyra.symbolToDomain(tokenToSpinner.getSelectedItem().toString()), swapToValueEditText.getText().toString()
+                                );
+                        rpc.setListener(new NetworkRpc.RpcTaskListener() {
+                            @Override
+                            public void onRpcTaskFinished(String[] output) {
+                                activity.runOnUiThread(new Runnable() {
+                                    public void run() {
+                                        System.out.println("RPC ADD LIQUIDITY: " + output[0] + output[1] + output[2]);
+                                        if (output[2].equals("error"))
+                                            UiDialog.showDialogStatus(R.string.str_an_error_occurred);
+                                        else {
+                                            FragmentSwap.clearAccountFromTo(activity);
+                                            try {
+                                                UiDialog.showDialogStatus(R.string.swap_add_liquidity_complete,
+                                                        ApiRpc.class.getDeclaredMethod("runActionHistory"));
+                                            } catch (NoSuchMethodException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                        });
+                        /*new ApiRpc().act(new ApiRpc.Action().actionAddLiquidity(Global.getSelectedAccountId(),
                                 GlobalLyra.symbolToDomain(tokenFromSpinner.getSelectedItem().toString()), Double.parseDouble(swapFromValueEditText.getText().toString()),
-                                GlobalLyra.symbolToDomain(tokenToSpinner.getSelectedItem().toString()), Double.parseDouble(swapToValueEditText.getText().toString())));
+                                GlobalLyra.symbolToDomain(tokenToSpinner.getSelectedItem().toString()), Double.parseDouble(swapToValueEditText.getText().toString())));*/
                         Toast.makeText(view.getContext(), getText(R.string.swap_add_liquidity_action_begin), Toast.LENGTH_LONG).show();
                     } else {
                         UiUpdates.PoolCalculateData poolCalculateData = UiUpdates.getPoolCalculateData();
                         if(poolCalculateData != null) {
-                            new ApiRpc().act(new ApiRpc.Action().actionSwap(Global.getSelectedAccountId(),
+                            NetworkRpc rpc = (NetworkRpc) new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL, Global.getWalletPassword())
+                                    .execute("", "Swap", Global.getSelectedAccountId(),
+                                            GlobalLyra.symbolToDomain(tokenFromSpinner.getSelectedItem().toString()),
+                                            GlobalLyra.symbolToDomain(tokenToSpinner.getSelectedItem().toString()),
+                                            GlobalLyra.symbolToDomain(tokenFromSpinner.getSelectedItem().toString()),
+                                            swapFromValueEditText.getText().toString(),
+                                            String.valueOf(poolCalculateData.getMinimumReceived())
+                                    );
+                            rpc.setListener(new NetworkRpc.RpcTaskListener() {
+                                @Override
+                                public void onRpcTaskFinished(String[] output) {
+                                    activity.runOnUiThread(new Runnable() {
+                                        public void run() {
+                                            System.out.println("RPC SWAP: " + output[0] + output[1] + output[2]);
+                                            if (output[2].equals("error"))
+                                                UiDialog.showDialogStatus(R.string.str_an_error_occurred, R.string.str_please_contact_lyra_period_inc);
+                                            else {
+                                                FragmentSwap.clearAccountFromTo(activity);
+                                                try {
+                                                    UiDialog.showDialogStatus(R.string.swap_swap_complete,
+                                                            ApiRpc.class.getDeclaredMethod("runActionHistory"));
+                                                } catch (NoSuchMethodException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+
+                            /*new ApiRpc().act(new ApiRpc.Action().actionSwap(Global.getSelectedAccountId(),
                                     GlobalLyra.symbolToDomain(tokenFromSpinner.getSelectedItem().toString()),
                                     GlobalLyra.symbolToDomain(tokenToSpinner.getSelectedItem().toString()),
                                     GlobalLyra.symbolToDomain(tokenFromSpinner.getSelectedItem().toString()),
                                     Double.parseDouble(swapFromValueEditText.getText().toString()),
                                     poolCalculateData.getMinimumReceived()
-                            ));
+                            ));*/
                             Toast.makeText(view.getContext(), getText(R.string.swap_swap_action_begin), Toast.LENGTH_LONG).show();
                         } else {
 

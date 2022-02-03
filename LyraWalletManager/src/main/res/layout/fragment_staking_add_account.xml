@@ -7,12 +7,14 @@
 
     <TextView
         android:id="@+id/textView7"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
         android:text="@string/Add_new_staking_account"
         android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -37,7 +39,7 @@
             android:background="@drawable/fab_spinner_send_token_select_outline">
 
             <EditText
-                android:id="@+id/stakingTokenAmountValue"
+                android:id="@+id/dialogStakingTokenAmountValue"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="8dp"
@@ -74,7 +76,7 @@
             android:layout_height="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/stakingAddAccountAmountValue" />
+            app:layout_constraintTop_toBottomOf="@+id/dialogStakingAddAccountDaysValue" />
 
         <TextView
             android:id="@+id/textView27"
@@ -84,7 +86,7 @@
             android:textAlignment="center" />
 
         <Spinner
-            android:id="@+id/stakingAddAccountSpinner"
+            android:id="@+id/dialogStakingAddAccountSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -107,7 +109,7 @@
             android:background="@drawable/fab_spinner_send_token_select_outline">
 
             <EditText
-                android:id="@+id/stakingAddAccountAmountValue"
+                android:id="@+id/stakingAddAccountDaysValue"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="8dp"
@@ -127,7 +129,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
-            android:id="@+id/stakingAddAccountAddButton"
+            android:id="@+id/stakingAddAccountPreviewButton"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginStart="16dp"
@@ -137,7 +139,7 @@
             android:backgroundTintMode="add"
             android:insetTop="0dp"
             android:insetBottom="0dp"
-            android:text="@string/Stake"
+            android:text="@string/Preview"
             android:textAllCaps="true"
             app:cornerRadius="@dimen/button_round_corner" />
 
@@ -147,6 +149,6 @@
             android:layout_height="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/stakingAddAccountAmountValue" />
+            app:layout_constraintTop_toBottomOf="@+id/dialogStakingAddAccountDaysValue" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

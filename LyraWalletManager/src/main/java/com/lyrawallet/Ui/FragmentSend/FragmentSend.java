@@ -16,6 +16,7 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -23,13 +24,19 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.lyrawallet.Api.ApiRpc;
+import com.lyrawallet.Api.Network.NetworkRpc;
 import com.lyrawallet.Crypto.CryptoSignatures;
 import com.lyrawallet.Global;
 import com.lyrawallet.GlobalLyra;
 import com.lyrawallet.R;
+import com.lyrawallet.Ui.FragmentManagerUser;
 import com.lyrawallet.Ui.TokensSpinnerAdapter;
+import com.lyrawallet.Ui.UiDialog;
 import com.lyrawallet.Ui.UiHelpers;
 import com.lyrawallet.Ui.UtilGetData;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -308,11 +315,53 @@ public class FragmentSend extends Fragment {
                             activity.runOnUiThread(new Runnable() {
                                 public void run() {
                                     try {
-                                        new ApiRpc().act(new ApiRpc.Action().actionSend(
-                                                Global.getSelectedAccountId(),
-                                                Double.parseDouble(tokenAmountEditText.getText().toString()),
-                                                GlobalLyra.symbolToDomain(tokenToSend),
-                                                recipientAddressEditText.getText().toString()));
+                                        UiDialog.showDialogStatus(R.string.send_sending);
+                                        NetworkRpc rpc = (NetworkRpc) new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL, Global.getWalletPassword())
+                                                .execute("", "Send", Global.getSelectedAccountId(),
+                                                        tokenAmountEditText.getText().toString(),
+                                                        recipientAddressEditText.getText().toString(),
+                                                        GlobalLyra.symbolToDomain(tokenToSend)
+                                        );
+                                        rpc.setListener(new NetworkRpc.RpcTaskListener() {
+                                            @Override
+                                            public void onRpcTaskFinished(String[] output) {
+                                                activity.runOnUiThread(new Runnable() {
+                                                    public void run() {
+                                                        System.out.println("RPC SEND: " + output[0] + output[1] + output[2]);
+                                                        EditText recipientAddressEditText = (EditText) activity.findViewById(R.id.sendTokenRecipientAddressValue);
+                                                        EditText tokenAmountEditText = (EditText) activity.findViewById(R.id.sendTokenAmountValue);
+                                                        if (recipientAddressEditText != null && tokenAmountEditText != null) {
+                                                            try {
+                                                                JSONObject objRsp = new JSONObject(output[2]);
+                                                                if (!objRsp.isNull("txHash")) { // If txHash is present, the transaction is successfully send.
+                                                                    Spinner tokenSpinner = (Spinner) activity.findViewById(R.id.sendTokenSelectSpinner);
+                                                                    SpinnerAdapter adapter = tokenSpinner.getAdapter();
+                                                                    String tokenToSend = adapter.getItem(tokenSpinner.getSelectedItemPosition()).toString();
+                                                                    ApiRpc.getBalanceAfterAction();
+                                                                    try {
+                                                                        UiDialog.showDialogStatus(R.string.send_successful, String.format(Locale.US, "%s: %f %s\n%s: %s-%d (%s)\n%s: %s",
+                                                                                activity.getString(R.string.Send1), Double.parseDouble(tokenAmountEditText.getText().toString()), tokenToSend,
+                                                                                activity.getString(R.string.From), activity.getString(R.string.Wallet), Global.getSelectedAccountNr() + 1, UiHelpers.getShortAccountId(Global.getSelectedAccountId(), 4),
+                                                                                activity.getString(R.string.To), UiHelpers.getShortAccountId(recipientAddressEditText.getText().toString(), 7)),
+                                                                                ApiRpc.class.getDeclaredMethod("runActionHistory")
+                                                                        );
+                                                                    } catch (NoSuchMethodException e) {
+                                                                        e.printStackTrace();
+                                                                    }
+                                                                    recipientAddressEditText.setText("");
+                                                                    tokenAmountEditText.setText("");
+                                                                    new FragmentManagerUser().goToAccount();
+                                                                }
+                                                            } catch (JSONException e) {
+                                                                e.printStackTrace();
+                                                                Toast.makeText(activity, e.toString(), Toast.LENGTH_LONG).show();
+                                                            }
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        });
+
                                         alertDialog.dismiss();
                                     } catch (NumberFormatException ex) {
                                         Snackbar.make(view, "An error occurred when trying to send.", Snackbar.LENGTH_LONG)

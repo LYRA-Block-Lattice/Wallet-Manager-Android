@@ -33,7 +33,6 @@ public class PreferencesLoad extends MainActivity {
         } else {
             Global.setInactivityTimeForClose(Integer.parseInt(inactivityTime));
         }
-        Global.setPasswordSaveAllowed(prefs.getString(getInstance().getString(R.string.pref_password_store_selection_key), "N").equals("Y"));
         Global.setDebugEnabled(prefs.getBoolean(getInstance().getString(R.string.pref_debug_enabled_switch_key), false));
         Global.setRandomizeIpEnabled(prefs.getBoolean(getInstance().getString(R.string.pref_randomize_node_address_enabled_switch_key), false));
     }
