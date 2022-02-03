@@ -927,42 +927,6 @@ public class ApiRpc extends MainActivity implements NetworkRpc.RpcTaskInformer {
                 if (output[0].equals("History")) {
                     ApiRpcActionsHistory.store(ac, output[2]);
                 } else if (output[0].equals("Send")) {
-                    EditText recipientAddressEditText = (EditText) activity.findViewById(R.id.sendTokenRecipientAddressValue);
-                    EditText tokenAmountEditText = (EditText) activity.findViewById(R.id.sendTokenAmountValue);
-                    if(recipientAddressEditText != null && tokenAmountEditText != null) {
-                        try {
-                            JSONObject objCmd = new JSONObject(output[1]);
-                            if (!objCmd.isNull("account_id") && !objCmd.isNull("destination_account_id")) {
-                                // Filter to show the message for the currently selected account and selected destination.
-                                if (objCmd.getString("account_id").equals(Global.getSelectedAccountId()) &&
-                                        objCmd.getString("destination_account_id").equals(recipientAddressEditText.getText().toString())) {
-                                    JSONObject objRsp = new JSONObject(output[2]);
-                                    if (!objRsp.isNull("txHash")) { // If thHash is present, the transaction is successfully send.
-                                        Spinner tokenSpinner = (Spinner) activity.findViewById(R.id.sendTokenSelectSpinner);
-                                        SpinnerAdapter adapter = tokenSpinner.getAdapter();
-                                        String tokenToSend = adapter.getItem(tokenSpinner.getSelectedItemPosition()).toString();
-                                        getBalanceAfterAction();
-                                        try {
-                                            UiDialog.showDialogStatus(R.string.send_successful, String.format(Locale.US, "%s: %f %s\n%s: %s-%d (%s)\n%s: %s",
-                                                    activity.getString(R.string.Send1), Double.parseDouble(tokenAmountEditText.getText().toString()), tokenToSend,
-                                                    activity.getString(R.string.From), activity.getString(R.string.Wallet), Global.getSelectedAccountNr() + 1, UiHelpers.getShortAccountId(Global.getSelectedAccountId(), 4),
-                                                    activity.getString(R.string.To), UiHelpers.getShortAccountId(recipientAddressEditText.getText().toString(), 7)),
-                                                    ApiRpc.class.getDeclaredMethod("runActionHistory")
-                                            );
-                                        } catch (NoSuchMethodException e) {
-                                            e.printStackTrace();
-                                        }
-                                        recipientAddressEditText.setText("");
-                                        tokenAmountEditText.setText("");
-                                        new FragmentManagerUser().goToAccount();
-                                    }
-                                }
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Toast.makeText(activity, e.toString(), Toast.LENGTH_LONG).show();
-                        }
-                    }
                 } else if(output[0].equals("Receive")) {
                     getBalanceAfterAction();
                 } else if(output[0].equals("Balance")) {
