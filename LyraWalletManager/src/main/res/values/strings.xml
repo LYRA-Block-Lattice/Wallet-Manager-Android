@@ -48,11 +48,18 @@
     <string name="Minted_block">Minted block</string>
     <string name="Account_type">Account type</string>
     <string name="Account_name">Account name</string>
+    <string name="Amount_to_stake">Your amount to stake</string>
     <string name="Add_new_staking_account">Add new staking account</string>
+    <string name="Add_stake">Add stake</string>
+    <string name="Adding_stake">Adding stake</string>
     <string name="Preview_add_new_staking_account">Preview add new staking account</string>
     <string name="Confirm_action">Confirm action</string>
+    <string name="Creating_staking_account">Creating staking account</string>
     <string name="Days_to_stake">Days to stake</string>
     <string name="Days_to_stake_min_max">Days to stake from 3 to 36500 days</string>
+    <string name="Error_adding_staking">Error adding staking</string>
+    <string name="Finished_to_add_stake">Finished to add stake</string>
+    <string name="Name_of_staking_account">Name of staking account</string>
     <string name="Transaction_detail">Transaction detail</string>
     <string name="Request_token">Request token</string>
     <string name="Invalid_request">Invalid request</string>
@@ -61,6 +68,7 @@
     <string name="Time_stamp">Time stamp</string>
     <string name="Send_account_id">Send account ID</string>
     <string name="Send_hash">Send hash</string>
+    <string name="Staking_validity">Staking validity</string>
     <string name="Receive_account_id">Receive account ID</string>
     <string name="Receive_hash">Receive hash</string>
     <string name="Amount_transferred">Amount transferred</string>

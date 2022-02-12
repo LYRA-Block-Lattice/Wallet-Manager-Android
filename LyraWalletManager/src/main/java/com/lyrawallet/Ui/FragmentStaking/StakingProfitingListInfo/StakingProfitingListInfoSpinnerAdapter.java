@@ -1,4 +1,4 @@
-package com.lyrawallet.Ui.FragmentStaking.ProfitingListInfo;
+package com.lyrawallet.Ui.FragmentStaking.StakingProfitingListInfo;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,14 +11,13 @@ import androidx.annotation.NonNull;
 
 import com.lyrawallet.R;
 
-import java.sql.Array;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 
-public class ProfitingListInfoSpinnerAdapter extends ArrayAdapter<String> {
+public class StakingProfitingListInfoSpinnerAdapter extends ArrayAdapter<String> {
     private int Resource = 0;
     private Context ctx;
     double AmountToStake = 0;
@@ -34,10 +33,10 @@ public class ProfitingListInfoSpinnerAdapter extends ArrayAdapter<String> {
     Double[] YourShareWillBe;
     boolean[] fetch;
 
-    public ProfitingListInfoSpinnerAdapter(Context context, int resource,
-                                           String[] accountName, String[] accountId, String[] accountType, Double[] shareRatio,
-                                           Integer[] seats, Long[] timeStamp, Double[] totalProfit,
-                                           Double[] totalStaked, Double[] yourShareWillBe) {
+    public StakingProfitingListInfoSpinnerAdapter(Context context, int resource,
+                                                  String[] accountName, String[] accountId, String[] accountType, Double[] shareRatio,
+                                                  Integer[] seats, Long[] timeStamp, Double[] totalProfit,
+                                                  Double[] totalStaked, Double[] yourShareWillBe) {
         super(context,  R.layout.profiting_account_info_entry, R.id.profitingAccountInfoAccountName, accountName);
         Resource = resource;
         this.ctx = context;

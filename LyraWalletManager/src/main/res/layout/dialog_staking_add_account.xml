@@ -32,35 +32,107 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/fab_spinner_send_token_select_outline">
 
             <TextView
-                android:id="@+id/dialogStakingTokenAmountValue"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:gravity="end|center"
-                android:padding="8dip"
-                android:singleLine="true"
+                android:id="@+id/textView29"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="0dip"
+                android:text="@string/Account_name"
                 android:textColor="@color/page_text"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/dialogStakingAddAccountNameValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="0dip"
+                android:text="@string/Some_name"
+                android:textColor="@color/page_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView29" />
+
+            <TableRow
+                android:id="@+id/hr2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#AAA"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/dialogStakingAddAccountNameValue" />
+
+            <TextView
+                android:id="@+id/textView12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="0dip"
+                android:text="@string/Staking_validity"
+                android:textColor="@color/page_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/dialogStakingAddAccountNameValue" />
+
+            <TextView
+                android:id="@+id/dialogStakingAddAccountDaysValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="0dip"
+                android:singleLine="true"
+                android:text="@string/Some_account_validity1"
+                android:textColor="@color/page_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView12" />
+
+            <TableRow
+                android:id="@+id/hr3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#AAA"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/dialogStakingAddAccountDaysValue" />
+
+            <TextView
+                android:id="@+id/textView13"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="0dip"
+                android:text="@string/Amount_to_stake"
+                android:textColor="@color/page_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/hr3" />
+
+            <TextView
+                android:id="@+id/dialogStakingTokenAmountValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="0dip"
+                android:singleLine="true"
+                android:text="@string/zero_lyr"
+                android:textColor="@color/page_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView13" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Space
             android:id="@+id/space6"
             android:layout_width="match_parent"
-            android:layout_height="8dp"
+            android:layout_height="4dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dialogStakingAddAccountDaysValue" />
+            app:layout_constraintTop_toBottomOf="@+id/dialogStakingTokenAmountValue" />
 
         <TextView
             android:id="@+id/textView27"
@@ -74,7 +146,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="0dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/fab_spinner_send_token_select_outline">
 
@@ -257,32 +329,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/fab_spinner_send_token_select_outline">
-
-            <TextView
-                android:id="@+id/dialogStakingAddAccountDaysValue"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:gravity="end|center"
-                android:padding="8dip"
-                android:singleLine="true"
-                android:textColor="@color/page_text"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
             android:id="@+id/dialogStakingAddAccountStakeButton"

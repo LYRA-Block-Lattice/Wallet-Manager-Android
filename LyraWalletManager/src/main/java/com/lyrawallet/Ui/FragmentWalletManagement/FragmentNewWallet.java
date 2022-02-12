@@ -1,5 +1,6 @@
 package com.lyrawallet.Ui.FragmentWalletManagement;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.method.PasswordTransformationMethod;
@@ -54,8 +55,11 @@ public class FragmentNewWallet extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        CurvedBottomNavigationView bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.setVisibility(View.GONE);
+        Activity activity = getActivity();
+        if (activity != null) {
+            CurvedBottomNavigationView bottomNavigationView = activity.findViewById(R.id.bottomNavigationView);
+            bottomNavigationView.setVisibility(View.GONE);
+        }
 
         EditText newWalletNameEditText = view.findViewById(R.id.newWalletName);
         EditText password1EditText = view.findViewById(R.id.newWalletPassword1);

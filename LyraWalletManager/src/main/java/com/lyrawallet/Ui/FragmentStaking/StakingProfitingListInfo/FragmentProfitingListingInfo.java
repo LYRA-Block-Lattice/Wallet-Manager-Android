@@ -1,9 +1,10 @@
-package com.lyrawallet.Ui.FragmentStaking.ProfitingListInfo;
+package com.lyrawallet.Ui.FragmentStaking.StakingProfitingListInfo;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,15 +16,24 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.snackbar.Snackbar;
+import com.lyrawallet.Api.Network.NetworkRpc;
 import com.lyrawallet.Api.Network.NetworkWebHttps;
 import com.lyrawallet.Api.ApiWebActions.ApiNode;
 import com.lyrawallet.Global;
 import com.lyrawallet.GlobalLyra;
 import com.lyrawallet.R;
+import com.lyrawallet.Ui.FragmentManagerUser;
+import com.lyrawallet.Ui.UiDialog;
 import com.lyrawallet.Ui.UiHelpers;
+import com.lyrawallet.Util.UtilTextFilters;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -37,7 +47,7 @@ import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView;
 
 public class FragmentProfitingListingInfo extends Fragment {
     int historyLen = 0;
-    ProfitingListInfoSpinnerAdapter adapter;
+    StakingProfitingListInfoSpinnerAdapter adapter;
     private boolean refreshInProgress = false;
     Timer timer1;
     Timer timer2;
@@ -57,7 +67,7 @@ public class FragmentProfitingListingInfo extends Fragment {
         EditText stakingAddAccountDaysValue = (EditText) v.findViewById(R.id.stakingAddAccountDaysValue);
         Button stakingAddAccountPreviewButton = (Button) v.findViewById(R.id.stakingAddAccountPreviewButton);
         Spinner tokenSpinner = (Spinner) v.findViewById(R.id.dialogStakingAddAccountSpinner);
-        ProfitingListInfoSpinnerAdapter adapter = (ProfitingListInfoSpinnerAdapter) tokenSpinner.getAdapter();
+        StakingProfitingListInfoSpinnerAdapter adapter = (StakingProfitingListInfoSpinnerAdapter) tokenSpinner.getAdapter();
         int selectedItem = tokenSpinner.getSelectedItemPosition();
         int stakingDays = 0;
         if(stakingAddAccountDaysValue.getText().toString().length() > 0) {
@@ -100,7 +110,7 @@ public class FragmentProfitingListingInfo extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         Activity activity = getActivity();
         if (activity == null)
             return;
@@ -141,7 +151,7 @@ public class FragmentProfitingListingInfo extends Fragment {
                     yourShareWillBe.add(0d);
                 }
 
-                ProfitingListInfoSpinnerAdapter adapter = new ProfitingListInfoSpinnerAdapter(view.getContext(), R.layout.profiting_account_info_entry,
+                StakingProfitingListInfoSpinnerAdapter adapter = new StakingProfitingListInfoSpinnerAdapter(view.getContext(), R.layout.profiting_account_info_entry,
                         accountName.toArray(new String[0]), accountId.toArray(new String[0]), accountType.toArray(new String[0]), shareRatio.toArray(new Double[0]), seats.toArray(new Integer[0]),
                         timeStamp.toArray(new Long[0]), totalProfit.toArray(new Double[0]), totalStaked.toArray(new Double[0]), yourShareWillBe.toArray(new Double[0])
                 );
@@ -153,7 +163,7 @@ public class FragmentProfitingListingInfo extends Fragment {
 
         tokenSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                ProfitingListInfoSpinnerAdapter adapter = (ProfitingListInfoSpinnerAdapter) adapterView.getAdapter();
+                StakingProfitingListInfoSpinnerAdapter adapter = (StakingProfitingListInfoSpinnerAdapter) adapterView.getAdapter();
                 NetworkWebHttps webHttpsTask = new NetworkWebHttps();
                 webHttpsTask.setListener(new NetworkWebHttps.WebHttpsTaskListener() {
                     @Override
@@ -198,7 +208,7 @@ public class FragmentProfitingListingInfo extends Fragment {
                 if(s.length() > 0) {
                     try {
                         Double.parseDouble(s.toString());
-                        ProfitingListInfoSpinnerAdapter adapter = (ProfitingListInfoSpinnerAdapter) tokenSpinner.getAdapter();
+                        StakingProfitingListInfoSpinnerAdapter adapter = (StakingProfitingListInfoSpinnerAdapter) tokenSpinner.getAdapter();
                         adapter.clearFetch();
                         EditText stakingTokenAmountValue = (EditText) v.findViewById(R.id.dialogStakingTokenAmountValue);
                         double amount = 0f;
@@ -216,6 +226,9 @@ public class FragmentProfitingListingInfo extends Fragment {
                 check(v);
             }
         });
+
+        EditText stakingAddAccountNameValue = (EditText) view.findViewById(R.id.stakingAddAccountNameValue);
+        stakingAddAccountNameValue.setFilters(new InputFilter[]{UtilTextFilters.getCharactersDigitsAndSpaceFilter()});
 
         EditText stakingAddAccountDaysValue = (EditText) view.findViewById(R.id.stakingAddAccountDaysValue);
         stakingAddAccountDaysValue.addTextChangedListener(new TextWatcher() {
@@ -242,6 +255,8 @@ public class FragmentProfitingListingInfo extends Fragment {
             }
         });
 
+//dialogStakingTokenAmountValue    dialogStakingAddAccountDaysValue
+
         double amount = Global.getAvailableToken("LYR");
         if (amount != 0f) {
             stakingTokenAmountValue.setHint(String.format(Locale.US, "%s %.6f LYR", getString(R.string.send_token_available), amount));
@@ -252,9 +267,10 @@ public class FragmentProfitingListingInfo extends Fragment {
         stakingAddAccountPreviewButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 String StakingTokenAmountValue = stakingTokenAmountValue.getText().toString();
+                String StakingAddAccountNameValue = stakingAddAccountNameValue.getText().toString();
                 String StakingAddAccountDaysValue = stakingAddAccountDaysValue.getText().toString();
                 Spinner tokenSpinner = (Spinner) view.findViewById(R.id.dialogStakingAddAccountSpinner);
-                ProfitingListInfoSpinnerAdapter adapter = (ProfitingListInfoSpinnerAdapter) tokenSpinner.getAdapter();
+                StakingProfitingListInfoSpinnerAdapter adapter = (StakingProfitingListInfoSpinnerAdapter) tokenSpinner.getAdapter();
                 int selectedItem = tokenSpinner.getSelectedItemPosition();
                 //adapter.AccountId[tokenSpinner.getSelectedItemPosition()];
 
@@ -281,8 +297,9 @@ public class FragmentProfitingListingInfo extends Fragment {
                 TextView dialogStakingAccountInfoTotalStaked = (TextView) mView.findViewById(R.id.dialogStakingAccountInfoTotalStaked);
                 TextView dialogStakingAccountInfoYourShare = (TextView) mView.findViewById(R.id.dialogStakingAccountInfoYourShare);
                 TextView dialogStakingAddAccountDaysValue = (TextView) mView.findViewById(R.id.dialogStakingAddAccountDaysValue);
+                TextView dialogStakingAddAccountNameValue = (TextView) mView.findViewById(R.id.dialogStakingAddAccountNameValue);
 
-                dialogStakingTokenAmountValue.setText(String.format("%s %s", StakingTokenAmountValue, getString(R.string.Days)));
+                dialogStakingTokenAmountValue.setText(String.format("%s LYR", StakingTokenAmountValue));
                 dialogStakingAccountInfoAccountName.setText(adapter.AccountName[selectedItem]);
                 dialogStakingAccountInfoAccountType.setText(adapter.AccountType[selectedItem]);
                 //.setText(adapter.AccountId[selectedItem]);
@@ -292,13 +309,73 @@ public class FragmentProfitingListingInfo extends Fragment {
                 dialogStakingAccountInfoTotalProfit.setText(String.format(Locale.US, "%.8f", adapter.TotalProfit[selectedItem]));
                 dialogStakingAccountInfoTotalStaked.setText(String.format(Locale.US, "%.8f", adapter.TotalStaked[selectedItem]));
                 dialogStakingAccountInfoYourShare.setText(String.format(Locale.US, "%.3f%%", adapter.YourShareWillBe[selectedItem] * 100));
-                dialogStakingAddAccountDaysValue.setText(String.format("%s LYR", StakingAddAccountDaysValue));
+                dialogStakingAddAccountNameValue.setText(StakingAddAccountNameValue);
+                dialogStakingAddAccountDaysValue.setText(String.format("%s %s", StakingAddAccountDaysValue, getString(R.string.Days)));
                 alertDialog.show();
 
                 Button dialogStakingAddAccountStakeButton = (Button) mView.findViewById(R.id.dialogStakingAddAccountStakeButton);
                 dialogStakingAddAccountStakeButton.setOnClickListener(new View.OnClickListener() {
                     public void onClick(View v) {
-
+                        Activity activity = getActivity();
+                        if (activity == null)
+                            return;
+                        activity.runOnUiThread(new Runnable() {
+                            public void run() {
+                                try {
+                                    int selectedItem = tokenSpinner.getSelectedItemPosition();
+                                    dialogStakingAccountInfoAccountName.setText(adapter.AccountName[selectedItem]);
+                                    UiDialog.showDialogStatus(R.string.Creating_staking_account);
+                                    NetworkRpc rpc = (NetworkRpc) new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL, Global.getWalletPassword())
+                                            .execute("", "CreateStakingAccount", Global.getSelectedAccountId(),
+                                                    dialogStakingAddAccountNameValue.getText().toString(), adapter.AccountId[selectedItem],
+                                                    StakingAddAccountDaysValue, "true");
+                                    rpc.setListener(new NetworkRpc.RpcTaskListener() {
+                                        @Override
+                                        public void onRpcTaskFinished(String[] output) {
+                                            System.out.println("RPC CREATE STAKING ACCOUNT: " + output[0] + output[1] + output[2]);
+                                            Activity activity = getActivity();
+                                            if (activity == null)
+                                                return;
+                                            activity.runOnUiThread(new Runnable() {
+                                                public void run() {
+                                                    try {
+                                                        JSONObject objRsp = new JSONObject(output[2]);
+                                                        if (objRsp.isNull("stkid")) {
+                                                            UiDialog.showDialogStatus(R.string.Error_adding_staking);
+                                                            return;
+                                                        }
+                                                        UiDialog.showDialogStatus(R.string.Adding_stake);
+                                                        NetworkRpc rpc = (NetworkRpc) new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL, Global.getWalletPassword())
+                                                                .execute("", "AddStaking", Global.getSelectedAccountId(),
+                                                                        objRsp.getString("stkid"),
+                                                                        StakingTokenAmountValue);
+                                                        rpc.setListener(new NetworkRpc.RpcTaskListener() {
+                                                            @Override
+                                                            public void onRpcTaskFinished(String[] output) {
+                                                                System.out.println("RPC ADD STAKING: " + output[0] + output[1] + output[2]);
+                                                                activity.runOnUiThread(new Runnable() {
+                                                                    public void run() {
+                                                                        UiDialog.showDialogStatus(R.string.Finished_to_add_stake);
+                                                                        alertDialog.dismiss();
+                                                                        new FragmentManagerUser().goToStaking();
+                                                                    }
+                                                                });
+                                                            }
+                                                        });
+                                                    } catch (NumberFormatException | JSONException ex) {
+                                                        Snackbar.make(view, "An error occurred when trying to add staking.", Snackbar.LENGTH_LONG)
+                                                                .setAction("", null).show();
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    });
+                                } catch (NumberFormatException ex) {
+                                    Snackbar.make(view, "An error occurred when trying to create staking account.", Snackbar.LENGTH_LONG)
+                                            .setAction("", null).show();
+                                }
+                            }
+                        });
                     }
                 });
             }

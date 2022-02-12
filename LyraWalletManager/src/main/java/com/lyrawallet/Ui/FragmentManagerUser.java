@@ -18,7 +18,7 @@ import com.lyrawallet.Ui.FragmentReceive.FragmentReceive;
 import com.lyrawallet.Ui.FragmentReceive.FragmentReceiveDialog;
 import com.lyrawallet.Ui.FragmentSend.FragmentSend;
 import com.lyrawallet.Ui.FragmentStaking.FragmentStaking;
-import com.lyrawallet.Ui.FragmentStaking.ProfitingListInfo.FragmentProfitingListingInfo;
+import com.lyrawallet.Ui.FragmentStaking.StakingProfitingListInfo.FragmentProfitingListingInfo;
 import com.lyrawallet.Ui.FragmentSwap.FragmentSwap;
 import com.lyrawallet.Ui.FragmentWalletManagement.FragmentImportWallet;
 import com.lyrawallet.Ui.FragmentWalletManagement.FragmentNewAccount;
@@ -87,9 +87,6 @@ public class FragmentManagerUser extends MainActivity {
                 break;
             case DIALOG_CREATE_STAKING:
                 new FragmentManagerUser().goToDialogCreateStaking();
-                break;
-            case DIALOG_ADD_STAKING:
-                new FragmentManagerUser().goToDialogAddStaking(params);
                 break;
             default:
                 new FragmentManagerUser().goToOpenWallet();
@@ -369,18 +366,4 @@ public class FragmentManagerUser extends MainActivity {
                     .commit();
         }
     }
-
-    public void goToDialogAddStaking(String[] params) {
-        Global.setVisiblePage(Global.visiblePage.DIALOG_ADD_STAKING);
-        if(getCurrentFragment() != Global.visiblePage.DIALOG_ADD_STAKING.ordinal()) {
-            getInstance().getSupportFragmentManager()
-                    .beginTransaction()
-                    .setReorderingAllowed(true)
-                    .addToBackStack(String.valueOf(Global.visiblePage.DIALOG_ADD_STAKING.ordinal()))
-                    .replace(R.id.nav_host_fragment_content_main, new FragmentTransactionDetailsDialog(params), "DIALOG_ADD_STAKING")
-                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                    .commit();
-        }
-    }
-
 }

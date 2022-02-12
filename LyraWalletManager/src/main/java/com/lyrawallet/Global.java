@@ -31,8 +31,7 @@ public class Global {
         DIALOG_RECEIVE,
         DIALOG_TRANSACTION_DETAIL,
         DIALOG_STAKING_DETAIL,
-        DIALOG_CREATE_STAKING,
-        DIALOG_ADD_STAKING
+        DIALOG_CREATE_STAKING
     }
 
     // Global constants

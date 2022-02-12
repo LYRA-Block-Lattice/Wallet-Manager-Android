@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.lyrawallet.Api.ApiRpc;
 import com.lyrawallet.Global;
 import com.lyrawallet.MainActivity;
@@ -24,6 +25,7 @@ import com.lyrawallet.R;
 import com.lyrawallet.Ui.FragmentManagerUser;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -93,7 +95,7 @@ public class FragmentStaking extends Fragment {
                     populateStaking(view);
                 }
             }
-        }, 100, 1000);
+        }, 500, 1000);
         timer2 = new Timer();
         timer2.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -107,7 +109,7 @@ public class FragmentStaking extends Fragment {
                     });
                 }
             }
-        }, 100, 60 * 1000);
+        }, 500, 60 * 1000);
     }
     @Override
     public void onResume() {
@@ -153,15 +155,16 @@ public class FragmentStaking extends Fragment {
                     }
                     historyLen = entryList.size();
                 } catch (NullPointerException ignored) { }
+                RecyclerView account_history_recycler = activity.findViewById(R.id.stakingAccountsRecycler);
                 FragmentStaking.ClickListener listener = new FragmentStaking.ClickListener() {
                     @Override
                     public void click(int index) {
-                        //new FragmentManagerUser().goToDialogStakingDetail(new String[]{entryList.get(index).AccountName});
+                        Snackbar.make(view, String.format(Locale.US, "You clicked: %d", index), Snackbar.LENGTH_LONG)
+                                .setAction("", null).show();
                     }
                 };
                 adapter = new StakingGalleryAdapter(
                         entryList, activity, listener);
-                RecyclerView account_history_recycler = activity.findViewById(R.id.stakingAccountsRecycler);
                 if(account_history_recycler != null) {
                     account_history_recycler.setAdapter(adapter);
                     account_history_recycler.setLayoutManager(
@@ -199,29 +202,30 @@ public class FragmentStaking extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         FragmentActivity activity = getActivity();
-        if (activity != null) {
-            CurvedBottomNavigationView bottomNavigationView = activity.findViewById(R.id.bottomNavigationView);
-            bottomNavigationView.setVisibility(View.VISIBLE);
-
-            TextView stakingAccountNameTextView = view.findViewById(R.id.stakingAccountNameTextView);
-            stakingAccountNameTextView.setText(String.format("%s/%s", Global.getSelectedAccountName(), Global.getCurrentNetworkName()));
-
-            ProgressBar progress = activity.findViewById(R.id.stakingAccountProgressBar);
-            if (progress != null) {
-                progress.setVisibility(View.VISIBLE);
-            }
-            ///LayoutInflater inflater = requireActivity().getLayoutInflater();
-
-            View v = new View((MainActivity) getActivity());
-            //new Accounts((MainActivity) getActivity()).promptForPassword(getContext(), v.getRootView());
-            historyLen = 0;
-
-            Button stakingAccountAddNewButton = (Button) view.findViewById(R.id.stakingAccountAddNewButton);
-            stakingAccountAddNewButton.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    new FragmentManagerUser().goToDialogCreateStaking();
-                }
-            });
+        if (activity == null) {
+            return;
         }
+        CurvedBottomNavigationView bottomNavigationView = activity.findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setVisibility(View.VISIBLE);
+
+        TextView stakingAccountNameTextView = view.findViewById(R.id.stakingAccountNameTextView);
+        stakingAccountNameTextView.setText(String.format("%s/%s", Global.getSelectedAccountName(), Global.getCurrentNetworkName()));
+
+        ProgressBar progress = activity.findViewById(R.id.stakingAccountProgressBar);
+        if (progress != null) {
+            progress.setVisibility(View.VISIBLE);
+        }
+        ///LayoutInflater inflater = requireActivity().getLayoutInflater();
+
+        View v = new View((MainActivity) getActivity());
+        //new Accounts((MainActivity) getActivity()).promptForPassword(getContext(), v.getRootView());
+        historyLen = 0;
+
+        Button stakingAccountAddNewButton = (Button) view.findViewById(R.id.stakingAccountAddNewButton);
+        stakingAccountAddNewButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                new FragmentManagerUser().goToDialogCreateStaking();
+            }
+        });
     }
 }

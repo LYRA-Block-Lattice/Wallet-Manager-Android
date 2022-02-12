@@ -151,7 +151,7 @@
     <string name="Days">Zile</string>
     <string name="One1">O</string>
     <string name="One_Day">O Zi</string>
-    <string name="Add_new_staking_account">Adauga un nou cont de staking</string>
+    <string name="Add_new_staking_account">Adaugă un nou cont de staking</string>
     <string name="Account_type">Tipul contului</string>
     <string name="None">Niciunul</string>
     <string name="Share_ratio">Rata de share</string>
@@ -172,5 +172,13 @@
     <string name="You_will_stake_for">Vei pune stake pentru</string>
     <string name="Preview">Previzualizare</string>
     <string name="Preview_add_new_staking_account">Previzualizare adaugare un nou cont de staking</string>
+    <string name="Staking_validity">Validitatea stakeului</string>
+    <string name="Amount_to_stake">Cantitatea ta pentru stake</string>
+    <string name="Name_of_staking_account">Numele contului de staking</string>
+    <string name="Creating_staking_account">Crează contul de staking</string>
+    <string name="Adding_stake">Adăugare stake</string>
+    <string name="Finished_to_add_stake">Finalizare adăugare stake</string>
+    <string name="Error_adding_staking">Eroare la adăugare staking</string>
+    <string name="Add_stake">Adaugă stake</string>
 
 </resources>

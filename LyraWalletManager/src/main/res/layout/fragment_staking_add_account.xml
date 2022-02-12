@@ -109,6 +109,23 @@
             android:background="@drawable/fab_spinner_send_token_select_outline">
 
             <EditText
+                android:id="@+id/stakingAddAccountNameValue"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="start|center"
+                android:hint="@string/Name_of_staking_account"
+                android:inputType="textVisiblePassword"
+                android:padding="8dip"
+                android:singleLine="true"
+                android:textColor="@color/page_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
                 android:id="@+id/stakingAddAccountDaysValue"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
@@ -120,11 +137,10 @@
                 android:padding="8dip"
                 android:singleLine="true"
                 android:textColor="@color/page_text"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/stakingAddAccountNameValue" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

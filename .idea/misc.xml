@@ -114,10 +114,13 @@
         <entry key="LyraWalletManager/src/main/res/layout/bottom_nav_menu.xml" value="0.25892857142857145" />
         <entry key="LyraWalletManager/src/main/res/layout/content_bottom_menu.xml" value="0.2896825396825397" />
         <entry key="LyraWalletManager/src/main/res/layout/content_main.xml" value="0.2896825396825397" />
+        <entry key="LyraWalletManager/src/main/res/layout/dialog_staking_add_account.xml" value="0.335" />
         <entry key="LyraWalletManager/src/main/res/layout/fragment_dash.xml" value="0.5166666666666667" />
         <entry key="LyraWalletManager/src/main/res/layout/fragment_dex.xml" value="0.25892857142857145" />
         <entry key="LyraWalletManager/src/main/res/layout/fragment_my_account_receive.xml" value="0.25892857142857145" />
+        <entry key="LyraWalletManager/src/main/res/layout/fragment_new_wallet.xml" value="0.25" />
         <entry key="LyraWalletManager/src/main/res/layout/fragment_staking.xml" value="0.25892857142857145" />
+        <entry key="LyraWalletManager/src/main/res/layout/fragment_staking_add_account.xml" value="0.25" />
         <entry key="LyraWalletManager/src/main/res/layout/fragment_swap.xml" value="0.25892857142857145" />
         <entry key="LyraWalletManager/src/main/res/layout/fragment_wallet.xml" value="0.25892857142857145" />
         <entry key="LyraWalletManager/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1875" />
