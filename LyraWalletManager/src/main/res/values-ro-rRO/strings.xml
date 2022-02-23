@@ -180,5 +180,16 @@
     <string name="Finished_to_add_stake">Finalizare adăugare stake</string>
     <string name="Error_adding_staking">Eroare la adăugare staking</string>
     <string name="Add_stake">Adaugă stake</string>
+    <string name="Restake">Restake</string>
+    <string name="Unstake">Unstake</string>
+    <string name="Stake_more">Stake mai mult</string>
+    <string name="Unstake_all">Unstake tot</string>
+    <string name="Remove_stake">Elimina stake</string>
+    <string name="Are_you_sure_you_want_to_remove_stake">Esti sigur ca vrei sa elimini stakeul?\nDaca stakeul curent nu este expirat wei fi penalizat cu 0.8% din valoare pentru incalcarea contractului.</string>
+    <string name="Are_you_sure_you_want_to_restake">Esti siugur ca wrei sa faci restake?\nProcedura de Unstake pentru cantitatea curenta si apoi Stake pentru aceasi valoare va fi declansata.\nDaca stakeul curent nu este expirat wei fi penalizat cu 0.8% din valoare pentru incalcarea contractului.</string>
+    <string name="You_will_add_more_value_to_current_staking">Vei adauga mai mult stake la stakeul curent.</string>
+    <string name="Stake_successfully_add">Stake adaugat cu succes</string>
+    <string name="Unstaking">Unstaking</string>
+    <string name="Successfully_unstaked">Unstaked cu succes</string>
 
 </resources>

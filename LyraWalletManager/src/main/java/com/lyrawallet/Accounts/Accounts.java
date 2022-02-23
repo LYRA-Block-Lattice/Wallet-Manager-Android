@@ -76,6 +76,8 @@ public class Accounts {
 
     public static String getPrivateKey() {
         List<Pair<String, String>> acc = StorageKeys.decrypt(Global.getAccountsContainer(), Password);
+        if(acc == null)
+            return null;
         for (Pair<String, String> ac: acc) {
             if(ac.first.equals(Global.getSelectedAccountName())) {
                 return ac.second;
@@ -86,6 +88,8 @@ public class Accounts {
 
     public static String getPrivateKey(String password) {
         List<Pair<String, String>> acc = StorageKeys.decrypt(Global.getAccountsContainer(), password);
+        if(acc == null)
+            return null;
         for (Pair<String, String> ac: acc) {
             if(ac.first.equals(Global.getSelectedAccountName())) {
                 return ac.second;

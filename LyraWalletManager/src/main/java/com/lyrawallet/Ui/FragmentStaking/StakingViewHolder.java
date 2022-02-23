@@ -1,6 +1,7 @@
 package com.lyrawallet.Ui.FragmentStaking;
 
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +17,8 @@ public class StakingViewHolder extends RecyclerView.ViewHolder {
     TextView Validity;
     TextView Amount;
     TextView Expired;
+    Button StakeMore;
+    Button Unstake;
     View view;
 
     StakingViewHolder(View itemView) {
@@ -32,7 +35,8 @@ public class StakingViewHolder extends RecyclerView.ViewHolder {
         ExpiryDate
                 = (TextView) itemView
                 .findViewById(R.id.profitingAccountExpirationDateTextView);
-        Validity= (TextView) itemView
+        Validity
+                =  (TextView) itemView
                 .findViewById(R.id.profitingAccountValidityTextView);
         Amount
                 = (TextView) itemView
@@ -40,6 +44,12 @@ public class StakingViewHolder extends RecyclerView.ViewHolder {
         Expired
                 = (TextView) itemView
                 .findViewById(R.id.profitingAccountStatusTextView);
+        StakeMore
+                = (Button) itemView
+                .findViewById(R.id.dialogAccountStatusStakeMore);
+        Unstake
+                = (Button) itemView
+                .findViewById(R.id.dialogAccountStatusUnstake);
         view = itemView;
     }
 }

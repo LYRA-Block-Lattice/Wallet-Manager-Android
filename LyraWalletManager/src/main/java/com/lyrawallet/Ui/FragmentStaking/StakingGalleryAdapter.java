@@ -25,15 +25,33 @@ import java.util.Locale;
 public class StakingGalleryAdapter extends RecyclerView.Adapter<StakingViewHolder> {
     List<FragmentStaking.StakingEntry> list = Collections.emptyList();
     Context Context;
-    FragmentStaking.ClickListener Listener;
+    FragmentStaking.ClickListener SelectedListener;
+    FragmentStaking.ClickListener StakeMoreListener;
+    FragmentStaking.ClickListener UnstakeListener;
+    int selectedItem = -1;
 
     public StakingGalleryAdapter(List<FragmentStaking.StakingEntry> list,
                                         Context context,
-                                 FragmentStaking.ClickListener listener)
+                                 FragmentStaking.ClickListener selectedListener,
+                                 FragmentStaking.ClickListener stakeMoreListener,
+                                 FragmentStaking.ClickListener unstakeListener)
     {
-        this.Listener = listener;
+        this.SelectedListener = selectedListener;
+        this.StakeMoreListener = stakeMoreListener;
+        this.UnstakeListener = unstakeListener;
         this.list = list;
         this.Context = context;
+    }
+
+    void setSelected(int index) {
+        if (index == selectedItem) {
+            this.notifyItemChanged(selectedItem);
+            selectedItem = -1;
+        } else {
+            this.notifyItemChanged(index);
+            this.notifyItemChanged(selectedItem);
+            selectedItem = index;
+        }
     }
 
     public List<FragmentStaking.StakingEntry> getDataSet(){
@@ -147,10 +165,42 @@ public class StakingGalleryAdapter extends RecyclerView.Adapter<StakingViewHolde
         }
         viewHolder.Expired
                 .setText(isExpired ? Context.getText(R.string.Expired) : Context.getText(R.string.Valid));
+
+        if(isExpired) {
+            viewHolder.Unstake.setEnabled(true);
+        } else {
+            viewHolder.Unstake.setEnabled(false);
+        }
+
+        if(selectedItem == index) {
+            viewHolder.StakeMore.setVisibility(View.VISIBLE);
+            viewHolder.Unstake.setVisibility(View.VISIBLE);
+            //this.notifyItemChanged(index);
+        } else {
+            viewHolder.StakeMore.setVisibility(View.GONE);
+            viewHolder.Unstake.setVisibility(View.GONE);
+        }
+        if(list.get(position).Amount == 0f) {
+            viewHolder.StakeMore.setText(R.string.Stake);
+            viewHolder.Unstake.setEnabled(false);
+        }
+
         viewHolder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Listener.click(index);
+                SelectedListener.click(index);
+            }
+        });
+        viewHolder.StakeMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                StakeMoreListener.click(index);
+            }
+        });
+        viewHolder.Unstake.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UnstakeListener.click(index);
             }
         });
     }
