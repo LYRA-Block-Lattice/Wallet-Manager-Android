@@ -6,24 +6,17 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.Handler;
-import android.os.SystemClock;
 import android.util.Pair;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
-import com.lyrawallet.Crypto.CryptoSignatures;
 import com.lyrawallet.GlobalLyra;
-import com.lyrawallet.MainActivity;
-import com.lyrawallet.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,8 +112,8 @@ public class UiHelpers {
         if(tokenNames == null)
             return null;
         for (int i = 0; i < tokenNames.size(); i++) {
-            int icon = GlobalLyra.TokenIconList[1].second;
-            for (Pair<String, Integer> k: GlobalLyra.TokenIconList) {
+            int icon = GlobalLyra.TickerIconList[1].second;
+            for (Pair<String, Integer> k: GlobalLyra.TickerIconList) {
                 if(k.first.equals(tokenNames.get(i))) {
                     icon = k.second;
                     break;
@@ -134,13 +127,13 @@ public class UiHelpers {
     public static Integer tickerToImage(String tokenName) {
         if (tokenName == null)
             return null;
-        int icon = GlobalLyra.TokenIconList[1].second;
-        for (Pair<String, Integer> k : GlobalLyra.TokenIconList) {
+        int icon = GlobalLyra.TickerIconList[1].second;
+        for (Pair<String, Integer> k : GlobalLyra.TickerIconList) {
             if (k.first.equals(GlobalLyra.domainToSymbol(tokenName))) {
                 return k.second;
             }
         }
-        return GlobalLyra.TokenIconList[1].second;
+        return GlobalLyra.TickerIconList[1].second;
     }
 
 }

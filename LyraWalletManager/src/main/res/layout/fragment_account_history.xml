@@ -33,7 +33,7 @@
                 android:popupBackground="@drawable/fab_spinner_account_select_outline"
                 android:text="@string/account_history"
                 android:textAlignment="gravity"
-                android:textColor="@color/page_foreground"
+                android:textColor="@color/text1"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 tools:ignore="RtlCompat" />
@@ -51,6 +51,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:indeterminateTintMode="src_atop"
+                android:indeterminateTint="@color/additional"
                 app:layout_constraintBottom_toBottomOf="@+id/nestedScrollView"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

@@ -9,6 +9,7 @@
     android:paddingRight="@dimen/fragment_horizontal_margin"
     android:paddingBottom="@dimen/fragment_vertical_margin"
     android:tag="new_wallet_tag"
+    android:background="@color/primary"
     tools:context="com.lyrawallet.Ui.FragmentWalletManagement.FragmentNewWallet">
 
     <androidx.constraintlayout.widget.Guideline
@@ -87,7 +88,7 @@
         android:layout_marginStart="2dp"
         android:layout_marginEnd="24dp"
         android:background="@drawable/fab_normal_cornered_button"
-        app:backgroundTint="@color/button_icon_tint"
+        app:backgroundTint="@color/text1"
         app:backgroundTintMode="add"
         app:icon="@drawable/ic_visibility_off_password"
         app:layout_constraintEnd_toEndOf="parent"
@@ -104,7 +105,7 @@
         android:layout_marginEnd="24dp"
         android:background="@drawable/fab_normal_button"
         android:text="@string/action_create_new_wallet_short"
-        app:backgroundTint="@color/button_icon_tint"
+        app:backgroundTint="@color/text1"
         app:backgroundTintMode="add"
         app:layout_constraintEnd_toStartOf="@id/guideline_middle_v"
         app:layout_constraintStart_toEndOf="@id/guideline_middle_v"

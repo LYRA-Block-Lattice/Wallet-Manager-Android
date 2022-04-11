@@ -2,7 +2,6 @@ package com.lyrawallet.Ui.FragmentStaking;
 
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,7 +24,7 @@ public class StakingViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         AccountName
                 = (TextView) itemView
-                .findViewById(R.id.stakingAccountNameTextView);
+                .findViewById(R.id.stakingAccount_Name_TextView);
         StakingAccountId
                 = (TextView) itemView
                 .findViewById(R.id.stakingAccountIdTextView);

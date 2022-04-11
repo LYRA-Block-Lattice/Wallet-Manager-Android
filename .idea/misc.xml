@@ -107,7 +107,11 @@
         <entry key="..\:/Users/Morgoth/NewFolder/app/src/main/res/layout/fragment_home.xml" value="0.2269021739130435" />
         <entry key="LyraWalletManager/src/main/res/drawable/fab_dashboard_header_color.xml" value="0.35208333333333336" />
         <entry key="LyraWalletManager/src/main/res/drawable/fab_normal_button.xml" value="0.3416666666666667" />
-        <entry key="LyraWalletManager/src/main/res/drawable/fab_round_button.xml" value="0.3416666666666667" />
+        <entry key="LyraWalletManager/src/main/res/drawable/fab_normal_cornered_button.xml" value="0.271" />
+        <entry key="LyraWalletManager/src/main/res/drawable/fab_round_button.xml" value="0.165" />
+        <entry key="LyraWalletManager/src/main/res/drawable/fab_spinner_account_select_outline.xml" value="0.199" />
+        <entry key="LyraWalletManager/src/main/res/drawable/fab_spinner_send_token_select_outline.xml" value="0.199" />
+        <entry key="LyraWalletManager/src/main/res/drawable/fab_token_verify_placeholder_outline.xml" value="0.199" />
         <entry key="LyraWalletManager/src/main/res/drawable/ic_lyra_dashboard_background.xml" value="0.35208333333333336" />
         <entry key="LyraWalletManager/src/main/res/drawable/side_nav_bar.xml" value="0.1875" />
         <entry key="LyraWalletManager/src/main/res/layout/app_bar_main.xml" value="0.2896825396825397" />
@@ -118,9 +122,17 @@
         <entry key="LyraWalletManager/src/main/res/layout/dialog_request_token.xml" value="0.2246376811594203" />
         <entry key="LyraWalletManager/src/main/res/layout/dialog_send.xml" value="0.2246376811594203" />
         <entry key="LyraWalletManager/src/main/res/layout/dialog_staking_add_account.xml" value="0.335" />
+        <entry key="LyraWalletManager/src/main/res/layout/entry_card_staking_account.xml" value="0.1765625" />
+        <entry key="LyraWalletManager/src/main/res/layout/entry_card_wallet_transaction.xml" value="0.1" />
+        <entry key="LyraWalletManager/src/main/res/layout/entry_dex_balance.xml" value="0.25" />
+        <entry key="LyraWalletManager/src/main/res/layout/entry_profiting_account_info.xml" value="0.1765625" />
+        <entry key="LyraWalletManager/src/main/res/layout/entry_send_token_select_spinner.xml" value="0.1765625" />
+        <entry key="LyraWalletManager/src/main/res/layout/entry_send_token_select_spinner_first.xml" value="0.13802083333333334" />
         <entry key="LyraWalletManager/src/main/res/layout/fragment_account.xml" value="0.2246376811594203" />
+        <entry key="LyraWalletManager/src/main/res/layout/fragment_account_history.xml" value="0.2595108695652174" />
         <entry key="LyraWalletManager/src/main/res/layout/fragment_dash.xml" value="0.5166666666666667" />
         <entry key="LyraWalletManager/src/main/res/layout/fragment_dex.xml" value="0.25892857142857145" />
+        <entry key="LyraWalletManager/src/main/res/layout/fragment_import_wallet.xml" value="0.13802083333333334" />
         <entry key="LyraWalletManager/src/main/res/layout/fragment_more.xml" value="0.2246376811594203" />
         <entry key="LyraWalletManager/src/main/res/layout/fragment_my_account_receive.xml" value="0.25892857142857145" />
         <entry key="LyraWalletManager/src/main/res/layout/fragment_new_account.xml" value="0.2246376811594203" />
@@ -140,6 +152,7 @@
         <entry key="LyraWalletManager/src/main/res/layout/wallet_transaction_entry_card.xml" value="0.2246376811594203" />
         <entry key="LyraWalletManager/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1875" />
         <entry key="LyraWalletManager/src/main/res/mipmap-anydpi-v26/ic_launcher_button_send.xml" value="0.1875" />
+        <entry key="LyraWalletManager/src/main/res/mipmap-anydpi-v26/ic_minted_token.xml" value="0.143" />
         <entry key="app/libs/anychart/src/main/res/layout/view_anychart.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/fab_right_botom.xml" value="0.1640625" />
         <entry key="app/src/main/res/drawable/side_nav_bar.xml" value="0.20555555555555555" />

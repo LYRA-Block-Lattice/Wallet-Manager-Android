@@ -360,9 +360,9 @@ public class FragmentSwap extends Fragment {
         for (int i = 0; i < list.size(); i++) {
             tickerList.add(GlobalLyra.domainToSymbol(list.get(i).first));
         }
-        TokensSpinnerAdapter adapter = new TokensSpinnerAdapter(view.getContext(), R.layout.send_token_select_spinner_entry,
+        TokensSpinnerAdapter adapter = new TokensSpinnerAdapter(view.getContext(), R.layout.entry_send_token_select_spinner,
                 tickerList.toArray(new String[0]), UiHelpers.tickerToImage(tickerList).toArray(new Integer[0]));
-        adapter.setDropDownViewResource(R.layout.send_token_select_spinner_entry_first);
+        adapter.setDropDownViewResource(R.layout.entry_send_token_select_spinner_first);
         tokenFromSpinner.setAdapter(adapter);
         tokenFromSpinner.setSelection(fromSelect);
         tokenFromSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -386,17 +386,17 @@ public class FragmentSwap extends Fragment {
                 }
             }
         } else {
-            for (int i = 0; i < GlobalLyra.TokenIconList.length; i++) {
+            for (int i = 0; i < GlobalLyra.TickerIconList.length; i++) {
                 if (tokenFromSpinner.getSelectedItem() != null) {
-                    if (i != 1 && !GlobalLyra.TokenIconList[i].first.equals(tokenFromSpinner.getSelectedItem().toString())) {
-                        tickerList.add(GlobalLyra.TokenIconList[i].first);
+                    if (i != 1 && !GlobalLyra.TickerIconList[i].first.equals(tokenFromSpinner.getSelectedItem().toString())) {
+                        tickerList.add(GlobalLyra.TickerIconList[i].first);
                     }
                 }
             }
         }
-        adapter = new TokensSpinnerAdapter(view.getContext(), R.layout.send_token_select_spinner_entry,
+        adapter = new TokensSpinnerAdapter(view.getContext(), R.layout.entry_send_token_select_spinner,
                 tickerList.toArray(new String[0]), UiHelpers.tickerToImage(tickerList).toArray(new Integer[0]), 2);
-        adapter.setDropDownViewResource(R.layout.send_token_select_spinner_entry_first);
+        adapter.setDropDownViewResource(R.layout.entry_send_token_select_spinner_first);
         tokenToSpinner.setAdapter(adapter);
         for (int i = 0; i < tokenToSpinner.getCount(); i++) {
             if(tokenToSpinner.getItemAtPosition(i).toString().equals(toSelect)) {

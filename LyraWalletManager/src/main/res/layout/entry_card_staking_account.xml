@@ -41,7 +41,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/stakingAccountNameTextView"
+                android:id="@+id/stakingAccount_Name_TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -68,7 +68,7 @@
                 android:layout_marginEnd="16dp"
                 android:text="@string/BurningAccountID"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/stakingAccountNameTextView" />
+                app:layout_constraintTop_toBottomOf="@+id/stakingAccount_Name_TextView" />
 
             <TextView
                 android:id="@+id/textView22"
@@ -181,7 +181,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="8dp"
-                android:backgroundTint="@color/button_2"
+                android:backgroundTint="@color/primary"
                 android:backgroundTintMode="add"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
@@ -199,7 +199,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:backgroundTint="@color/button_2"
+                android:backgroundTint="@color/primary"
                 android:backgroundTintMode="add"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"

@@ -32,7 +32,7 @@
                     android:paddingEnd="20dp"
                     android:text="@string/More"
                     android:textAlignment="textStart"
-                    android:textColor="@color/page_foreground"
+                    android:textColor="@color/text1"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -47,7 +47,7 @@
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="8dp"
                     android:text="@string/Account_name"
-                    android:textColor="@color/page_foreground"
+                    android:textColor="@color/text1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -83,7 +83,7 @@
                 android:drawableLeft="@drawable/ic_outline_search_24"
                 android:text="@string/str_launcher_explorer_button"
                 android:textAlignment="textStart"
-                android:textColor="@color/more_tint"
+                android:textColor="@color/text1"
                 android:theme="@style/CardView" />
 
             <TableRow
@@ -103,7 +103,7 @@
                 android:drawableLeft="@drawable/ic_outline_account_tree_24"
                 android:text="@string/str_launcher_new_account_button"
                 android:textAlignment="textStart"
-                android:textColor="@color/more_tint"
+                android:textColor="@color/text1"
                 android:theme="@style/CardView" />
 
             <TableRow
@@ -123,7 +123,7 @@
                 android:drawableLeft="@drawable/ic_outline_settings_backup_restore_24"
                 android:text="@string/str_launcher_backup_wallet_button"
                 android:textAlignment="textStart"
-                android:textColor="@color/more_tint"
+                android:textColor="@color/text1"
                 android:theme="@style/CardView" />
 
             <TableRow
@@ -143,7 +143,7 @@
                 android:drawableLeft="@drawable/ic_outline_settings_24"
                 android:text="@string/str_launcher_settings_button"
                 android:textAlignment="textStart"
-                android:textColor="@color/more_tint"
+                android:textColor="@color/text1"
                 android:theme="@style/CardView" />
 
             <TableRow
@@ -163,7 +163,7 @@
                 android:drawableLeft="@drawable/ic_baseline_favorite_border_24"
                 android:text="@string/str_launcher_about_us_button"
                 android:textAlignment="textStart"
-                android:textColor="@color/more_tint"
+                android:textColor="@color/text1"
                 android:theme="@style/CardView" />
 
             <TableRow

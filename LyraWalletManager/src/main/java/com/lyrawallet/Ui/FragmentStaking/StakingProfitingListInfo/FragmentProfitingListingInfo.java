@@ -151,11 +151,11 @@ public class FragmentProfitingListingInfo extends Fragment {
                     yourShareWillBe.add(0d);
                 }
 
-                StakingProfitingListInfoSpinnerAdapter adapter = new StakingProfitingListInfoSpinnerAdapter(view.getContext(), R.layout.profiting_account_info_entry,
+                StakingProfitingListInfoSpinnerAdapter adapter = new StakingProfitingListInfoSpinnerAdapter(view.getContext(), R.layout.entry_profiting_account_info,
                         accountName.toArray(new String[0]), accountId.toArray(new String[0]), accountType.toArray(new String[0]), shareRatio.toArray(new Double[0]), seats.toArray(new Integer[0]),
                         timeStamp.toArray(new Long[0]), totalProfit.toArray(new Double[0]), totalStaked.toArray(new Double[0]), yourShareWillBe.toArray(new Double[0])
                 );
-                adapter.setDropDownViewResource(R.layout.send_token_select_spinner_entry_first);
+                adapter.setDropDownViewResource(R.layout.entry_send_token_select_spinner_first);
                 tokenSpinner.setAdapter(adapter);
             }
         });

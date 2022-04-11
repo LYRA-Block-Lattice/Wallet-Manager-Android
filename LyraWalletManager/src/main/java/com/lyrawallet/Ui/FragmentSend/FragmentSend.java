@@ -30,7 +30,6 @@ import com.lyrawallet.Global;
 import com.lyrawallet.GlobalLyra;
 import com.lyrawallet.R;
 import com.lyrawallet.Ui.FragmentManagerUser;
-import com.lyrawallet.Ui.TokensSpinnerAdapter;
 import com.lyrawallet.Ui.UiDialog;
 import com.lyrawallet.Ui.UiHelpers;
 import com.lyrawallet.Ui.UtilGetData;
@@ -177,9 +176,9 @@ public class FragmentSend extends Fragment {
         for (int i = 0; i < Balances.size(); i++) {
             tickerList.add(GlobalLyra.domainToSymbol(Balances.get(i).first));
         }
-        SendTokensSpinnerAdapter adapter = new SendTokensSpinnerAdapter(this.getContext(), R.layout.send_token_select_spinner_entry,
+        SendTokensSpinnerAdapter adapter = new SendTokensSpinnerAdapter(this.getContext(), R.layout.entry_send_token_select_spinner,
                 tickerList.toArray(new String[0]), UiHelpers.tickerToImage(tickerList).toArray(new Integer[0]));
-        adapter.setDropDownViewResource(R.layout.send_token_select_spinner_entry_first);
+        adapter.setDropDownViewResource(R.layout.entry_send_token_select_spinner_first);
         tokenSpinner.setAdapter(adapter);
         tokenSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {

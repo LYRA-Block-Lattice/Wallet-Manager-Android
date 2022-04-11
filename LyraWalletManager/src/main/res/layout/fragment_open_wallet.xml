@@ -9,6 +9,7 @@
     android:paddingRight="@dimen/fragment_horizontal_margin"
     android:paddingBottom="@dimen/fragment_vertical_margin"
     android:tag="open_wallet_tag"
+    android:background="@color/primary"
     tools:context="com.lyrawallet.Ui.FragmentWalletManagement.FragmentOpenWallet">
 
     <EditText
@@ -58,7 +59,7 @@
         android:layout_gravity="end"
         android:layout_marginEnd="24dp"
         android:background="@drawable/fab_normal_cornered_button"
-        app:backgroundTint="@color/button_icon_tint"
+        app:backgroundTint="@color/text1"
         app:backgroundTintMode="add"
         app:icon="@drawable/ic_visibility_off_password"
         app:layout_constraintEnd_toEndOf="parent"
@@ -74,7 +75,7 @@
         android:enabled="false"
         android:text="@string/action_open_wallet_short"
         android:background="@drawable/fab_normal_button"
-        app:backgroundTint="@color/button_icon_tint"
+        app:backgroundTint="@color/text1"
         app:backgroundTintMode="add"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -88,7 +89,7 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/fab_normal_button"
         android:text="@string/action_new_wallet_short"
-        app:backgroundTint="@color/button_icon_tint"
+        app:backgroundTint="@color/text1"
         app:backgroundTintMode="add"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -103,7 +104,7 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/fab_normal_button"
         android:text="@string/action_import_wallet_short"
-        app:backgroundTint="@color/button_icon_tint"
+        app:backgroundTint="@color/text1"
         app:backgroundTintMode="add"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -57,13 +57,13 @@ public class FragmentReceiveDialog extends DialogFragment {
         }
 
         List<String> tickerList = new ArrayList<>();
-        for (int i = 2; i < GlobalLyra.TokenIconList.length; i++) {
-            tickerList.add(GlobalLyra.TokenIconList[i].first);
+        for (int i = 2; i < GlobalLyra.TickerIconList.length; i++) {
+            tickerList.add(GlobalLyra.TickerIconList[i].first);
         }
         Spinner tokenSpinner = (Spinner) v.findViewById(R.id.receiveTokenSelectSpinner);
-        TokensSpinnerAdapter adapter = new TokensSpinnerAdapter(v.getContext(), R.layout.send_token_select_spinner_entry,
+        TokensSpinnerAdapter adapter = new TokensSpinnerAdapter(v.getContext(), R.layout.entry_send_token_select_spinner,
                 tickerList.toArray(new String[0]), UiHelpers.tickerToImage(tickerList).toArray(new Integer[0]));
-        adapter.setDropDownViewResource(R.layout.send_token_select_spinner_entry_first);
+        adapter.setDropDownViewResource(R.layout.entry_send_token_select_spinner_first);
         tokenSpinner.setAdapter(adapter);
         tokenSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {

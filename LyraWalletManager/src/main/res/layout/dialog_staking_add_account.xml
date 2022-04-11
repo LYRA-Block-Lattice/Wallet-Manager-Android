@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:padding="0dip"
                 android:text="@string/Account_name"
-                android:textColor="@color/page_text"
+                android:textColor="@color/text2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:padding="0dip"
                 android:text="@string/Some_name"
-                android:textColor="@color/page_text"
+                android:textColor="@color/text2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView29" />
@@ -64,7 +64,7 @@
                 android:id="@+id/hr2"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#AAA"
+                android:background="@color/stroke"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/dialogStakingAddAccountNameValue" />
@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:padding="0dip"
                 android:text="@string/Staking_validity"
-                android:textColor="@color/page_text"
+                android:textColor="@color/text2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/dialogStakingAddAccountNameValue" />
@@ -87,7 +87,7 @@
                 android:padding="0dip"
                 android:singleLine="true"
                 android:text="@string/Some_account_validity1"
-                android:textColor="@color/page_text"
+                android:textColor="@color/text2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView12" />
@@ -96,7 +96,7 @@
                 android:id="@+id/hr3"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#AAA"
+                android:background="@color/stroke"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/dialogStakingAddAccountDaysValue" />
@@ -107,7 +107,7 @@
                 android:layout_height="wrap_content"
                 android:padding="0dip"
                 android:text="@string/Amount_to_stake"
-                android:textColor="@color/page_text"
+                android:textColor="@color/text2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/hr3" />
@@ -119,7 +119,7 @@
                 android:padding="0dip"
                 android:singleLine="true"
                 android:text="@string/zero_lyr"
-                android:textColor="@color/page_text"
+                android:textColor="@color/text2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView13" />
@@ -275,7 +275,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="8dp"
-                android:background="#AAA"
+                android:background="@color/stroke"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/dialogStakingAccountInfoTotalProfit" />
@@ -337,7 +337,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
-            android:backgroundTint="@color/button_2"
+            android:backgroundTint="@color/primary"
             android:backgroundTintMode="add"
             android:insetTop="0dp"
             android:insetBottom="0dp"

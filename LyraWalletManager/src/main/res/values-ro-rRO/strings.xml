@@ -100,7 +100,7 @@
     <string name="swap_total_liquidity">Lichiditate totală</string>
     <string name="swap_your_share">Partea ta de share</string>
     <string name="swap_amount_of_token">Numar de tokeni</string>
-    <string name="swap_balance_0">Balanta 0</string>
+    <string name="swap_balance_0">Balanța 0</string>
     <string name="swap_spinner_from_content_description">Tin token</string>
     <string name="swap_spinner_to_content_description">In token</string>
     <string name="swap_swap_between_content_description">Schimba tokenii intre ei</string>
@@ -133,8 +133,8 @@
     <string name="Amounts_in_accounts">Cantitati in cont</string>
     <string name="account_history">Istoria contului</string>
     <string name="History">Istoria</string>
-    <string name="Total_balance_usd_zero">Balanta totala: $0</string>
-    <string name="Total_balance_usd">"Balanta totala: "</string>
+    <string name="Total_balance_usd_zero">Balanța totala: $0</string>
+    <string name="Total_balance_usd">"Balanța totala: "</string>
     <string name="Staking">Staking</string>
     <string name="Account_name">Numele contului</string>
     <string name="Staking_account_ID">ID-ul contului de staking</string>
@@ -191,5 +191,9 @@
     <string name="Stake_successfully_add">Stake adaugat cu succes</string>
     <string name="Unstaking">Unstaking</string>
     <string name="Successfully_unstaked">Unstaked cu succes</string>
+    <string name="Balances">Balanțe</string>
+    <string name="Refresh">Refresh</string>
+    <string name="Deposit">Depozitează</string>
+    <string name="Withdraw">Retrage</string>
 
 </resources>

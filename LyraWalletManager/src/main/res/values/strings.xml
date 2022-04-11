@@ -11,11 +11,15 @@
 
 
     <string name="Amount">Amount</string>
+    <string name="Balance">Balance</string>
+    <string name="Balances">Balances</string>
     <string name="Send">Send</string>
     <string name="One1">One</string>
     <string name="One_Day">One Day</string>
     <string name="Day">Day</string>
     <string name="Days">Days</string>
+    <string name="Deposit">Deposit</string>
+    <string name="Withdraw">Withdraw</string>
     <string name="Dex">Dex</string>
     <string name="Send1">Send</string>
     <string name="Send2">Send</string>
@@ -44,7 +48,7 @@
     <string name="Unstake">Unstake</string>
     <string name="Unstaking">Unstaking</string>
     <string name="Receive">Receive</string>
-    <string name="Balance">Balance</string>
+    <string name="Refresh">Refresh</string>
     <string name="History">History</string>
     <string name="Height">Height</string>
     <string name="Direction">Direction</string>
@@ -103,6 +107,10 @@
     <string name="You_will_stake_for">You will stake for</string>
     <string name="No_tokens_available">No tokens available</string>
 
+    <string name="Spot_colon" translatable="false">Spot:</string>
+    <string name="To_DEX" translatable="false">To DEX</string>
+    <string name="DEX_colon" translatable="false">DEX:</string>
+    <string name="Tron" translatable="false">Tron</string>
     <string name="zero_lyr" translatable="false">0 LYR</string>
     <string name="zero_usd" translatable="false">0 USD</string>
     <string name="Account_1" translatable="false">Account 1</string>
@@ -116,6 +124,9 @@
     <string name="Some_name" translatable="false">Account1</string>
     <string name="Some_profit" translatable="false">32.10242048</string>
     <string name="Some_staked" translatable="false">1024.20484096</string>
+    <string name="Some_qty1" translatable="false">10.00</string>
+    <string name="Some_qty2" translatable="false">0.000002</string>
+    <string name="Some_ticker1" translatable="false">TRX</string>
 
 
 

@@ -37,7 +37,7 @@ public class StakingProfitingListInfoSpinnerAdapter extends ArrayAdapter<String>
                                                   String[] accountName, String[] accountId, String[] accountType, Double[] shareRatio,
                                                   Integer[] seats, Long[] timeStamp, Double[] totalProfit,
                                                   Double[] totalStaked, Double[] yourShareWillBe) {
-        super(context,  R.layout.profiting_account_info_entry, R.id.profitingAccountInfoAccountName, accountName);
+        super(context,  R.layout.entry_profiting_account_info, R.id.profitingAccountInfoAccountName, accountName);
         Resource = resource;
         this.ctx = context;
         this.AccountName = accountName;

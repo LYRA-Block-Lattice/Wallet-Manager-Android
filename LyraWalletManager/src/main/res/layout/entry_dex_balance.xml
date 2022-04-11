@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/fab_token_verify_placeholder_outline"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="8dp">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="48dp" />
+
+            <ImageView
+                android:id="@+id/entryDex_Ticker_ImageView"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginStart="16dp"
+                android:scaleX="1.3"
+                android:scaleY="1.3"
+                app:layout_constraintBottom_toTopOf="@+id/guideline10"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/guideline10"
+                app:srcCompat="@mipmap/ic_tron_foreground" />
+
+            <TextView
+                android:id="@+id/entryDex_Ticker_TextView"
+                android:layout_width="230dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="16dp"
+                android:text="@string/Tron"
+                android:textSize="20sp"
+                android:gravity="center_vertical"
+                app:layout_constraintBottom_toTopOf="@+id/guideline10"
+                app:layout_constraintStart_toEndOf="@+id/entryDex_Ticker_ImageView"
+                app:layout_constraintTop_toTopOf="@+id/guideline10" />
+
+            <ImageButton
+                android:id="@+id/entryDexSettingsImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="@color/background"
+                android:backgroundTintMode="multiply"
+                android:contentDescription="@string/str_launcher_settings_button"
+                android:minHeight="48dp"
+                app:cornerRadius="@dimen/button_round_corner"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_outline_settings_24" />
+
+            <TextView
+                android:id="@+id/textView34"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="16dp"
+                android:text="@string/Balances"
+                android:textSize="30sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/entryDex_Ticker_ImageView" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline11"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="147dp"
+                />
+
+            <TextView
+                android:id="@+id/textView38"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/Spot_colon"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/guideline11"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/guideline11" />
+
+            <ImageButton
+                android:id="@+id/entryDex_SpotToDex_ImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                app:layout_constraintBottom_toTopOf="@+id/guideline11"
+                app:layout_constraintStart_toEndOf="@+id/textView38"
+                app:layout_constraintTop_toTopOf="@+id/guideline11"
+                android:backgroundTint="@color/background"
+                android:backgroundTintMode="multiply"
+                android:contentDescription="@string/To_DEX"
+                android:minHeight="48dp"
+                app:cornerRadius="@dimen/button_round_corner"
+                app:srcCompat="@drawable/ic_round_arrow_circle_down_24" />
+
+            <TextView
+                android:id="@+id/entryDex_SpotQty_TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/Some_qty1"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/guideline11"
+                app:layout_constraintStart_toEndOf="@+id/entryDex_SpotToDex_ImageButton"
+                app:layout_constraintTop_toTopOf="@+id/guideline11" />
+
+            <TextView
+                android:id="@+id/entryDex_SpotTicker_TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/Some_ticker1"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/guideline11"
+                app:layout_constraintStart_toEndOf="@+id/entryDex_SpotQty_TextView"
+                app:layout_constraintTop_toTopOf="@+id/guideline11" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="196dp"
+                />
+
+            <TextView
+                android:id="@+id/textView41"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/DEX_colon"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/guideline12"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/guideline12" />
+
+            <ImageButton
+                android:id="@+id/entryDex_DexToSpot_ImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                app:layout_constraintBottom_toTopOf="@+id/guideline12"
+                app:layout_constraintStart_toEndOf="@+id/textView38"
+                app:layout_constraintTop_toTopOf="@+id/guideline12"
+                android:backgroundTint="@color/background"
+                android:backgroundTintMode="multiply"
+                android:contentDescription="@string/To_DEX"
+                android:minHeight="48dp"
+                app:cornerRadius="@dimen/button_round_corner"
+                app:srcCompat="@drawable/ic_round_arrow_circle_up_24" />
+
+            <TextView
+                android:id="@+id/entryDex_DexQty_TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@string/Some_qty2"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/guideline12"
+                app:layout_constraintStart_toEndOf="@+id/entryDex_DexToSpot_ImageButton"
+                app:layout_constraintTop_toTopOf="@+id/guideline12" />
+
+            <TextView
+                android:id="@+id/entryDex_DexTicker_TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="@string/Some_ticker1"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/guideline12"
+                app:layout_constraintStart_toEndOf="@+id/entryDex_DexQty_TextView"
+                app:layout_constraintTop_toTopOf="@+id/guideline12" />
+
+            <Button
+                android:id="@+id/entryDex_Deposit_Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:backgroundTint="@color/primary"
+                android:backgroundTintMode="add"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="@string/Deposit"
+                android:textAllCaps="true"
+                app:cornerRadius="@dimen/button_round_corner"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/entryDex_DexToSpot_ImageButton" />
+
+            <Button
+                android:id="@+id/entryDex_Withdraw_Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="4dp"
+                android:backgroundTint="@color/primary"
+                android:backgroundTintMode="add"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:text="@string/Withdraw"
+                android:textAllCaps="true"
+                app:cornerRadius="@dimen/button_round_corner"
+                app:layout_constraintStart_toEndOf="@+id/entryDex_Deposit_Button"
+                app:layout_constraintTop_toBottomOf="@+id/entryDex_DexToSpot_ImageButton" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

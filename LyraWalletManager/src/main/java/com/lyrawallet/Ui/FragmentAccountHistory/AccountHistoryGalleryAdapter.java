@@ -87,7 +87,7 @@ public class AccountHistoryGalleryAdapter extends RecyclerView.Adapter<AccountHi
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         // Inflate the layout
-        View photoView = inflater.inflate(R.layout.wallet_transaction_entry_card, parent, false);
+        View photoView = inflater.inflate(R.layout.entry_card_wallet_transaction, parent, false);
         AccountHistoryViewHolder viewHolder = new AccountHistoryViewHolder(photoView);
         return viewHolder;
     }

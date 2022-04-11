@@ -1,17 +1,14 @@
 package com.lyrawallet.Ui.FragmentStaking;
 
 import android.content.Context;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.lyrawallet.Global;
-import com.lyrawallet.GlobalLyra;
 import com.lyrawallet.R;
-import com.lyrawallet.Ui.FragmentAccountHistory.FragmentAccountHistory;
 import com.lyrawallet.Ui.UiHelpers;
 
 import java.text.Format;
@@ -128,17 +125,17 @@ public class StakingGalleryAdapter extends RecyclerView.Adapter<StakingViewHolde
     }
 
     @Override
-    public StakingViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public StakingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         // Inflate the layout
-        View photoView = inflater.inflate(R.layout.staking_account_entry_card, parent, false);
+        View photoView = inflater.inflate(R.layout.entry_card_staking_account, parent, false);
         return new StakingViewHolder(photoView);
     }
 
     @Override
     public void
-    onBindViewHolder(final StakingViewHolder viewHolder,
+    onBindViewHolder(@NonNull final StakingViewHolder viewHolder,
                      final int position)
     {
 
@@ -206,15 +203,13 @@ public class StakingGalleryAdapter extends RecyclerView.Adapter<StakingViewHolde
     }
 
     @Override
-    public int getItemCount()
-    {
+    public int getItemCount() {
         return list.size();
     }
 
     @Override
     public void onAttachedToRecyclerView(
-            RecyclerView recyclerView)
-    {
+            RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
 }

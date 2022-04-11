@@ -1,7 +1,7 @@
 package com.lyrawallet;
 
 import static com.lyrawallet.R.mipmap.ic_eth_foreground;
-import static com.lyrawallet.R.mipmap.ic_lyra_foreground;
+import static com.lyrawallet.R.mipmap.ic_lyra_token_foreground;
 import static com.lyrawallet.R.mipmap.ic_tron_foreground;
 import static com.lyrawallet.R.mipmap.ic_unknown_foreground;
 import static com.lyrawallet.R.mipmap.ic_usdc_foreground;
@@ -16,22 +16,72 @@ public class GlobalLyra {
     public static final double LYRA_TX_FEE                     = 1.0;
     public static final String BREAKING_STAKE_CONTRACT_FEE     = "0.8";
     public static final String SYMBOL_FOR_TETHERED_TOKEN       = "$";
-    public static final String LYRA_RPC_API_URL                =  "/api/v1/socket";
+    public static final String LYRA_RPC_API_URL                = "/api/v1/socket";
     public static final String LYRA_NODE_API_URL               = "/api/Node";
+    public static final String LYRA_DEX_API_URL                = "https://dex.lyra.live/api/Dex";
     public static final int LYRA_STAKE_MIN_DAYS                = 3;
     public static final int LYRA_STAKE_MAX_DAYS                = 36500;
 
 
 
-    public final static Pair<String, Integer>[] TokenIconList = new Pair[]{
+    public final static Pair<String, Integer>[] TickerIconList = new Pair[]{
             new Pair<>("", 0),
             new Pair<>("UNKNOWN", ic_unknown_foreground),
-            new Pair<>("LYR", ic_lyra_foreground),
+            new Pair<>("LYR", ic_lyra_token_foreground),
             new Pair<>("$TRX", ic_tron_foreground),
             new Pair<>("$USDT", ic_usdt_foreground),
             new Pair<>("$ETH", ic_eth_foreground),
             new Pair<>("$USDC", ic_usdc_foreground),
+            new Pair<>("$LTT", ic_unknown_foreground),
+            new Pair<>("$TLYR", ic_unknown_foreground),
     };
+
+    public final static Pair<String, Integer>[] TokenTestnetIconList = new Pair[]{
+            new Pair<>("", 0),
+            new Pair<>("UNKNOWN", ic_unknown_foreground),
+            new Pair<>("Lyra", ic_lyra_token_foreground),
+            new Pair<>("Tron", ic_tron_foreground),
+            new Pair<>("USDT", ic_usdt_foreground),
+            new Pair<>("Ethereum (Rinkeby Testnet)", ic_eth_foreground),
+            new Pair<>("USDC", ic_usdc_foreground),
+            new Pair<>("Lyra Test Token", ic_unknown_foreground),
+            new Pair<>("Lyra Tether on Ethereum", ic_unknown_foreground),
+    };
+
+    public final static Pair<String, Integer>[] TokenMainnetIconList = new Pair[]{
+            new Pair<>("", 0),
+            new Pair<>("UNKNOWN", ic_unknown_foreground),
+            new Pair<>("Lyra", ic_lyra_token_foreground),
+            new Pair<>("Tron", ic_tron_foreground),
+            new Pair<>("USDT", ic_usdt_foreground),
+            new Pair<>("Ethereum", ic_eth_foreground),
+            new Pair<>("USDC", ic_usdc_foreground),
+            new Pair<>("Lyra Test Token", ic_unknown_foreground),
+            new Pair<>("Lyra Tether on Ethereum", ic_unknown_foreground),
+    };
+
+    public static int getTokenImage(String token) {
+        Pair<String, Integer>[] TokenIconList = TokenTestnetIconList;
+        if(Global.getCurrentNetworkName().equals("MAINNET"))
+            TokenIconList = TokenMainnetIconList;
+        int icon = TokenIconList[1].second;
+        for (Pair<String, Integer> k : TokenIconList) {
+            if (k.first.equals(GlobalLyra.domainToSymbol(token))) {
+                return k.second;
+            }
+        }
+        return icon;
+    }
+
+    public static int getTickerImage(String token) {
+        int icon = GlobalLyra.TickerIconList[1].second;
+        for (Pair<String, Integer> k : GlobalLyra.TickerIconList) {
+            if (k.first.equals(GlobalLyra.domainToSymbol(token))) {
+                return k.second;
+            }
+        }
+        return icon;
+    }
 
     public static String symbolToDomain(String token) {
         if(token == null)

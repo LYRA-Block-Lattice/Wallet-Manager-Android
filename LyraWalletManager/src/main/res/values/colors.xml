@@ -1,35 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="color_dark_200">#4439AA</color>
-    <color name="color_dark_500">#493DB6</color>
-    <color name="color_dark_700">#594AE2</color>
-    <color name="color_light_200">#7164E3</color>
-    <color name="color_light_700">#938BE1</color>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-    <color name="grey_light">#C8C8C8</color>
+    <color name="primary">#FCD535</color>
+    <color name="background">#FFFFFF</color>
+    <color name="background2">#FAFAFA</color>
+    <color name="background_acc">#F4F5F5</color>
+    <color name="additional">#02C076</color>
+    <color name="text1">#1E2329</color>
+    <color name="text2">#474D57</color>
+    <color name="stroke">#DDD</color>
 
-    <color name="button_icon_tint">#66000000</color>
-    <color name="button_2">@color/color_dark_700</color>
-    <color name="button_2_focused">@color/color_dark_700</color>
-    <color name="button_2_pressed">@color/color_dark_500</color>
-    <color name="button_2_stroke">@color/color_dark_500</color>
-    <color name="button_2_stroke_focused">@color/color_dark_500</color>
-    <color name="button_2_stroke_pressed">@color/color_dark_200</color>
-
-    <color name="page_background">#FFFFFF</color>
-    <color name="page_foreground">@color/white</color>
-    <color name="page_text">@color/black</color>
-    <color name="page_header_1">@color/color_dark_200</color>
-    <color name="page_header_2">@color/color_dark_700</color>
-
-    <color name="more_tint">#000</color>
-
-    <color name="send_token_select_spinner_tint">#FFF</color>
-    <color name="send_token_select_spinner_tint_stroke">#CCC</color>
-    <color name="send_token_select_spinner_text">@color/black</color>
-
-    <color name="send_token_verify_placeholder_tint">#FFF</color>
-    <color name="send_token_verify_placeholder_tint_stroke">#CCC</color>
+    <color name="cbn_cb">@color/primary</color>
 
 </resources>

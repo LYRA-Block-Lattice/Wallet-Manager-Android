@@ -28,7 +28,7 @@
                 android:popupBackground="@drawable/fab_spinner_account_select_outline"
                 android:text="@string/receive_account_address"
                 android:textAlignment="gravity"
-                android:textColor="@color/page_foreground"
+                android:textColor="@color/text1"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 tools:ignore="RtlCompat" />
@@ -99,7 +99,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="16dp"
-                android:backgroundTint="@color/button_2"
+                android:backgroundTint="@color/primary"
                 android:backgroundTintMode="add"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"

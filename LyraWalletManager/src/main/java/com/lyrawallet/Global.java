@@ -36,6 +36,8 @@ public class Global {
 
     // Global constants
     public final static String[] networkName = {"TESTNET", "MAINNET", "DEVNET"};
+    public final static String[] dexNetworkDns = {"https://testnet.lyra.live", "https://mainnet.lyra.live", "https://devnet.lyra.live"};
+    public static final String[] dexNetworkApi = {"https://dextestnet.lyra.live/api/Dex", "https://dex.lyra.live/api/Dex", "https://dexdevnet.lyra.live/api/Dex"};
     public final static String[] languageName = {"EN", "RO"};
     public final static String DefaultWalletExtension = "lyr";
     public final static int RpcConnectionTimeout = 100; // in 10mS steps
@@ -345,6 +347,28 @@ public class Global {
                 return NodeAddressMainNet;
             default:
                 return NodeAddressTestNet;
+        }
+    }
+
+    public static String getDexNetwork() {
+        switch (getCurrentNetwork()) {
+            case "DEVNET":
+                return dexNetworkDns[2];
+            case "MAINNET":
+                return dexNetworkDns[1];
+            default:
+                return dexNetworkDns[0];
+        }
+    }
+
+    public static String getDexNetworkApi() {
+        switch (getCurrentNetwork()) {
+            case "DEVNET":
+                return dexNetworkApi[2];
+            case "MAINNET":
+                return dexNetworkApi[1];
+            default:
+                return dexNetworkApi[0];
         }
     }
 

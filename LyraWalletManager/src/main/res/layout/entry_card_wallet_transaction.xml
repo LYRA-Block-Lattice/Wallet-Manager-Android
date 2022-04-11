@@ -21,7 +21,7 @@
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline3"
-        app:srcCompat="@mipmap/ic_lyra_dashboard_icon" />
+        app:srcCompat="@mipmap/ic_lyra_token_foreground" />
 
     <TextView
         android:id="@+id/walletTrEntryCardTicker"
@@ -32,7 +32,7 @@
         android:gravity="center_horizontal|start"
         android:text="TLYR"
         android:textSize="16sp"
-        android:textColor="@color/more_tint"
+        android:textColor="@color/text1"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintStart_toEndOf="@+id/tickerImageView" />
 
@@ -45,7 +45,7 @@
         android:gravity="center_horizontal|start"
         android:text="$0.1"
         android:textSize="13sp"
-        android:textColor="@color/more_tint"
+        android:textColor="@color/text1"
         app:layout_constraintStart_toEndOf="@+id/tickerImageView"
         app:layout_constraintTop_toTopOf="@+id/guideline3" />
 
@@ -58,7 +58,7 @@
         android:gravity="center_horizontal|end"
         android:text="1,000.1234"
         android:textSize="16sp"
-        android:textColor="@color/more_tint"
+        android:textColor="@color/text1"
         app:layout_constraintBottom_toTopOf="@+id/guideline3"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -70,7 +70,7 @@
         android:gravity="center_horizontal|end"
         android:text="$100.1234"
         android:textSize="13sp"
-        android:textColor="@color/more_tint"
+        android:textColor="@color/text1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline3" />
 
@@ -83,7 +83,7 @@
         android:gravity="center_horizontal|end"
         android:text="0"
         android:textSize="11sp"
-        android:textColor="@color/more_tint"
+        android:textColor="@color/text1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -94,7 +94,7 @@
         android:id="@+id/hr"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="#AAA"
+        android:background="@color/stroke"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

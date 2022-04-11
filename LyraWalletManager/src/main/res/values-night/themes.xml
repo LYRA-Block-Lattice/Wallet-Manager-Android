@@ -2,13 +2,13 @@
     <!-- Base application theme. -->
     <style name="Theme.LyraWalletAndroid" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/color_dark_500</item>
-        <item name="colorPrimaryVariant">@color/color_dark_700</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary</item>
+        <item name="colorOnPrimary">@color/text1</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/color_light_200</item>
-        <item name="colorSecondaryVariant">@color/color_light_700</item>
-        <item name="colorOnSecondary">@color/black</item>
+        <item name="colorSecondary">@color/primary</item>
+        <item name="colorSecondaryVariant">@color/primary</item>
+        <item name="colorOnSecondary">@color/text1</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->

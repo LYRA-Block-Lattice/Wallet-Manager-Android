@@ -3,22 +3,22 @@
     <item android:state_pressed="true" >
         <shape android:shape="rectangle"  >
             <corners android:radius="@dimen/button_round_corner" />
-            <stroke android:width="1dip" android:color="@color/button_2_stroke_pressed" />
-            <gradient android:angle="-90" android:startColor="@color/button_2_pressed" android:endColor="@color/button_2_pressed"  />
+            <stroke android:width="1dip" android:color="@color/stroke" />
+            <gradient android:angle="-90" android:startColor="@color/primary" android:endColor="@color/primary"  />
         </shape>
     </item>
     <item android:state_focused="true">
         <shape android:shape="rectangle"  >
             <corners android:radius="@dimen/button_round_corner" />
-            <stroke android:width="1dip" android:color="@color/button_2_stroke_focused" />
-            <solid android:color="@color/button_2_focused"/>
+            <stroke android:width="1dip" android:color="@color/stroke" />
+            <solid android:color="@color/primary"/>
         </shape>
     </item>
     <item >
         <shape android:shape="rectangle"  >
             <corners android:radius="@dimen/button_round_corner" />
-            <stroke android:width="1dip" android:color="@color/button_2_stroke" />
-            <gradient android:angle="-90" android:startColor="@color/button_2" android:endColor="@color/button_2" />
+            <stroke android:width="1dip" android:color="@color/stroke" />
+            <gradient android:angle="-90" android:startColor="@color/primary" android:endColor="@color/primary" />
         </shape>
     </item>
 </selector>

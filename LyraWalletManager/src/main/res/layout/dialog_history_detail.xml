@@ -42,7 +42,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.0"
-                    app:srcCompat="@color/page_header_2" />
+                    app:srcCompat="@color/background" />
 
                 <TextView
                     android:id="@+id/accountValueLyrTextView"
@@ -51,7 +51,7 @@
                     android:layout_marginTop="4dp"
                     android:gravity="center"
                     android:text="0 LYR"
-                    android:textColor="@color/page_foreground"
+                    android:textColor="@color/text1"
                     android:textSize="24sp"
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -65,7 +65,7 @@
                     android:layout_marginTop="4dp"
                     android:gravity="center"
                     android:text="0 USD"
-                    android:textColor="@color/page_foreground"
+                    android:textColor="@color/text1"
                     android:textSize="16sp"
                     android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -105,7 +105,7 @@
                     app:layout_constraintEnd_toStartOf="@+id/guideline2"
                     app:layout_constraintStart_toStartOf="@+id/guideline2"
                     app:layout_constraintTop_toTopOf="@+id/imageView2"
-                    app:srcCompat="@mipmap/ic_lyra_dashboard_icon"
+                    app:srcCompat="@mipmap/ic_lyra_token_foreground"
                     tools:ignore="ContentDescription" />
 
                 <com.google.android.material.button.MaterialButton
@@ -148,7 +148,7 @@
                     android:layout_height="wrap_content"
                     android:paddingBottom="7dp"
                     android:text="@string/Transaction_detail"
-                    android:textColor="@color/page_foreground"
+                    android:textColor="@color/text1"
                     android:textSize="20sp"
                     app:layout_constraintEnd_toStartOf="@+id/guideline2"
                     app:layout_constraintStart_toStartOf="@+id/guideline2"
@@ -160,14 +160,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
-                    android:backgroundTint="@color/page_header_2"
+                    android:backgroundTint="@color/background"
                     android:scaleX="1.3"
                     android:scaleY="1.3"
                     android:visibility="invisible"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/ic_outline_arrow_back_ios_24"
-                    app:tint="@color/page_foreground"
+                    app:tint="@color/text1"
                     tools:ignore="SpeakableTextPresentCheck" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

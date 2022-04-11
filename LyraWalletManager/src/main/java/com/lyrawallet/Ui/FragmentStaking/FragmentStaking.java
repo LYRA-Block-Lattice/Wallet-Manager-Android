@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.InputType;
-import android.text.method.PasswordTransformationMethod;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,8 +22,6 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
-import com.lyrawallet.Api.ApiRpc;
 import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsBrokerAccounts;
 import com.lyrawallet.Api.Network.NetworkRpc;
 import com.lyrawallet.Global;
@@ -37,7 +34,6 @@ import com.lyrawallet.Ui.UtilGetData;
 import com.lyrawallet.Util.Concatenate;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -185,7 +181,7 @@ public class FragmentStaking extends Fragment {
                     refreshInProgress = false;
                     return;
                 }
-                ProgressBar progress = activity.findViewById(R.id.stakingAccountProgressBar);
+                ProgressBar progress = activity.findViewById(R.id.stakingAccount_ProgressBar);
                 try {
                     if (entryList.size() == historyLen) {
                         refreshInProgress = false;
@@ -196,7 +192,7 @@ public class FragmentStaking extends Fragment {
                     }
                     historyLen = entryList.size();
                 } catch (NullPointerException ignored) { }
-                RecyclerView account_history_recycler = activity.findViewById(R.id.stakingAccountsRecycler);
+                RecyclerView account_history_recycler = activity.findViewById(R.id.stakingAccounts_Recycler);
                 FragmentStaking.ClickListener selectedListener = new FragmentStaking.ClickListener() {
                     @Override
                     public void click(int index) {
@@ -225,36 +221,36 @@ public class FragmentStaking extends Fragment {
                         passEditText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                         passEditText.setHint(String.format("%s: %s %s", getString(R.string.send_token_available), max, "LYR"));
                         AlertDialog dialog = new AlertDialog.Builder(activity)
-                                .setTitle(R.string.Add_stake)
-                                .setMessage(R.string.You_will_add_more_value_to_current_staking)
-                                .setView(passEditText)
-                                .setPositiveButton(R.string.Accept, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        activity.runOnUiThread(new Runnable() {
-                                            public void run() {
-                                                UiDialog.showDialogStatus(R.string.Adding_stake);
-                                                NetworkRpc rpc = (NetworkRpc) new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL, Global.getWalletPassword())
-                                                        .execute("", "AddStaking", Global.getSelectedAccountId(),
-                                                                entryList.get(index).StakingAccountId,
-                                                                passEditText.getText().toString());
-                                                rpc.setListener(new NetworkRpc.RpcTaskListener() {
-                                                    @Override
-                                                    public void onRpcTaskFinished(String[] output) {
-                                                        activity.runOnUiThread(new Runnable() {
-                                                            public void run() {
-                                                                UiDialog.showDialogStatus(R.string.Stake_successfully_add);
-                                                                restoreTimers(view);
-                                                            }
-                                                        });
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    }
-                                })
-                                .setNegativeButton(R.string.Cancel, null)
-                                .create();
+                            .setTitle(R.string.Add_stake)
+                            .setMessage(R.string.You_will_add_more_value_to_current_staking)
+                            .setView(passEditText)
+                            .setPositiveButton(R.string.Accept, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    activity.runOnUiThread(new Runnable() {
+                                        public void run() {
+                                            UiDialog.showDialogStatus(R.string.Adding_stake);
+                                            NetworkRpc rpc = (NetworkRpc) new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL, Global.getWalletPassword())
+                                                    .execute("", "AddStaking", Global.getSelectedAccountId(),
+                                                            entryList.get(index).StakingAccountId,
+                                                            passEditText.getText().toString());
+                                            rpc.setListener(new NetworkRpc.RpcTaskListener() {
+                                                @Override
+                                                public void onRpcTaskFinished(String[] output) {
+                                                    activity.runOnUiThread(new Runnable() {
+                                                        public void run() {
+                                                            UiDialog.showDialogStatus(R.string.Stake_successfully_add);
+                                                            restoreTimers(view);
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            })
+                            .setNegativeButton(R.string.Cancel, null)
+                            .create();
                         dialog.show();
                     }
                 };
@@ -265,36 +261,36 @@ public class FragmentStaking extends Fragment {
                                 //.setAction("", null).show();
                         FragmentActivity activity = getActivity();
                         AlertDialog dialog = new AlertDialog.Builder(activity)
-                                .setTitle(R.string.Remove_stake)
-                                .setMessage(R.string.Are_you_sure_you_want_to_remove_stake)
-                                //.setView(passEditText)
-                                .setPositiveButton(R.string.Accept, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        activity.runOnUiThread(new Runnable() {
-                                            public void run() {
-                                                UiDialog.showDialogStatus(R.string.Unstaking);
-                                                NetworkRpc rpc = (NetworkRpc) new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL, Global.getWalletPassword())
-                                                        .execute("", "UnStaking", Global.getSelectedAccountId(),
-                                                                entryList.get(index).StakingAccountId
-                                                        );
-                                                rpc.setListener(new NetworkRpc.RpcTaskListener() {
-                                                    @Override
-                                                    public void onRpcTaskFinished(String[] output) {
-                                                        activity.runOnUiThread(new Runnable() {
-                                                            public void run() {
-                                                                UiDialog.showDialogStatus(R.string.Successfully_unstaked);
-                                                                restoreTimers(view);
-                                                            }
-                                                        });
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    }
-                                })
-                                .setNegativeButton(R.string.Cancel, null)
-                                .create();
+                            .setTitle(R.string.Remove_stake)
+                            .setMessage(R.string.Are_you_sure_you_want_to_remove_stake)
+                            //.setView(passEditText)
+                            .setPositiveButton(R.string.Accept, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    activity.runOnUiThread(new Runnable() {
+                                        public void run() {
+                                            UiDialog.showDialogStatus(R.string.Unstaking);
+                                            NetworkRpc rpc = (NetworkRpc) new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL, Global.getWalletPassword())
+                                                    .execute("", "UnStaking", Global.getSelectedAccountId(),
+                                                            entryList.get(index).StakingAccountId
+                                                    );
+                                            rpc.setListener(new NetworkRpc.RpcTaskListener() {
+                                                @Override
+                                                public void onRpcTaskFinished(String[] output) {
+                                                    activity.runOnUiThread(new Runnable() {
+                                                        public void run() {
+                                                            UiDialog.showDialogStatus(R.string.Successfully_unstaked);
+                                                            restoreTimers(view);
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            })
+                            .setNegativeButton(R.string.Cancel, null)
+                            .create();
                         dialog.show();
                     }
                 };
@@ -346,10 +342,10 @@ public class FragmentStaking extends Fragment {
         CurvedBottomNavigationView bottomNavigationView = activity.findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setVisibility(View.VISIBLE);
 
-        TextView stakingAccountNameTextView = view.findViewById(R.id.stakingAccountNameTextView);
+        TextView stakingAccountNameTextView = view.findViewById(R.id.stakingAccount_Name_TextView);
         stakingAccountNameTextView.setText(String.format("%s/%s", Global.getSelectedAccountName(), Global.getCurrentNetworkName()));
 
-        ProgressBar progress = activity.findViewById(R.id.stakingAccountProgressBar);
+        ProgressBar progress = activity.findViewById(R.id.stakingAccount_ProgressBar);
         if (progress != null) {
             progress.setVisibility(View.VISIBLE);
         }
@@ -359,7 +355,7 @@ public class FragmentStaking extends Fragment {
         //new Accounts((MainActivity) getActivity()).promptForPassword(getContext(), v.getRootView());
         historyLen = 0;
 
-        Button stakingAccountAddNewButton = (Button) view.findViewById(R.id.stakingAccountAddNewButton);
+        Button stakingAccountAddNewButton = (Button) view.findViewById(R.id.stakingAccount_AddNew_Button);
         stakingAccountAddNewButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 new FragmentManagerUser().goToDialogCreateStaking();

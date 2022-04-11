@@ -86,12 +86,12 @@ public class UtilGetData {
             } else {
                 tokenAmount = historyList.get(i).getChanges().get(0);
             }
-            int icon = GlobalLyra.TokenIconList[1].second;
+            int icon = GlobalLyra.TickerIconList[1].second;
             if(historyList.get(i).getSendAccountId() == null) {
                 icon = R.drawable.ic_outline_diamond_24;
             } else {
-                icon = GlobalLyra.TokenIconList[1].second;
-                for (Pair<String, Integer> k : GlobalLyra.TokenIconList) {
+                icon = GlobalLyra.TickerIconList[1].second;
+                for (Pair<String, Integer> k : GlobalLyra.TickerIconList) {
                     if (k.first.equals(GlobalLyra.domainToSymbol(tokenAmount.first))) {
                         icon = k.second;
                         break;
