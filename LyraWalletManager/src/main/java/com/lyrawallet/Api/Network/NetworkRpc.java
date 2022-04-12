@@ -181,7 +181,6 @@ public class NetworkRpc extends AsyncTask<String, Void, String[]> implements Net
     }
 
     public state send(String api, List<String> args) {
-        System.out.println("Executing: " + api + ";" + args);
         return sendResponse(api, args);
     }
 
@@ -214,7 +213,7 @@ public class NetworkRpc extends AsyncTask<String, Void, String[]> implements Net
             return state.COMPOSE_MESSAGE_ERROR;
         }
         this.LastParameters = args;
-        if(!Socket.send(jsonObject.toString())) {
+        if(!Socket.send(jsonObject.toString().replace("\\", ""))) {
             sendState(state.FOUND_DISCONNECTED);
             return state.FOUND_DISCONNECTED;
         }
@@ -299,7 +298,6 @@ public class NetworkRpc extends AsyncTask<String, Void, String[]> implements Net
                     }
                 }
             } else if (!obj.isNull("error")) {
-                composeSendResponse("error");
                 InternalState = state.IDLE;
                 obj = obj.getJSONObject("error");
                 if(!obj.isNull("data")) {
@@ -309,6 +307,8 @@ public class NetworkRpc extends AsyncTask<String, Void, String[]> implements Net
                 }
                 String error = obj.getString("message");
                 System.out.println("RPC ERROR: " + error); // BlockSignatureValidationFailed
+                InstanceName = error;
+                composeSendResponse("error");
                 if(error.equals("BlockSignatureValidationFailed")) {
                     retrySign();
                 }

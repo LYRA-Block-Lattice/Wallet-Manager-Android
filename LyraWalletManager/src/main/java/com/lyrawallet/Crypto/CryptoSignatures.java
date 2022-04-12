@@ -79,8 +79,8 @@ public class CryptoSignatures {
             Signature sign = Signature.getInstance("SHA256withECDSA");
             sign.initVerify(pubKey);
             sign.update(message.getBytes(StandardCharsets.UTF_8));
-            byte[] signnatureBytes = CryptoBase58Encoding.decode(signature);
-            return sign.verify(CryptoSignatureHelper.derSign(signnatureBytes));
+            byte[] signatureBytes = CryptoBase58Encoding.decode(signature);
+            return sign.verify(CryptoSignatureHelper.derSign(signatureBytes));
         } catch (InvalidKeyException | NoSuchAlgorithmException | SignatureException | IOException e) {
             e.printStackTrace();
         }

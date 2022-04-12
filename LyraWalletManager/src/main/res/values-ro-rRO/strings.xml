@@ -68,6 +68,7 @@
     <string name="send_successful">Trimis cu success</string>
     <string name="OK">Bine</string>
     <string name="send_sending">Trimit</string>
+    <string name="send_removing">Eliminare</string>
     <string name="receive_account_address">Adresa contului</string>
     <string name="receive_scan_or_copy_address">Scanează sau copiază adresa</string>
     <string name="receive_scan_address_copied">Adresa copiata</string>
@@ -86,7 +87,7 @@
     <string name="swap_token_amount_to_send_hint">Valoare trimisă</string>
     <string name="swap_token_amount_to_receive_hint">Valoare primita</string>
     <string name="Balance">Balanța</string>
-    <string name="swap_pool_remove_all_my_share">Eliminați toată partea mea</string>
+    <string name="swap_pool_remove_share_from_pair">Eliminați share din pereche</string>
     <string name="swap_pool_add_liquidity">Adăugați lichiditate</string>
     <string name="swap_you_will_sell">Vei vinde</string>
     <string name="swap_you_will_get">Vei primi</string>
@@ -113,6 +114,7 @@
     <string name="pref_randomize_node_address_enabled_switch_summary">Modifica adresa IP al nodurilor in mod random la fiecate operatie, daca este deschisa va avea impact in timpul necesar refreshului istoriei</string>
     <string name="swap_swap_complete">Swap efectuat</string>
     <string name="swap_add_liquidity_complete">Adaugare lichiditate completa</string>
+    <string name="swap_remove_liquidity_complete">Eliminare lichiditate completa</string>
     <string name="swap_add_liquidity_action_begin">Actiunea de adaugare a lichiditatii inceputa</string>
     <string name="Transaction_detail">Detaliile tranzacției</string>
     <string name="Invalid_request">Cerere invalida</string>

@@ -157,7 +157,8 @@ public class FragmentDex extends Fragment {
                         if (intHistoryList == null || intHistoryList.second == null) {
                             historyAvailable = false;
                         } else {
-                            spotBalances = intHistoryList.second.get(intHistoryList.second.size() - 1).getBalances();
+                            if(intHistoryList.second.size() > 0)
+                                spotBalances = intHistoryList.second.get(intHistoryList.second.size() - 1).getBalances();
                         }
                         for (int n = 0; n < list.size(); n++) {
                             for (int i = 0; i < dexBalances.getBalancesList().size(); i++) {
@@ -168,7 +169,7 @@ public class FragmentDex extends Fragment {
                                     }
                                 }
                             }
-                            if(historyAvailable) {
+                            if(historyAvailable && spotBalances != null) {
                                 for (int i = 0; i < spotBalances.size(); i++) {
                                     if(GlobalLyra.domainToSymbol(spotBalances.get(i).first).equals(list.get(n).Ticker)) {
                                         adapter.list.get(n).setSpotQty(spotBalances.get(i).second);

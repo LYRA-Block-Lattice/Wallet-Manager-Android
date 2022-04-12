@@ -62,6 +62,11 @@ public class FragmentSwap extends Fragment {
     static boolean fromLastEditTextChanged = true;
     private final Handler UserInputValueChangedHandler = new Handler();
     View thisView = null;
+    UiUpdates.PoolData PoolData = null;
+    UiUpdates.PoolCalculateData PoolCalculateData = null;
+    double InternalLyrPrice = 0f;
+    Timer timer1;
+    Timer timer2;
 
     public FragmentSwap() {
         // Required empty public constructor
@@ -165,8 +170,8 @@ public class FragmentSwap extends Fragment {
             swapYouWillSellValueTextView.setText(String.format(Locale.US, "%.8f %s", sellValue, GlobalLyra.domainToSymbol(from)));
             swapYouWillGetValueTextView.setText(String.format(Locale.US, "%.8f %s", buyValue, GlobalLyra.domainToSymbol(to)));
             swapPriceImpactValueTextView.setText(String.format(Locale.US, "%.8f %%", priceImpact * 100));
-            swapPoolFeeValueTextView.setText(String.format(Locale.US, "%.3f LYR", poolFee));
-            swapNetworkFeeValueTextView.setText(String.format(Locale.US, "%.3f %s", networkFee, GlobalLyra.domainToSymbol(from)));
+            swapPoolFeeValueTextView.setText(String.format(Locale.US, "%.3f %s", poolFee, GlobalLyra.domainToSymbol(from)));
+            swapNetworkFeeValueTextView.setText(String.format(Locale.US, "%.3f LYR", networkFee));
             ProgressBar progressBar = (ProgressBar) activity.findViewById(R.id.swapProgressBar);
             progressBar.setVisibility(View.GONE);
             setPoolValuesVisibility(activity, View.VISIBLE);
@@ -476,16 +481,11 @@ public class FragmentSwap extends Fragment {
                             public void onRpcTaskFinished(String[] output) {
                                 System.out.println("RPC POOL LYR/USDT: " + output[0] + output[1] + output[2]);
                                 try {
-                                    UiUpdates.setPoolData(new UiUpdates.PoolData(output[2]));
+                                    UiUpdates.PoolData poolData = new UiUpdates.PoolData(output[2]);
                                     JSONObject obj = new JSONObject(output[2]);
                                     JSONObject objBalance = obj.getJSONObject("balance");
-                                    if( UiUpdates.getPoolData().token0Is("tether/USDT") && UiUpdates.getPoolData().token0Is("LYR")) {
+                                    if( poolData.token1Is("tether/USDT") && poolData.token0Is("LYR"))
                                         Global.setTokenPrice(new Pair<>("LYR", "tether/USDT"), objBalance.getDouble("tether/USDT") / objBalance.getDouble("LYR"));
-                                        TextView swapExternalPriceValueTextView = (TextView) view.findViewById(R.id.swapExternalPriceValueTextView);
-                                        if (swapExternalPriceValueTextView != null) {
-                                            swapExternalPriceValueTextView.setText(String.format(Locale.US, "$ %.8f", Global.getTokenPrice(new Pair<>("LYR", "USD"))));
-                                        }
-                                    }
                                 } catch (JSONException | NullPointerException e) {
                                     e.printStackTrace();
                                     Toast.makeText(activity, e.toString(), Toast.LENGTH_LONG).show();
@@ -504,6 +504,8 @@ public class FragmentSwap extends Fragment {
                 activity.runOnUiThread(new Runnable() {
                     public void run() {
                         populateSpinners(view, poolSelected);
+                        TextView swapExternalPriceValueTextView = (TextView) view.findViewById(R.id.swapExternalPriceValueTextView);
+                        swapExternalPriceValueTextView.setText(String.format(Locale.US, "$ %.8f", Global.getTokenPrice(new Pair<>("LYR", "USD"))));
                         double internalLyrPrice = Global.getTokenPrice(new Pair<>("LYR", "tether/USDT"));
                         if(InternalLyrPrice != internalLyrPrice) {
                             InternalLyrPrice = internalLyrPrice;
@@ -531,9 +533,19 @@ public class FragmentSwap extends Fragment {
                                     Spinner tokenToSpinner = (Spinner) view.findViewById(R.id.swapToValueSpinner);
                                     if(GlobalLyra.domainToSymbol(poolCalculateData.getSwapInToken()).equals(tokenFromSpinner.getSelectedItem().toString()) &&
                                             GlobalLyra.domainToSymbol(poolCalculateData.getSwapOutToken()).equals(tokenToSpinner.getSelectedItem().toString())) {
-                                        setSwapValues(activity, PoolCalculateData.getSwapInToken(), PoolCalculateData.getSwapOutToken(),
-                                                PoolCalculateData.getPrice(), PoolCalculateData.getSwapInAmount(), PoolCalculateData.getSwapOutAmount(),
-                                                PoolCalculateData.getPriceImpact(), PoolCalculateData.getPayToProvider(), PoolCalculateData.getPayToAuthorizer());
+                                        if (poolSelected) {
+                                            double multiplier = PoolData.getToken1Balance() / PoolData.getToken0Balance();
+                                            if(PoolCalculateData.getSwapInToken().equals(PoolData.getToken1()))
+                                                multiplier = PoolData.getToken0Balance() / PoolData.getToken1Balance();
+                                            setSwapValues(activity, PoolCalculateData.getSwapInToken(), PoolCalculateData.getSwapOutToken(),
+                                                    PoolCalculateData.getPrice(), PoolCalculateData.getSwapInAmount(), PoolCalculateData.getSwapInAmount() * (multiplier),
+                                                    PoolCalculateData.getPriceImpact(), PoolCalculateData.getPayToProvider(), PoolCalculateData.getPayToAuthorizer());
+
+                                        } else {
+                                            setSwapValues(activity, PoolCalculateData.getSwapInToken(), PoolCalculateData.getSwapOutToken(),
+                                                    PoolCalculateData.getPrice(), PoolCalculateData.getSwapInAmount(), PoolCalculateData.getSwapOutAmount(),
+                                                    PoolCalculateData.getPriceImpact(), PoolCalculateData.getPayToProvider(), PoolCalculateData.getPayToAuthorizer());
+                                        }
                                     }
                                 }
                             }
@@ -574,11 +586,6 @@ public class FragmentSwap extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
     }
-    UiUpdates.PoolData PoolData = null;
-    UiUpdates.PoolCalculateData PoolCalculateData = null;
-    double InternalLyrPrice = 0f;
-    Timer timer1;
-    Timer timer2;
     @Override
     public void onResume() {
         super.onResume();
@@ -748,7 +755,7 @@ public class FragmentSwap extends Fragment {
                     EditText swapToValueEditText = (EditText) view.findViewById(R.id.swapToValueEditText);
                     if(poolSelected) {
                         NetworkRpc rpc = (NetworkRpc) new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL, Global.getWalletPassword())
-                                .execute("", "AddLiquidity", Global.getSelectedAccountId(),
+                                .execute("", "AddLiquidaty", Global.getSelectedAccountId(),
                                         GlobalLyra.symbolToDomain(tokenFromSpinner.getSelectedItem().toString()), swapFromValueEditText.getText().toString(),
                                         GlobalLyra.symbolToDomain(tokenToSpinner.getSelectedItem().toString()), swapToValueEditText.getText().toString()
                                 );
@@ -759,7 +766,7 @@ public class FragmentSwap extends Fragment {
                                     public void run() {
                                         System.out.println("RPC ADD LIQUIDITY: " + output[0] + output[1] + output[2]);
                                         if (output[2].equals("error"))
-                                            UiDialog.showDialogStatus(R.string.str_an_error_occurred);
+                                            UiDialog.showDialogStatus(output[1]);
                                         else {
                                             FragmentSwap.clearAccountFromTo(activity);
                                             try {
@@ -830,7 +837,35 @@ public class FragmentSwap extends Fragment {
         });
         swapRemoveShareActionButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
+                UiDialog.showDialogStatus(R.string.send_removing);
+                Spinner tokenFromSpinner = (Spinner) view.findViewById(R.id.swapFromValueSpinner);
+                Spinner tokenToSpinner = (Spinner) view.findViewById(R.id.swapToValueSpinner);
+                NetworkRpc rpc = (NetworkRpc) new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL, Global.getWalletPassword())
+                        .execute("", "RemoveLiquidaty", Global.getSelectedAccountId(),
+                                GlobalLyra.symbolToDomain(tokenFromSpinner.getSelectedItem().toString()),
+                                GlobalLyra.symbolToDomain(tokenToSpinner.getSelectedItem().toString())
+                        );
+                rpc.setListener(new NetworkRpc.RpcTaskListener() {
+                    @Override
+                    public void onRpcTaskFinished(String[] output) {
+                        activity.runOnUiThread(new Runnable() {
+                            public void run() {
+                                System.out.println("RPC REMOVE LIQUIDITY: " + output[0] + output[1] + output[2]);
+                                if (output[2].equals("error"))
+                                    UiDialog.showDialogStatus(output[1]);
+                                else {
+                                    FragmentSwap.clearAccountFromTo(activity);
+                                    try {
+                                        UiDialog.showDialogStatus(R.string.swap_remove_liquidity_complete,
+                                                ApiRpc.class.getDeclaredMethod("runActionHistory"));
+                                    } catch (NoSuchMethodException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }
+                        });
+                    }
+                });
             }
         });
         restoreTimers(view);

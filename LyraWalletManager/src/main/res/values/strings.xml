@@ -174,6 +174,7 @@
     <string name="send_token_available">Available</string>
     <string name="send_successful">Successfully send</string>
     <string name="send_sending">Sending</string>
+    <string name="send_removing">Removing</string>
 
     <string name="receive_account_address">Account address</string>
     <string name="receive_scan_or_copy_address">Scan or copy address</string>
@@ -182,7 +183,7 @@
     <string name="swap_token_amount_to_send_hint">Amount sent</string>
     <string name="swap_token_amount_to_receive_hint">Amount receive</string>
     <string name="swap_pool_add_liquidity">Add liquidity</string>
-    <string name="swap_pool_remove_all_my_share">Remove all my share</string>
+    <string name="swap_pool_remove_share_from_pair">Remove share from pair</string>
     <string name="swap_lyr_internal_price">LYR internal price</string>
     <string name="swap_lyr_external_price">LYR external price</string>
     <string name="swap_token_pair">Token pair</string>
@@ -203,8 +204,8 @@
     <string name="swap_some_eth_dummy" translatable="false">0.00000001 $ETH</string>
     <string name="swap_some_percentage" translatable="false">0.00001700 %</string>
     <string name="swap_some_lyr1" translatable="false">0.003 LYR</string>
-    <string name="swap_some_usd1" translatable="false">$ 0.0001904</string>
-    <string name="swap_some_usd2" translatable="false">$ 0.00023885</string>
+    <string name="swap_some_usd1" translatable="false">$ 0.0</string>
+    <string name="swap_some_usd2" translatable="false">$ 0.0</string>
     <string name="swap_0_lyr_and_0_usd" translatable="false">0 LYR\n0 $USDT</string>
     <string name="swap_some_percentage1" translatable="false">90.9674 %</string>
     <string name="swap_spinner_from_content_description">Token from</string>
@@ -212,6 +213,7 @@
     <string name="swap_swap_between_content_description">Swap tokens between them</string>
     <string name="swap_swap_complete">Swap complete</string>
     <string name="swap_add_liquidity_complete">Add liquidity complete</string>
+    <string name="swap_remove_liquidity_complete">Remove liquidity complete</string>
 
 
     <string name="swap_amount_of_token">Amount of token</string>

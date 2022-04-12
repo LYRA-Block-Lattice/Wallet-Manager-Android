@@ -142,6 +142,7 @@ public class NetworkRpcSocket {
     }
 
     public boolean send(String s) {
+        System.out.println("Executing: " + s);
         return send(s, "");
     }
 

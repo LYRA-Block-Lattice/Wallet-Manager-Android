@@ -95,6 +95,20 @@ public class UiDialog extends MainActivity {
         dialogWindow.show();
     }
 
+    public static void showDialogStatus(String title) {
+        if(dialogWindow != null)
+            dialogWindow.dismiss();
+        dialogWindow = new AlertDialog.Builder(getInstance())
+                .setTitle(title)
+                .setPositiveButton(R.string.OK, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .create();
+        dialogWindow.show();
+    }
+
     public static void showDialogStatus(int title, Method onClickEvent) {
         if(dialogWindow != null)
             dialogWindow.dismiss();
