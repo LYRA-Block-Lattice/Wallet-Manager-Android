@@ -1,5 +1,7 @@
 package com.lyrawallet.Ui.FragmentDex;
 
+import static java.lang.Integer.getInteger;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.os.Bundle;
@@ -25,6 +27,7 @@ import com.lyrawallet.Global;
 import com.lyrawallet.GlobalLyra;
 import com.lyrawallet.MainActivity;
 import com.lyrawallet.R;
+import com.lyrawallet.Ui.FragmentManagerUser;
 import com.lyrawallet.Ui.FragmentStaking.FragmentStaking;
 import com.lyrawallet.Ui.FragmentStaking.StakingGalleryAdapter;
 import com.lyrawallet.Util.Concatenate;
@@ -44,7 +47,8 @@ public class FragmentDex extends Fragment {
     private String mParam2;
 
     DexGalleryAdapter adapter;
-
+    ApiDex.AllSupported supportedTokens = null;
+    ApiDex.AllBalances dexWallets = null;
 
     public FragmentDex() {
         // Required empty public constructor
@@ -83,6 +87,7 @@ public class FragmentDex extends Fragment {
         String Ticker;
         double SpotQty;
         double DexQty;
+        double Fee;
 
         public void setTicker(String ticker) {
             Ticker = ticker;
@@ -93,11 +98,15 @@ public class FragmentDex extends Fragment {
         public void setDexQty(double qty) {
             DexQty = qty;
         }
+        public void setFee(double fee) {
+            Fee = fee;
+        }
 
-        public DexEntry(String ticker, double spotQty, double dexQty) {
+        public DexEntry(String ticker, double spotQty, double dexQty, double fee) {
             this.Ticker = ticker;
             this.SpotQty = spotQty;
             this.DexQty = dexQty;
+            this.Fee = fee;
         }
     }
 
@@ -114,31 +123,6 @@ public class FragmentDex extends Fragment {
         }
         ProgressBar progress = v.findViewById(R.id.fragmentDex_ProgressBar);
         progress.setVisibility(View.VISIBLE);
-        FragmentDex.ClickListener settingsListener = new FragmentDex.ClickListener() {
-            @Override
-            public void click(int index) {
-            }
-        };
-        FragmentDex.ClickListener dexToSpotListener = new FragmentDex.ClickListener() {
-            @Override
-            public void click(int index) {
-            }
-        };
-        FragmentDex.ClickListener spotToDexListener = new FragmentDex.ClickListener() {
-            @Override
-            public void click(int index) {
-            }
-        };
-        FragmentDex.ClickListener depositListener = new FragmentDex.ClickListener() {
-            @Override
-            public void click(int index) {
-            }
-        };
-        FragmentDex.ClickListener withdrawListener = new FragmentDex.ClickListener() {
-            @Override
-            public void click(int index) {
-            }
-        };
         NetworkWebHttps getSupportedWebHttpsTask = new NetworkWebHttps(null);
         List<DexEntry> list = new ArrayList<>();
         getSupportedWebHttpsTask.setListener(new NetworkWebHttps.WebHttpsTaskListener() {
@@ -150,7 +134,7 @@ public class FragmentDex extends Fragment {
                     @Override
                     public void onWebHttpsTaskFinished(NetworkWebHttps instance) {
                         System.out.println("Static function thread: " + instance.getContent());
-                        ApiDex.AllBalances dexBalances = new ApiDex.AllBalances().fromJson(instance.getContent());
+                        dexWallets = new ApiDex.AllBalances().fromJson(instance.getContent());
                         Pair<Integer, List<ApiRpcActionsHistory.HistoryEntry>> intHistoryList = Global.getWalletHistory(Concatenate.getHistoryFileName());
                         List<Pair<String, Double>> spotBalances = null;
                         boolean historyAvailable = true;
@@ -160,11 +144,85 @@ public class FragmentDex extends Fragment {
                             if(intHistoryList.second.size() > 0)
                                 spotBalances = intHistoryList.second.get(intHistoryList.second.size() - 1).getBalances();
                         }
+                        progress.setVisibility(View.GONE);
+                        FragmentDex.ClickListener settingsListener = new FragmentDex.ClickListener() {
+                            @Override
+                            public void click(int index) {
+                            }
+                        };
+                        FragmentDex.ClickListener dexToSpotListener = new FragmentDex.ClickListener() {
+                            @Override
+                            public void click(int index) {
+                                //TODO Dex to SPOT
+                            }
+                        };
+                        FragmentDex.ClickListener spotToDexListener = new FragmentDex.ClickListener() {
+                            @Override
+                            public void click(int index) {
+                                //TODO SPOT to DEX
+                            }
+                        };
+                        FragmentDex.ClickListener depositListener = new FragmentDex.ClickListener() {
+                            @Override
+                            public void click(int index) {
+                                int i = 0;
+                                try {
+                                    for (; i < supportedTokens.getSuportedList().size(); i++) {
+                                        if (supportedTokens.getSuportedList().get(index).getSymbol().equals(dexWallets.getBalancesList().get(i).getExtSymbol()))
+                                            break;
+                                    }
+                                    String ticker = dexWallets.getBalancesList().get(i).getExtSymbol();
+                                    String provider = dexWallets.getBalancesList().get(i).getExtProvider();
+                                    String depositAddress = dexWallets.getBalancesList().get(i).getExtAddress();
+
+                                    String contractAddress = supportedTokens.getSuportedList().get(index).getContract();
+                                    double minDeposit = supportedTokens.getSuportedList().get(index).getMinDeposit();
+                                    double depositionFee = supportedTokens.getSuportedList().get(index).getDepositFee();
+                                    String conf = supportedTokens.getSuportedList().get(index).getConfirmationInfo();
+                                    int confirmations = 0;
+                                    try {
+                                        if (conf != null) {
+                                            if (conf.split(" ")[0] != null) {
+                                                confirmations = Integer.decode(conf.split(" ")[0]);
+                                            }
+                                        }
+                                    } catch(NullPointerException ignored) {};
+                                    new FragmentManagerUser().goToReceive(ticker, provider, contractAddress, depositAddress, minDeposit, depositionFee, confirmations);
+                                } catch (IndexOutOfBoundsException ignored) {}
+                            }
+                        };
+                        FragmentDex.ClickListener withdrawListener = new FragmentDex.ClickListener() {
+                            @Override
+                            public void click(int index) {
+                                try {
+                                    int i = 0;
+                                    for (; i < supportedTokens.getSuportedList().size(); i++) {
+                                        if (supportedTokens.getSuportedList().get(index).getSymbol().equals(dexWallets.getBalancesList().get(i).getExtSymbol()))
+                                            break;
+                                    }
+                                    String ticker = dexWallets.getBalancesList().get(i).getExtSymbol();
+                                    double maxAmount = dexWallets.getBalancesList().get(i).getBalances().get(0).second / 100_000_000;
+                                    String provider = dexWallets.getBalancesList().get(i).getExtProvider();
+
+                                    String contractAddress = supportedTokens.getSuportedList().get(index).getContract();
+                                    double withdrawFee = supportedTokens.getSuportedList().get(index).getWithdrawFee();
+                                    new FragmentManagerUser().goToSend(ticker, provider, contractAddress, maxAmount, withdrawFee);
+                                } catch (IndexOutOfBoundsException ignored) {}
+                            }
+                        };
+                        RecyclerView tokens_list_recycler = v.findViewById(R.id.fragmentDex_RecyclerView);
+                        adapter = new DexGalleryAdapter(list, activity,
+                                settingsListener, dexToSpotListener, spotToDexListener, depositListener, withdrawListener);
+                        if(tokens_list_recycler != null) {
+                            tokens_list_recycler.setAdapter(adapter);
+                            tokens_list_recycler.setLayoutManager(
+                                    new LinearLayoutManager(activity));
+                        }
                         for (int n = 0; n < list.size(); n++) {
-                            for (int i = 0; i < dexBalances.getBalancesList().size(); i++) {
-                                if(dexBalances.getBalancesList().get(i).getIntSymbol().equals(list.get(n).Ticker)) {
-                                    if(dexBalances.getBalancesList().get(i).getBalances().size() > 0) {
-                                        adapter.list.get(n).setDexQty(dexBalances.getBalancesList().get(i).getBalances().get(0).second / 100000000);
+                            for (int i = 0; i < dexWallets.getBalancesList().size(); i++) {
+                                if(dexWallets.getBalancesList().get(i).getIntSymbol().equals(list.get(n).Ticker)) {
+                                    if(dexWallets.getBalancesList().get(i).getBalances().size() > 0) {
+                                        adapter.list.get(n).setDexQty(dexWallets.getBalancesList().get(i).getBalances().get(0).second / 100000000);
                                         adapter.notifyItemChanged(n);
                                     }
                                 }
@@ -178,23 +236,13 @@ public class FragmentDex extends Fragment {
                                 }
                             }
                         }
-                        RecyclerView tokens_list_recycler = v.findViewById(R.id.fragmentDex_RecyclerView);
-                        progress.setVisibility(View.GONE);
                     }
                 });
                 getWalletsWebHttpsTask.execute(String.format("%s%s/GetAllDexWallets/?owner=%s", Global.getDexNetwork(), GlobalLyra.LYRA_NODE_API_URL, Global.getSelectedAccountId()));
-                ApiDex.AllSupported supportedTokens = new ApiDex.AllSupported().fromJson(instance.getContent());
+                supportedTokens = new ApiDex.AllSupported().fromJson(instance.getContent());
                 for (int cnt = 0; cnt < supportedTokens.getSuportedList().size(); cnt++) {
-                    DexEntry entry = new DexEntry(String.format("$%s", supportedTokens.getSuportedList().get(cnt).getSymbol()), 0, 0);
+                    DexEntry entry = new DexEntry(String.format("$%s", supportedTokens.getSuportedList().get(cnt).getSymbol()), 0, 0, supportedTokens.getSuportedList().get(cnt).getWithdrawFee());
                     list.add(entry);
-                }
-                RecyclerView tokens_list_recycler = v.findViewById(R.id.fragmentDex_RecyclerView);
-                adapter = new DexGalleryAdapter(list, activity,
-                        settingsListener, dexToSpotListener, spotToDexListener, depositListener, withdrawListener);
-                if(tokens_list_recycler != null) {
-                    tokens_list_recycler.setAdapter(adapter);
-                    tokens_list_recycler.setLayoutManager(
-                            new LinearLayoutManager(activity));
                 }
             }
         });

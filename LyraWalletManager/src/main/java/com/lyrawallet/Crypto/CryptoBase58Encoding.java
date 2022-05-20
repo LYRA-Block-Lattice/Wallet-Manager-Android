@@ -94,7 +94,7 @@ public class CryptoBase58Encoding {
                 digit58 = INDEXES[c];
             }
             if (digit58 < 0) {
-                throw new RuntimeException("ERROR: Not a Base58 input: " + input);
+                return null;
             }
 
             input58[i] = (byte) digit58;

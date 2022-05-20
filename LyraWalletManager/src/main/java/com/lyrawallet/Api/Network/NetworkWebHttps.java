@@ -129,6 +129,7 @@ public class NetworkWebHttps extends AsyncTask<String, Void, NetworkWebHttps> {
         if (listenerCallBack != null) {
             listenerCallBack.onWebHttpsTaskFinished(s);
         }
+        this.cancel(true);
     }
     public void setListener(WebHttpsTaskListener listener) {
         this.listenerCallBack = listener;

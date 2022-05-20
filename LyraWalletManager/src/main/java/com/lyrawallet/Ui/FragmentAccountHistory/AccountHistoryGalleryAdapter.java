@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lyrawallet.Global;
+import com.lyrawallet.GlobalLyra;
 import com.lyrawallet.R;
 
 import java.util.Collections;
@@ -97,9 +98,12 @@ public class AccountHistoryGalleryAdapter extends RecyclerView.Adapter<AccountHi
     onBindViewHolder(final AccountHistoryViewHolder viewHolder,
                      final int position)
     {
-        double unitValuePerUsd = Global.getTokenPrice(new Pair<>(list.get(position).TickerName, "tether/USDT"));
+        double unitValuePerUsd = Global.getTokenPrice(new Pair<>(GlobalLyra.symbolToDomain(list.get(position).TickerName), "tether/USDT"));
         if(unitValuePerUsd == 0) {
-            unitValuePerUsd = Global.getTokenPrice(new Pair<>(list.get(position).TickerName, "USD"));
+            unitValuePerUsd = Global.getTokenPrice(new Pair<>(GlobalLyra.symbolToDomain(list.get(position).TickerName), "tether/USDC"));
+        }
+        if(unitValuePerUsd == 0) {
+            unitValuePerUsd = Global.getTokenPrice(new Pair<>(GlobalLyra.symbolToDomain(list.get(position).TickerName), "USD"));
         }
         final int index = viewHolder.getAdapterPosition();
         viewHolder.Height

@@ -95,13 +95,14 @@ public class FragmentRecoverAccount extends Fragment {
                     } else {
                         Accounts accounts = new Accounts((MainActivity) getActivity());
                         boolean success = accounts.loadAccountsFromDisk(Global.getWalletName(), passwordEditText.getText().toString());
-                        passwordEditText.setText("");
-                        newWalletNameEditText.setText("");
                         if(!success) {
                             Snackbar.make(view, "An error occured when reloading wallet.", Snackbar.LENGTH_LONG)
                                     .setAction("", null).show();
                             new FragmentManagerUser().goToOpenWallet();
                         } else {
+                            Global.setSelectedAccountName(newWalletNameEditText.getText().toString());
+                            Global.setSelectedAccountNr(Global.getWalletAccNameAndIdList().size() - 1);
+                            //Global.setWalletName(Global.getWalletName());
                             UiHelpers.closeKeyboard(view);
                             FragmentActivity activity = getActivity();
                             if (activity != null) {
@@ -113,6 +114,8 @@ public class FragmentRecoverAccount extends Fragment {
                             }
                             new FragmentManagerUser().goToAccount();
                         }
+                        passwordEditText.setText("");
+                        newWalletNameEditText.setText("");
                     }
                 }
             }

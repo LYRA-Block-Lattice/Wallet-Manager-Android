@@ -2,6 +2,11 @@ package com.lyrawallet.Ui.FragmentSend;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
@@ -25,6 +31,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.lyrawallet.Api.ApiRpc;
 import com.lyrawallet.Api.Network.NetworkRpc;
+import com.lyrawallet.Crypto.CryptoBase58Encoding;
 import com.lyrawallet.Crypto.CryptoSignatures;
 import com.lyrawallet.Global;
 import com.lyrawallet.GlobalLyra;
@@ -33,6 +40,7 @@ import com.lyrawallet.Ui.FragmentManagerUser;
 import com.lyrawallet.Ui.UiDialog;
 import com.lyrawallet.Ui.UiHelpers;
 import com.lyrawallet.Ui.UtilGetData;
+import com.lyrawallet.Util.ExternTokenAddressValidator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -51,6 +59,13 @@ import np.com.susanthapa.curved_bottom_navigation.CurvedBottomNavigationView;
 public class FragmentSend extends Fragment {
     private List<Pair<String, Double>> Balances = new ArrayList<>();
 
+    String Ticker = null;
+    String Provider = null;
+    String ContractAddress = null;
+    double AmountToSend = 0f;
+    double WithdrawFee = 0f;
+    boolean sendToExternalAddress = false;
+
     public static class SendTokensEntry {
         int TickerImage;
         String TickerName;
@@ -66,6 +81,15 @@ public class FragmentSend extends Fragment {
         // Required empty public constructor
     }
 
+    public FragmentSend(String ticker, String provider, String contractAddress, double amountToSend, double withdrawFee) {
+        Ticker = ticker;
+        Provider = provider;
+        ContractAddress = contractAddress;
+        AmountToSend = amountToSend;
+        WithdrawFee = withdrawFee;
+        sendToExternalAddress = true;
+    }
+
     public static FragmentSend newInstance(String param1, String param2) {
         FragmentSend fragment = new FragmentSend();
         return fragment;
@@ -73,32 +97,52 @@ public class FragmentSend extends Fragment {
 
     private boolean checkSend() {
         Activity activity = getActivity();
-        if(activity == null)
+        if (activity == null)
             return false;
         Button nextButton = (Button) activity.findViewById(R.id.sendTokenNextButton);
-        if(nextButton == null)
+        if (nextButton == null)
             return false;
         nextButton.setEnabled(false);
         Spinner tokenSpinner = (Spinner) activity.findViewById(R.id.sendTokenSelectSpinner);
         EditText recipientAddressEditText = (EditText) activity.findViewById(R.id.sendTokenRecipientAddressValue);
-        if(!CryptoSignatures.validateAccountId(recipientAddressEditText.getText().toString()))
-            return false;
+        // Check destination account validity.
+        if (!sendToExternalAddress) {
+            if (!CryptoSignatures.validateAccountId(recipientAddressEditText.getText().toString()))
+                return false;
+        } else {
+            if (Ticker.equals("TRX") || Provider.equals("TRC-20")) {
+                if(!ExternTokenAddressValidator.tron(recipientAddressEditText.getText().toString()))
+                    return false;
+            } else if (Ticker.equals("ETH") || Provider.equals("ERC-20")) {
+                if(!ExternTokenAddressValidator.ethereum(recipientAddressEditText.getText().toString()))
+                    return false;
+            }
+        }
         EditText tokenAmountEditText = (EditText) activity.findViewById(R.id.sendTokenAmountValue);
-        if (tokenSpinner == null)
+        if (!sendToExternalAddress && tokenSpinner == null)
             return false;
         SpinnerAdapter adapter = tokenSpinner.getAdapter();
-        if (adapter == null)
+        if (!sendToExternalAddress && adapter == null)
             return false;
-        try {
-            if (!UtilGetData.checkEnoughTokens(adapter.getItem(tokenSpinner.getSelectedItemPosition()).toString(),
-                    Double.parseDouble(tokenAmountEditText.getText().toString()),
-                    GlobalLyra.LYRA_TX_FEE)) {
+        // Check enough tokens.
+        if(!sendToExternalAddress) {
+            try {
+                if (!UtilGetData.checkEnoughTokens(adapter.getItem(tokenSpinner.getSelectedItemPosition()).toString(),
+                        Double.parseDouble(tokenAmountEditText.getText().toString()),
+                        GlobalLyra.LYRA_TX_FEE)) {
+                    return false;
+                }
+            } catch (NumberFormatException ignored) {
                 return false;
             }
-        } catch (NumberFormatException ex) {
-            return false;
+        } else {
+            try {
+                if (Double.parseDouble(tokenAmountEditText.getText().toString()) + WithdrawFee > AmountToSend)
+                    return false;
+            } catch (NumberFormatException ignored) {
+                return false;
+            }
         }
-
         nextButton.setEnabled(true);
         return true;
     }
@@ -128,49 +172,125 @@ public class FragmentSend extends Fragment {
         CurvedBottomNavigationView bottomNavigationView = activity.findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setVisibility(View.GONE);
         //new ApiRpc().act(new ApiRpc.Action().actionPool("LYR", "tether/LTT"));
-        EditText recipientAddressEditText = (EditText) view.findViewById(R.id.sendTokenRecipientAddressValue);
-        if(recipientAddressEditText != null) {
-            recipientAddressEditText.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void afterTextChanged(Editable s) {
-                }
-                @Override
-                public void beforeTextChanged(CharSequence s, int start,
-                                              int count, int after) {
-                }
-                @Override
-                public void onTextChanged(CharSequence s, int start,
-                                          int before, int count) {
-                    checkSend();
+        Spinner tokenSpinner = (Spinner) activity.findViewById(R.id.sendTokenSelectSpinner);
+        if(sendToExternalAddress) {
+            tokenSpinner.setVisibility(View.GONE);
+            TextView dexSendTickerNameTextView = view.findViewById(R.id.dexSendTickerNameTextView);
+            TextView dexSendTokenTextView = view.findViewById(R.id.dexSendTokenTextView);
+            TextView dexSendTickerTextView = view.findViewById(R.id.dexSendTickerTextView);
+            TextView dexSendProviderTextView = view.findViewById(R.id.dexSendProviderTextView);
+            TextView dexSendContractTextView = view.findViewById(R.id.dexSendContractTextView);
+            TextView dexSendWithdrawFeeTextView = view.findViewById(R.id.dexSendWithdrawFeeTextView);
+            TextView dexSendContractAddressCopyTextView = view.findViewById(R.id.dexSendContractAddressCopyTextView);
+            TextView dexSendContractAddressViewTextView = view.findViewById(R.id.dexSendContractAddressViewTextView);
+            dexSendTokenTextView.setText(GlobalLyra.tickerToTokenName(Ticker));
+            dexSendTickerNameTextView.setText(Ticker);
+            dexSendTickerTextView.setText(Ticker);
+            dexSendProviderTextView.setText(Provider);
+            if(ContractAddress == null || ContractAddress.equals("null")) {
+                dexSendContractAddressCopyTextView.setVisibility(View.GONE);
+                dexSendContractAddressViewTextView.setVisibility(View.GONE);
+                dexSendContractTextView.setText(" ");
+            } else {
+                dexSendContractTextView.setText(UiHelpers.getShortAccountId(ContractAddress, 12));
+            }
+            dexSendWithdrawFeeTextView.setText(String.format(Locale.US, "%f",  WithdrawFee));
+
+            dexSendContractAddressCopyTextView.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Activity activity = getActivity();
+                    if(activity == null)
+                        return;
+                    ClipboardManager clipboard = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clip = ClipData.newPlainText(activity.getString(R.string.receive_scan_address_copied), ContractAddress);
+                    clipboard.setPrimaryClip(clip);
+
+                    Snackbar.make(activity.findViewById(R.id.nav_host_fragment_content_main), activity.getString(R.string.receive_scan_address_copied), Snackbar.LENGTH_SHORT)
+                            .setAction("", null).show();
                 }
             });
-        }
-
-        EditText tokenAmountEditText = (EditText) view.findViewById(R.id.sendTokenAmountValue);
-        if(tokenAmountEditText != null) {
-            tokenAmountEditText.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void afterTextChanged(Editable s) {
-                }
-                @Override
-                public void beforeTextChanged(CharSequence s, int start,
-                                              int count, int after) {
-                }
-                @Override
-                public void onTextChanged(CharSequence s, int start,
-                                          int before, int count) {
-                    if(s.length() > 0) {
-                        try {
-                            Double.parseDouble(s.toString());
-                        } catch (NumberFormatException e) {
-                            tokenAmountEditText.setText(s.subSequence(0, before - 1));
+            dexSendContractAddressViewTextView.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Activity activity = getActivity();
+                    if(activity == null)
+                        return;
+                    String url;
+                    if(Provider.equals("TRC-20")) {
+                        switch (Global.getCurrentNetworkName()) {
+                            case "MAINNET":
+                                url = "https://tronscan.org/#/address/";
+                                break;
+                            case "DEVNET":
+                                url = "";
+                                break;
+                            default:
+                                url = "https://shasta.tronscan.org/#/address/";
+                                break;
+                        }
+                    } else {
+                        switch (Global.getCurrentNetworkName()) {
+                            case "MAINNET":
+                                url = "https://etherscan.io/address/";
+                                break;
+                            case "DEVNET":
+                                url = "";
+                                break;
+                            default:
+                                url = "https://rinkeby.etherscan.io/address/";
+                                break;
                         }
                     }
-                    checkSend();
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url + ContractAddress));
+                    startActivity(browserIntent);
+
+                    Snackbar.make(activity.findViewById(R.id.nav_host_fragment_content_main), activity.getString(R.string.receive_scan_address_copied), Snackbar.LENGTH_SHORT)
+                            .setAction("", null).show();
                 }
             });
         }
-        Spinner tokenSpinner = (Spinner) view.findViewById(R.id.sendTokenSelectSpinner);
+        else {
+            FrameLayout dexSendFrameLayout = view.findViewById(R.id.dexSendFrameLayout);
+            dexSendFrameLayout.setVisibility(View.GONE);
+        }
+        EditText recipientAddressEditText = (EditText) view.findViewById(R.id.sendTokenRecipientAddressValue);
+        recipientAddressEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                checkSend();
+            }
+        });
+
+        EditText tokenAmountEditText = (EditText) view.findViewById(R.id.sendTokenAmountValue);
+        tokenAmountEditText.setText(String.format(Locale.US, "%f", AmountToSend));
+        tokenAmountEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                if(s.length() > 0) {
+                    try {
+                        Double.parseDouble(s.toString());
+                    } catch (NumberFormatException e) {
+                        tokenAmountEditText.setText(s.subSequence(0, before - 1));
+                    }
+                }
+                checkSend();
+            }
+        });
         List<String> tickerList = new ArrayList<>();
         Balances = UtilGetData.getAvailableTokenList();
         for (int i = 0; i < Balances.size(); i++) {
@@ -270,6 +390,7 @@ public class FragmentSend extends Fragment {
                     TextView sendFromTextView = (TextView) mView.findViewById(R.id.dialogSendFromValue);
                     TextView sendToTextView = (TextView) mView.findViewById(R.id.dialogSendToValue);
                     TextView networkFeeTextView = (TextView) mView.findViewById(R.id.dialogSendNetworkFeeValue);
+                    TextView totalSpendTextTextView = (TextView) mView.findViewById(R.id.dialogSendTotalSpendText);
                     TextView totalSpendTextView = (TextView) mView.findViewById(R.id.dialogSendTotalSpendValue);
 
                     if(sendValueTextView == null || sendFromTextView == null || sendToTextView == null || networkFeeTextView == null || totalSpendTextView == null) {
@@ -278,6 +399,12 @@ public class FragmentSend extends Fragment {
                         return;
                     }
                     Spinner tokenSpinner = (Spinner) activity.findViewById(R.id.sendTokenSelectSpinner);
+                    if(sendToExternalAddress)
+                        tokenSpinner.setVisibility(View.GONE);
+                    else {
+                        FrameLayout dexSendFrameLayout = view.findViewById(R.id.dexSendFrameLayout);
+                        dexSendFrameLayout.setVisibility(View.GONE);
+                    }
                     SpinnerAdapter adapter = tokenSpinner.getAdapter();
                     EditText tokenAmountEditText = (EditText) view.findViewById(R.id.sendTokenAmountValue);
                     if (tokenAmountEditText == null) {
@@ -286,24 +413,35 @@ public class FragmentSend extends Fragment {
                         return;
                     }
                     String tokenToSend = adapter.getItem(tokenSpinner.getSelectedItemPosition()).toString();
-                    try {
-                        sendValueTextView.setText(String.format(Locale.US, "%f %s",
-                                Double.parseDouble(tokenAmountEditText.getText().toString()), tokenToSend));
-                    } catch (NumberFormatException ex) {
-                        Snackbar.make(view, "Invalid amount value.", Snackbar.LENGTH_LONG)
-                                .setAction("", null).show();
-                        return;
+                    if(!sendToExternalAddress) {
+                        try {
+                            sendValueTextView.setText(String.format(Locale.US, "%f %s",
+                                    Double.parseDouble(tokenAmountEditText.getText().toString()), tokenToSend));
+                        } catch (NumberFormatException ex) {
+                            Snackbar.make(view, "Invalid amount value.", Snackbar.LENGTH_LONG)
+                                    .setAction("", null).show();
+                            return;
+                        }
+                    } else {
+                        String s = String.format(Locale.US, "%f", Double.parseDouble(tokenAmountEditText.getText().toString()));
+                        sendValueTextView.setText(String.format(Locale.US, "%s %s", s, Ticker));
                     }
                     sendFromTextView.setText(String.format(Locale.US, "%s-%d (%s)", activity.getString(R.string.Wallet),
                             Global.getSelectedAccountNr() + 1, UiHelpers.getShortAccountId(Global.getSelectedAccountId(), 4)));
                     sendToTextView.setText(UiHelpers.getShortAccountId(recipientAddressEditText.getText().toString(), 7));
-                    networkFeeTextView.setText(String.format(Locale.US, "%s LYR", GlobalLyra.LYRA_TX_FEE));
-                    String s;
-                    if(tokenToSend.equals("LYR"))
-                        s = String.format(Locale.US, "%f", Double.parseDouble(tokenAmountEditText.getText().toString()) + GlobalLyra.LYRA_TX_FEE);
-                    else
-                        s = String.format(Locale.US, "%f", Double.parseDouble(tokenAmountEditText.getText().toString()));
-                    totalSpendTextView.setText(String.format(Locale.US, "%s %s", s, tokenToSend));
+                    if(!sendToExternalAddress) {
+                        networkFeeTextView.setText(String.format(Locale.US, "%s LYR", GlobalLyra.LYRA_TX_FEE));
+                        String s;
+                        if (tokenToSend.equals("LYR"))
+                            s = String.format(Locale.US, "%f", Double.parseDouble(tokenAmountEditText.getText().toString()) + GlobalLyra.LYRA_TX_FEE);
+                        else
+                            s = String.format(Locale.US, "%f", Double.parseDouble(tokenAmountEditText.getText().toString()));
+                        totalSpendTextView.setText(String.format(Locale.US, "%s %s", s, tokenToSend));
+                    } else {
+                        networkFeeTextView.setText(String.format(Locale.US, "%s %s", WithdrawFee, Ticker));
+                        totalSpendTextTextView.setVisibility(View.GONE);
+                        totalSpendTextView.setVisibility(View.GONE);
+                    }
 
                     Button sendButton = (Button) mView.findViewById(R.id.dialog_send_token_button);
                     sendButton.setOnClickListener(new View.OnClickListener() {
@@ -314,54 +452,57 @@ public class FragmentSend extends Fragment {
                             activity.runOnUiThread(new Runnable() {
                                 public void run() {
                                     try {
-                                        UiDialog.showDialogStatus(R.string.send_sending);
-                                        NetworkRpc rpc = (NetworkRpc) new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL, Global.getWalletPassword())
-                                                .execute("", "Send", Global.getSelectedAccountId(),
-                                                        tokenAmountEditText.getText().toString(),
-                                                        recipientAddressEditText.getText().toString(),
-                                                        GlobalLyra.symbolToDomain(tokenToSend)
-                                        );
-                                        rpc.setListener(new NetworkRpc.RpcTaskListener() {
-                                            @Override
-                                            public void onRpcTaskFinished(String[] output) {
-                                                activity.runOnUiThread(new Runnable() {
-                                                    public void run() {
-                                                        System.out.println("RPC SEND: " + output[0] + output[1] + output[2]);
-                                                        EditText recipientAddressEditText = (EditText) activity.findViewById(R.id.sendTokenRecipientAddressValue);
-                                                        EditText tokenAmountEditText = (EditText) activity.findViewById(R.id.sendTokenAmountValue);
-                                                        if (recipientAddressEditText != null && tokenAmountEditText != null) {
-                                                            try {
-                                                                JSONObject objRsp = new JSONObject(output[2]);
-                                                                if (!objRsp.isNull("txHash")) { // If txHash is present, the transaction is successfully send.
-                                                                    Spinner tokenSpinner = (Spinner) activity.findViewById(R.id.sendTokenSelectSpinner);
-                                                                    SpinnerAdapter adapter = tokenSpinner.getAdapter();
-                                                                    String tokenToSend = adapter.getItem(tokenSpinner.getSelectedItemPosition()).toString();
-                                                                    ApiRpc.getBalanceAfterAction();
-                                                                    try {
-                                                                        UiDialog.showDialogStatus(R.string.send_successful, String.format(Locale.US, "%s: %f %s\n%s: %s-%d (%s)\n%s: %s",
-                                                                                activity.getString(R.string.Send1), Double.parseDouble(tokenAmountEditText.getText().toString()), tokenToSend,
-                                                                                activity.getString(R.string.From), activity.getString(R.string.Wallet), Global.getSelectedAccountNr() + 1, UiHelpers.getShortAccountId(Global.getSelectedAccountId(), 4),
-                                                                                activity.getString(R.string.To), UiHelpers.getShortAccountId(recipientAddressEditText.getText().toString(), 7)),
-                                                                                ApiRpc.class.getDeclaredMethod("runActionHistory")
-                                                                        );
-                                                                    } catch (NoSuchMethodException e) {
-                                                                        e.printStackTrace();
+                                        //TODO DEX Send to external addresses
+                                        if(!sendToExternalAddress) {
+                                            UiDialog.showDialogStatus(R.string.send_sending);
+                                            NetworkRpc rpc = (NetworkRpc) new NetworkRpc(GlobalLyra.LYRA_RPC_API_URL, Global.getWalletPassword())
+                                                    .execute("", "Send", Global.getSelectedAccountId(),
+                                                            tokenAmountEditText.getText().toString(),
+                                                            recipientAddressEditText.getText().toString(),
+                                                            GlobalLyra.symbolToDomain(tokenToSend)
+                                                    );
+                                            rpc.setListener(new NetworkRpc.RpcTaskListener() {
+                                                @Override
+                                                public void onRpcTaskFinished(String[] output) {
+                                                    activity.runOnUiThread(new Runnable() {
+                                                        public void run() {
+                                                            System.out.println("RPC SEND: " + output[0] + output[1] + output[2]);
+                                                            EditText recipientAddressEditText = (EditText) activity.findViewById(R.id.sendTokenRecipientAddressValue);
+                                                            EditText tokenAmountEditText = (EditText) activity.findViewById(R.id.sendTokenAmountValue);
+                                                            if (recipientAddressEditText != null && tokenAmountEditText != null) {
+                                                                try {
+                                                                    JSONObject objRsp = new JSONObject(output[2]);
+                                                                    if (!objRsp.isNull("txHash")) { // If txHash is present, the transaction is successfully send.
+                                                                        Spinner tokenSpinner = (Spinner) activity.findViewById(R.id.sendTokenSelectSpinner);
+                                                                        SpinnerAdapter adapter = tokenSpinner.getAdapter();
+                                                                        String tokenToSend = adapter.getItem(tokenSpinner.getSelectedItemPosition()).toString();
+                                                                        ApiRpc.getBalanceAfterAction();
+                                                                        try {
+                                                                            UiDialog.showDialogStatus(R.string.send_successful, String.format(Locale.US, "%s: %f %s\n%s: %s-%d (%s)\n%s: %s",
+                                                                                    activity.getString(R.string.Send1), Double.parseDouble(tokenAmountEditText.getText().toString()), tokenToSend,
+                                                                                    activity.getString(R.string.From), activity.getString(R.string.Wallet), Global.getSelectedAccountNr() + 1, UiHelpers.getShortAccountId(Global.getSelectedAccountId(), 4),
+                                                                                    activity.getString(R.string.To), UiHelpers.getShortAccountId(recipientAddressEditText.getText().toString(), 7)),
+                                                                                    ApiRpc.class.getDeclaredMethod("runActionHistory")
+                                                                            );
+                                                                        } catch (NoSuchMethodException e) {
+                                                                            e.printStackTrace();
+                                                                        }
+                                                                        recipientAddressEditText.setText("");
+                                                                        tokenAmountEditText.setText("");
+                                                                        new FragmentManagerUser().goToAccount();
                                                                     }
-                                                                    recipientAddressEditText.setText("");
-                                                                    tokenAmountEditText.setText("");
-                                                                    new FragmentManagerUser().goToAccount();
+                                                                } catch (JSONException e) {
+                                                                    e.printStackTrace();
+                                                                    Toast.makeText(activity, e.toString(), Toast.LENGTH_LONG).show();
                                                                 }
-                                                            } catch (JSONException e) {
-                                                                e.printStackTrace();
-                                                                Toast.makeText(activity, e.toString(), Toast.LENGTH_LONG).show();
                                                             }
                                                         }
-                                                    }
-                                                });
-                                            }
-                                        });
+                                                    });
+                                                }
+                                            });
 
-                                        alertDialog.dismiss();
+                                            alertDialog.dismiss();
+                                        }
                                     } catch (NumberFormatException ex) {
                                         Snackbar.make(view, "An error occurred when trying to send.", Snackbar.LENGTH_LONG)
                                                 .setAction("", null).show();
@@ -374,5 +515,6 @@ public class FragmentSend extends Fragment {
                 }
             }
         });
+        checkSend();
     }
 }

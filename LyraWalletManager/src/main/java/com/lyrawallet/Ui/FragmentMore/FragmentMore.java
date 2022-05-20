@@ -86,7 +86,7 @@ public class FragmentMore extends Fragment {
                     if(Global.getSelectedAccountNr() != i) {
                         Global.setSelectedAccountName(adapterView.getSelectedItem().toString());
                         Global.setSelectedAccountNr(i);
-                        Global.setWalletName(Global.getWalletName());
+                        //Global.setWalletName(Global.getWalletName());
                         TextView stakingAccountNameTextView = activity.findViewById(R.id.moreAccountNameTextView);
                         stakingAccountNameTextView.setText(String.format("%s/%s", Global.getSelectedAccountName(), Global.getCurrentNetworkName()));
                         activity.runOnUiThread(new Runnable() {

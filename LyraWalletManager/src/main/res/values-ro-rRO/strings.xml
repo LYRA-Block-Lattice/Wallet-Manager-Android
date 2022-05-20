@@ -197,5 +197,17 @@
     <string name="Refresh">Refresh</string>
     <string name="Deposit">Depozitează</string>
     <string name="Withdraw">Retrage</string>
+    <string name="Deposit_funds_for">Depoziteaza fonduri pentru</string>
+    <string name="Provider">Provider:</string>
+    <string name="Native">Native</string>
+    <string name="Contract">Contract:</string>
+    <string name="Minimal_deposit">Depozit minim:</string>
+    <string name="Deposition_fee">Cost deposzitare</string>
+    <string name="Withdraw_fee">Cost de retragere</string>
+    <string name="Confirmation_Semicolon">Confirmare:</string>
+    <string name="Some_Confirmation">1 Confirmare</string>
+    <string name="Confirmation">Confirmare</string>
+    <string name="Confirmations">Confirmari</string>
+    <string name="To_Your_AddressOn">către adresa ta în</string>
 
 </resources>

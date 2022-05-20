@@ -22,6 +22,7 @@ import com.lyrawallet.Ui.FragmentManagerUser;
 import com.lyrawallet.Ui.UtilGetData;
 import com.lyrawallet.Util.Concatenate;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -71,9 +72,10 @@ public class FragmentAccountHistory extends Fragment {
         return new FragmentAccountHistory();
     }
 
-    /*private boolean addMoreEntrys() {
+    private boolean addMoreEntrys() {
         return addMoreEntrys(50);
     }
+    List<AccountHistoryEntry> EntryList = new ArrayList<>();
     private boolean addMoreEntrys(int entryNr) {
         if (addCnt < EntryList.size()) {
             if(addCnt <  EntryList.size() - 50) {
@@ -86,7 +88,7 @@ public class FragmentAccountHistory extends Fragment {
             return true;
         }
         return false;
-    }*/
+    }
 
     public void populateHistory(View view) {
         //View v = new View((MainActivity) getActivity());
@@ -108,8 +110,8 @@ public class FragmentAccountHistory extends Fragment {
                     refreshInProgress = false;
                     return;
                 }
-                List<AccountHistoryEntry> entryList = UtilGetData.historyToAccountAdapter(intHistoryList.second);
-                if (entryList == null) {
+                EntryList = UtilGetData.historyToAccountAdapter(intHistoryList.second);
+                if (EntryList == null) {
                     refreshInProgress = false;
                     return;
                 }
@@ -124,17 +126,15 @@ public class FragmentAccountHistory extends Fragment {
                     }
                     historyLen = intHistoryList.second.size();
                 } catch (NullPointerException ignored) { }
-                //List<AccountHistoryEntry> entryWrList = entryList;//new ArrayList<>();
+                List<AccountHistoryEntry> entryWrList = new ArrayList<>();
                 ClickListener listener = new ClickListener() {
                     @Override
                     public void click(int index) {
-                        /*Snackbar.make(view, "clicked item index is " + index, Snackbar.LENGTH_LONG)
-                                .setAction("", null).show();*/
-                        new FragmentManagerUser().goToDialogTransactionDetail(new String[]{String.valueOf(entryList.get(index).Height)});
+                        new FragmentManagerUser().goToDialogTransactionDetail(new String[]{String.valueOf(EntryList.get(index).Height)});
                     }
                 };
                 adapter = new AccountHistoryGalleryAdapter(
-                        entryList, activity, listener);
+                        entryWrList, activity, listener);
                 RecyclerView account_history_recycler = activity.findViewById(R.id.accountHistoryRecycler);
                 if(account_history_recycler != null) {
                     account_history_recycler.setAdapter(adapter);
@@ -142,8 +142,7 @@ public class FragmentAccountHistory extends Fragment {
                             new LinearLayoutManager(activity));
                 }
                 addCnt = 0;
-                //addMoreEntrys();
-                //adapter.setDataSet(EntryList);
+                addMoreEntrys();
                 refreshInProgress = false;
                 if(progress != null) {
                     progress.setVisibility(View.GONE);
@@ -210,12 +209,12 @@ public class FragmentAccountHistory extends Fragment {
             }
 
             nestedSV = view.findViewById(R.id.nestedScrollViewAccount);
-            /*nestedSV.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            nestedSV.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
                 @Override
                 public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
                     // on scroll change we are checking when users scroll as bottom.
                     if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
-                        ProgressBar progress = activity.findViewById(R.id.fragment_account_progressBar);
+                        ProgressBar progress = activity.findViewById(R.id.fragmentAccountProgressBar);
                         if(progress != null) {
                             progress.setVisibility(View.VISIBLE);
                         }
@@ -226,12 +225,13 @@ public class FragmentAccountHistory extends Fragment {
                         }
                     }
                 }
-            });*/
+            });
         }
+        EntryList = new ArrayList<>();
         historyLen = 0;
         /*Snackbar.make(view, "account created", Snackbar.LENGTH_LONG)
                 .setAction("", null).show();*/
-        ApiRpcActionsHistory.load(Concatenate.getHistoryFileName());
+        //ApiRpcActionsHistory.load(Concatenate.getHistoryFileName());
 
         new Handler().postDelayed(new Runnable() {
             public void run() {

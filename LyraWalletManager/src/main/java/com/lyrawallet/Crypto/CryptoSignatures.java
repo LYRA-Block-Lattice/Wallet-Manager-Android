@@ -100,11 +100,9 @@ public class CryptoSignatures {
 
             signer.initSign(privKey/*, new SecureRandom()*/);
             byte[] signature;
-            //do {
-                signer.update(message.getBytes(StandardCharsets.UTF_8));
-                byte[] signedBytes = signer.sign();
-                signature = CryptoSignatureHelper.convertDerToP1393(signedBytes);
-            //}while(signature[0] == 0);
+            signer.update(message.getBytes(StandardCharsets.UTF_8));
+            byte[] signedBytes = signer.sign();
+            signature = CryptoSignatureHelper.convertDerToP1393(signedBytes);
             return CryptoBase58Encoding.encode(signature);
         } catch (InvalidKeyException | NoSuchAlgorithmException | SignatureException | InvalidKeySpecException | IOException e) {
             e.printStackTrace();

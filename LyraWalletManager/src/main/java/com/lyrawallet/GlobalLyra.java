@@ -33,7 +33,7 @@ public class GlobalLyra {
             new Pair<>("$ETH", ic_eth_foreground),
             new Pair<>("$USDC", ic_usdc_foreground),
             new Pair<>("$LTT", ic_unknown_foreground),
-            new Pair<>("$TLYR", ic_unknown_foreground),
+            new Pair<>("$TLYR", ic_lyra_token_foreground),
     };
 
     public final static Pair<String, Integer>[] TokenTestnetIconList = new Pair[]{
@@ -45,7 +45,7 @@ public class GlobalLyra {
             new Pair<>("Ethereum (Rinkeby Testnet)", ic_eth_foreground),
             new Pair<>("USDC", ic_usdc_foreground),
             new Pair<>("Lyra Test Token", ic_unknown_foreground),
-            new Pair<>("Lyra Tether on Ethereum", ic_unknown_foreground),
+            new Pair<>("Lyra Tether on Ethereum", ic_lyra_token_foreground),
     };
 
     public final static Pair<String, Integer>[] TokenMainnetIconList = new Pair[]{
@@ -57,7 +57,24 @@ public class GlobalLyra {
             new Pair<>("Ethereum", ic_eth_foreground),
             new Pair<>("USDC", ic_usdc_foreground),
             new Pair<>("Lyra Test Token", ic_unknown_foreground),
-            new Pair<>("Lyra Tether on Ethereum", ic_unknown_foreground),
+            new Pair<>("Lyra Tether on Ethereum", ic_lyra_token_foreground),
+    };
+
+    public final static Pair<String, String>[] TickerTokenNameList = new Pair[]{
+            new Pair<>("", "UNKNOWN"),
+            new Pair<>("LYR", "Lyra"),
+            new Pair<>("$LYR", "Lyra Test Token"),
+            new Pair<>("TLYR", "Lyra Tether on Ethereum"),
+            new Pair<>("$TLYR", "Lyra Tether on Ethereum"),
+            new Pair<>("TRX", "Tron"),
+            new Pair<>("$TRX", "Tron"),
+            new Pair<>("USDT", "USDT"),
+            new Pair<>("$USDT", "USDT on Tron"),
+            new Pair<>("$ETH", "Ethereum"),
+            new Pair<>("$USDC", "USDC on Tron"),
+            new Pair<>("$LTT", "Lyra Test Token"),
+            new Pair<>("ETH", "Ethereum"),
+            new Pair<>("$ETH", "Ethereum"),
     };
 
     public static int getTokenImage(String token) {
@@ -81,6 +98,16 @@ public class GlobalLyra {
             }
         }
         return icon;
+    }
+
+    public static String tickerToTokenName(String ticker) {
+        String token = GlobalLyra.TickerTokenNameList[0].second;
+        for (int i = 0; i < GlobalLyra.TickerTokenNameList.length; i++) {
+            if(GlobalLyra.TickerTokenNameList[i].first.equals(ticker)) {
+                return GlobalLyra.TickerTokenNameList[i].second;
+            }
+        }
+         return token;
     }
 
     public static String symbolToDomain(String token) {

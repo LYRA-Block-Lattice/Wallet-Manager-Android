@@ -101,24 +101,20 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
+                    <ProgressBar
+                        android:id="@+id/fragmentDex_ProgressBar"
+                        style="?android:attr/progressBarStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:indeterminateTint="@color/primary"
+                        android:indeterminateTintMode="src_atop" />
+
                 </LinearLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
-    <ProgressBar
-        android:id="@+id/fragmentDex_ProgressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:indeterminateTintMode="src_atop"
-        android:indeterminateTint="@color/additional"
-        app:layout_constraintBottom_toBottomOf="@+id/nestedScrollView2"
-        app:layout_constraintEnd_toEndOf="@+id/nestedScrollView2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/nestedScrollView2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

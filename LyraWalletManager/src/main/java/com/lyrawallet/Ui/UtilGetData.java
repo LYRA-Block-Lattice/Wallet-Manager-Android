@@ -23,7 +23,7 @@ public class UtilGetData {
         try {
             if (history == null)
                 return balancesRet;
-            if (history.second.size() != 0) {
+            if (history.second != null && history.second.size() != 0) {
                 balances = history.second.get(history.second.size() - 1).getBalances();
                 for (int i = 0; i < balances.size(); i++) {
                     Pair<String, Double> p = new Pair<>(GlobalLyra.domainToSymbol(balances.get(i).first), balances.get(i).second);

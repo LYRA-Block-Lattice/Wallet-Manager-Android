@@ -9,6 +9,7 @@
     android:paddingRight="@dimen/fragment_horizontal_margin"
     android:paddingBottom="@dimen/fragment_vertical_margin"
     android:tag="recover_account_tag"
+    android:background="@color/primary"
     tools:context="com.lyrawallet.Ui.FragmentWalletManagement.FragmentRecoverAccount">
 
     <androidx.constraintlayout.widget.Guideline

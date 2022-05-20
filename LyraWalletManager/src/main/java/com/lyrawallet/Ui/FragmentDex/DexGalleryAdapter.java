@@ -121,6 +121,7 @@ public class DexGalleryAdapter extends RecyclerView.Adapter<DexViewHolder> {
                 DepositListener.click(index);
             }
         });
+        viewHolder.WithdrawButton.setEnabled(list.get(position).DexQty > list.get(position).Fee );
         viewHolder.WithdrawButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

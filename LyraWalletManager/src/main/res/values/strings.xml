@@ -13,6 +13,10 @@
     <string name="Amount">Amount</string>
     <string name="Balance">Balance</string>
     <string name="Balances">Balances</string>
+    <string name="Contract">Contract:</string>
+    <string name="Confirmation_Semicolon">Confirmation:</string>
+    <string name="Confirmation">Confirmation</string>
+    <string name="Confirmations">Confirmations</string>
     <string name="Send">Send</string>
     <string name="One1">One</string>
     <string name="One_Day">One Day</string>
@@ -26,6 +30,7 @@
     <string name="Send3">Sent</string>
     <string name="Seats">Seats</string>
     <string name="Stake">Stake</string>
+    <string name="Some_Confirmation">1 Confirmation</string>
     <string name="From">From</string>
     <string name="Fetch">Fetch</string>
     <string name="Expired">Expired</string>
@@ -38,11 +43,13 @@
     <string name="Accept">Accept</string>
     <string name="Cancel">Cancel</string>
     <string name="More">More</string>
+    <string name="Native">native</string>
     <string name="Swap">Swap</string>
     <string name="Staking">Staking</string>
     <string name="Status">Status</string>
     <string name="Pool">Pool</string>
     <string name="Preview">Preview</string>
+    <string name="Provider">Provider:</string>
     <string name="Request">Request</string>
     <string name="Restake">Restake</string>
     <string name="Unstake">Unstake</string>
@@ -64,6 +71,7 @@
     <string name="Creating_staking_account">Creating staking account</string>
     <string name="Days_to_stake">Days to stake</string>
     <string name="Days_to_stake_min_max">Days to stake from 3 to 36500 days</string>
+    <string name="Deposit_funds_for">Deposit funds for</string>
     <string name="Error_adding_staking">Error adding staking</string>
     <string name="Finished_to_add_stake">Finished to add stake</string>
     <string name="Name_of_staking_account">Name of staking account</string>
@@ -71,6 +79,9 @@
     <string name="Request_token">Request token</string>
     <string name="Invalid_request">Invalid request</string>
     <string name="Not_received_yet">Not received yet</string>
+    <string name="Minimal_deposit">Minimal deposit:</string>
+    <string name="Deposition_fee">Deposition fee:</string>
+    <string name="Withdraw_fee">Withdraw fee:</string>
     <string name="Not_fetch">Not fetch</string>
     <string name="Time_stamp">Time stamp</string>
     <string name="Send_account_id">Send account ID</string>
@@ -106,6 +117,7 @@
     <string name="Select_to_stake_for">Select to stake for</string>
     <string name="You_will_stake_for">You will stake for</string>
     <string name="No_tokens_available">No tokens available</string>
+    <string name="To_Your_AddressOn">to your address on</string>
 
     <string name="Spot_colon" translatable="false">Spot:</string>
     <string name="To_DEX" translatable="false">To DEX</string>
@@ -127,6 +139,9 @@
     <string name="Some_qty1" translatable="false">10.00</string>
     <string name="Some_qty2" translatable="false">0.000002</string>
     <string name="Some_ticker1" translatable="false">TRX</string>
+    <string name="Some_ticker2" translatable="false">ETH</string>
+    <string name="Some_Token1" translatable="false">Tron</string>
+    <string name="Some_Token2" translatable="false">Ethereum</string>
 
 
 
@@ -208,6 +223,7 @@
     <string name="swap_some_usd2" translatable="false">$ 0.0</string>
     <string name="swap_0_lyr_and_0_usd" translatable="false">0 LYR\n0 $USDT</string>
     <string name="swap_some_percentage1" translatable="false">90.9674 %</string>
+    <string name="swap_some_percentage2" translatable="false">0.0000 %</string>
     <string name="swap_spinner_from_content_description">Token from</string>
     <string name="swap_spinner_to_content_description">Token to</string>
     <string name="swap_swap_between_content_description">Swap tokens between them</string>
@@ -268,7 +284,8 @@
 
     <!-- Other -->
     <string name="pref_description_title">Version</string>
-    <string name="pref_description_summary" translatable="false">LyraWalletManager V0.1.0</string>
+    <string name="pref_description_summary" translatable="false">LyraWalletManager V0.0.0</string>
+    <string name="pref_version_key" translatable="false">pref_version_key</string>
 
 
     <!-- ************************************************************************************** -->

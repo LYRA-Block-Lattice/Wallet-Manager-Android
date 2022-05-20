@@ -330,7 +330,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:indeterminateTintMode="src_atop"
-                        android:indeterminateTint="@color/additional"
+                        android:indeterminateTint="@color/primary"
                         app:layout_constraintBottom_toTopOf="@+id/space2"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -354,7 +354,8 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="8dp">
 
                     <TextView
                         android:id="@+id/swapTokenPairTextView"
@@ -381,7 +382,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="2dp"
                         android:text="@string/swap_estimated_ratio"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/swapTokenPairTextView" />
@@ -390,7 +391,7 @@
                         android:id="@+id/swapEstimatedRatioValueTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="2dp"
                         android:layout_marginEnd="8dp"
                         android:text="@string/swap_0_lyr_per_usd"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -401,7 +402,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="2dp"
                         android:text="@string/swap_you_will_sell"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/swapEstimatedRatioTextView" />
@@ -410,7 +411,7 @@
                         android:id="@+id/swapYouWillSellValueTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="2dp"
                         android:layout_marginEnd="8dp"
                         android:text="@string/swap_1_lyr"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -421,7 +422,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="2dp"
                         android:text="@string/swap_you_will_get"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/swapYouWillSellTextView" />
@@ -430,7 +431,7 @@
                         android:id="@+id/swapYouWillGetValueTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="2dp"
                         android:layout_marginEnd="8dp"
                         android:text="@string/swap_some_eth_dummy"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -441,7 +442,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="2dp"
                         android:text="@string/swap_price_impact"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/swapYouWillGetTextView" />
@@ -450,7 +451,7 @@
                         android:id="@+id/swapPriceImpactValueTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="2dp"
                         android:layout_marginEnd="8dp"
                         android:text="@string/swap_some_percentage"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -461,7 +462,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="2dp"
                         android:text="@string/swap_pool_fee"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/swapPriceImpactTextView" />
@@ -470,7 +471,7 @@
                         android:id="@+id/swapPoolFeeValueTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="2dp"
                         android:layout_marginEnd="8dp"
                         android:text="@string/swap_some_lyr1"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -481,7 +482,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="2dp"
                         android:text="@string/swap_network_fee"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/swapPoolFeeTextView" />
@@ -490,7 +491,7 @@
                         android:id="@+id/swapNetworkFeeValueTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="2dp"
                         android:layout_marginEnd="8dp"
                         android:text="@string/swap_some_lyr1"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -501,7 +502,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="0dp"
                         android:text="@string/swap_lyr_internal_price"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/swapExternalPriceTextView" />
@@ -530,7 +531,7 @@
                         android:id="@+id/swapInternalPriceValueTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="0dp"
                         android:layout_marginEnd="8dp"
                         android:text="@string/swap_some_usd2"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -570,21 +571,31 @@
                         app:layout_constraintTop_toBottomOf="@+id/swapNetworkFeeValueTextView" />
 
                     <TextView
-                        android:id="@+id/textView30"
+                        android:id="@+id/swapShareTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="10dp"
+                        android:text="@string/swap_your_share"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/swapTotalLiquidityTextView" />
+
+                    <TextView
+                        android:id="@+id/swapShareValueTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
                         android:layout_marginEnd="8dp"
-                        android:text="@string/swap_some_percentage1"
-                        android:visibility="gone"
+                        android:text="@string/swap_some_percentage2"
+                        android:visibility="visible"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/swapTotalLiquidityValueTextView" />
+                        app:layout_constraintTop_toBottomOf="@+id/swapTotalLiquidityTextView" />
 
                     <Space
                         android:id="@+id/space4"
                         android:layout_width="match_parent"
                         android:layout_height="10dp"
-                        app:layout_constraintTop_toBottomOf="@+id/swapYourShareTextView" />
+                        app:layout_constraintTop_toBottomOf="parent" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

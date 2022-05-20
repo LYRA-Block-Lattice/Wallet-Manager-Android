@@ -60,7 +60,7 @@
         <Preference
             android:summary="@string/pref_description_summary"
             android:title="@string/pref_description_title"
-            android:key="@string/pref_debug_enabled_switch_key"/>
+            android:key="@string/pref_version_key"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

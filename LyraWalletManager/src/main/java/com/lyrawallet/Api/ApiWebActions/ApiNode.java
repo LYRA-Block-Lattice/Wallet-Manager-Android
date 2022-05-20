@@ -125,7 +125,10 @@ public class ApiNode {
         }
 
         List<AllProfitingAccountsEntry> AccountList = new ArrayList<>();
-        public List<AllProfitingAccountsEntry> getAccountList() { return AccountList; }
+
+        public List<AllProfitingAccountsEntry> getAccountList() {
+            return AccountList;
+        }
 
         public AllProfitingAccounts fromJson(String data) {
             try {
@@ -192,15 +195,36 @@ public class ApiNode {
             double Amount = 0f;
             boolean CompoundMode = false;
 
-            public String getStkAccount() { return StkAccount; }
-            public String getOwnerAccount() { return OwnerAccount; }
-            public long getTime() { return Time; }
-            public int getDays() { return Days; }
-            public double getAmount() { return Amount; }
-            public boolean getCompoundMode() { return CompoundMode; }
+            public String getStkAccount() {
+                return StkAccount;
+            }
+
+            public String getOwnerAccount() {
+                return OwnerAccount;
+            }
+
+            public long getTime() {
+                return Time;
+            }
+
+            public int getDays() {
+                return Days;
+            }
+
+            public double getAmount() {
+                return Amount;
+            }
+
+            public boolean getCompoundMode() {
+                return CompoundMode;
+            }
         }
+
         List<FindAllStakingsEntry> AccountList = new ArrayList<>();
-        public List<FindAllStakingsEntry> getAccountList() { return AccountList; }
+
+        public List<FindAllStakingsEntry> getAccountList() {
+            return AccountList;
+        }
 
         public FindAllStakings fromJson(String data) {
             try {
@@ -218,6 +242,126 @@ public class ApiNode {
                     entry.CompoundMode = accObj.getBoolean("compoundMode");
                     AccountList.add(entry);
                 }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return this;
+        }
+    }
+
+    public static class GetPool {
+            String PoolFactoryAccountId = null;
+            String PoolAccountId = null;
+            String Token0 = null;
+            String Token1 = null;
+
+            String RelatedTx = null;
+            List<Pair<String, Double>> Shares = new ArrayList<>();
+
+            String DestinationAccountId = null;
+            String AccountID = null;
+            List<Pair<String, Double>> Balances = new ArrayList<>();
+            double Fee = 0.0;
+            String FeeCode = null;
+            int FeeType = 0;
+            String NonFungibleToken = null;
+            String VoteFor = null;
+            long Height = 0;
+            String TimeStamp = null;
+            long Time = 0;
+            int Version = 0;
+            int BlockType = 0;
+            String PreviousHash = null;
+            String ServiceHash = null;
+            List<Pair<String, String>> Tags = new ArrayList<>();
+            String Hash = null;
+            String Signature = null;
+            int ResultBlockType = 0;
+            int ResultCode = 0;
+            String ResultMessage = null;
+
+            public String getPoolFactoryAccountId() { return PoolFactoryAccountId; }
+            public String getPoolAccountId() { return PoolAccountId; }
+            public String getToken0() { return Token0; }
+            public String getToken1() { return Token1; }
+
+            public String getRelatedTx() { return RelatedTx; }
+            public List<Pair<String, Double>> getShares() { return Shares; }
+
+            public String getDestinationAccountId() { return DestinationAccountId; }
+            public String getAccountID() { return AccountID; }
+            public List<Pair<String, Double>> getBalances() { return Balances; }
+            public double getFee() { return Fee; }
+            public String getFeeCode() { return FeeCode; }
+            public int getFeeType() { return FeeType; }
+            public String getNonFungibleToken() { return NonFungibleToken; }
+            public String getVoteFor() { return VoteFor; }
+            public long getHeight() { return Height; }
+            public String getTimeStamp() { return TimeStamp; }
+            public int getVersion() { return Version; }
+            public int getBlockType() { return BlockType; }
+            public String getPreviousHash() { return PreviousHash; }
+            public String getServiceHash() { return ServiceHash; }
+            public List<Pair<String, String>> getTags() { return Tags; }
+            public String getHash() { return Hash; }
+            public String getSignature() { return Signature; }
+            public int getResultBlockType() { return ResultBlockType; }
+            public int getResultCode() { return ResultCode; }
+            public String getResultMessage() { return ResultMessage; }
+
+        public GetPool fromJson(String data) {
+            try {
+                JSONObject obj = new JSONObject(data);
+
+                PoolFactoryAccountId = obj.getString("poolFactoryAccountId");
+                PoolAccountId = obj.getString("poolAccountId");
+                Token0 = obj.getString("token0");
+                Token1 = obj.getString("token1");
+                String blockData = obj.getString("blockData");
+                JSONObject blockDataObj = new JSONObject(blockData);
+                RelatedTx = blockDataObj.getString("RelatedTx");
+                if (!blockDataObj.isNull("Shares")) {
+                    JSONObject shares = blockDataObj.getJSONObject("Shares");
+                    for (Iterator<String> it = shares.keys(); it.hasNext(); ) {
+                        String key = it.next();
+                        Shares.add(new Pair<>(key, ((double) shares.getLong(key)) / 1_000_000_000_000.0));
+                    }
+                }
+
+                DestinationAccountId = blockDataObj.getString("DestinationAccountId");
+                AccountID = blockDataObj.getString("AccountID");
+                JSONObject balances = blockDataObj.getJSONObject("Balances");
+                for (Iterator<String> it = balances.keys(); it.hasNext(); ) {
+                    String key = it.next();
+                    Balances.add(new Pair<>(key, ((double) balances.getLong(key)) / 100_000_000.0));
+                }
+                Fee = blockDataObj.getDouble("Fee");
+                FeeCode = blockDataObj.getString("FeeCode");
+                FeeType = blockDataObj.getInt("FeeType");
+                NonFungibleToken = blockDataObj.getString("NonFungibleToken");
+                VoteFor = blockDataObj.getString("VoteFor");
+                Height = blockDataObj.getLong("Height");
+                TimeStamp = blockDataObj.getString("TimeStamp");
+                java.sql.Timestamp ts = java.sql.Timestamp.valueOf(
+                        blockDataObj.getString("TimeStamp").replace("T", " ").split("\\.")[0]);
+                Time = ts.getTime();
+                Version = blockDataObj.getInt("Version");
+                BlockType = blockDataObj.getInt("BlockType");
+                PreviousHash = blockDataObj.getString("PreviousHash");
+                ServiceHash = blockDataObj.getString("ServiceHash");
+                if (!blockDataObj.isNull("Tags")) {
+                    JSONObject tags = blockDataObj.getJSONObject("Tags");
+                    for (Iterator<String> it = tags.keys(); it.hasNext(); ) {
+                        String key = it.next();
+                        Tags.add(new Pair<>(key, tags.getString(key)));
+                    }
+                }
+                Hash = blockDataObj.getString("Hash");
+                Signature = blockDataObj.getString("Signature");
+                ResultBlockType = obj.getInt("resultBlockType");
+                ResultCode = obj.getInt("resultCode");
+                ResultMessage = obj.getString("resultMessage");
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }

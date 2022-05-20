@@ -38,6 +38,7 @@ import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
 import com.lyrawallet.Api.Network.NetworkProbe;
 import com.lyrawallet.Api.Network.NetworkRpc;
 import com.lyrawallet.Api.Network.NetworkWebHttps;
+import com.lyrawallet.Crypto.CryptoBase58Encoding;
 import com.lyrawallet.Crypto.CryptoSignatures;
 import com.lyrawallet.PreferencesLoad.PreferencesLoad;
 import com.lyrawallet.Storage.StorageCommon;
@@ -45,6 +46,7 @@ import com.lyrawallet.Ui.FragmentManagerUser;
 import com.lyrawallet.Ui.UiHelpers;
 import com.lyrawallet.Ui.UtilGetData;
 import com.lyrawallet.Util.Concatenate;
+import com.lyrawallet.Util.ExternTokenAddressValidator;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -218,6 +220,9 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
         FragmentManagerUser.setVisiblePage(Global.getVisiblePage());
         /*new WebHttps(this).execute("https://api.latoken.com/v2/ticker", "MainCallHttps1");
         new WebHttps(this).execute("https://api.latoken.com/v2/ticker", "MainCallHttps2");*/
+        Global.setTokenPrice(new Pair<String, String>("USD", "USD"), 1f);
+        Global.setTokenPrice(new Pair<String, String>("tether/USDC", "tether/USDC"), 1f);
+        Global.setTokenPrice(new Pair<String, String>("tether/USDT", "tether/USDT"), 1f);
     }
     void restoreTimers() {
         timerBalance = new Timer();
@@ -449,7 +454,9 @@ public class MainActivity extends AppCompatActivity implements NetworkWebHttps.W
                                     }
                                 } catch (JSONException | NumberFormatException e) {
                                     e.printStackTrace();
-                                    if (CryptoSignatures.validateAccountId(result.getContents())) {
+                                    if (CryptoSignatures.validateAccountId(result.getContents()) ||
+                                            ExternTokenAddressValidator.tron(result.getContents()) ||
+                                            ExternTokenAddressValidator.ethereum(result.getContents())) {
                                         recipientAddressEditText.setText(result.getContents());
                                     } else {
                                         Toast.makeText(this, "Scanned: Invalid address", Toast.LENGTH_LONG).show();

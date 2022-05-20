@@ -1,5 +1,7 @@
 package com.lyrawallet.Ui.FragmentPreferences;
 
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -107,6 +109,16 @@ public class FragmentPreferencesRoot extends PreferenceFragmentCompat {
                 }
             });
         }
+        PackageInfo pInfo = null;
+        try {
+            pInfo = this.getActivity().getPackageManager().getPackageInfo(this.getActivity().getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        String version = pInfo.versionName;
+        Preference pref_version_key = findPreference(getString(R.string.pref_version_key));
+        pref_version_key.setSummary(String.format(Locale.US, "%s%s", "LyraWalletManager V", version));
+
         View v = super.onCreateView(inflater, container, savedInstanceState);
         return v;//inflater.inflate(R.layout.fragment_settings, container, false);
     }

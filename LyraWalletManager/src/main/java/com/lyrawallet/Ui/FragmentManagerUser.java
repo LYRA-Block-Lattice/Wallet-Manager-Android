@@ -273,6 +273,19 @@ public class FragmentManagerUser extends MainActivity {
         }
     }
 
+    public void goToReceive(String ticker, String provider, String contractAddress, String depositAddress, double minDeposit, double depositionFee, int confirmations) {
+        Global.setVisiblePage(Global.visiblePage.RECEIVE);
+        if(getCurrentFragment() != Global.visiblePage.RECEIVE.ordinal()) {
+            getInstance().getSupportFragmentManager()
+                    .beginTransaction()
+                    .setReorderingAllowed(true)
+                    .addToBackStack(String.valueOf(Global.visiblePage.RECEIVE.ordinal()))
+                    .replace(R.id.nav_host_fragment_content_main, new FragmentReceive(ticker, provider, contractAddress, depositAddress, minDeposit, depositionFee, confirmations), "RECEIVE_EXT_TOKEN")
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .commit();
+        }
+    }
+
     public void goToSend() {
         Global.setVisiblePage(Global.visiblePage.SEND);
         if(getCurrentFragment() != Global.visiblePage.SEND.ordinal()) {
@@ -281,6 +294,19 @@ public class FragmentManagerUser extends MainActivity {
                     .setReorderingAllowed(true)
                     .addToBackStack(String.valueOf(Global.visiblePage.SEND.ordinal()))
                     .replace(R.id.nav_host_fragment_content_main, new FragmentSend(), "SEND")
+                    .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                    .commit();
+        }
+    }
+
+    public void goToSend(String ticker, String provider, String contractAddress, double amountToSend, double withdrawFee) {
+        Global.setVisiblePage(Global.visiblePage.SEND);
+        if(getCurrentFragment() != Global.visiblePage.SEND.ordinal()) {
+            getInstance().getSupportFragmentManager()
+                    .beginTransaction()
+                    .setReorderingAllowed(true)
+                    .addToBackStack(String.valueOf(Global.visiblePage.SEND.ordinal()))
+                    .replace(R.id.nav_host_fragment_content_main, new FragmentSend(ticker, provider, contractAddress, amountToSend, withdrawFee), "SEND")
                     .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
                     .commit();
         }

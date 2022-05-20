@@ -33,8 +33,9 @@ public class Global {
         DIALOG_STAKING_DETAIL,
         DIALOG_CREATE_STAKING
     }
-
     // Global constants
+    public static final char TRON_ADDRESSPREFIX                = 'T';
+
     public final static String[] networkName = {"TESTNET", "MAINNET", "DEVNET"};
     public final static String[] dexNetworkDns = {"https://testnet.lyra.live", "https://mainnet.lyra.live", "https://devnet.lyra.live"};
     public static final String[] dexNetworkApi = {"https://dextestnet.lyra.live/api/Dex", "https://dex.lyra.live/api/Dex", "https://dexdevnet.lyra.live/api/Dex"};

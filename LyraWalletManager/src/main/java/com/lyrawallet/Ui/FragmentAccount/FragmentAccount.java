@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsHistory;
+import com.lyrawallet.Api.ApiRpcActions.ApiRpcActionsPairPrice;
 import com.lyrawallet.Api.Network.NetworkProbe;
 import com.lyrawallet.Api.Network.NetworkWebHttps;
 import com.lyrawallet.Global;
@@ -85,12 +87,12 @@ public class FragmentAccount extends Fragment {
                             List<Pair<String, Double>> balances = intHistoryList.second.get(intHistoryList.second.size() - 1).getBalances();
                             entryList.add(new FragmentAccountHistory.AccountHistoryEntry(-1, UiHelpers.tickerToImage(balances.get(i).first),
                                     GlobalLyra.domainToSymbol(balances.get(i).first), balances.get(i).second));
-                            double unitValuePerUsd = Global.getTokenPrice(new Pair<>(balances.get(i).first, "tether/USDT"));
+                            double unitValuePerUsd = Global.getTokenPrice(new Pair<>(GlobalLyra.domainToSymbol(balances.get(i).first), "tether/USDT"));
                             if(unitValuePerUsd == 0) {
-                                unitValuePerUsd = Global.getTokenPrice(new Pair<>(balances.get(i).first, "USDC"));
+                                unitValuePerUsd = Global.getTokenPrice(new Pair<>(GlobalLyra.domainToSymbol(balances.get(i).first), "USD"));
                             }
                             if(unitValuePerUsd == 0) {
-                                unitValuePerUsd = Global.getTokenPrice(new Pair<>(balances.get(i).first, "USD"));
+                                unitValuePerUsd = Global.getTokenPrice(new Pair<>(GlobalLyra.domainToSymbol(balances.get(i).first), "USDC"));
                             }
                             valueInUsd += unitValuePerUsd * balances.get(i).second;
                         }
@@ -98,8 +100,8 @@ public class FragmentAccount extends Fragment {
                 } catch (NullPointerException ignored) { }
                 priceRefreshed = false;
                 historyLen = intHistoryList.second.size();
-                TextView accountValueLyr = (TextView) view.findViewById(R.id.totalBalanceUsdTextView);
-                accountValueLyr.setText(String.format(Locale.US, "%s $ %f", getString(R.string.Total_balance_usd), valueInUsd));
+                TextView totalBalanceUsd = (TextView) view.findViewById(R.id.totalBalanceUsdTextView);
+                totalBalanceUsd.setText(String.format(Locale.US, "%s $ %f", getString(R.string.Total_balance_usd), valueInUsd));
                 setAccountValue(view);
                 FragmentAccountHistory.ClickListener listener = new FragmentAccountHistory.ClickListener() {
                     @Override
@@ -140,7 +142,7 @@ public class FragmentAccount extends Fragment {
                         for (int i = 0; i < tokenList.size(); i++) {
                             if( tokenList.get(i).first.equals("LYR")) {
                                 accountValueLyr.setText(String.format(Locale.US, "%.8f %s", tokenList.get(i).second, "LYR"));
-                                accountValueUsd.setText(String.format(Locale.US, "%.2f %s", tokenList.get(i).second * Global.getTokenPrice(new Pair<>("LYR", "USD")), "USD"));
+                                accountValueUsd.setText(String.format(Locale.US, "%.2f %s", tokenList.get(i).second * Global.getTokenPrice(new Pair<>("LYR", "tether/USDT")), "USD"));
                                 break;
                             }
                         }
@@ -195,6 +197,11 @@ public class FragmentAccount extends Fragment {
                     }
                 });
                 webHttpsTask.execute("https://api.coingecko.com/api/v3/simple/price?ids=lyra,tron,ethereum,bitcoin&vs_currencies=usd&include_market_cap=false&include_24hr_vol=false&include_24hr_change=false&include_last_updated_at=false");
+                FragmentActivity activity = getActivity();
+                if (activity != null) {
+                    ApiRpcActionsPairPrice.set(activity, "LYR", "tether/USDT");
+                    ApiRpcActionsPairPrice.set(activity, "LYR", "tether/TRX");
+                }
             }
         }, 10, 120 * 1000);
     }
@@ -231,12 +238,18 @@ public class FragmentAccount extends Fragment {
         if (activity != null) {
             CurvedBottomNavigationView bottomNavigationView = activity.findViewById(R.id.bottomNavigationView);
             bottomNavigationView.setVisibility(View.VISIBLE);
+        } else {
+            return;
         }
         TextView accountNameTextView = view.findViewById(R.id.accountNameTextView);
         accountNameTextView.setText(String.format("%s/%s", Global.getSelectedAccountName(), Global.getCurrentNetworkName()));
 
+        ProgressBar progress = activity.findViewById(R.id.accountProgressBar);
+        if(progress != null) {
+            progress.setVisibility(View.VISIBLE);
+        }
         historyLen = 0;
-        ApiRpcActionsHistory.load(Concatenate.getHistoryFileName());
+        //ApiRpcActionsHistory.load(Concatenate.getHistoryFileName());
         setAccountValue(view);
         populateHistory(view);
 
@@ -262,7 +275,12 @@ public class FragmentAccount extends Fragment {
             public void run() {
                 ApiRpcActionsHistory.load(Concatenate.getHistoryFileName());
                 setAccountValue(view);
+                //ProgressBar progress = activity.findViewById(R.id.accountProgressBar);
+                if(progress != null) {
+                    progress.setVisibility(View.GONE);
+                }
             }
-        }, 700);
+        }, 1000);
+        ApiRpcActionsPairPrice.set(activity, "LYR", "tether/USDT");
     }
 }

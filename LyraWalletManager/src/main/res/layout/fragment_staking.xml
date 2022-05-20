@@ -87,7 +87,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:indeterminateTintMode="src_atop"
-                        android:indeterminateTint="@color/additional"
+                        android:indeterminateTint="@color/primary"
                         app:layout_constraintBottom_toBottomOf="@+id/nestedScrollView"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
